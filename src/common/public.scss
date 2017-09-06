@@ -1,0 +1,10 @@
+@import './var.scss';
+@import "./mixin.scss";
+html{
+  margin:0;
+  padding:0;
+  font-family:PingFangSC;
+}
+li{
+  list-style-type: none;
+}

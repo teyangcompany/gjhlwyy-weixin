@@ -1,0 +1,277 @@
+/**
+ * Created by Administrator on 2017/8/21.
+ */
+import myProfile from './myProfile'
+import healthIndex from "../health/healthIndex"
+import beautify from '../health/beautify'
+import gender from '../health/gender'
+import healthContent from '../health/healthContent'
+import season from '../health/season'
+import index from "../index/index"
+import serviceIndex from "../service/serviceIndex"
+import personInfo from './personInfo'
+import about  from  './about'
+import account from './account'
+import myWait from './myWait'
+import healthFile from "./healthFile"
+import ill from './healthBasic/ill'
+import pastHistory from './healthBasic/pastHistory'
+import familyHistory from './healthBasic/familyHistory'
+import allergyHistory from './healthBasic/allergyHistory'
+import addRecord from './healthBasic/addRecord'
+import deleteRecord from './healthBasic/deleteRecord'
+import detailPage from './healthBasic/detailPage'
+import myConsult from './myConsult'
+import canceled from './myConsult/canceled'
+import commented from './myConsult/commented'
+import doing from './myConsult/doing'
+import waitComment from './myConsult/waitComment'
+import waitPay from './myConsult/waitPay'
+import consultDetail from './myConsult/consultDetail'
+import arrangeInfo from './myConsult/arrangeInfo'
+import waitArrange from './myConsult/waitArrange'
+import myBookNumber from './myBookNumber'
+import usualPatient from './usualPatient'
+import addUsualPatient from './addUsualPatient'
+import detailUsual from './detailUsual'
+import costLog from './costLog'
+import oldPhone from './accountAbout/oldPhone'
+import changePhone from './accountAbout/changePhone'
+import changePhoneSuccess from './accountAbout/changePhoneSuccess'
+import oldPass from './accountAbout/oldPass'
+import changePassWord from './accountAbout/changePassWord'
+import bookNumberDetail from './bookNumberDetail'
+import cancelApply from  './myConsult/cancelApply'
+import comment from './myConsult/comment'
+import toggleAddUsual from './toggleAddUsual'
+import myBookNumberSelect from './myBookNumberSelect'
+import bookToggleAddUsual from './bookToggleAddUsual'
+import waitToggleAddUsual  from './waitToggleAddUsual'
+import  checkToggleAddUsual from './checkToggleAddUsual'
+export default[
+    {
+      path:'/myProfile',
+      component:myProfile,
+      children:[
+        {
+          path:"healthIndex",
+          component:healthIndex,
+          children:[
+            {
+              path:"beautify",
+              component:beautify
+            },
+            {
+              path:"gender",
+              component:gender
+            },
+            {
+              path:"healthContent",
+              component:healthContent
+            },
+            {
+              path:"season",
+              component:season
+            },
+          ]
+        },
+        {
+          path:"index",
+          component:index
+        },
+        {
+          path:"serviceIndex",
+          component:serviceIndex
+        },
+      ]
+    },
+    {
+      path:"/personInfo",
+      component:personInfo
+    },
+    {
+       path:"/about",
+       component:about
+    },
+    {
+      path:"/account",
+      component:account
+    },
+  {
+    path:'/myWait',
+    component:myWait
+  },
+  {
+    path:"/healthFile",
+    component:healthFile
+  },
+  {
+    path:"/ill",
+    component:ill
+  },
+  {
+    path:"/pastHistory",
+    component:pastHistory
+  },
+  {
+    path:"/familyHistory",
+    component:familyHistory
+  },
+  {
+    path:"/allergyHistory",
+    component:allergyHistory
+  },
+  {
+    path:"/addRecord",
+    component:addRecord
+  },
+  {
+    path:"/deleteRecord",
+    component:deleteRecord
+  },
+  {
+    path:"/detailPage",
+    component:detailPage
+  },
+  {
+    path:"/myConsult",
+    component:myConsult,
+    children:[
+      {
+        path:"canceled",
+        component:canceled
+      },
+      {
+        path:"commented",
+        component:commented
+      },
+      {
+        path:"doing",
+        component:doing
+      },
+      {
+        path:"waitComment",
+        component:waitComment
+      },
+      {
+        path:"waitPay",
+        component:waitPay
+      },
+    ]
+  },
+  {
+    path:"/myConsult",
+    component:myConsult,
+    children:[
+      {
+        path:"online/canceled",
+        component:canceled
+      },
+      {
+        path:"online/commented",
+        component:commented
+      },
+      {
+        path:"online/doing",
+        component:doing
+      },
+      {
+        path:"online/waitComment",
+        component:waitComment
+      },
+      {
+        path:"online/waitPay",
+        component:waitPay
+      },
+    ]
+  },
+  {
+    path:"/consultDetail",
+    component:consultDetail
+  },
+  {
+    path:"/arrangeInfo",
+    component:arrangeInfo
+  },
+  {
+    path:'/waitArrange',
+    component:waitArrange
+  },
+  {
+    path:"/myBookNumber",
+    component:myBookNumber
+  },
+  {
+    path:"/usualPatient",
+    component:usualPatient
+  },
+  {
+    path:"/addUsualPatient",
+    component:addUsualPatient
+  },
+  {
+    path:"/detailUsual",
+    component:detailUsual
+  },
+  {
+    path:"/costLog",
+    component:costLog
+  },
+  {
+    path:"/oldPhone",
+    component:oldPhone
+  },
+  {
+    path:"/changePhone",
+    component:changePhone
+  },
+  {
+    path:"/changePhoneSuccess",
+    component:changePhoneSuccess
+  },
+  {
+    path:"/oldPass",
+    component:oldPass
+  },
+  {
+    path:"/changePassWord",
+    component:changePassWord
+  },
+  {
+    path:"/bookNumberDetail",
+    component:bookNumberDetail
+  },
+  {
+    path:"/cancelApply",
+    component:cancelApply
+  },
+  {
+    path:"/comment",
+    component:comment
+  },
+  {
+    path:"/toggleAddUsual",
+    component:toggleAddUsual
+  },
+  {
+    path:"/myBookNumberSelect",
+    component:myBookNumberSelect
+  },
+  {
+    path:"/bookToggleAddUsual",
+    component:bookToggleAddUsual
+  },
+  {
+    path:"/waitToggleAddUsual",
+    component:waitToggleAddUsual
+  },
+  {
+    path:"/checkToggleAddUsual",
+    component:checkToggleAddUsual
+  },
+  {
+    path:"",
+    redirect:"/myProfile/index",
+    component:index
+  },
+  ]
