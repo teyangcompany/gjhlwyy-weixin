@@ -7,7 +7,7 @@
         </div>
          <div class="myBookNumber" v-else ref="myBookNumber">
            <div>
-             <router-link tag="div" :to="{path:'/bookNumberDetail',query:{bookHosId:item.bookHosId,index:index}}" class="numberCenter" v-for="(item,index) in orderList">
+             <router-link tag="div" :to="{path:'/bookNumberDetail',query:{bookHosId:item.bookHosId,index:index}}" class="numberCenter" v-for="(item,index) in orderList" :key="item.id">
                <ul>
                  <li>
                    <p class="hosTitle">{{ item.hosName }}</p>

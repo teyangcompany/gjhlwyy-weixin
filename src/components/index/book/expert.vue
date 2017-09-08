@@ -278,7 +278,7 @@
           }
         }
         .cancelTime{
-          flex:1;
+          width:200rem/$rem;
           display: flex;
           justify-content: flex-end;
           align-items: center;

@@ -1,11 +1,11 @@
 <template>
   <scroll class="canceled" :data="consultList" :pullup="pullup" @scrollToEnd="scrollToEnd()" ref="cancel">
     <div>
-      <router-link tag="ul" :to="{path:'/waitArrange',query:{consultId:item.consultId}}" class="border-1px" v-for="item in consultList" :key="item.id">
-        <li >
+      <router-link tag="ul" :to="{path:'/waitArrange',query:{consultId:item.consultId}}" class="border-1px" v-for="(item,index) in consultList" :key="item.id">
+        <li v-if="item.consultTypeName != '名医视频' && item.consultTypeName != '在线医生视频'" >
           <div>
             <span class="picConsult">{{ item.consultTypeName }}</span>
-            <span class="consultTim">2016/11/28 18:17</span>
+            <span class="consultTim">{{ createTime[index] }}</span>
           </div>
           <div class="mainContent">
             <p>{{ item.consultContent }}</p>
@@ -29,6 +29,7 @@
   import BScroll from 'better-scroll'
   import api from '../../../lib/api'
   import Scroll from '../../../base/scroll'
+  import {formatDate} from '../../../utils/formatTimeStamp'
   export default{
     data(){
         return{
@@ -37,6 +38,7 @@
           listPage:1,
           dataLength:"",
           loadingStatus:true,
+          createTime:[]
         }
     },
     mounted(){
@@ -46,13 +48,17 @@
        api("nethos.consult.info.list",{
            pageNo:1,
            pageSize:10,
+           sort:"create_time.desc",
            token:localStorage.getItem("token")
        }).then((data)=>{
+           this.loadingStatus = false
          for(var i=0;i<data.list.length; i++){
            this.consultList.push(data.list[i])
+           this.createTime.push(formatDate(new Date(data.list[i].createTime)))
          }
 //          this.consultList.push(data.list)
          console.log(data)
+         console.log(this.createTime)
           console.log(this.consultList)
        })
     },
@@ -72,11 +78,13 @@
         let that = this
         api("nethos.consult.info.list",{
           token:localStorage.getItem("token"),
+          sort:"create_time.desc",
           pageNo:that.listPage,
           pageSize:"10"
         }).then((data)=>{
           for(var i=0;i<data.list.length; i++){
             this.consultList.push(data.list[i])
+            this.createTime.push(formatDate(new Date(data.list[i].createTime)))
           }
           this.loadingStatus = false
           that.dataLength = data.list.length
@@ -113,7 +121,7 @@
       /*padding-bottom: 5px;*/
       li {
         width: 690rem/$rem;
-        /*height: 166px;*/
+        /*<!--height: 200rem/$rem;-->*/
         border-radius: 7px;
         background-color:white;
         list-style-type: none;
@@ -134,6 +142,7 @@
           display: flex;
           flex-direction: column;
           justify-content: center;
+          height: 52px;
           >div{
             img{
               width: 22.5%;
@@ -145,11 +154,10 @@
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
             overflow: hidden;
-            font-size: 32rem/$rem;
+            font-size: 30rem/$rem;
             color: #666666;
-            height: 52px;
+            /*height: 52px;*/
             padding: 5px 5px 5px 5px;
-            background-color: $bgColor2;
             border-radius: 7px;
           }
         }
@@ -160,8 +168,8 @@
             color: #999999;
             .circle {
               display: inline-block;
-              width: 10px;
-              height: 10px;
+              width: 13px;
+              height: 13px;
               margin-right: 3px;
               background-color: red;
               border-radius: 50%;

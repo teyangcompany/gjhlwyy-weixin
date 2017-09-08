@@ -18,7 +18,7 @@
           <div class="desCenter team">
             <h4>医生擅长</h4>
             <div class="line"></div>
-                <h6 v-if="excelAll">{{ aboutDoctor.docSkill }}</h6>
+                <h6 class="good" v-if="excelAll">{{ aboutDoctor.docSkill }}</h6>
                 <p v-else>{{ aboutDoctor.docSkill }}</p>
             <div>
               <div v-if="excelAll" @touchend="excelDownMore()">
@@ -35,7 +35,7 @@
           <div class="desCenter team">
             <h4>医生介绍</h4>
             <div class="line"></div>
-                <h6 v-if="introAll">{{ aboutDoctor.docResume }}</h6>
+                <h6 class="intro" v-if="introAll">{{ aboutDoctor.docResume }}</h6>
                 <p v-else>{{ aboutDoctor.docResume }}</p>
             <div>
               <div v-if="introAll" @touchend="introDownMore()">
@@ -213,8 +213,9 @@
           }
           span.chief{
             position: relative;
-            font-size: 28rem/$rem;
+            font-size: 26rem/$rem;
             color: white;
+            border-radius: 3px;
             background-color: $assistColorBrown;
             display: inline-block;
             width:58rem/$rem;
@@ -235,7 +236,7 @@
         }
         .checkRating{
           span{
-            color: #666666;
+            color: #333333;
             font-size: 28rem/$rem;
           }
         }
@@ -261,7 +262,9 @@
         }
         >div{
           width: 50px;
-          margin: 0 auto;
+          position: absolute;
+          right:0;
+          /*margin: 0 auto;*/
           text-align: center;
           img{
             width:24rem/$rem;
@@ -287,6 +290,9 @@
             text-align: center;
             margin-bottom: 10px;
           }
+        }
+        h6.good,h6.intro{
+          text-align: left;
         }
         h6{
           display: -webkit-box;

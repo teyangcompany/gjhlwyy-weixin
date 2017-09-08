@@ -6,7 +6,7 @@
       <span>正在很努力的加载中...</span>
     </div>
     <div class="myBookNumber" v-else>
-      <router-link tag="div" :to="{path:'/bookNumberDetail',query:{bookHosId:item.bookHosId,index:index}}" class="numberCenter" v-for="(item,index) in orderList">
+      <router-link tag="div" :to="{path:'/bookNumberDetail',query:{bookHosId:item.bookHosId,index:index}}" class="numberCenter" v-for="(item,index) in orderList" :key="item.id">
         <ul>
           <li>
             <p class="hosTitle">{{ item.hosName }}</p>

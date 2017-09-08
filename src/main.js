@@ -5,8 +5,8 @@ import App from './App'
 import router from './router'
 import Vuelidate from 'vuelidate'
 
-Vue.use(Vuelidate)
 
+Vue.use(Vuelidate)
 Vue.config.productionTip = false
 Vue.mixin({
   created: function () {

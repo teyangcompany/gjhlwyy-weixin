@@ -22,6 +22,8 @@
           <label for="">验证码</label>
           <input type="text" placeholder="请输入验证码" v-model="captcha">
           <button @click="getCode()">获取验证码</button>
+          <button @click="getCode()" v-if="countdown == 60 || countdown == 0">获取验证码</button>
+          <button  v-else>{{ countdown }}s后重新获取</button>
         </div>
       </div>
     </div>
@@ -49,7 +51,9 @@
         compatIdcard:"",
         compatMobile:"",
         captcha:"",
-        cid:0
+        cid:0,
+        countdown:60,
+        a:""
       }
     },
 //    validations:{
@@ -71,7 +75,12 @@
           captchaType:"SMS",
           mobile:this.compatMobile
         }).then((data)=>{
-          this.cid = data.obj
+          if(data.code == 0){
+            this.cid = data.obj
+            this.a = setInterval(()=>{
+              this.countdown--
+            },1000)
+          }
         })
       },
       goAdd(){
@@ -99,6 +108,14 @@
     components:{
       "VHeader":header,
       Alert
+    },
+    watch:{
+      countdown(){
+        if(this.countdown == 0){
+          clearInterval(this.a)
+          this.countdown = 60
+        }
+      }
     }
   }
 </script>

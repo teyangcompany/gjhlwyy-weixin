@@ -16,7 +16,7 @@
         <span>抱歉，未能查询到您的相关报告</span>
       </div>
       <div v-else>
-        <router-link tag="div" :to="{path:'/checkReportCard',query:{specialIndex:specialIndex,index:index,compatId:compatId,reportInfoString:reportInfoString}}" class="checkCenter" style="display: block" v-for="(item,index) in reportInfo">
+        <router-link tag="div" :to="{path:'/checkReportCard',query:{specialIndex:specialIndex,index:index,compatId:compatId,reportInfoString:reportInfoString}}" class="checkCenter" style="display: block" v-for="(item,index) in reportInfo" :key="item.id">
           <div class="reportList">
             <h3 class="border-1px">{{ item.sendDept }}报告</h3>
             <p><span>{{ item.name }}</span><span>{{ item.checkTime }}</span></p>

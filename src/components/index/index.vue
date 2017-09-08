@@ -73,7 +73,7 @@
             </div>
           </div>
         </div>
-        <router-link tag="div" :to="{path:'/healthInfoDetail',query:{newId:item.newId,title:item.title}}" class="healthList border-1px" v-for="item in healthList">
+        <router-link tag="div" :to="{path:'/healthInfoDetail',query:{newId:item.newId,title:item.title}}" class="healthList border-1px" v-for="item in healthList" :key="item.id">
            <div>
              <div>
                <img :src="item.imgUrl" alt="">
@@ -301,7 +301,8 @@
             height:320rem/$rem;
             .leftMain{
               height:320rem/$rem;
-              flex-basis: 280rem/$rem;
+              width: 280rem/$rem;
+              flex:0 0 auto;
               display: flex;
               flex-direction: column;
               /*justify-content: center;*/
@@ -323,6 +324,7 @@
             .rightMain{
               height:320rem/$rem;
               width:470rem/$rem;
+              flex:0 0 auto;
               margin:0;
               padding:0;
               display: flex;

@@ -1,32 +1,44 @@
 <template>
-  <div class="canceled" ref="cancel">
+  <scroll class="canceled" :data="waitCommentList" ref="cancel" :pullup="pullup" @scrollToEnd="scrollToEnd()">
     <div>
-      <router-link tag="ul" :to="{path:'/waitArrange',query:{consultId:item.consultId}}" class="border-1px" v-for="item in waitCommentList" :key="item.id">
-        <li >
+      <router-link tag="ul" :to="{path:'/waitArrange',query:{consultId:item.consultId}}" class="border-1px" v-for="(item,index) in waitCommentList" :key="item.id">
+        <li v-if="item.consultTypeName != '名医视频' && item.consultTypeName != '在线医生视频'">
           <div>
             <span class="picConsult">{{ item.consultTypeName }}</span>
-            <span class="consultTim">2016/11/28 18:17</span>
+            <span class="consultTim">{{ createTime[index] }}</span>
           </div>
           <div class="mainContent">
             <p>{{ item.consultContent }}</p>
           </div>
           <div class="ConsultRelate">
-            <span class="name"><span class="circle"> </span><span class="number">{{ item.docName }}</span></span>
+            <span class="name"><span class="circle" v-if="(item.docName)"> </span><span class="number">{{ item.docName }}</span></span>
             <span class="money">{{ item.consultStatusDescription }}</span>
           </div>
         </li>
       </router-link>
-
+      <div class="loadMore" v-if="loadingStatus">
+        <span class="pullMore">
+           <img src="../../../../static/img/loading.gif" alt="">
+           数据加载中...
+        </span>
+      </div>
     </div>
-  </div>
+  </scroll>
 </template>
 <script>
   import BScroll from 'better-scroll'
   import api from '../../../lib/api'
+  import Scroll from '../../../base/scroll'
+  import {formatDate} from '../../../utils/formatTimeStamp'
   export default{
     data(){
       return{
-        waitCommentList:""
+        waitCommentList:[],
+        createTime:[],
+        loadingStatus:true,
+        pullup:true,
+        listPage:1,
+        dataLength:"",
       }
     },
     mounted(){
@@ -34,28 +46,65 @@
     },
     created(){
       api("nethos.consult.info.list",{
+        pageNo:1,
+        pageSize:10,
         statusList:['4'],
+        sort:"create_time.desc",
         token:localStorage.getItem("token")
       }).then((data)=>{
-        this.waitCommentList = data.list
+        this.loadingStatus = false
         console.log(data)
+        for(var i=0;i<data.list.length; i++){
+          this.waitCommentList.push(data.list[i])
+          this.createTime.push(formatDate(new Date(data.list[i].createTime)))
+        }
       })
     },
     methods:{
-      _initCancel(){
-        this.cancel = new BScroll(this.$refs.cancel,{
-          click:true
+//      _initCancel(){
+//        this.cancel = new BScroll(this.$refs.cancel,{
+//          click:true
+//        })
+//      }
+      scrollToEnd(){
+        if (this.preventRepeatRequest) {
+          return
+        }
+        this.loadingStatus = true
+        this.preventRepeatRequest = true;
+        this.listPage +=1;
+        let that = this
+        console.log(this.listPage)
+        api("nethos.consult.info.list",{
+          token:localStorage.getItem("token"),
+          sort:"create_time.desc",
+          statusList:['4'],
+          pageNo:that.listPage,
+          pageSize:"10"
+        }).then((data)=>{
+          for(var i=0;i<data.list.length; i++){
+            this.waitCommentList.push(data.list[i])
+            this.createTime.push(formatDate(new Date(data.list[i].createTime)))
+          }
+          this.loadingStatus = false
+          that.dataLength = data.list.length
+          if(data.list.length >= 10){
+            this.preventRepeatRequest = false;
+          }
         })
-      }
+      },
     },
     watch:{
-      waitCommentList(){
-        this.$nextTick(()=>{
-          setTimeout(()=>{
-            this. _initCancel()
-          },20)
-        })
-      }
+//      waitCommentList(){
+//        this.$nextTick(()=>{
+//          setTimeout(()=>{
+//            this. _initCancel()
+//          },20)
+//        })
+//      }
+    },
+    components:{
+      Scroll
     }
   }
 </script>
@@ -133,6 +182,21 @@
       }
       li:nth-child(1){
         padding-top: 5px;
+      }
+    }
+    .loadMore{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      span.pullMore{
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        img{
+          width: 16px;
+          height: 16px;
+          margin-right: 5px;
+        }
       }
     }
   }
