@@ -36,8 +36,8 @@ import addUsualPatient from './addUsualPatient'
 import detailUsual from './detailUsual'
 import costLog from './costLog'
 import oldPhone from './accountAbout/oldPhone'
-import changePhone from './accountAbout/changePhone'
-import changePhoneSuccess from './accountAbout/changePhoneSuccess'
+// import changePhone from './accountAbout/changePhone'
+// import changePhoneSuccess from './accountAbout/changePhoneSuccess'
 import oldPass from './accountAbout/oldPass'
 import changePassWord from './accountAbout/changePassWord'
 import bookNumberDetail from './bookNumberDetail'
@@ -48,7 +48,66 @@ import myBookNumberSelect from './myBookNumberSelect'
 import bookToggleAddUsual from './bookToggleAddUsual'
 import waitToggleAddUsual  from './waitToggleAddUsual'
 import  checkToggleAddUsual from './checkToggleAddUsual'
+import  accountAbout from './account/accountAbout.vue'
+import  changePassword from './account/changePassword.vue'
+import  changePhone from './account/changePhone.vue'
+import  changePhoneSucc from './account/changePhoneSucc.vue'
+import  confrimPhone from './account/confrimPhone.vue'
+import  modificationPassword from './account/modificationPassword.vue'
+import  succeed from './account/succeed.vue'
+import  userHelp from './account/userHelp.vue'
+import  expenseHistory from './healthBasic/expenseHistory.vue'
+
+import  detailDescription from './account/detailDescription.vue'
 export default[
+  {
+    path:"/expenseHistory",
+    name:'expenseHistory',
+    component:expenseHistory
+  },
+  {
+    path:"/detailDescription",
+    name:'detailDescription',
+    component:detailDescription
+  },
+  {
+    path:"/userHelp",
+    name:'userHelp',
+    component:userHelp
+  },
+  {
+    path:"/accountAbout",
+    name:'accountAbout',
+    component:accountAbout
+  },{
+    path:"/changePassword",
+    name:'changePassword',
+    component:changePassword
+  }
+  ,
+  {
+    path:"/changePhone",
+    name:'changePhone',
+    component:changePhone
+  },
+  {
+    path:"/changePhoneSucc",
+    name:'changePhoneSucc',
+    component:changePhoneSucc
+  },
+  {
+    path:"/confrimPhone",
+    name:'confrimPhone',
+    component:confrimPhone
+  },{
+    path:"/modificationPassword",
+    name:'modificationPassword',
+    component:modificationPassword
+  },{
+    path:"/succeed",
+    name:'succeed',
+    component:succeed
+  },
     {
       path:'/myProfile',
       component:myProfile,
@@ -103,22 +162,27 @@ export default[
   },
   {
     path:"/healthFile",
+    name:'healthFile',
     component:healthFile
   },
   {
     path:"/ill",
+    name:'ill',
     component:ill
   },
   {
     path:"/pastHistory",
+    name:'pastHistory',
     component:pastHistory
   },
   {
     path:"/familyHistory",
+    name:'familyHistory',
     component:familyHistory
   },
   {
     path:"/allergyHistory",
+    name:'allergyHistory',
     component:allergyHistory
   },
   {
@@ -127,6 +191,7 @@ export default[
   },
   {
     path:"/deleteRecord",
+    name:'deleteRecord',
     component:deleteRecord
   },
   {
@@ -221,14 +286,14 @@ export default[
     path:"/oldPhone",
     component:oldPhone
   },
-  {
-    path:"/changePhone",
-    component:changePhone
-  },
-  {
-    path:"/changePhoneSuccess",
-    component:changePhoneSuccess
-  },
+  // {
+  //   path:"/changePhone",
+  //   component:changePhone
+  // },
+  // {
+  //   path:"/changePhoneSuccess",
+  //   component:changePhoneSuccess
+  // },
   {
     path:"/oldPass",
     component:oldPass

@@ -66,7 +66,7 @@
               </div>
               <div class="weui-cell__ft"></div>
             </a>
-            <a class="weui-cell weui-cell_access" href="javascript:;">
+            <a class="weui-cell weui-cell_access" href="javascript:;" @click="userHelp">
               <div class="weui-cell__hd"><img src="../../../static/img/my/ic_help@2x.png" alt="" style="width:20px;margin-right:7px;display:block"></div>
               <div class="weui-cell__bd">
                 <p>使用帮助</p>
@@ -93,7 +93,7 @@
         </div>
     </div>
 </template>
-<script>
+<script type="text/ecmascript-6">
   import header from '../../base/header'
   import api from '../../lib/api'
   export default{
@@ -127,11 +127,16 @@
             })
       },
       methods:{
+        userHelp(){
+          this.$router.push({
+            name:'userHelp'
+          })
+        },
         goAbout(){
             this.$router.push('/about')
         },
         goAccount(){
-             this.$router.push('/account')
+             this.$router.push('/accountAbout')
         },
         goMyWait(){
             this.$router.push('/myWait')
@@ -149,7 +154,7 @@
             this.$router.push('/myConsult/commented')
         },
         goCostLog(){
-          this.$router.push('/costLog')
+          this.$router.push('/expenseHistory')
         },
         goProfile(){
           this.$router.push('/myProfile/healthIndex/beautify')

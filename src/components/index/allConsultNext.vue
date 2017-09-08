@@ -49,7 +49,7 @@
     </div>
   </transition>
 </template>
-<script>
+<script type="text/ecmascript-6">
   import header from '../../base/header'
   import patientToggle from '../../base/patientToggle'
   import Alert from '../../base/alert'

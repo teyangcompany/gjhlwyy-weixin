@@ -22,30 +22,35 @@
       </div>
       <div class="wrapText border-1px">
         <div>
-          <textarea placeholder="请详细描述您的症状、疾病和身体情况。(请放心您的个人信息不会泄露)"></textarea>
+          <textarea v-model="text" placeholder="请详细描述您的症状、疾病和身体情况。(请放心您的个人信息不会泄露)"></textarea>
         </div>
       </div>
-      <div class="upload">
-        <div class="addPicture" v-for="(singleImage,index) in previewImg" v-if="previewImg.length != 0">
-          <!--<span class="deleteImg">X</span>-->
-          <img :src="singleImage" alt="" ref="replaceImg" @click="makeLarge(index)">
-        </div>
-        <div class="addPicture">
-          <input type="file" name="upload" id="upload" ref="upload" @change="onFileChange">
-          <img src="../../../../static/img/添加图片.png" alt=""  @click="selectImg()">
-        </div>
-        <div class="wordFor">
-          <span>添加图片</span>
-          <span>请上传患处图片,让医生更了解您的病情</span>
-        </div>
+      <!--<div class="upload">-->
+        <!--<div class="addPicture" v-for="(singleImage,index) in previewImg" v-if="previewImg.length != 0">-->
+          <!--&lt;!&ndash;<span class="deleteImg">X</span>&ndash;&gt;-->
+          <!--<img :src="singleImage" alt="" ref="replaceImg" @click="makeLarge(index)">-->
+        <!--</div>-->
+        <!--<div class="addPicture">-->
+          <!--<input type="file" name="upload" id="upload" ref="upload" @change="onFileChange">-->
+          <!--<img src="../../../../static/img/添加图片.png" alt=""  @click="selectImg()">-->
+        <!--</div>-->
+        <!--<div class="wordFor">-->
+          <!--<span>添加图片</span>-->
+          <!--<span>请上传患处图片,让医生更了解您的病情</span>-->
+        <!--</div>-->
+      <!--</div>-->
+      <div class="addImg">
+        <upload v-on:getAttaIdsList="getAttaIdsList"></upload>
       </div>
     </div>
   </div>
 </template>
-<script>
+<script type="text/ecmascript-6">
   import header from '../../../base/header'
   import weui from 'weui.js'
   import {getCurrentTime} from '../../../utils/getTime.js'
+    import api from '../../../lib/api'
+  import upload from '../../../base/upload.vue'
   export default{
     data(){
       return{
@@ -54,12 +59,23 @@
         time:"",
         date:"",
         previewImg:[],
+        attaId:[],
+        patId:'',
+        text:'',
+        times:''
       }
     },
     mounted(){
-      this.time = getCurrentTime()
+      this.time = getCurrentTime();
+      this.times = this.time;
+     this.patId=this.$route.query.patId;
+      console.log(this.patId,3333)
     },
     methods:{
+      getAttaIdsList(value){
+        console.log(value,88888)
+        this.$set(this.$data,'attaId',value)
+      },
       selectOther(){
         let that =this
         weui.datePicker({
@@ -69,12 +85,32 @@
           onChange: function(result){
           },
           onConfirm: function(result){
-            that.$set(that.$data,'date',result)
+
+            var timess = result[0].value+'-'+result[1].value+'-'+result[2].value
+             var times = Date.parse(new Date(timess))/1000
+            that.$set(that.$data,'date',result);
+            that.$set(that.$data,'times',times);
+            console.log(that.times,55555);
           },
         })
       },
       detail(){
-        this.$router.push('/detailPage')
+        console.log(this.patId,2222);
+        api('nethos.pat.medicalhistroy.add',{
+          patId:this.patId,
+          medicalContent:this.text,
+          attaIdList:this.attaId,
+          medicalTime:this.times,
+          "token":localStorage.getItem('token')
+        }).then(res=>{
+          console.log(res,11111);
+          if(res.succ){
+             this.$router.push('/detailPage')
+          }else {
+            alert(res.msg)
+          }
+        })
+
       },
       selectImg(e){
         this.$refs.upload.click()
@@ -89,17 +125,27 @@
           alert("您的浏览器不支持图片上传，请升级您的浏览器")
           return false
         }
-        let that = this
+        let that = this;
         let fileName = file.name
         let reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onload = function(){
-          that.previewImg.push(this.result)
+          that.previewImg.push(this.result);
+          api("nethos.system.atta.upload.image.base64",{
+            base64:this.result,
+            originalName:fileName
+          }).then((data)=>{
+            console.log(data,77777)
+            that.attaId.push(data.obj.attaId)
+
+          console.log( that.attaId,33333)
+        })
         }
       },
     },
     components:{
-      'VHeader':header
+      'VHeader':header,
+      upload
     }
   }
 </script>
