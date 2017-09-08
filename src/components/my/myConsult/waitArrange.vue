@@ -4,15 +4,21 @@
     <v-header :title="title" :rightTitle="goingTitle" v-else-if="aboutConsult.consultStatus == 'GOING'&& aboutConsult.consultTypeName == '全科分诊' && aboutReplyMessage.length == 0" @on-cancel="goAllCancel"> </v-header>
     <v-header :title="title" :rightTitle="overConsultTitle" v-else-if="aboutConsult.consultStatus == 'GOING'&& aboutConsult.consultTypeName == '图文咨询' && aboutReplyMessage.length != 0" @on-cancel="goOverConsult"> </v-header>
     <v-header :title="title" :rightTitle="rightTitle" v-else> </v-header>
-    <div class="tips">
-      {{ aboutConsult.consultStatusDescription }}
+    <div class="tips" v-if="aboutConsult">
+      <span v-if="aboutConsult.consultStatusDescription.substr(15,16) == '按钮'">进行中</span>
+      <span v-else> {{aboutConsult.consultStatusDescription}}</span>
     </div>
-    <scroll :class="seeMore ? 'conversationUp':'conversation'" @make-blur="inputHide()" :data="aboutReplyMessage"   @click="goDown()" ref="conversation" :listen-scroll="listenScroll" :probe-type="probeType">
+    <!--<div class="tips" v-else>-->
+      <!--{{ aboutConsult.consultStatusDescription }}-->
+    <!--</div>-->
+    <scroll class="conversation"  :data="aboutReplyMessage"   @click="goDown()" ref="conversation" :listen-scroll="listenScroll" :probe-type="probeType">
       <section class="conversationList" ref="slideList" >
         <ul v-if="aboutConsult != ''">
           <li ref="chatLi">
             <div class=" other mysay">
-              <img src="../../../../static/img/p1.jpg" alt="">
+              <img v-if="aboutConsult.patAvatar" :src="aboutConsult.patAvatar" alt="">
+              <img v-if="aboutConsult.consulterGender == 'F' && !(aboutConsult.patAvatar)" src="../../../../static/img/患者女.jpg" alt="">
+              <img v-if="aboutConsult.consulterGender == 'M' && !(aboutConsult.patAvatar)" src="../../../../static/img/患者男.jpg" alt="">
               <div class="whatsay">
                 <div class="whatsay_svg">
                   <svg>
@@ -33,8 +39,8 @@
         <ul>
           <li v-for="item in aboutReplyMessage" ref="chatLi">
             <div class="other" :class="{mysay:item.replierType == 'PAT'}">
-              <img src="../../../../static/img/ys1.jpg" alt="" v-if="item.replierType == 'PAT'">
-              <img :src="aboutConsult.docAvatar" alt="" v-else>
+              <img :src="aboutConsult.patAvatar" alt="" v-if="item.replierType == 'PAT'">
+              <img :src="item.replierAvatar" alt="" v-else>
               <div class="whatsay">
                 <div class="whatsay_svg">
                   <svg>
@@ -60,6 +66,9 @@
        <div class="payWrap">
          <button @click="pay()">付款</button>
        </div>
+      <div class="assistScroll">
+
+      </div>
     </footer>
     <footer v-else-if="aboutConsult.consultStatus == 'GOING' && aboutReplyMessage && aboutReplyMessage.length == 0" class="payButton">
 
@@ -72,7 +81,7 @@
     <footer :class="{footshow:seeMore}" ref="footer" v-else-if="aboutConsult.consultStatus == 'GOING' && aboutReplyMessage.length != 0">
       <section class="foot_top">
         <div class="chatInput">
-          <input type="text"  maxlength="100"  @focus="focused" @blur="blured" ref="inputFocus" v-model="inputInfo" @input="whatInput" @keyup.enter="enterThing()">
+          <input type="text"  maxlength="100"  @blur="blured" ref="inputFocus" v-model="inputInfo" @input="whatInput" @keyup.enter="enterThing()">
         </div>
         <div class="chatSend">
           <div class="send" @touchstart.prevent="send()" v-if="light">
@@ -409,25 +418,22 @@
       },
       upMore(){
         this.seeMore = !this.seeMore
-        if(this.seeMore == true){
-          this.gift = true
-        }
       },
-      inputHide(e){
-        this.seeMore = false
-        this.$refs.inputFocus.blur()
-//        this.$refs.footer.style.bottom=-160 + 'px'
-      },
+//      inputHide(e){
+//        this.seeMore = false
+//        this.$refs.inputFocus.blur()
+////        this.$refs.footer.style.bottom=-160 + 'px'
+//      },
       blured(){
 //          this.$refs.footer.style.bottom=-160 + 'px'
       },
-      forceFocused(){
-        this.$refs.inputFocus.focus()
-      },
-      focused(){
-        this.seeMore = false
-        this.$refs.footer.style.bottom=-160 + 'px'
-      },
+//      forceFocused(){
+//        this.$refs.inputFocus.focus()
+//      },
+//      focused(){
+//        this.seeMore = false
+//        this.$refs.footer.style.bottom=-160 + 'px'
+//      },
     },
   }
 </script>
@@ -459,7 +465,7 @@
     /*height: 500px;*/
     position: fixed;
     top: 90px;
-    bottom: 40px;
+    bottom: 98rem/$rem;
     overflow: hidden;
     /*overflow: auto;*/
     /*-webkit-overflow-scrolling: touch;*/
@@ -580,7 +586,7 @@
     }
   }
   footer.payButton{
-    margin-bottom: 50rem/$rem;
+    margin-bottom: 10rem/$rem;
     width:100%;
     div.payWrap{
       width:690rem/$rem;
@@ -595,6 +601,9 @@
         border-radius: 7px;
         background-color: $buttonColor;
       }
+    }
+    .assistScroll{
+      height: 500px;
     }
   }
   footer{

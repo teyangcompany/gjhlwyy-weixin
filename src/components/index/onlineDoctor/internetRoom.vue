@@ -2,7 +2,7 @@
     <div>
          <v-header :title="title" :rightTitle="rightTitle" @on-consult="goMyConsult()" @on-index="goIndex()"></v-header>
           <div class="tab border-1px">
-            <div class="tab-item border-1px-right" :class="{choose_type:sortBy == 'displaySort'}">
+            <div class="tab-item" :class="{choose_type:sortBy == 'displaySort'}">
               <div class="tab_item_container">
                 <span @click="chooseType('displaySort')" v-if="sortPick == ''">全部科室
                 <svg width="10" height="10" xmlns="http://www.w3.org/2000/svg" version="1.1" class="sort_icon">
@@ -16,7 +16,7 @@
                 </span>
               </div>
             </div>
-            <div class="tab-item border-1px-right" :class="{choose_type:sortBy == 'displayType'}">
+            <div class="tab-item" :class="{choose_type:sortBy == 'displayType'}">
               <div class="tab_item_container">
                 <div class="tab_item_border">
                   <span  @click="chooseType('displayType')" v-if="typePick == ''">全部问诊形式
@@ -554,7 +554,7 @@
       /*top: 15px;*/
       /*right: 5px;*/
       transition: 0.3s;
-      fill:#666;
+      fill:#ededed;
     }
     /*position: relative;*/
     /*background-color: #0BB20C;*/

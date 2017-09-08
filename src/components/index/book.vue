@@ -13,7 +13,7 @@
                   <div>
                     <span class="myDoctor">{{ item.hosShortname }}</span>
                     <p>{{ item.hosLevel }}</p>
-                    <p>{{ item.hosAddress }}</p>
+                    <p class="hosAddress">{{ item.hosAddress }}</p>
                   </div>
                 </div>
               </li>
@@ -27,23 +27,27 @@
       <div class="bookCenter" v-show="book" @click="hideBook()">
         <div class="forPosition">
           <router-link tag="div" :to="{path:'/selectType',query:{bookHosId:this.bookHosId,bookSort:'预约挂号'}}">
-            <img src="../../../static/img/book/doctor.png" alt="">
+           <div class="img">
+             <img src="../../../static/img/book/doctor.png" alt="">
+           </div>
             <div class="middlePosition">
               <p>预约挂号</p>
               <p>七天内普通号、专家号预约</p>
             </div>
             <div class="seeMore">
-              <img src="../../../static/img/查看更多.png" alt="">
+              <!--<img src="../../../static/img/查看更多.png" alt="">-->
             </div>
           </router-link>
           <router-link tag="div" :to="{path:'/selectType',query:{bookHosId:this.bookHosId,bookSort:'实时挂号'}}">
-            <img src="../../../static/img/book/doctor.png" alt="">
+            <div class="img">
+              <img src="../../../static/img/book/doctor.png" alt="">
+            </div>
             <div class="middlePosition">
               <p>当天挂号</p>
               <p>今天号源立挂立取</p>
             </div>
             <div class="seeMore">
-              <img src="../../../static/img/查看更多.png" alt="">
+              <!--<img src="../../../static/img/查看更多.png" alt="">-->
             </div>
           </router-link>
         </div>
@@ -137,6 +141,12 @@
                 color: #999999;
                 font-size: 28rem/$rem;
               }
+              p.hosAddress{
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                overflow: hidden;
+              }
             }
           }
           .distance{
@@ -178,23 +188,25 @@
     justify-content: center;
     div.forPosition{
        >div{
-         width:600rem/$rem;
-         height:140rem/$rem;
+         width:690rem/$rem;
+         height:190rem/$rem;
          display: flex;
          align-items: center;
          justify-content: space-around;
          background-color: white;
          margin-bottom: 20rem/$rem;
          border-radius: 7px;
-         >img{
+         .img{
            width:90rem/$rem;
+           img{
+             width:90rem/$rem;
+           }
          }
          .middlePosition{
            width: 340rem/$rem;
-           p{
-             font-size: 32rem/$rem;
+           p:first-child{
+             font-size: 34rem/$rem;
              color: #333333;
-             font-weight: bold;
            }
            p:last-child{
              font-weight: normal;

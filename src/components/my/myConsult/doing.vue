@@ -1,17 +1,17 @@
 <template>
   <scroll class="canceled" :data="doingList" ref="cancel" :pullup="pullup" @scrollToEnd="scrollToEnd()">
     <div>
-      <router-link tag="ul" :to="{path:'/waitArrange',query:{consultId:item.consultId}}" class="border-1px" v-for="item in doingList" :key="item.id">
-        <li >
+      <router-link tag="ul" :to="{path:'/waitArrange',query:{consultId:item.consultId}}" class="border-1px" v-for="(item,index) in doingList" :key="item.id">
+        <li v-if="item.consultTypeName != '名医视频' && item.consultTypeName != '在线医生视频'">
           <div>
             <span class="picConsult">{{ item.consultTypeName }}</span>
-            <span class="consultTim">2016/11/28 18:17</span>
+            <span class="consultTim">{{ createTime[index] }}</span>
           </div>
           <div class="mainContent">
             <p>{{ item.consultContent }}</p>
           </div>
           <div class="ConsultRelate">
-            <span class="name"><span class="circle"> </span><span class="number">{{ item.docName }}</span></span>
+            <span class="name"><span class="circle" v-if="(item.docName)"> </span><span class="number">{{ item.docName }}</span></span>
             <span class="money">{{ item.consultStatusDescription }}</span>
           </div>
         </li>
@@ -28,6 +28,7 @@
 <script>
   import BScroll from 'better-scroll'
   import api from '../../../lib/api'
+  import {formatDate} from '../../../utils/formatTimeStamp'
   import Scroll from '../../../base/scroll'
   export default{
     data(){
@@ -37,6 +38,7 @@
         listPage:1,
         dataLength:"",
         loadingStatus:true,
+        createTime:[]
       }
     },
     mounted(){
@@ -47,10 +49,13 @@
         pageNo:1,
         pageSize:10,
         statusList:['2'],
+        sort:"create_time.desc",
         token:localStorage.getItem("token")
       }).then((data)=>{
+        this.loadingStatus = false
         for(var i=0;i<data.list.length; i++){
           this.doingList.push(data.list[i])
+          this.createTime.push(formatDate(new Date(data.list[i].createTime)))
         }
 
         console.log(data)
@@ -73,11 +78,13 @@
         api("nethos.consult.info.list",{
           token:localStorage.getItem("token"),
           statusList:['2'],
+          sort:"create_time.desc",
           pageNo:that.listPage,
           pageSize:"10"
         }).then((data)=>{
           for(var i=0;i<data.list.length; i++){
             this.doingList.push(data.list[i])
+            this.createTime.push(formatDate(new Date(data.list[i].createTime)))
           }
           this.loadingStatus = false
           that.dataLength = data.list.length
@@ -148,9 +155,9 @@
             overflow: hidden;
             font-size: 15px;
             color: #666666;
-            height: 52px;
+            /*height: 52px;*/
             padding: 5px 5px 5px 5px;
-            background-color: $bgColor2;
+            /*<!--background-color: $bgColor2;-->*/
             border-radius: 7px;
 
           }

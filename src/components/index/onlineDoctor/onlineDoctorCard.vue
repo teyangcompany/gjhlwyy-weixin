@@ -41,8 +41,8 @@
           <div class="desCenter team">
             <h4>医生擅长</h4>
             <div class="line"></div>
-            <h6 v-if="excelAll">{{ aboutDoctor.docSkill }}</h6>
-            <p v-else>{{ aboutDoctor.docSkill }}</p>
+            <h6 class="good" v-if="excelAll">{{ aboutDoctor.docSkill }}</h6>
+            <p class="good" v-else>{{ aboutDoctor.docSkill }}</p>
             <div>
               <div v-if="excelAll" @touchend="excelDownMore()">
                 <img src="../../../../static/img/下.png" alt="" >
@@ -58,8 +58,8 @@
           <div class="desCenter team">
             <h4>医生介绍</h4>
             <div class="line"></div>
-            <h6 v-if="introAll">{{ aboutDoctor.docResume }}</h6>
-            <p v-else>{{ aboutDoctor.docResume }}</p>
+            <h6 class="intro" v-if="introAll">{{ aboutDoctor.docResume }}</h6>
+            <p  class="intro" v-else>{{ aboutDoctor.docResume }}</p>
             <div>
               <div v-if="introAll" @touchend="introDownMore()">
                 <img src="../../../../static/img/下.png" alt="" >
@@ -423,16 +423,19 @@
         flex-direction: column;
         justify-content: center;
         .line{
-           position: absolute;
-           left:0;
-           top: 24rem/$rem;
-           width: 3px;
-           height: 20px;
-           background-color: $assistColorBrown;
+          position: absolute;
+          left:0;
+          top: 15px;
+          width: 3px;
+          height: 20px;
+          background-color: $assistColorBrown;
         }
         >div{
           width: 50px;
-          margin: 0 auto;
+          position: absolute;
+          right:0;
+          /*margin: 0 auto;*/
+          background-color: #E64340;
           text-align: center;
           img{
             width:24rem/$rem;
@@ -459,16 +462,24 @@
             margin-bottom: 10px;
           }
         }
+        h6.good,h6.intro{
+          text-align: left;
+          width:650rem/$rem;
+        }
+        p.good,p.intro{
+          text-align: left;
+          width:650rem/$rem;
+        }
         h6{
           display: -webkit-box;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 2;
           overflow: hidden;
           font-size:32rem/$rem;
-          color: #999999;
+          color: #666666;
           text-align: center;
           img{
-            width:260rem/$rem;
+            width:200rem/$rem;
           }
         }
         p{
@@ -476,7 +487,7 @@
           padding:0;
           font-weight: normal;
           font-size:32rem/$rem;
-          color: #999999;
+          color: #666666;
         }
         p.article{
           display: flex;

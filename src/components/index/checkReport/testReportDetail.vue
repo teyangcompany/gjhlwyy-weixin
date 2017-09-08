@@ -16,7 +16,7 @@
         <span>抱歉，未能查询到您的相关报告</span>
       </div>
       <div v-else>
-        <router-link tag="div" :to="{path:'/testReportCard',query:{index:index,recordId:item.recordId,item:reportInfoString}}" class="checkCenter" style="display: block" v-for="(item,index) in reportInfo">
+        <router-link tag="div" :to="{path:'/testReportCard',query:{index:index,recordId:item.recordId,item:reportInfoString}}" class="checkCenter" style="display: block" v-for="(item,index) in reportInfo" :key="item.id">
           <div class="reportList">
             <h3 class="border-1px">{{ item.inspectDept }}报告</h3>
             <p><span>{{ item.name }}</span><span>{{ item.inspectDate }}</span></p>

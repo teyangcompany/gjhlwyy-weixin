@@ -293,6 +293,9 @@
                       })
                     }else if(data.msg == '请先绑定就诊卡号'){
                         this.showDialog = true
+                    }else if(data.code == '02020801'){
+                      this.showAlert = true
+                      this.secondLine = "排班信息已过期，请重新查询排班数据"
                     }else{
                       this.showAlert = true
                       this.secondLine = data.msg
@@ -533,7 +536,7 @@
         }
       }
       .rightMatch{
-        flex:1;
+        width:300px;
         display: flex;
         flex-direction: column;
         align-items: flex-end;
