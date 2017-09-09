@@ -10,7 +10,7 @@
           <div v-for="(item,index) in patList" @click="checkDoctor(index)">
             <p class="dark border-1px">{{item.compatName}}</p>
           </div>
-          <p class="lightBlue border-1px" @click="addPat()" v-if="path !='/bookService'">添加常用就诊人 <span> <img src="../../static/img/add.png"></span></p>
+          <p class="lightBlue border-1px" @click="addPat()" v-if="path !='/bookService'">添加常用就诊人</p>
         </div>
       </div>
       <div class="ft">

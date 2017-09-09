@@ -25,7 +25,7 @@
         </div>
         <div class="detail border-1px">
           <div class="detailInput">
-            <textarea  @keyup="keypress()" id="myArea" placeholder="请详细描述患者的主要症状、持续时间、已经确诊的疾病和接诊医生的意见。(如有症状照片、病历、检查单，可在下方上传)" v-model="description"></textarea>
+            <textarea  onselectstart="return false;" @keyup="keypress()" id="myArea" placeholder="请详细描述患者的主要症状、持续时间、已经确诊的疾病和接诊医生的意见。(如有症状照片、病历、检查单，可在下方上传)" v-model="description"></textarea>
           </div>
         </div>
         <div class="uploadWrap">
@@ -149,6 +149,8 @@
                 })
                 console.log("成功")
                 console.log(data)
+              }else{
+                  alert(data.msg)
               }
             })
           }
@@ -173,21 +175,17 @@
         }
         this.fileLegth = file.length
         let that = this
-        var q = d3.queue()
         for(var i=0;i<file.length;++i){
-
-
-              let reader = new FileReader()
-              reader.readAsDataURL(file[i])
-              that.fileName.push(file[i].name)
-          q.defer(  function() {  (function(i) {
-              reader.onload = function () {
-                that.previewImg.push(this.result)
-
-                    api("nethos.system.atta.upload.image.base64", {
-                      base64: that.previewImg[i],
-                      originalName: that.fileName[i]
-                    })
+          let reader = new FileReader()
+          reader.readAsDataURL(file[i])
+          that.fileName.push(file[i].name)
+         (function(i) {
+          reader.onload = function () {
+            that.previewImg.push(this.result)
+                api("nethos.system.atta.upload.image.base64", {
+                  base64: that.previewImg[i],
+                  originalName: that.fileName[i]
+                })
 //                      .then((data) => {
 ////                console.log(that.previewImg[i])
 //                      console.log(that.fileName[i])
@@ -197,24 +195,11 @@
 //                      that.attaId.push(data.obj.attaId)
 ////                console.log(that.attaId)
 //                    })
-
-
-
-
-              }
-              })(i)
-          })
+          }
+          })(i)
         }
-        q.await(function(error,data) {
-          if (error) throw error;
-          console.log(data)
-          console.log("Goodbye!");
-        });
         console.log(that.fileName)
         console.log(that.previewImg)
-
-
-
       },
     },
     components:{
@@ -222,6 +207,16 @@
       patientToggle,
       Alert
     },
+    watch:{
+      description(){
+        this.text = document.getElementById("myArea").value
+        this.textLength = this.text.length
+        if(this.textLength > 500){
+          document.getElementById("myArea").value = this.text.substr(0,500)
+          alert("字数不能超过500")
+        }
+      }
+    }
 //    watch:{
 //      textLength(){
 //        if(this.textLength>500){

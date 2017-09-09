@@ -11,7 +11,7 @@
               </div>
               <div class="rightType" ref="rightScroll">
                 <ul>
-                  <li v-for="(item,index) in categoryDetail" @click="seeDetail(index)" v-if="item.hasScheme == true">
+                  <li v-for="(item,index) in categoryDetail" @click="seeDetail(index,item)" v-if="item.hasScheme == true">
                     <span >{{ item.deptName }}</span>
                   </li>
                   <li v-for="(item,index) in categoryDetail" v-else>
@@ -70,12 +70,20 @@
            this.categoryDetail = this.category[this.clickIndex].deptList
             console.log(index)
         },
-        seeDetail(index){
+        seeDetail(index,item){
+            console.log(item.deptName)
             console.log(this.categoryDetail[index].bookDeptId)
-            this.$router.push({
-             path:'/bookType/expert',
-             query:{bookDeptId:this.categoryDetail[index].bookDeptId,bookHosId:this.bookHosId,bookSort:this.bookSort}
-            })
+            if(this.bookSort == '预约挂号'){
+              this.$router.push({
+                path:'/bookType/expert',
+                query:{bookDeptId:this.categoryDetail[index].bookDeptId,bookHosId:this.bookHosId,bookSort:this.bookSort}
+              })
+            }else{
+              this.$router.push({
+                path:'/nowBook',
+                query:{bookDeptId:this.categoryDetail[index].bookDeptId,bookHosId:this.bookHosId,bookSort:this.bookSort,deptName:item.deptName}
+              })
+            }
         },
         goHosList(){
             console.log("123")

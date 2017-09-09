@@ -177,7 +177,7 @@
               originalName:fileName
             }).then((data)=>{
               console.log(data)
-
+              that.$set(that.$data,'previewImg',data.obj.url)
               this.previewImg = data.obj.url
             })
           }

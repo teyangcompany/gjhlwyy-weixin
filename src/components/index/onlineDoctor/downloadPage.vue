@@ -5,7 +5,7 @@
             <div class="downloadCenter">
                <div class="tips">
                    <p v-if="ios == true">点击右上角“<img src="../../../../static/img/u330.png" alt="">在safari中打开”以下载</p>
-                   <p v-else>点击右上角“<img src="../../../../static/img/u313.png" alt="">在safari中打开”以下载</p>
+                   <p v-else>点击右上角“<img src="../../../../static/img/u313.png" alt="">在浏览器中打开”以下载</p>
                    <div class="nav"></div>
                </div>
                <div class="icon">

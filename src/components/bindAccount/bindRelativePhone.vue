@@ -4,21 +4,26 @@
          <div class="bindPhone">
              <div class="bindPhoneCenter">
                <div class="bigMiddle">
-                   <p>请先绑定您的手机号</p>
+                   <p>
+                     <img src="../../../static/img/填写手机号.png" alt="">
+                     <span>请先填写您的手机号</span>
+                   </p>
                </div>
                <div class="aboutNumber">
                  <div class="formContent">
-                   <div class="form phone">
-                     <label for="" class="phoneLabel">手机号</label>
+                   <div class="form phone border-1px">
+                     <label for="" class="phoneLabel"> <img src="../../../static/img/手机号.png" alt=""> </label>
                      <input type="text" placeholder="请输入手机号" class="numberInput" v-model="phone">
                    </div>
-                   <div class="form verifyCode">
-                     <label for="" class="codeLabel">验证码</label>
+                   <div class="form verifyCode border-1px">
+                     <label for="" class="codeLabel"> <img src="../../../static/img/验证码.png" alt=""> </label>
                      <input type="text" placeholder="请输入验证码" class="codeInput" v-model="code">
-                     <button @click="getCode">获取验证码</button>
+                     <span @click="getCode">获取验证码</span>
                    </div>
                  </div>
-                 <button class="bottom" @click="verifyCode()">这是我的手机号</button>
+                 <div class="buttonWrap">
+                   <button class="bottom" @click="verifyCode()">这是我的手机号</button>
+                 </div>
                </div>
              </div>
          </div>
@@ -95,6 +100,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      p{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        img{
+          width:319rem/$rem;
+          height:246rem/$rem;
+          margin-bottom: 85rem/$rem;
+        }
+        span{
+          font-size: 50rem/$rem;
+          color: #333333;
+        }
+      }
     }
     .aboutNumber{
       position: fixed;
@@ -111,26 +130,38 @@
           display: flex;
           margin-top: 1px;
           label{
-            width: 100px;
-            font-size: 16px;
+            width: 60px;
             padding-left:1rem;
-            font-size: 32rem/$rem;
-            color: #333333;
-            background-color: $bgColor2;
+            /*<!--background-color: $bgColor2;-->*/
           }
           label.phoneLabel{
             border-top-left-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            img{
+              height:50rem/$rem;
+              width:30rem/$rem;
+            }
           }
           label.codeLabel{
             border-bottom-left-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            img{
+              height:45rem/$rem;
+              width:40rem/$rem;
+            }
           }
           input{
             flex: 1;
+            text-align: left;
             border: none;
             outline: medium;
             font-size: 32rem/$rem;
             color: #999999;
-            background-color: $bgColor2;
+            /*<!--background-color: $bgColor2;-->*/
           }
           input.codeInput{
             border-bottom-right-radius: 7px;
@@ -139,7 +170,7 @@
             flex:1;
             font-size: 32rem/$rem;
             color: #999999;
-            background-color: $bgColor2;
+            /*<!--background-color: $bgColor2;-->*/
             border-top-right-radius: 7px;
           }
         }
@@ -148,32 +179,37 @@
         }
         .verifyCode{
           position: relative;
-
+          height:109rem/$rem
         }
-        .verifyCode button{
+        .verifyCode span{
           position: absolute;
-          top:5px;
+          display: inline-block;
+          top:30rem/$rem;
+          text-align: center;
           right:0;
-          height: 30px;
-          line-height: 30px;
-          width: 200rem/$rem;
-          border:none;
-          outline: medium;
-          border-radius: 7px;
-          font-size: 32rem/$rem;
-          color: white;
-          background-color: $buttonColor;
+          height: 57rem/$rem;
+          line-height: 57rem/$rem;
+          width: 154rem/$rem;
+          font-size: 26rem/$rem;
+          border:1px solid #3Dccc2;
+          border-radius: 5px;
+          color: #3Dccc2;
         }
       }
-      button.bottom{
+      .buttonWrap{
         width:690rem/$rem;
-        height:80rem/$rem;
+        height:90rem/$rem;
+        margin-top: 69rem/$rem;
+        text-align: center;
+      }
+      button.bottom{
+        width:650rem/$rem;
+        height:90rem/$rem;
         border: none;
         outline: medium;
-        border-radius: 7px;
-        margin-top: 150rem/$rem;
+        border-radius: 22px;
         color: white;
-        font-size: 32rem/$rem;
+        font-size: 36rem/$rem;
         background-color: $buttonColor;
       }
     }

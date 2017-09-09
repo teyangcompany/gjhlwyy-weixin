@@ -8,15 +8,15 @@ import Vuelidate from 'vuelidate'
 
 Vue.use(Vuelidate)
 Vue.config.productionTip = false
-Vue.mixin({
-  created: function () {
-    var myOption = this.$options.myOption
-    var token = localStorage.getItem("token")
-    if (!token) {
-     this.$router.push('/login')
-    }
-  }
-})
+// Vue.mixin({
+//   created: function () {
+//     var myOption = this.$options.myOption
+//     var token = localStorage.getItem("token")
+//     if (!token) {
+//      this.$router.push('/login')
+//     }
+//   }
+// })
 let UA = window.navigator.userAgent.toLocaleLowerCase();
 if (/iphone/.test(UA)) {
   window.device = "iphone";

@@ -1,7 +1,7 @@
 <template>
   <div class="doctor">
       <img  @click="back()" class="previous" src="../../../../static/img/返回.png" alt="">
-      <span @click="follow" class="follow" v-if="isFollow"><img src="../../../../static/img/爱心2.png" alt="">关注</span>
+      <span @click="follow" class="follow" v-if="isFollow"><img src="../../../../static/img/爱心2.png" alt="">取消</span>
       <span @click="follow" class="follow" v-else><img src="../../../../static/img/爱心1.png" alt="">关注</span>
     <v-header ref="topHeader" :title="title" :rightTitle="rightTitle" ></v-header>
     <div class="doctorCard" ref="doctorCard">
@@ -14,7 +14,7 @@
             <h4><span class="mainTitle">{{aboutDoctor.docName}}</span><span class="chief">名医</span></h4>
             <h6>{{aboutDoctor.docDeptName}}&nbsp; {{aboutDoctor.docTitle}}</h6>
             <h6>{{aboutDoctor.docHosName}}</h6>
-            <div class="checkRating"> <span>查看评价</span> </div>
+            <router-link tag="div" :to="{path:'/commentDetail',query:{docId:aboutDoctor.docId}}" class="checkRating">  <star :size="24" :score="aboutDoctor.docScoure"></star><span v-if="aboutDoctor.docScoure">{{ aboutDoctor.docScoure.toFixed(1) }}分 </span><span>查看评价></span> </router-link>
           </div>
         </div>
         <div class="sortFunc">
@@ -41,14 +41,16 @@
           <div class="desCenter team">
             <h4>医生擅长</h4>
             <div class="line"></div>
-            <h6 class="good" v-if="excelAll">{{ aboutDoctor.docSkill }}</h6>
-            <p class="good" v-else>{{ aboutDoctor.docSkill }}</p>
-            <div>
-              <div v-if="excelAll" @touchend="excelDownMore()">
-                <img src="../../../../static/img/下.png" alt="" >
-              </div>
-              <div  v-else @touchend="excelClose()">
-                <img src="../../../../static/img/上.png" alt="" >
+            <div class="forArrowLeft">
+              <h6 class="good" v-if="excelAll">{{ aboutDoctor.docSkill }}</h6>
+              <p class="good" v-else>{{ aboutDoctor.docSkill }}</p>
+              <div>
+                <div v-if="excelAll" @touchend="excelDownMore()">
+                  <img src="../../../../static/img/下.png" alt="" >
+                </div>
+                <div  v-else @touchend="excelClose()">
+                  <img src="../../../../static/img/上.png" alt="" >
+                </div>
               </div>
             </div>
           </div>
@@ -58,14 +60,16 @@
           <div class="desCenter team">
             <h4>医生介绍</h4>
             <div class="line"></div>
-            <h6 class="intro" v-if="introAll">{{ aboutDoctor.docResume }}</h6>
-            <p  class="intro" v-else>{{ aboutDoctor.docResume }}</p>
-            <div>
-              <div v-if="introAll" @touchend="introDownMore()">
-                <img src="../../../../static/img/下.png" alt="" >
-              </div>
-              <div  v-else @touchend="introClose()">
-                <img src="../../../../static/img/上.png" alt="" >
+            <div class="forArrowLeft">
+              <h6 class="intro" v-if="introAll">{{ aboutDoctor.docResume }}</h6>
+              <p  class="intro" v-else>{{ aboutDoctor.docResume }}</p>
+              <div>
+                <div v-if="introAll" @touchend="introDownMore()">
+                  <img src="../../../../static/img/下.png" alt="" >
+                </div>
+                <div  v-else @touchend="introClose()">
+                  <img src="../../../../static/img/上.png" alt="" >
+                </div>
               </div>
             </div>
           </div>
@@ -73,9 +77,11 @@
         <div class="blank border-1px"></div>
         <div class="institutionDes border-1px">
           <div class="desCenter team">
-            <h4>医生文章</h4>
+            <h4 class="article">医生文章 <span @click="goArticleList()" v-if="doctorArticle.length !=0">更多<img src="../../../../static/img/left-arrow.png" alt=""></span> </h4>
             <div class="line"></div>
-            <p class="article" v-for="(item,index) in doctorArticle"><span> {{ item.title }}</span><span> {{ item.readTimes }}次阅读</span><span> {{ articleTime[index] }}</span> </p>
+            <router-link tag="p" :to="{path:'/articleDetail',query:{articleId:item.articleId}}" class="article" v-for="(item,index) in doctorArticle" :key="item.id">
+              <span> {{ item.title }}</span><span> {{ item.readTimes }}次阅读</span><span> {{ articleTime[index] }}</span>
+            </router-link>
           </div>
         </div>
         <div class="blank border-1px"></div>
@@ -101,13 +107,14 @@
   import BScroll from 'better-scroll'
   import Dialog from '../../../base/dialog'
   import api from '../../../lib/api'
+  import Star from '../../../base/star/star'
   import { formatDate } from '../../../utils/formatTimeStamp'
   export default{
     data(){
       return{
         title:"",
         rightTitle:"",
-        dialogTitle:"温馨提示",
+        dialogTitle:"",
         dialogMain:"微信暂不支持该功能，请前往应用商店下载app来和医生视频问诊",
         dialogLeftFoot:"取消",
         dialogRightFoot:"下载app",
@@ -183,6 +190,12 @@
             }
         })
       },
+      goArticleList(){
+           this.$router.push({
+             path:'/articleList',
+             query:{docId:this.doctorId}
+           })
+      },
       goBookNum(){
 
       },
@@ -239,7 +252,8 @@
     },
     components:{
       "VHeader":header,
-       "VDialog":Dialog
+       "VDialog":Dialog,
+       Star
     },
     watch:{
       excelAll(){
@@ -260,7 +274,7 @@
         this.$nextTick(()=>{
           setTimeout(()=>{
             this._initDoctorScroll()
-          },100)
+          },200)
         })
       }
     }
@@ -366,9 +380,13 @@
           margin:0;
         }
         .checkRating{
+          display: flex;
+          align-items: center;
+          justify-content: center;
           span{
             color: #666666;
             font-size: 28rem/$rem;
+            margin-left: 10px;
           }
         }
         /*background-color: #0BB20C;*/
@@ -430,16 +448,15 @@
           height: 20px;
           background-color: $assistColorBrown;
         }
-        >div{
-          width: 50px;
-          position: absolute;
-          right:0;
-          /*margin: 0 auto;*/
-          background-color: #E64340;
-          text-align: center;
-          img{
-            width:24rem/$rem;
-            height:16rem/$rem;
+        .forArrowLeft{
+           display: flex;
+          >div{
+            >div{
+              height:70rem/$rem;
+              img{
+                width:40rem/$rem;
+              }
+            }
           }
         }
         h4,h6{
@@ -462,13 +479,28 @@
             margin-bottom: 10px;
           }
         }
+        h4.article{
+          display: flex;
+          justify-content: space-between;
+           span{
+             width:200rem/$rem;
+             text-align: right;
+             img{
+               width:16rem/$rem;
+               height:24rem/$rem;
+               margin-left: 5px;
+             }
+           }
+        }
         h6.good,h6.intro{
           text-align: left;
           width:650rem/$rem;
+          word-break: break-all;
         }
         p.good,p.intro{
           text-align: left;
           width:650rem/$rem;
+          word-break: break-all;
         }
         h6{
           display: -webkit-box;
@@ -479,7 +511,7 @@
           color: #666666;
           text-align: center;
           img{
-            width:200rem/$rem;
+            width:450rem/$rem;
           }
         }
         p{
@@ -494,7 +526,7 @@
           justify-content: space-between;
           span:nth-child(1){
             display: -webkit-box;
-            height:40rem/$rem;
+            /*<!--height:40rem/$rem;-->*/
             width:200rem/$rem;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 1;

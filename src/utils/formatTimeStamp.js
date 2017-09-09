@@ -16,6 +16,14 @@ function formatDate(now) {
     +(hour<10?"0"+hour:hour)+":"
     +(minute<10?"0"+minute:minute)
 }
+function nowTime(now){
+  var year=now.getFullYear();
+  var month=now.getMonth()+1;
+  var date=now.getDate();
+  return year+"-"
+    +(month < 10 ? "0" + month:month)+"-"
+    +(date<10?"0" + date:date) +" "
+}
 function formDateHour(nowTime){
   var h=nowTime.getHours();
   var m=nowTime.getMinutes();
@@ -27,4 +35,4 @@ function formDateMinute(playDuration){
   var s = parseInt(playDuration%60)
   return (m1 < 10?"0" + m1:m1)+ "′"+(s<10?"0"+s:s)+"″"
 }
-export {formatDate,formDateHour,formDateMinute}
+export {formatDate,formDateHour,formDateMinute,nowTime}

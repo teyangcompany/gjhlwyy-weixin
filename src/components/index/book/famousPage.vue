@@ -5,52 +5,57 @@
       <img src="../../../../static/img/loading.gif" alt="">
       <span>正在很努力的加载中...</span>
     </div>
-    <div class="expertList" v-if="doctorInfo">
-      <ul  class="border-1px">
-        <router-link tag="div" to="/expertDetail">
-          <li>
-            <div class="cancelImg">
-              <img :src="doctorInfo.docAvatar" alt="">
-            </div>
-            <div class="cancelIntro">
-              <div>
-                <span class="chatDoctor">{{ doctorInfo.docName }}</span> <span class="doctorTitle">{{ doctorInfo.docTitle }}</span>
-                <p>{{ doctorInfo.hosName }}</p>
-                <p v-if="deptSchemeList.length != 0">{{ deptSchemeList[0].deptName }}</p>
-              </div>
-            </div>
-          </li>
-        </router-link>
-      </ul>
-      <div class="blank"></div>
-      <div class="blank border-1px"></div>
-      <div class="list border-1px">
-        <p v-if="deptSchemeList.length != 0">{{ deptSchemeList[0].deptName }}<img src="../../../../static/img/book/left-arrow.png" alt=""> </p>
-      </div>
-      <div class="list border-1px" v-if="schemeList.length != 0" v-for="(item,index) in schemeList" @click="book(item,index)">
-        <p class="specialBlack">{{ (item.schemeDate).substr(0,10) }} {{ weekNum  }} {{ item.schemeAmpm == 'am'? '上午':'下午' }}
-          <span class="year gray" v-if="item.schemeStats == 0">无</span>
-          <span class="year gray" v-if="item.schemeStats == 1">停诊</span>
-          <span class="year gray" v-if="item.schemeStats == 2">已满</span>
-          <span class="year" v-if="item.schemeStats == 3">即将(未放号或号子被锁定)</span>
-          <!--<span class="year" >预约</span>-->
-          <span class="specialMoney" v-if="item.schemeStats == 4">预约{{ item.bookFee }}元</span>
-        </p>
-      </div>
-      <div class="list border-1px" v-else>
-        <p class="specialBlack">暂无医生排班信息
+    <scroll class="expertList" v-if="doctorInfo" :data="deptSchemeList">
+       <div>
+         <ul  class="border-1px">
+           <div>
+             <li>
+               <div class="cancelImg">
+                 <img :src="doctorInfo.docAvatar" alt="">
+               </div>
+               <div class="cancelIntro">
+                 <div>
+                   <span class="chatDoctor">{{ doctorInfo.docName }}</span> <span class="doctorTitle">{{ doctorInfo.docTitle }}</span>
+                   <p>{{ doctorInfo.hosName }}</p>
+                   <p v-if="deptSchemeList.length != 0">{{ deptSchemeList[0].deptName }}</p>
+                 </div>
+               </div>
+             </li>
+           </div>
+         </ul>
+         <div v-for="parentItem in deptSchemeList">
+           <div class="blank border-1px"></div>
+           <div class="list border-1px">
+             <p v-if="deptSchemeList.length != 0">{{ parentItem.deptName }}<img src="../../../../static/img/book/left-arrow.png" alt=""> </p>
+           </div>
+           <div class="list border-1px" v-if="parentItem.schemeList.length != 0" v-for="(item,index) in parentItem.schemeList" @click="book(item,index)">
+             <p class="specialBlack">{{ (item.schemeDate).substr(0,10) }} {{ weekNum  }} {{ item.schemeAmpm == 'am'? '上午':'下午' }}
+               <span class="year gray" v-if="item.schemeStats == 0">无</span>
+               <span class="year gray" v-if="item.schemeStats == 1">停诊</span>
+               <span class="year gray" v-if="item.schemeStats == 2">已满</span>
+               <span class="year" v-if="item.schemeStats == 3">即将(未放号或号子被锁定)</span>
+               <!--<span class="year" >预约</span>-->
+               <span class="specialMoney" v-if="item.schemeStats == 4">预约{{ item.bookFee }}元</span>
+             </p>
+           </div>
+           <div class="list border-1px" v-else>
+             <p class="specialBlack">暂无医生排班信息
 
-        </p>
-      </div>
-      <!--<div class="list border-1px">-->
-        <!--<p class="specialBlack">2017-08-24 周四 上午  </p>-->
-      <!--</div>-->
-      <div class="blank"></div>
-      <div class="blank border-1px"></div>
-      <div class="list border-1px">
-        <p>医生擅长<img src="../../../../static/img/book/left-arrow.png" alt=""> </p>
-      </div>
-    </div>
+             </p>
+           </div>
+         </div>
+         <!--<div class="list border-1px">-->
+         <!--<p class="specialBlack">2017-08-24 周四 上午  </p>-->
+         <!--</div>-->
+         <div class="blank border-1px"></div>
+         <div class="list border-1px">
+           <p>医生擅长<img src="../../../../static/img/book/left-arrow.png" alt=""> </p>
+         </div>
+         <div class="goodAt">
+           <p>{{ doctorInfo.docDescription }}</p>
+         </div>
+       </div>
+    </scroll>
     <time-toggle :patList="patientAll" :showPat="showPat" :option="patOption" @activate="check" @toggleClosed="closeTime()"></time-toggle>
     <toast v-if="showToast"></toast>
   </div>
@@ -60,6 +65,7 @@
   import api from '../../../lib/api'
   import TimeToggle from '../../../base/timeToggle'
   import Toast from '../../../base/toast'
+  import Scroll from '../../../base/scroll'
   export default{
     data(){
       return{
@@ -168,7 +174,8 @@
     components:{
       "VHeader":header,
       TimeToggle,
-      Toast
+      Toast,
+      Scroll
     }
   }
 </script>
@@ -326,6 +333,14 @@
               /*color: #999999;*/
             /*}*/
           }
+        }
+      }
+      .goodAt{
+        p{
+          width:690rem/$rem;
+          font-size: 32rem/$rem;
+          color: #333333;
+          margin: 10rem/$rem auto;
         }
       }
     }

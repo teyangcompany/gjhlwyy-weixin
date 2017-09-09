@@ -3,36 +3,36 @@
           <v-header :title="title" :rightTitle="rightTitle"></v-header>
           <div class="infoArea">
             <div class="weui-cells weuiMargin">
-              <!--<a class="weui-cell weui-cell_access" href="javascript:;">-->
-                <!--<div class="weui-cell__hd"></div>-->
-                <!--<div class="weui-cell__bd">-->
-                  <!--<p>头像</p>-->
-                <!--</div>-->
-                <!--<div class="weui-cell__ft">-->
-                  <!--<img src="../../../static/img/p1.jpg" alt="" v-if="previewImg == ''">-->
-                  <!--<img :src="previewImg" alt="" v-else>-->
-                <!--</div>-->
-              <!--</a>-->
+              <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd"></div>
+                <div class="weui-cell__bd">
+                  <p>头像</p>
+                </div>
+                <div class="weui-cell__ft">
+                  <img :src="patientInfo.patAvatar" alt="" v-if="previewImg == ''">
+                  <img :src="previewImg" alt="" v-else>
+                </div>
+              </a>
               <a class="weui-cell weui-cell_access" href="javascript:;">
                 <div class="weui-cell__hd"></div>
                 <div class="weui-cell__bd">
                   <p>姓名</p>
                 </div>
-                <div class="weui-cell__ft">马建军</div>
+                <div class="weui-cell__ft">{{ patientInfo.patName }}</div>
               </a>
               <a class="weui-cell weui-cell_access" href="javascript:;">
                 <div class="weui-cell__hd"></div>
                 <div class="weui-cell__bd">
                   <p>性别</p>
                 </div>
-                <div class="weui-cell__ft">男</div>
+                <div class="weui-cell__ft">{{ patientInfo.patGender == 'M'?'男':'女' }}</div>
               </a>
               <a class="weui-cell weui-cell_access" href="javascript:;">
                 <div class="weui-cell__hd"></div>
                 <div class="weui-cell__bd">
                   <p>年龄</p>
                 </div>
-                <div class="weui-cell__ft">28</div>
+                <div class="weui-cell__ft">{{ patientInfo.age }}</div>
               </a>
               <a class="weui-cell weui-cell_access" href="javascript:;">
                 <div class="weui-cell__hd"></div>
@@ -47,14 +47,14 @@
                 <div class="weui-cell__bd">
                   <p>手机号</p>
                 </div>
-                <div class="weui-cell__ft">1432148132564315</div>
+                <div class="weui-cell__ft">{{ patientInfo.patMobile }}</div>
               </a>
               <a class="weui-cell weui-cell_access" href="javascript:;">
                 <div class="weui-cell__hd"></div>
                 <div class="weui-cell__bd">
                   <p>身份证号</p>
                 </div>
-                <div class="weui-cell__ft">4213143312424512535</div>
+                <div class="weui-cell__ft">{{ patientInfo.patIdcard  }}</div>
               </a>
             </div>
             <div class="blank border-1px"></div>
@@ -66,13 +66,23 @@
 </template>
 <script>
   import header from '../../base/header'
+  import api from '../../lib/api'
   export default{
       data(){
           return{
               title:"我",
               rightTitle:"",
-              previewImg:""
+              previewImg:"",
+              patientInfo:""
           }
+      },
+      created(){
+        api("nethos.pat.info.get",{
+          token:localStorage.getItem("token")
+        }).then((data)=>{
+          this.patientInfo = data.obj
+          console.log(data)
+        })
       },
       methods:{
         selectImg(e){
