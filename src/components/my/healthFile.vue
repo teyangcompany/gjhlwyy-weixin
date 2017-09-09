@@ -7,13 +7,13 @@
           <ul>
             <li>
               <div class="cancelImg">
-                <img src="../../../static/img/p1.jpg" alt="">
+                <img :src="docObj.patAvatar" alt="">
               </div>
               <div class="cancelIntro">
                 <div class="introTitle">
-                  <span class="subTitle">王小仙</span>
-                  <p>姓名:刘劲松</p>
-                  <p>男 27岁 浙江杭州</p>
+                  <span class="subTitle">{{docObj.patName}}</span>
+                  <p>姓名:{{docObj.patName}}</p>
+                  <p>{{docObj.patGender=='M'?'男':'女'}} {{docObj.age}} </p>
                 </div>
               </div>
             </li>
@@ -23,89 +23,69 @@
               基本情况
             </div>
           </div>
-          <router-link tag="div" to="/ill" class="illness border-1px">
+          <div tag="div" @click="goIll(history.presentingComplaint)"  class="illness border-1px">
             <div>
               所患疾病
               <div>
-                <span>未填写</span>
+                <span v-show="flag">{{history.presentingComplaint?history.presentingComplaint.substring(0,5)+'......':'无'}}</span>
                 <img src="../../../static/img/查看更多.png" alt="">
               </div>
             </div>
-          </router-link>
-          <router-link tag="div" to="/pastHistory" class="history border-1px">
+          </div>
+          <div tag="div"  @click="goPastHistory(history.pastHistory)" class="history border-1px">
             <div>
               既往史
               <div>
-                <span>无</span>
+                <span  v-show="flag">
+                {{history.pastHistory?history.pastHistory.substring(0,5)+'......':'无'}}
+                </span>
                 <img src="../../../static/img/查看更多.png" alt="">
               </div>
             </div>
-          </router-link>
-          <router-link tag="div" to="/familyHistory" class="family border-1px">
+          </div>
+          <div tag="div" @click="goFamilyHistory(history.familyHistory)" class="family border-1px">
             <div>
               家族史
               <div>
-                <span>无</span>
+                <span  v-show="flag">
+                 {{history.familyHistory?history.familyHistory.substring(0,5)+'......':'无'}}
+                </span>
                 <img src="../../../static/img/查看更多.png" alt="">
               </div>
             </div>
-          </router-link>
-          <router-link tag="div" to="/allergyHistory" class="alergic border-1px">
+          </div>
+          <div tag="div" @click="goAllergyHistory(history.allergyHistory)" class="alergic border-1px">
             <div>
               过敏史
               <div>
-                <span>无</span>
+                <span  v-show="flag">
+                  {{history.allergyHistory?history.allergyHistory.substring(0,5)+'......':'无'}}
+                </span>
                 <img src="../../../static/img/查看更多.png" alt="">
               </div>
             </div>
-          </router-link>
+          </div>
           <div class="basic">
             <div>
               诊疗记录
             </div>
           </div>
-          <router-link tag="div" to="/deleteRecord" class="recordList border-1px">
-            <div class="wrapList">
-              <p class="listTime number">2017-13-12</p>
-              <p class="listContent">我最近因为经常在晚上看书，光线又十分不明亮的时候看导致最近视力降的很快</p>
+          <div class="recordList border-1px" v-show="historyList">
+            <div class="wrapList" v-for="item of historyList" @click="goDelete(item)">
+              <p class="listTime number">{{item.createTime | Todate}}</p>
+              <p class="listContent">{{item.medContent}}</p>
               <div class="recordImg">
-                <div>
-                  <img src="../../../static/img/c3.jpg" alt="">
+                <div v-for="url of item.sysAttachmentList">
+                  <img :src="url.url" alt="" @load="getImg">
                 </div>
-                <div>
-                  <img src="../../../static/img/c9.jpg" alt="">
-                </div>
-                <div>
-                  <img src="../../../static/img/c10.jpg" alt="">
-                </div>
-                <div>
-                  <img src="../../../static/img/c6.jpg" alt="">
-                </div>
-                <div>
-                  <img src="../../../static/img/c3.jpg" alt="">
-                </div>
+
               </div>
             </div>
-          </router-link>
-          <router-link tag="div" class="recordList border-1px" to="/deleteRecord">
-            <div class="wrapList">
-              <p class="listTime number">2017-13-12</p>
-              <p class="listContent">腰腿疼属于一种非常常见的疾病，主要是在突然用力过猛的时候容易出现，并且身体瞬间感觉到向闪电一样的疼痛，然后直接放射到臀部、大腿最后到小脚趾</p>
-              <div class="recordImg">
-                <div>
-                  <img src="../../../static/img/c1.jpg" alt="">
-                </div>
-                <div>
-                  <img src="../../../static/img/c2.jpg" alt="">
-                </div>
-                <div>
-                  <img src="../../../static/img/c5.jpg" alt="">
-                </div>
-              </div>
-            </div>
-          </router-link>
+          </div>
           <div class="addFile">
-            <router-link tag="div" to="/addRecord" class="button">
+            <router-link tag="div" :to="{path:'/addRecord',
+            query:{
+            patId:patId}}" class="button">
               <button>+ 添加诊疗记录</button>
             </router-link>
           </div>
@@ -116,28 +96,130 @@
     </div>
   </transition>
 </template>
-<script>
+<script type="text/ecmascript-6">
   import header from '../../base/header'
   import BScroll from 'better-scroll'
+  import api from '../../lib/api'
+  import {Todate} from '../../lib/filter'
   export default{
     data(){
       return{
         title:'健康档案',
-        rightTitle:''
+        rightTitle:'',
+        token:localStorage.getItem('token'),
+        docObj:{},
+        history:{},
+        historyList:[],
+        patId:'',
+        flag:false
       }
+    },
+    filters:{
+      Todate
     },
     mounted(){
       this.$nextTick(()=>{
         this._initFileScroll()
+      });
+
+      api('nethos.pat.info.get',{
+        "token":localStorage.getItem('token')
+      }).then(res=>{
+        if(res.succ){
+          this.docObj = res.obj;
+          this.getData();
+          this.getHistory();
+          this.patId = res.obj.patId
+        }else {
+          alert(res.msg)
+        }
       })
     },
     methods:{
+      goAllergyHistory(val){
+        this.$router.push({
+          name:'allergyHistory',
+          params:{
+            val:val,
+            patId:this.patId
+          }
+        })
+      },
+      goFamilyHistory(val){
+        this.$router.push({
+          name:'familyHistory',
+          params:{
+            val:val,
+            patId:this.patId
+          }
+        })
+      },
+      goIll(val){
+        this.$router.push({
+          name:'ill',
+          params:{
+            val:val,
+            patId:this.patId
+          }
+        })
+      },
+      goPastHistory(val){
+        this.$router.push({
+          name:'pastHistory',
+          params:{
+            val:val,
+            patId:this.patId
+          }
+        })
+      },
+      goDelete(value){
+        this.$router.push({
+          name:'deleteRecord',
+          params:{
+            obj:value
+          }
+        })
+      },
       _initFileScroll(){
         this.fileScroll = new BScroll(this.$refs.healthFile,{
           click:true
         })
-        console.log( this.fileScroll)
-      }
+      },
+      getData(){
+        api('nethos.pat.medicalinfo.details',{
+          patId:this.docObj.patId,
+          "token":localStorage.getItem('token')
+        }).then(res=>{
+          if(res.succ){
+            console.log(res,9999);
+            if(res.obj){
+              console.log(this.flag)
+              this.flag=true;
+              this.history = res.obj;
+            }
+
+          }else {
+            alert(res.msg)
+          }
+        })
+      },
+      getHistory(){
+        api('nethos.pat.medicalhistroy.list',{
+          "token":localStorage.getItem('token'),
+          patId:this.docObj.patId,
+        }).then(res=>{
+          if(res.succ){
+            console.log(res,88888);
+            this.historyList = res.list
+          }else {
+            alert(res.msg)
+          }
+        })
+      },
+      getImg(){
+        console.log(212121);
+        this._initFileScroll()
+      },
     },
     components:{
       'VHeader':header
