@@ -309,7 +309,11 @@
     width:100%;
     top:0;
     display: flex;
+
     z-index:160;
+
+    z-index:6;
+
     section{
       text-align: center;
       .word{
