@@ -71,17 +71,22 @@
       },
       getCode(){
           console.log("123")
-          api("nethos.system.captcha.generate",{
+          if(this.compatMobile == ''){
+            this.alertContent = '请先输入您的手机号'
+            this.showAlert = true
+          }else{
+            api("nethos.system.captcha.generate",{
               captchaType:"SMS",
               mobile:this.compatMobile
             }).then((data)=>{
               if(data.code == 0){
-                  this.cid = data.obj
-                    this.a = setInterval(()=>{
-                      this.countdown--
-                    },1000)
+                this.cid = data.obj
+                this.a = setInterval(()=>{
+                  this.countdown--
+                },1000)
               }
-          })
+            })
+          }
       },
       goAdd(){
         console.log(this.cid)
@@ -134,8 +139,8 @@
     margin-top: 10px;
     .form{
       width:100%;
-      height: 40px;
-      line-height: 40px;
+      height: 90rem/$rem;
+      line-height: 90rem/$rem;
       background-color:white;
       display: flex;
       margin-top: 1px;
@@ -164,11 +169,11 @@
     }
     .verifyCode button{
       position: absolute;
-      top:5px;
+      top:13rem/$rem;
       right:0;
-      height: 30px;
-      line-height: 30px;
-      width: 200rem/$rem;
+      height: 70rem/$rem;
+      line-height: 70rem/$rem;
+      width: 220rem/$rem;
       border:none;
       border-radius: 7px;
       outline:medium;

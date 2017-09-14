@@ -1,8 +1,15 @@
 <template>
      <div>
           <v-header :title="title" :rightTitle="rightTitle"></v-header>
-       <div class="contentWrap" ref="contentWrap">
-         <div>
+       <div class="contentWrap" ref="contentWrap" :data="commonRoom">
+         <div v-if="!commonRoom" class="loading">
+           <img src="../../../../static/img/loading.gif" alt="">
+           <span>正在很努力的加载中...</span>
+         </div>
+         <div v-else-if="commonRoom.length == 0" class="loading">
+            <tips></tips>
+         </div>
+         <div v-else>
            <div class="content" style="display: block">
              <div  class="border-1px" v-if="!parentItem.bookDocId" v-for="(parentItem,index) in commonRoom">
                <div  class="border-1px" v-for="(secondItem,index) in parentItem.deptSchemeList">
@@ -63,6 +70,9 @@
              </div>
            </div>
          </div>
+         <div v-if="showAlertTips" class="loading">
+           <alert-tips ></alert-tips>
+         </div>
        </div>
        <time-toggle :patList="patientAll" :showPat="showPat" :option="patOption" @activate="check" @toggleClosed="closeTime()"></time-toggle>
        <toast v-if="showToast"></toast>
@@ -73,6 +83,10 @@
   import api from '../../../lib/api'
   import TimeToggle from '../../../base/timeToggle'
   import Toast from '../../../base/toast'
+  import Tips from '../../../base/tips'
+  import AlertTips from '../../../base/alertTips'
+  import Scroll from '../../../base/scroll'
+  import BScroll from 'better-scroll'
   import {nowTime} from '../../../utils/formatTimeStamp'
   export default{
       data(){
@@ -88,20 +102,27 @@
             bookDeptId:"",
             commonRoom:"",
             listIndex:"",
-            bookSchemeId:""
+            bookSchemeId:"",
+            bookSort:"",
+            showAlertTips:false,
           }
       },
       components:{
           "VHeader":header,
             TimeToggle,
-            Toast
+            Toast,
+            Scroll,
+            Tips,
+            AlertTips
       },
       created(){
           this.deptName = this.$route.query.deptName
           this.bookDeptId = this.$route.query.bookDeptId
+          this.bookSort = this.$route.query.bookSort
           this.title = this.deptName
           this.nowTime = nowTime(new Date())
           console.log(this.nowTime)
+          console.log(this.bookSort)
           api("nethos.book.doc.list.scheme.list",{
             bookDeptId:this.bookDeptId,
             date:this.nowTime
@@ -109,10 +130,24 @@
               console.log(data)
               if(data.code == 0){
                   this.commonRoom = data.list
+              }else if(!(data.msg)){
+                this.commonRoom = true
+                this.showAlertTips = true
+                setTimeout(()=>{
+                  this.showAlertTips = false
+                },1000)
+              }else{
+                this.commonRoom = true
+                  alert(data.msg)
               }
           })
       },
       methods:{
+        _initNowScroll(){
+            this.NowBookScroll = new BScroll(this.$refs.contentWrap,{
+              click:true
+            })
+        },
         check(index){
           this.showPat=false;
 //          console.log(item)
@@ -159,6 +194,15 @@
           }
 
         },
+      },
+      watch:{
+        commonRoom(){
+            this.$nextTick(()=>{
+                setTimeout(()=>{
+                    this._initNowScroll()
+                },100)
+            })
+        }
       }
   }
 </script>
@@ -175,6 +219,25 @@
     left:0;
     right:0;
     bottom:0;
+    .loading{
+      position: fixed;
+      top: 90px;
+      left:0;
+      right:0;
+      bottom:0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      img{
+        width:100rem/$rem;
+        margin-bottom: 10px;
+      }
+      span{
+        font-size: 32rem/$rem;
+        color: #999999;
+      }
+    }
     >div{
       .content{
         >div{

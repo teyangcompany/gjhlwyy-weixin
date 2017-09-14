@@ -28,9 +28,9 @@
                 <div class="whatsay_text">
                   <p>{{ aboutConsult.consultContent }}</p>
                   <img v-for="item in attachImg" :src="item.url" alt="">
-                  <p>就诊人:{{ aboutConsult.consulterName }} {{ aboutConsult.consulterGender == "M"?"男":"女" }} {{ aboutConsult.consulterAge }}岁</p>
-                  <p>手机号:{{ aboutConsult.consulterMobile }} </p>
-                  <p>身份证号:{{ aboutConsult.consulterIdcard }} </p>
+                  <!--<p>就诊人:{{ aboutConsult.consulterName }} {{ aboutConsult.consulterGender == "M"?"男":"女" }} {{ aboutConsult.consulterAge }}岁</p>-->
+                  <!--<p>手机号:{{ aboutConsult.consulterMobile }} </p>-->
+                  <!--<p>身份证号:{{ aboutConsult.consulterIdcard }} </p>-->
                 </div>
               </div>
             </div>
@@ -73,7 +73,7 @@
     <footer v-else-if="aboutConsult.consultStatus == 'GOING' && aboutReplyMessage && aboutReplyMessage.length == 0" class="payButton">
 
     </footer>
-    <footer v-else-if="aboutConsult.consultStatus == 'NEEDCOMMENT' && aboutReplyMessage && aboutReplyMessage.length != 0" class="payButton">
+    <footer v-else-if="aboutConsult.consultStatus == 'NEEDCOMMENT'" class="payButton">
       <div class="payWrap">
         <button @click="comment()">评价</button>
       </div>
@@ -191,7 +191,9 @@
               this.aboutConsult = data.obj.consult
               this.aboutReplyMessage = data.obj.messageList
               this.attachImg = data.obj.attaList
+              console.log("下面data")
               console.log(data)
+              console.log("上面的data")
               console.log(this.aboutReplyMessage)
               console.log(this.aboutConsult)
 
@@ -211,6 +213,10 @@
 
 
             })
+          }else{
+              console.log("错误的data")
+              console.log(data)
+              console.log("上面是错误的data")
           }
 //          console.log(this.attachImg)
         })

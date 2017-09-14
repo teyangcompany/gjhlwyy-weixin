@@ -5,8 +5,11 @@
         <img src="../../../../static/img/loading.gif" alt="">
         <span>正在很努力的加载中...</span>
       </div>
+      <div v-else-if="doctorList.length == 0" class="loading">
+          <tips></tips>
+      </div>
       <div v-else>
-        <ul  class="border-1px" v-for="(item,index) in doctorList" v-if="!item.docAvatar">
+        <ul  class="border-1px" v-for="(item,index) in doctorList" v-if="!item.bookDocId">
           <div @click="goExpertDetail(index)">
             <li>
               <div class="cancelImg">
@@ -32,11 +35,14 @@
           </div>
         </ul>
         <div class="blank border-1px"></div>
-        <ul  class="border-1px" v-for="(item,index) in doctorList" v-if="item.docAvatar">
+        <ul  class="border-1px" v-for="(item,index) in doctorList" v-if="item.bookDocId">
           <div @click="goFamousPage(index)">
             <li>
-              <div class="avartarImg">
+              <div class="avartarImg" v-if="item.docAvatar != ''">
                 <img :src="item.docAvatar" alt="">
+              </div>
+              <div class="avartarImg" v-else>
+                <img src="../../../../static/img/医生男.jpg" alt="">
               </div>
               <div class="cancelIntro">
                 <div>
@@ -58,6 +64,9 @@
           </div>
         </ul>
       </div>
+      <div v-if="showAlertTips" class="loading">
+        <alert-tips ></alert-tips>
+      </div>
     </div>
     <!--<div class="myDoctorList" >-->
       <!--<div class="emptyHistory">-->
@@ -77,6 +86,8 @@
 </template>
 <script>
   import BScroll from 'better-scroll'
+  import Tips from '../../../base/tips'
+  import AlertTips from '../../../base/alertTips'
   import api from '../../../lib/api'
 //  import Loading from '../../../..base/loading/loading'
   export default{
@@ -87,7 +98,8 @@
         bookDeptId:"",
         doctorList:"",
         waitLoading:1,
-        commonIndex:""
+        commonIndex:"",
+        showAlertTips:false,
       }
     },
     created(){
@@ -103,7 +115,18 @@
       api("nethos.book.doc.list.scheme.list",{
         bookDeptId:this.bookDeptId
       }).then((data)=>{
-          this.doctorList = data.list
+          if(data.code == 0){
+            this.doctorList = data.list
+          }else if(!(data.msg)){
+            this.doctorList = true
+            this.showAlertTips = true
+            setTimeout(()=>{
+              this.showAlertTips = false
+            },1000)
+          }else{
+            this.doctorList = true
+              alert(data.msg)
+          }
           console.log(this.doctorList)
             console.log(data)
       })
@@ -148,6 +171,8 @@
 //      }
     },
     components:{
+      Tips,
+      AlertTips
 //      Loading,
 //      "VMask":VMask,
     }

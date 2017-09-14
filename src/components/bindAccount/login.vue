@@ -32,9 +32,9 @@
     },
     methods:{
       login(){
-          this.password = sha512(hex_md5('a1111111') + 'a1111111' );
+          this.password = sha512(hex_md5('a12345678') + 'a12345678' );
           api("nethos.pat.login",{
-            patMobile:"15958036586",
+            patMobile:"17130049182",
             patPassword:this.password
           }).then((data)=>{
               localStorage.setItem("token",data.token)

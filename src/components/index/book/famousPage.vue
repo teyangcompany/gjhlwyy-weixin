@@ -10,8 +10,11 @@
          <ul  class="border-1px">
            <div>
              <li>
-               <div class="cancelImg">
+               <div class="cancelImg" v-if="doctorInfo.docAvatar != ''">
                  <img :src="doctorInfo.docAvatar" alt="">
+               </div>
+               <div class="cancelImg" v-else>
+                 <img src="../../../../static/img/医生男.jpg" alt="">
                </div>
                <div class="cancelIntro">
                  <div>

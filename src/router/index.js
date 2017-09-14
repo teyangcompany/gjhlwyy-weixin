@@ -9,6 +9,7 @@ import scanBind from '../components/scanBind/router'
 import login from '../components/bindAccount/login'
 import blankPage from '../components/blankPage.vue'
 import menuMy from '../components/menuMy'
+import internetTerms from '../components/internetTerms'
 Vue.use(Router)
 
 export default new Router({
@@ -24,6 +25,10 @@ export default new Router({
     {
       path:"/profile",
       component:menuMy
+    },
+    {
+      path:"/internetTerms",
+      component:internetTerms
     },
     ...index,
     ...my,

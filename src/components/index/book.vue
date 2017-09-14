@@ -3,7 +3,7 @@
       <v-header :title="title" :rightTitle="rightTitle" @on-index="goIndex()"></v-header>
       <div class="book">
         <div>
-          <ul class="border-1px" @click="alertBook(index)" v-for="(item,index) in hosList">
+          <ul  class="border-1px" @click="alertBook(item,index)" v-for="(item,index) in hosList">
             <div>
               <li>
                 <div class="cancelImg">
@@ -77,16 +77,21 @@
           })
       },
       methods:{
-        alertBook(index){
+        alertBook(item,index){
+            console.log(index)
             this.bookHosId = this.hosList[index].bookHosId
-            this.book = true
+            this.$router.push({
+              path:"/selectType",
+              query:{bookHosId:this.bookHosId,bookSort:'预约挂号'}
+            })
+//            this.book = true
         },
         hideBook(){
             console.log("123")
-            this.book = false
+//            this.book = false
         },
         goIndex(){
-            this.$router.push('/myProfile/index')
+//            this.$router.push('/myProfile/index')
         }
       },
       components:{

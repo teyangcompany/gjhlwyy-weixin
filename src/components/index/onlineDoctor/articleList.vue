@@ -61,8 +61,14 @@
   }
    >div{
      p:nth-child(1){
-       width:100%;
-       text-align: center;
+       width:690rem/$rem;
+       margin:0 auto;
+       display: -webkit-box;
+       -webkit-box-orient: vertical;
+       -webkit-line-clamp: 1;
+       overflow: hidden;
+       word-break: break-all;
+       text-align: left;
        padding-top: 10px;
        padding-bottom: 3px;
        font-size: 32rem/$rem;

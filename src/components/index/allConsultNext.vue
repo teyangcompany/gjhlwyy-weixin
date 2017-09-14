@@ -1,7 +1,8 @@
 <template>
   <transition name="slide">
     <div>
-      <v-header :title="title" :rightTitle="rightTitle" @on-pay="goPay()"></v-header>
+      <v-header :title="title" :rightTitle="rightTitle" @on-pay="goPay()" v-if="textLength <=500"></v-header>
+      <v-header :title="title" :rightTitle="rightTitle" @on-pay="goAlert()" v-else></v-header>
       <div class="want">
         <!--<div class="basic border-1px">-->
         <!--<div>-->
@@ -19,25 +20,25 @@
         </div>
         <div class="basic border-1px">
           <div>
-            填写病情资料
+            填写病情资料 <span>{{ textLength }}/500</span>
           </div>
         </div>
         <div class="detail border-1px">
           <div class="detailInput">
-            <textarea placeholder="请详细描述患者的主要症状、持续时间、已经确诊的疾病和接诊医生的意见。(如有症状照片、病历、检查单，可在下方上传)" v-model="description"></textarea>
+            <textarea @keyup="keypress()" id="myArea" placeholder="请详细描述患者的主要症状、持续时间、已经确诊的疾病和接诊医生的意见。(如有症状照片、病历、检查单，可在下方上传)" v-model="description"></textarea>
           </div>
         </div>
         <div class="uploadWrap">
           <div class="upload">
-            <div class="addPicture" v-for="(singleImage,index) in previewImg" v-if="previewImg.length != 0">
+            <div class="addPicture" v-for="(singleImage,index) in displayImg" v-if="displayImg.length != 0">
               <!--<span class="deleteImg">X</span>-->
-              <img :src="singleImage" alt="" ref="replaceImg" @click="makeLarge(index)">
+              <img :src="singleImage" alt="" ref="replaceImg" @click="deleteImg(index)">
             </div>
-            <div class="addPicture">
-              <input type="file" name="upload" id="upload" ref="upload" @change="onFileChange">
+            <div class="addPicture" v-if="displayImg.length < 9">
+              <input type="file" name="upload" id="upload" ref="upload" multiple="multiple" @change="onFileChange">
               <img src="../../../static/img/添加图片.png" alt=""  @click="selectImg()">
             </div>
-            <div class="wordFor">
+            <div class="wordFor" v-if="displayImg.length == 0">
               <span>添加图片</span>
               <span>请上传患处图片,让医生更了解您的病情</span>
             </div>
@@ -46,6 +47,10 @@
       </div>
       <patient-toggle :patList="patientAll" :showPat="showPat" :option="patOption" @activate="check" @toggleClosed="closePatient()"></patient-toggle>
       <alert :firstLine="firstLine" :secondLine="secondLine" :bottomLine="bottomLine" v-if="showAlert" @on-iKnow="iKnow()"></alert>
+      <v-dialog v-if="showDialog" @on-cancel="cancel()" @on-download="confirmDelete()"
+                :dialogMain="dialogMain"
+                :dialogLeftFoot="dialogLeftFoot"
+                :dialogRightFoot="dialogRightFoot"></v-dialog>
     </div>
   </transition>
 </template>
@@ -53,6 +58,7 @@
   import header from '../../base/header'
   import patientToggle from '../../base/patientToggle'
   import Alert from '../../base/alert'
+  import Dialog from '../../base/dialog'
   import api from '../../lib/api'
   export default{
     data(){
@@ -63,8 +69,13 @@
         secondLine:"",
         bottomLine:"确定",
         showAlert:false,
+        showDialog:false,
+        dialogMain:"确定删除照片",
+        dialogLeftFoot:"取消",
+        dialogRightFoot:"确定",
         description:"",
-        previewImg:[],
+        previewImg:"",
+        displayImg:[],
         patOption:"请选择就诊人",
         patientAll:[],
         showPat:false,
@@ -73,7 +84,10 @@
         patientInfo:"",
         patId:"",
         attaId:[],
-        consultId:""
+        consultId:"",
+        textLength:0,
+        text:"",
+        deleteImgIndex:""
       }
     },
     created(){
@@ -93,6 +107,33 @@
        })
     },
     methods:{
+      keypress(){
+        this.text = document.getElementById("myArea").value
+        this.textLength = this.text.length
+        if(this.textLength > 500){
+          document.getElementById("myArea").value = this.text.substr(0,500)
+          alert("字数不能超过500")
+        }
+      },
+      goAlert(){
+        alert("字数不能超过500")
+      },
+      deleteImg(index){
+        console.log(index)
+        this.deleteImgIndex = index
+        if(this.uploadTips = '上传完毕'){
+          this.showDialog = true
+        }
+      },
+      cancel(){
+        this.showDialog = false
+      },
+      confirmDelete(){
+        this.displayImg.splice(this.deleteImgIndex,1)
+        this.attaId.splice(this.deleteImgIndex,1)
+        this.$set(this.$data,'displayImg',this.displayImg)
+        this.showDialog = false
+      },
       selectPatient(){
         this.showPat=true;
       },
@@ -137,35 +178,66 @@
       },
       onFileChange(e){
         console.log(e)
-        var file = e.target.files[0]
-        this.createImage(file)
-      },
-      createImage(file){
-        if(typeof FileReader === "undefined"){
-          alert("您的浏览器不支持图片上传，请升级您的浏览器")
-          return false
+        var file = e.target.files
+        if(this.displayImg.length + file.length > 9){
+          alert("最多只可上传九张照片")
+        }else{
+          this.createImage(file,file.length)
         }
-        let that = this
-        let fileName = file.name
-        let reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = function(){
-          that.previewImg.push(this.result)
-          api("nethos.system.atta.upload.image.base64",{
-            base64:this.result,
-            originalName:fileName
-          }).then((data)=>{
-            that.attaId.push(data.obj.attaId)
-
-            console.log( that.attaId)
-          })
+      },
+      createImage(file,i){
+        if(i>9){
+          alert("最多只可上传九张照片")
+        }else if(i<=0){
+          return
+        }else{
+          if(typeof FileReader === "undefined"){
+            alert("您的浏览器不支持图片上传，请升级您的浏览器")
+            return false
+          }else{
+            let reader = new FileReader()
+            reader.readAsDataURL(file[i-1])
+            this.fileName = file[i-1].name
+            let that =this
+            reader.onload = function () {
+              that.previewImg = this.result
+              api("nethos.system.atta.upload.image.base64",{
+                base64:that.previewImg,
+                originalName:that.fileName
+              }).then((data)=>{
+                if(data.code == 0){
+                  that.attaId.push(data.obj.attaId)
+                  that.displayImg.push(that.previewImg)
+                  console.log(i)
+                }
+                that.createImage(file,--i)
+                console.log(data.obj.attaId)
+                console.log("123")
+                if(i = 1){
+                  this.uploadTips = '上传完毕'
+                }
+              })
+            }
+//            console.log(this.previewImg)
+          }
         }
       },
     },
     components:{
       "VHeader":header,
       patientToggle,
-      Alert
+      Alert,
+      "VDialog":Dialog
+    },
+    watch:{
+      description(){
+        this.text = document.getElementById("myArea").value
+        this.textLength = this.text.length
+        if(this.textLength > 500){
+          document.getElementById("myArea").value = this.text.substr(0,500)
+          alert("字数不能超过500")
+        }
+      }
     }
   }
 </script>
@@ -177,7 +249,7 @@
     bottom:0;
     left:0;
     right:0;
-    background-color:$bgColor1;
+    /*<!--background-color:$bgColor1;-->*/
     .basic,.illness,.history,.family,.alergic,.record{
       width: 100%;
       height: 90rem/$rem;

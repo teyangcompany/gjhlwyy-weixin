@@ -1,6 +1,5 @@
 <template>
     <div>
-         <v-header :title="title" :rightTitle="rightTitle"></v-header>
          <div class="bindPhone">
              <div class="bindPhoneCenter">
                <div class="bigMiddle">
@@ -9,11 +8,14 @@
                      <span>请先填写您的手机号</span>
                    </p>
                </div>
+               <!--<div class="verifyTips">-->
+                  <!--<span class="form-group__message" v-if="!$v.phone.required">手机号不能为空</span><span class="form-group__message" v-if="!$v.phone.minLength">Name must have at least {{$v.phone.$params.minLength.min}} letters.</span>-->
+               <!--</div>-->
                <div class="aboutNumber">
-                 <div class="formContent">
+                 <div class="formContent" ref="formContent">
                    <div class="form phone border-1px">
                      <label for="" class="phoneLabel"> <img src="../../../static/img/手机号.png" alt=""> </label>
-                     <input type="text" placeholder="请输入手机号" class="numberInput" v-model="phone">
+                     <input type="text" placeholder="请输入手机号"  @focus="focus()" @blur="blur()" v-model.trim="phone" @input="$v.phone.$touch()" class="numberInput">
                    </div>
                    <div class="form verifyCode border-1px">
                      <label for="" class="codeLabel"> <img src="../../../static/img/验证码.png" alt=""> </label>
@@ -26,55 +28,75 @@
                  </div>
                </div>
              </div>
+             <v-mask v-if="showMask"></v-mask>
          </div>
     </div>
 </template>
 <script>
    import header from '../../base/header'
    import api from '../../lib/api.js'
+   import mask from '../../base/mask'
+   import { required, minLength, between } from 'vuelidate/lib/validators'
    export default{
        data(){
            return{
-               title:"广济互联网医院",
-               rightTitle:"",
                phone:"",
                code:"",
-               cid:0
+               cid:"",
+               codeValue:"",
+             showMask:false
            }
        },
+       validations: {
+         phone: {
+           required,
+           minLength: minLength(4)
+         },
+         age: {
+           between: between(20, 30)
+         }
+       },
        created(){
-
+         console.log(document.getElementsByTagName("body")[0].offsetHeight)
+         console.log(window.innerHeight)
        },
        methods:{
          getCode(){
-             let that = this
-           api("nethos.system.captcha.generate",{
-             captchaType:"SMS",
+           api("nethos.system.captcha.pat.wechat.bind",{
              mobile:this.phone,
            }).then((data)=>{
-               that.cid = data.obj
-               console.log(that.cid)
+               this.cid = data.obj.cid
+               this.codeValue = data.obj.value
+               console.log(this.cid)
+               console.log(this.codeValue)
            })
          },
          verifyCode(){
              console.log(this.cid)
-             api("nethos.pat.checkcaptchamobile",{
-               captcha:this.code,
-               patMobile:this.phone,
-               cid:this.cid,
-               isType:"register"
-             }).then((data)=>{
-                 if(data.msg == '该手机号已被注册，请直接登陆'){
-                     this.$router.push('/login')
-                 }else{
-                     this.$router.push("/register")
-                 }
-                 console.log(data)
-             })
+           this.$router.push({
+             path:'/register',
+             query:{cid:this.cid,codeValue:this.codeValue}
+           })
+
+         },
+         focus(){
+//            this.showMask = true
+           console.log(window.innerHeight)
+           document.getElementsByClassName("formContent")[0].style.height = window.innerHeight
+           document.getElementsByClassName("formContent")[0].style.backgroundColor = 'white'
+           console.log(document.getElementsByTagName("body")[0].offsetHeight)
+//             setInterval(function(){
+//                 console.log("123")
+//                 document.getElementsByClassName("formContent")[0].scrollIntoView()
+//             },200)
+         },
+         blur(){
+           this.showMask = false
          }
        },
        components:{
-           "VHeader":header
+           "VHeader":header,
+            "VMask":mask
        }
    }
 </script>
@@ -90,11 +112,7 @@
     width:690rem/$rem;
     margin:0 auto;
     .bigMiddle{
-      position: fixed;
-      top: 50px;
-      left:0;
-      right:0;
-      bottom:500rem/$rem;
+      margin-top: 50rem/$rem;
       font-size: 32rem/$rem;
       color: #333333;
       display: flex;
@@ -115,10 +133,18 @@
         }
       }
     }
+    .verifyTips{
+        margin-top: 130rem/$rem;
+        position: relative;
+        text-align: center;
+    }
     .aboutNumber{
       position: fixed;
-      bottom:0;
-      height:500rem/$rem;
+      bottom:100rem/$rem;
+      background-color: white;
+      z-index:100;
+      /*<!--margin-top: 18rem/$rem;-->*/
+      /*<!--height:500rem/$rem;-->*/
       .formContent{
         width: 690rem/$rem;
         margin: 0 auto;

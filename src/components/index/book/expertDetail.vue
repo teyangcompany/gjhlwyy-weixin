@@ -92,7 +92,9 @@
       api("nethos.book.doc.normal.scheme.list",{
         bookDeptId:this.bookDeptId
       }).then((data)=>{
+        console.log("下面是data")
         console.log(data)
+        console.log("上面是data")
         this.commonNumDetail = data.obj.deptSchemeList
         console.log(this.commonNumDetail)
         for(var i=0;i<this.commonNumDetail[0].schemeList.length;i++){

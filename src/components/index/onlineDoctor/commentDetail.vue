@@ -64,7 +64,7 @@
               title:"医生评价",
               rightTitle:"",
               docId:"",
-              allInfo:"",
+              allInfo:[],
               pullup:true,
               listPage:1,
               dataLength:"",
@@ -83,9 +83,9 @@
               if(data.code == 0){
                 console.log("123")
                 this.loadingStatus = false
-                this.allInfo = data.list
                 console.log(data)
                 for(var i=0;i<data.list.length;i++){
+                  this.allInfo.push(data.list[i])
                   this.createTime.push( formatDate(new Date(this.allInfo[i].sysComment.createTime)))
                 }
               }
@@ -106,14 +106,16 @@
               pageSize:10
             }).then((data)=>{
               console.log(data)
-              for(var i=0;i<data.list.length;i++){
-                this.allInfo.push(data.list[i])
-                this.createTime.push( formatDate(new Date(this.allInfo[i].sysComment.createTime)))
-              }
-              this.loadingStatus = false
-              that.dataLength = data.list.length
-              if(data.list.length >= 10){
-                this.preventRepeatRequest = false;
+              if(data.code == 0){
+                for(var i=0;i<data.list.length;i++){
+                  this.allInfo.push(data.list[i])
+                  this.createTime.push( formatDate(new Date(this.allInfo[i].sysComment.createTime)))
+                }
+                this.loadingStatus = false
+                that.dataLength = data.list.length
+                if(data.list.length >= 10){
+                  this.preventRepeatRequest = false;
+                }
               }
             })
           },

@@ -398,7 +398,7 @@
             this.$router.push('/myConsult/online/commented')
         },
         goIndex(){
-            this.$router.push('/myProfile/index')
+//            this.$router.push('/myProfile/index')
         },
         chooseType(type){
           if(this.sortBy !== type){
@@ -419,9 +419,77 @@
         displayAll(){
 
         },
-        selectCategoryName(id, index){
+        selectCategoryName(item, index){
           this.clickIndex = index
           this.categoryDetail = this.together[index].sonGbDeptList;
+          if(this.arrow[index] == 0){
+              console.log(item,"此处为空白")
+            this.gbDeptCode = item.gbDeptCode
+            this.sortPick = item.gbDeptName
+            this.sortBy = ''
+            if(this.typePick == "视频问诊"){
+              if(this.defaultPick == '按好评排'){
+                api("nethos.doc.list",{
+                  gbDeptCode:this.gbDeptCode,
+                  docVideoConsultStatus:true,
+                  sort:"docScoure.desc",
+                }).then((data)=>{
+                  this.doctorList = data.list
+                  console.log(data.list)
+                })
+              }else{
+                api("nethos.doc.list",{
+                  gbDeptCode:this.gbDeptCode,
+                  docVideoConsultStatus:true,
+                }).then((data)=>{
+                  this.doctorList = data.list
+                  console.log(data.list)
+                })
+              }
+              this.$set(this.$data,'showVideo',true)
+            }else if(this.typePick == "图文咨询"){
+              if(this.defaultPick == '按好评排'){
+                api("nethos.doc.list",{
+                  gbDeptCode:this.gbDeptCode,
+                  docPicConsultStatus:true,
+                  sort:"docScoure.desc",
+                }).then((data)=>{
+                  this.doctorList = data.list
+                  console.log(data.list)
+                })
+              }else{
+                api("nethos.doc.list",{
+                  gbDeptCode:this.gbDeptCode,
+                  docPicConsultStatus:true,
+                }).then((data)=>{
+                  this.doctorList = data.list
+                  console.log(data.list)
+                })
+              }
+              this.$set(this.$data,'showVideo',false)
+              this.$set(this.$data,'showPicture',true)
+            }else{
+              if(this.defaultPick == '按好评排'){
+                api("nethos.doc.list",{
+                  gbDeptCode:this.gbDeptCode,
+                  sort:"docScoure.desc",
+                }).then((data)=>{
+                  this.doctorList = data.list
+                  console.log(data.list)
+                })
+              }else{
+                api("nethos.doc.list",{
+                  gbDeptCode:this.gbDeptCode,
+                }).then((data)=>{
+                  this.doctorList = data.list
+                  console.log(data.list)
+                })
+              }
+              this.$set(this.$data,'showVideo',false)
+              this.$set(this.$data,'showPicture',false)
+              this.$set(this.$data,'showAllType',true)
+            }
+          }
         },
         selectSecond(index,item){
             this.gbDeptCode = item.gbDeptCode

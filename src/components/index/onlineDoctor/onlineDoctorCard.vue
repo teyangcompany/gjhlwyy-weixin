@@ -11,10 +11,13 @@
             <img :src="aboutDoctor.docAvatar" alt="">
           </div>
           <div class="doctorIntro">
-            <h4><span class="mainTitle">{{aboutDoctor.docName}}</span><span class="chief">名医</span></h4>
+            <h4><span class="mainTitle">{{aboutDoctor.docName}}</span>
+              <span class="chief" v-if="aboutDoctor.docFamousConsultStatus">名医</span>
+              <span  v-else>&nbsp;</span>
+            </h4>
             <h6>{{aboutDoctor.docDeptName}}&nbsp; {{aboutDoctor.docTitle}}</h6>
             <h6>{{aboutDoctor.docHosName}}</h6>
-            <router-link tag="div" :to="{path:'/commentDetail',query:{docId:aboutDoctor.docId}}" class="checkRating">  <star :size="24" :score="aboutDoctor.docScoure"></star><span v-if="aboutDoctor.docScoure">{{ aboutDoctor.docScoure.toFixed(1) }}分 </span><span>查看评价></span> </router-link>
+            <router-link tag="div" :to="{path:'/commentDetail',query:{docId:aboutDoctor.docId}}" class="checkRating">  <star :size="24" :score="aboutDoctor.docScoure"></star><span v-if="aboutDoctor.docScoure">{{ aboutDoctor.docScoure.toFixed(1) }}分 </span><span>查看评价</span> </router-link>
           </div>
         </div>
         <div class="sortFunc">
@@ -227,6 +230,7 @@
         this.$router.back(-1)
       },
       follow(){
+          console.log("123")
           if(this.isFollow == false){
             api("nethos.follow.dp.add",{
               token:localStorage.getItem("token"),
@@ -304,7 +308,7 @@
        position: absolute;
        right:30rem/$rem;
        top: 14.5px;
-       z-index:20;
+       z-index:2000;
        font-size: 32rem/$rem;
        display: flex;
        align-items: center;
@@ -318,7 +322,7 @@
         position: absolute;
         left:30rem/$rem;
         top: 17.5px;
-        z-index:20;
+        z-index:2000;
       }
     /*}*/
   }

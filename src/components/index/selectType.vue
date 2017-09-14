@@ -87,7 +87,12 @@
         },
         goHosList(){
             console.log("123")
-            this.$router.push('/book')
+           if(this.bookSort == '预约挂号'){
+             this.$router.push('/book')
+           }else{
+               this.$router.push('/todayBook')
+           }
+//
         },
         goMyBookNumber(){
           this.$router.push('/myBookNumberSelect')

@@ -218,7 +218,7 @@
   .recentChat{
     width:100%;
     position: fixed;
-    top: 90px;
+    top: 52px;
     bottom:0;
     left:0;
     right:0;
@@ -226,7 +226,7 @@
   .myDoctorList{
     width:100%;
     position: fixed;
-    top: 90px;
+    top: 52px;
     bottom:0;
     left:0;
     right:0;

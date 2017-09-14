@@ -2,7 +2,7 @@
   <div>
     <v-header :title="title" :rightTitle="rightTitle"></v-header>
     <div class="myArea">
-      <div class="blank border-1px"></div>
+      <!--<div class="blank border-1px"></div>-->
       <div  class="avatar border-1px" >
         <div class="avatarCenter">
           <div class="leftWord">
@@ -63,13 +63,13 @@
           </div>
           <div class="weui-cell__ft"></div>
         </a>
-        <a class="weui-cell weui-cell_access" href="javascript:;">
-          <div class="weui-cell__hd"><img src="../../static/img/my/ic_help@2x.png" alt="" style="width:20px;margin-right:7px;display:block"></div>
-          <div class="weui-cell__bd">
-            <p>使用帮助</p>
-          </div>
-          <div class="weui-cell__ft"></div>
-        </a>
+        <!--<a class="weui-cell weui-cell_access" href="javascript:;">-->
+          <!--<div class="weui-cell__hd"><img src="../../static/img/my/ic_help@2x.png" alt="" style="width:20px;margin-right:7px;display:block"></div>-->
+          <!--<div class="weui-cell__bd">-->
+            <!--<p>使用帮助</p>-->
+          <!--</div>-->
+          <!--<div class="weui-cell__ft"></div>-->
+        <!--</a>-->
       </div>
     </div>
   </div>
@@ -93,6 +93,8 @@
       }
     },
     created(){
+      console.log(document.getElementsByTagName('title')[0])
+//      document.getElementsByTagName('title')[0].innerText= '我的'
       api("nethos.pat.info.get",{
         token:localStorage.getItem("token")
       }).then((data)=>{
@@ -104,8 +106,11 @@
       goAbout(){
         this.$router.push('/about')
       },
+//      goAccount(){
+//        this.$router.push('/account')
+//      },
       goAccount(){
-        this.$router.push('/account')
+        this.$router.push('/accountAbout')
       },
       goMyWait(){
         this.$router.push('/myWait')
@@ -123,7 +128,7 @@
         this.$router.push('/myConsult/commented')
       },
       goCostLog(){
-        this.$router.push('/costLog')
+        this.$router.push('/expenseHistory')
       },
       goProfile(){
         this.$router.push('/myProfile/healthIndex/beautify')

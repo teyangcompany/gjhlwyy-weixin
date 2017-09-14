@@ -90,26 +90,43 @@
            </div>
          </div>
         <div class="bottom border-1px-top">
-          <div class="fixedBottom">
+          <div class="fixedBottom" v-if="orderDetail">
             <button v-if="orderDetail[index].orderState == '0'" @click="cancelBook">取消挂号</button>
             <button v-if="orderDetail[index].orderState == '4'">预约已过期</button>
             <button v-if="orderDetail[index].orderState == '3'">已取消</button>
             <!--<button class="pay">付款</button>-->
           </div>
         </div>
+        <div v-if="showAlertTips" class="loading">
+            <alert-tips></alert-tips>
+        </div>
+        <toast v-if="showToast"></toast>
+        <alert v-if="showAlert"
+               :firstLine="firstLine"
+               :bottomLine="bottomLine"
+               @on-iKnow="iKnow"
+        ></alert>
     </div>
 </template>
 <script>
   import header from '../../base/header'
   import BScroll from 'better-scroll'
+  import Alert from '../../base/alert'
+  import Toast from '../../base/toast'
   import api from '../../lib/api'
+  import AlertTips from '../../base/alertTips.vue'
   export default{
       data(){
           return{
             title:"挂号详情",
             rightTitle:"",
             index:"",
-            orderDetail:""
+            orderDetail:"",
+            showAlert:false,
+            showToast:false,
+            showAlertTips:false,
+            firstLine:"",
+            bottomLine:"我知道了"
           }
       },
       mounted(){
@@ -127,15 +144,28 @@
       },
        methods:{
          cancelBook(){
+             this.showToast = true
              api("nethos.book.order.cancel",{
                token:localStorage.getItem("token"),
                orderId: this.orderDetail[this.index].orderId
              }).then((data)=>{
                  console.log(data)
+               this.showToast = false
                  if(data.code == 0){
                      location.reload()
+                 }else if(!(data.msg)){
+                    this.showAlertTips = true
+                   setTimeout(()=>{
+                     this.showAlertTips = false
+                   },1000)
+                 }else{
+                   this.firstLine = data.msg
+                   this.showAlert = true
                  }
              })
+         },
+         iKnow(){
+           this.showAlert = false
          },
          _initBookDetailScroll(){
              if(this.orderDetail){
@@ -147,7 +177,10 @@
          }
        },
       components:{
-          "VHeader":header
+          "VHeader":header,
+           Alert,
+           Toast,
+        AlertTips
       },
       watch:{
         orderDetail(){
@@ -219,7 +252,7 @@
     }
   }
   .assistScroll{
-    height: 200px;
+    height: 100px;
   }
 }
   .bottom{

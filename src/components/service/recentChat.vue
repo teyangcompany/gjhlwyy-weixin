@@ -2,150 +2,31 @@
   <div class="recentChat">
     <div class="myDoctorList" ref="contactList" v-if="waitLoading == 1 && chatList.length > 0">
       <div>
-        <ul  class="border-1px" v-for="item in chatList">
+        <ul v-if="chatList.length != 0" class="border-1px" v-for="(item,index) in chatList">
           <router-link tag="div" to="/chat">
             <li>
-              <div class="cancelImg">
-                <img src="../../../static/img/ys1.jpg" alt="">
+              <div class="cancelImg" v-if="item.sysDoc">
+                <img :src="item.sysDoc.docAvatar" alt="">
               </div>
               <div class="cancelIntro">
                 <div>
-                  <span class="chatDoctor">华立</span> <span class="doctorTitle">主治</span>
-                  <div class="badgeDoc">
-                    <span class="myDoctor">签约</span>
-                  </div>
-                  <p>[安排服务]</p>
-                </div>
-              </div>
-              <div class="cancelTime">
-                <div >
-                  <span class="year">刚刚</span>
-                  <p class="time"><span class="badge">2</span></p>
-                </div>
-              </div>
-            </li>
-          </router-link>
-        </ul>
-        <ul  class="border-1px" v-for="item in chatList">
-          <router-link tag="div" to="/chat">
-            <li>
-              <div class="cancelImg">
-                <img src="../../../static/img/ys2.jpg" alt="">
-              </div>
-              <div class="cancelIntro">
-                <div>
-                  <span class="chatDoctor">张康</span> <span class="doctorTitle">实习</span>
-                  <div class="badgeDoc">
-                    <span class="myDoctor">签约</span>
-                  </div>
-                  <p>你问一下华医生吧，我和他说过了</p>
-                </div>
-              </div>
-              <div class="cancelTime">
-                <div >
-                  <span class="year">13:45</span>
-                  <!--<p class="time"><span class="badge">1</span></p>-->
-                </div>
-              </div>
-            </li>
-          </router-link>
-        </ul>
-        <ul  class="border-1px" v-for="item in chatList">
-          <router-link tag="div" to="/chat">
-            <li>
-              <div class="cancelImg">
-                <img src="../../../static/img/ys3.jpg" alt="">
-              </div>
-              <div class="cancelIntro">
-                <div>
-                  <span class="chatDoctor">陈刚</span> <span class="doctorTitle">主治</span>
-                  <div class="badgeDoc">
-                    <!--<span class="myDoctor"></span>-->
-                  </div>
-                  <p>[图片]</p>
-                </div>
-              </div>
-              <div class="cancelTime">
-                <div >
-                  <span class="year">09:10</span>
-                  <!--<p class="time"><span class="badge">1</span></p>-->
-                </div>
-              </div>
-            </li>
-          </router-link>
-        </ul>
-        <ul  class="border-1px" v-for="item in chatList">
-          <router-link tag="div" to="/chat">
-            <li>
-              <div class="cancelImg">
-                <img src="../../../static/img/ys4.jpg" alt="">
-              </div>
-              <div class="cancelIntro">
-                <div>
-                  <span class="chatDoctor">李爱国</span> <span class="doctorTitle">护工</span>
-                  <div class="badgeDoc">
-                    <span class="myDoctor">签约</span>
-                  </div>
-                  <p>谢谢了，下个月还是这个时候就行</p>
-                </div>
-              </div>
-              <div class="cancelTime">
-                <div >
-                  <span class="year">星期三</span>
-                  <!--<p class="time"><span class="badge">1</span></p>-->
-                </div>
-              </div>
-            </li>
-          </router-link>
-        </ul>
-        <ul  class="border-1px" v-for="item in chatList">
-          <router-link tag="div" to="/chat">
-            <li>
-              <div class="cancelImg">
-                <img src="../../../static/img/ys5.jpg" alt="">
-              </div>
-              <div class="cancelIntro">
-                <div>
-                  <span class="chatDoctor">谢尚全</span> <span class="doctorTitle">主治</span>
-                  <div class="badgeDoc">
+                  <span class="chatDoctor" v-if="item.sysDoc">{{ item.sysDoc.docName }}</span>
+                  <!--<div class="badgeDoc">-->
                     <!--<span class="myDoctor">签约</span>-->
-                  </div>
-                  <p>你可以找你签约的医生说一下</p>
+                  <!--</div>-->
+                  <p v-if="item.followMessage">{{ item.followMessage.msgText}}</p>
                 </div>
               </div>
               <div class="cancelTime">
                 <div >
-                  <span class="year">2017/8/7</span>
-                  <!--<p class="time"><span class="badge">1</span></p>-->
+                  <span class="year" v-if="myCreateTime.length != 0">{{ myCreateTime[index] }}</span>
+                  <p class="time" v-if="item.unReadCount != 0"><span class="badge">{{ item.unReadCount }}</span></p>
                 </div>
               </div>
             </li>
           </router-link>
         </ul>
-        <ul  class="border-1px" v-for="item in chatList">
-          <router-link tag="div" to="/chat">
-            <li>
-              <div class="cancelImg">
-                <img src="../../../static/img/ys6.jpg" alt="">
-              </div>
-              <div class="cancelIntro">
-                <div>
-                  <span class="chatDoctor">赵乾坤</span> <span class="doctorTitle">护工</span>
-                  <div class="badgeDoc">
-                    <span class="myDoctor">签约</span>
-                  </div>
-                  <p>好的</p>
-                </div>
-              </div>
-              <div class="cancelTime">
-                <div >
-                  <span class="year">2017/6/2</span>
-                  <!--<p class="time"><span class="badge">1</span></p>-->
-                </div>
-              </div>
-            </li>
-          </router-link>
-        </ul>
+
 
         <!--<ul  class="border-1px" v-for="item in chatList">-->
         <!--<router-link tag="div" to="/chat">-->
@@ -191,30 +72,44 @@
 </template>
 <script>
   import BScroll from 'better-scroll'
+  import api from '../../lib/api'
+  import {formatDate} from '../../utils/formatTimeStamp'
 //  import Loading from '../../base/loading/loading'
 //  import VMask from '../../base/mask'
   export default{
     data(){
       return{
         showList:true,
-        chatList:[
-          {
-            docAvatar:"http://img.25pp.com/uploadfile/app/icon/20160901/1472663211278834.jpg",
-            docName:"丁聪华",
-            docTitle:"眼科",
-          }
-        ],
-        waitLoading:1
+        chatList:[],
+        waitLoading:1,
+        myCreateTime:[]
       }
     },
     mounted(){
       this._initRecentChat()
     },
+    created(){
+       api("nethos.follow.message.last.list",{
+            token:localStorage.getItem("token"),
+       }).then((data)=>{
+           if(data.code == 0){
+             this.chatList = data.list
+             if(data.list){
+               for(var i=0;i<data.list.length;i++){
+                 this.myCreateTime.push(formatDate(new Date(data.list[i].followMessage.createTime)))
+               }
+             }
+           }
+           console.log(data)
+       })
+    },
     methods:{
       _initRecentChat(){
-        this.doctorListScroll = new BScroll(this.$refs.contactList,{
-          click:true
-        })
+         if(this.waitLoading == 1 && this.chatList.length > 0){
+           this.doctorListScroll = new BScroll(this.$refs.contactList,{
+             click:true
+           })
+         }
       },
     },
     watch:{
@@ -235,7 +130,7 @@
   .recentChat{
     width:100%;
     position: fixed;
-    top: 90px;
+    top: 50px;
     bottom: 0;
     left:0;
     right:0;
@@ -243,15 +138,18 @@
   .myDoctorList{
     width:100%;
     position: fixed;
-    top: 90px;
+    top: 50px;
     bottom:98rem/$rem;
     left:0;
     right:0;
     z-index:1;
     /*background-color: white;*/
     .emptyHistory{
-      width:100%;
-      height:100%;
+      position: fixed;
+      top: 50px;
+      left:0;
+      right:0;
+      bottom:0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -283,8 +181,13 @@
         .cancelIntro{
           flex:2;
           display: flex;
-          align-items: center;
+          /*align-items: center;*/
+          justify-content: center;
           line-height: 40rem/$rem;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
           .badgeDoc{
             display: inline-block;
             padding-top: -5px;
@@ -319,7 +222,8 @@
           }
         }
         .cancelTime{
-          flex:1;
+          /*flex:1;*/
+          width:300rem/$rem;
           display: flex;
           justify-content: flex-end;
           align-items: center;

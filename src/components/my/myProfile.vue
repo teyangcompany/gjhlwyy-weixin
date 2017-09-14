@@ -112,7 +112,7 @@
                 {tabLink:"/myProfile/index",imgLinkIndexOn:"./static/img/tab/home1.png",imgLinkOn:"./static/img/tab/honme.png",imgLinkMyOn:"./static/img/tab/honme.png",imgLastOn:"./static/img/tab/honme.png"},
                 {tabLink:"/myProfile/serviceIndex",imgLinkIndexOn:"./static/img/tab/服务1.png",imgLinkOn:"./static/img/tab/服务.png",imgLinkMyOn:"./static/img/tab/服务1.png",imgLastOn:"./static/img/tab/服务1.png"},
                 {tabLink:"/myProfile/healthIndex",imgLinkIndexOn:"./static/img/tab/健康资讯1.png",imgLinkOn:"./static/img/tab/健康资讯1.png",imgLinkMyOn:"./static/img/tab/健康资讯.png",imgLastOn:"./static/img/tab/健康资讯1.png"},
-                {tabLink:"/myProfile",imgLinkIndexOn:"./static/img/tab/mine1.png",imgLinkOn:"./static/img/tab/mine1.png",imgLinkMyOn:"./static/img/tab/mine1.png",imgLastOn:"./static/img/tab/mine.png"}
+                {tabLink:"/Profile",imgLinkIndexOn:"./static/img/tab/mine1.png",imgLinkOn:"./static/img/tab/mine1.png",imgLinkMyOn:"./static/img/tab/mine1.png",imgLastOn:"./static/img/tab/mine.png"}
               ],
               tellPath:"",
               previewImg:""
