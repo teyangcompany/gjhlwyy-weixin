@@ -4,8 +4,8 @@
     <div class="checkList">
       <div>
         <div class="topMenu border-1px">
-          <p class="picked" @click="seeTime('一周内')">一周内</p>
-          <p @click="seeTime('三个月')">三个月</p>
+          <!--<p class="picked" @click="seeTime('一周内')">一周内</p>-->
+          <p class="picked" @click="seeTime('三个月')">三个月</p>
           <p @click="seeTime('半年内')">半年内</p>
           <p @click="seeTime('一年内')">一年内</p>
         </div>
@@ -87,22 +87,28 @@
           this.index= this.$route.query.index
           this.patCard = this.$route.query.patCard
           this.compatId = this.$route.query.compatId
+          this.nowTime = this.getNow()
+          this.threeMonth = this.getMonth(3)
           if(this.selectValue == '检验报告'){
-              api("nethos.book.inspect.list",{
-                token:localStorage.getItem("token"),
-                startDate:this.oneWeek,
-                endDate:this.nowTime,
-                patCard:this.patCard,
-                compatId:this.compatId
-              }).then((data)=>{
+              if(this.threeMonth != ''){
+                api("nethos.book.inspect.list",{
+                  token:localStorage.getItem("token"),
+                  startDate:this.threeMonth,
+                  endDate:this.nowTime,
+                  patCard:this.patCard,
+                  compatId:this.compatId
+                }).then((data)=>{
                   if(data.code == 0){
+                    console.log(this.threeMonth)
+                    console.log(data)
                     this.reportInfo = data.list
                     this.reportInfoString = JSON.stringify(this.reportInfo)
                     console.log(data)
                   }else{
                     this.reportInfo = 2
                   }
-              })
+                })
+              }
           }
     },
     methods:{

@@ -4,8 +4,8 @@
     <div class="checkList">
       <div>
         <div class="topMenu border-1px">
-          <p class="picked" @click="seeTime('一周内')">一周内</p>
-          <p @click="seeTime('三个月')">三个月</p>
+          <!--<p class="picked" @click="seeTime('一周内')">一周内</p>-->
+          <p class="picked" @click="seeTime('三个月')">三个月</p>
           <p @click="seeTime('半年内')">半年内</p>
           <p @click="seeTime('一年内')">一年内</p>
         </div>
@@ -88,10 +88,12 @@
       this.patCard = this.$route.query.patCard
       this.compatId = this.$route.query.compatId
       this.specialIndex = this.$route.query.specialIndex
+      this.threeMonth = this.getMonth(3)
+      this.nowTime = this.getNow()
       if(this.selectValue == '检查报告'){
         api("nethos.book.inspect.examination",{
           token:localStorage.getItem("token"),
-          startDate:this.oneWeek,
+          startDate:this.threeMonth ,
           endDate:this.nowTime,
           compatId:this.compatId
         }).then((data)=>{
