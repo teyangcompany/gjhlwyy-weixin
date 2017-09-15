@@ -3,22 +3,23 @@
     <v-header :title="title" :rightTitle="rightTitle"></v-header>
     <div class="myArea">
       <!--<div class="blank border-1px"></div>-->
-      <div  class="avatar border-1px" >
+      <div class="avatar border-1px">
         <div class="avatarCenter">
           <div class="leftWord">
             <img class="profile" :src="patientInfo.patAvatar" alt="" v-if="!previewImg" @click="selectImg()">
-            <img class="profile" :src="previewImg" alt="" v-else  @click="selectImg()">
+            <img class="profile" :src="previewImg" alt="" v-else @click="selectImg()">
             <input type="file" name="upload" id="upload" ref="upload" @change="onFileChange">
           </div>
           <!--<router-link tag="div" to="/personInfo" class="rightWord">-->
-            <!--<div v-if="patientInfo">-->
-              <!--<span>姓名:{{ patientInfo.patName }}</span><span>{{ patientInfo.patGender == 'M' ? '男':'女' }} {{ patientInfo.age }}岁</span>-->
-            <!--</div>-->
-            <!--<img class="look" src="../../static/img/查看更多.png" alt="">-->
+          <!--<div v-if="patientInfo">-->
+          <!--<span>姓名:{{ patientInfo.patName }}</span><span>{{ patientInfo.patGender == 'M' ? '男':'女' }} {{ patientInfo.age }}岁</span>-->
+          <!--</div>-->
+          <!--<img class="look" src="../../static/img/查看更多.png" alt="">-->
           <!--</router-link>-->
-          <div  class="rightWord" @click="selectImg()">
+          <div class="rightWord" @click="selectImg()">
             <div v-if="patientInfo">
-              <span>姓名:{{ patientInfo.patName }}</span><span>{{ patientInfo.patGender == 'M' ? '男':'女' }} {{ patientInfo.age }}岁</span>
+              <span>姓名:{{ patientInfo.patName }}</span><span>{{ patientInfo.patGender == 'M' ? '男' : '女'
+              }} {{ patientInfo.age }}岁</span>
             </div>
             <img class="look" src="../../static/img/查看更多.png" alt="">
           </div>
@@ -27,21 +28,24 @@
       <div class="blank border-1px"></div>
       <div class="weui-cells weuiMargin">
         <a class="weui-cell weui-cell_access" href="javascript:;" @click="goMyConsult()">
-          <div class="weui-cell__hd"><img src="../../static/img/my/ic_interrogation@2x.png" alt="" style="width:20px;margin-right:7px;display:block"></div>
+          <div class="weui-cell__hd"><img src="../../static/img/my/ic_interrogation@2x.png" alt=""
+                                          style="width:20px;margin-right:7px;display:block"></div>
           <div class="weui-cell__bd">
             <p>我的问诊</p>
           </div>
           <div class="weui-cell__ft"></div>
         </a>
         <a class="weui-cell weui-cell_access" href="javascript:;" @click="goMyBookNumber()">
-          <div class="weui-cell__hd"><img src="../../static/img/my/ic_register@2x.png" alt="" style="width:20px;margin-right:7px;display:block"></div>
+          <div class="weui-cell__hd"><img src="../../static/img/my/ic_register@2x.png" alt=""
+                                          style="width:20px;margin-right:7px;display:block"></div>
           <div class="weui-cell__bd">
             <p>我的挂号</p>
           </div>
           <div class="weui-cell__ft"></div>
         </a>
         <a class="weui-cell weui-cell_access" href="javascript:;" @click="goUsualPatient()">
-          <div class="weui-cell__hd"><img src="../../static/img/my/ic_Contacts@2x.png" alt="" style="width:20px;margin-right:7px;display:block"></div>
+          <div class="weui-cell__hd"><img src="../../static/img/my/ic_Contacts@2x.png" alt=""
+                                          style="width:20px;margin-right:7px;display:block"></div>
           <div class="weui-cell__bd">
             <p>常用就诊人</p>
           </div>
@@ -49,7 +53,8 @@
         </a>
         <div class="blank border-1px"></div>
         <a class="weui-cell weui-cell_access" href="javascript:;" @click="goCostLog()">
-          <div class="weui-cell__hd"><img src="../../static/img/my/ic_consumption@2x.png" alt="" style="width:20px;margin-right:7px;display:block"></div>
+          <div class="weui-cell__hd"><img src="../../static/img/my/ic_consumption@2x.png" alt=""
+                                          style="width:20px;margin-right:7px;display:block"></div>
           <div class="weui-cell__bd">
             <p>消费记录</p>
           </div>
@@ -57,18 +62,19 @@
         </a>
         <div class="blank border-1px"></div>
         <a class="weui-cell weui-cell_access" href="javascript:;" @click="goAccount()">
-          <div class="weui-cell__hd"><img src="../../static/img/my/我的收入.png" alt="" style="width:20px;margin-right:7px;display:block"></div>
+          <div class="weui-cell__hd"><img src="../../static/img/my/我的收入.png" alt=""
+                                          style="width:20px;margin-right:7px;display:block"></div>
           <div class="weui-cell__bd">
             <p>账户相关</p>
           </div>
           <div class="weui-cell__ft"></div>
         </a>
         <!--<a class="weui-cell weui-cell_access" href="javascript:;">-->
-          <!--<div class="weui-cell__hd"><img src="../../static/img/my/ic_help@2x.png" alt="" style="width:20px;margin-right:7px;display:block"></div>-->
-          <!--<div class="weui-cell__bd">-->
-            <!--<p>使用帮助</p>-->
-          <!--</div>-->
-          <!--<div class="weui-cell__ft"></div>-->
+        <!--<div class="weui-cell__hd"><img src="../../static/img/my/ic_help@2x.png" alt="" style="width:20px;margin-right:7px;display:block"></div>-->
+        <!--<div class="weui-cell__bd">-->
+        <!--<p>使用帮助</p>-->
+        <!--</div>-->
+        <!--<div class="weui-cell__ft"></div>-->
         <!--</a>-->
       </div>
     </div>
@@ -77,72 +83,76 @@
 <script>
   import header from '../base/header'
   import api from '../lib/api'
-  export default{
-    data(){
-      return{
-        title:"我的",
-        rightTitle:"",
-        healthTitle:"健康资讯",
-        healthRightTitle:"",
-        serviceTitle:"服务",
-        serviceRightTitle:"",
-        indexTitle:"首页",
-        indexRightTitle:"",
-        patientInfo:"",
-        previewImg:null,
+  import {isLoginMixin} from "../lib/mixin"
+
+  export default {
+    mixins: [isLoginMixin],
+    data() {
+      return {
+        title: "我的",
+        rightTitle: "",
+        healthTitle: "健康资讯",
+        healthRightTitle: "",
+        serviceTitle: "服务",
+        serviceRightTitle: "",
+        indexTitle: "首页",
+        indexRightTitle: "",
+        patientInfo: "",
+        previewImg: null,
       }
     },
-    created(){
+    created() {
       console.log(document.getElementsByTagName('title')[0])
 //      document.getElementsByTagName('title')[0].innerText= '我的'
-      api("nethos.pat.info.get",{
-        token:localStorage.getItem("token")
-      }).then((data)=>{
-        this.patientInfo = data.obj
-        console.log(data)
+      api("nethos.pat.info.get", {}).then((data) => {
+        if (data.code == 0) {
+          this.patientInfo = data.obj
+        } else {
+         this.$router.push("/bindRelativePhone");
+        }
       })
     },
-    methods:{
-      goAbout(){
+    methods: {
+      goAbout() {
         this.$router.push('/about')
       },
 //      goAccount(){
 //        this.$router.push('/account')
 //      },
-      goAccount(){
+      goAccount() {
         this.$router.push('/accountAbout')
       },
-      goMyWait(){
+      goMyWait() {
         this.$router.push('/myWait')
       },
-      goMyBookNumber(){
+      goMyBookNumber() {
         this.$router.push('/myBookNumber')
       },
-      goUsualPatient(){
+      goUsualPatient() {
         this.$router.push('/usualPatient')
       },
-      goHealthFile(){
+      goHealthFile() {
         this.$router.push('/HealthFile')
       },
-      goMyConsult(){
+      goMyConsult() {
         this.$router.push('/myConsult/commented')
       },
-      goCostLog(){
+      goCostLog() {
         this.$router.push('/expenseHistory')
       },
-      goProfile(){
+      goProfile() {
         this.$router.push('/myProfile/healthIndex/beautify')
       },
-      selectImg(e){
+      selectImg(e) {
         this.$refs.upload.click()
       },
-      onFileChange(e){
+      onFileChange(e) {
         console.log(e)
         var file = e.target.files[0]
         this.createImage(file)
       },
-      createImage(file){
-        if(typeof FileReader === "undefined"){
+      createImage(file) {
+        if (typeof FileReader === "undefined") {
           alert("您的浏览器不支持图片上传，请升级您的浏览器")
           return false
         }
@@ -150,36 +160,36 @@
         let fileName = file.name
         let reader = new FileReader()
         reader.readAsDataURL(file)
-        reader.onload = function(){
-          api("nethos.system.atta.upload.image.base64",{
-            base64:this.result,
-            originalName:fileName
-          }).then((data)=>{
+        reader.onload = function () {
+          api("nethos.system.atta.upload.image.base64", {
+            base64: this.result,
+            originalName: fileName
+          }).then((data) => {
             this.previewImg = data.obj.url
-            that.$set(that.$data,'previewImg',data.obj.url)
+            that.$set(that.$data, 'previewImg', data.obj.url)
             console.log(this.previewImg)
-            api("nethos.pat.info.modify",{
-              token:localStorage.getItem("token"),
-              patId:that.patientInfo.patId,
-              patAvatar:this.previewImg,
-            }).then((data)=>{
+            api("nethos.pat.info.modify", {
+              token: localStorage.getItem("token"),
+              patId: that.patientInfo.patId,
+              patAvatar: this.previewImg,
+            }).then((data) => {
 
-                console.log(data,'666')
+              console.log(data, '666')
             })
           })
         }
       },
     },
-    components:{
-      "VHeader":header
+    components: {
+      "VHeader": header
     },
-    mounted(){
-      this.$nextTick(()=>{
+    mounted() {
+      this.$nextTick(() => {
         this.tellPath = this.$route.path
       })
     },
-    watch:{
-      "$route":function(){
+    watch: {
+      "$route": function () {
         this.tellPath = this.$route.path
       }
     }
@@ -187,93 +197,95 @@
 </script>
 <style scoped lang="scss">
   @import '../common/public';
-  .myArea{
+
+  .myArea {
     position: fixed;
     top: 50px;
-    left:0;
-    right:0;
-    bottom:98rem/$rem;
-    .avatar{
-      width:100%;
-      height:85px;
+    left: 0;
+    right: 0;
+    bottom: 98rem/$rem;
+    .avatar {
+      width: 100%;
+      height: 85px;
       background-color: white;
-      .avatarCenter{
-        width:690rem/$rem;
+      .avatarCenter {
+        width: 690rem/$rem;
         height: 80px;
         margin: 0 auto;
         display: flex;
         align-items: center;
-        .leftWord{
-          img.profile{
+        .leftWord {
+          img.profile {
             width: 60px;
             height: 60px;
             border-radius: 50%;
             margin-right: 10px;
           }
         }
-        .rightWord{
+        .rightWord {
           height: 80px;
-          width:690rem/$rem;
+          width: 690rem/$rem;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          >div{
+          > div {
             display: flex;
             flex-direction: column;
           }
-          img.look{
+          img.look {
             width: 16rem/$rem;
             height: 20rem/$rem;
           }
-          span{
+          span {
             height: 25px;
             font-size: 32rem/$rem;
             font-family: PingFangSC;
             color: #333333;
           }
-          span:nth-child(2),span:nth-child(3){
+          span:nth-child(2), span:nth-child(3) {
             color: #999999;
           }
         }
       }
     }
-    .blank{
-      width:100%;
+    .blank {
+      width: 100%;
       height: 20rem/$rem;
-      background-color: rgb(245,245,245);
+      background-color: rgb(245, 245, 245);
     }
-    .weuiMargin{
-      margin:0;
-      p{
+    .weuiMargin {
+      margin: 0;
+      p {
         font-size: 32rem/$rem;
         color: #333333;
       }
     }
   }
-  .footer{
-    width:100%;
-    height:98rem/$rem;
+
+  .footer {
+    width: 100%;
+    height: 98rem/$rem;
     position: fixed;
-    bottom:0;
-    left:0;
-    right:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     background-color: #FFFFFF;
     display: flex;
-    >div{
-      flex:1;
+    > div {
+      flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
       margin-top: 10rem/$rem;
-      img{
-        height:70rem/$rem;
+      img {
+        height: 70rem/$rem;
       }
     }
 
-
     /*background-color: #3CC51F;*/
   }
-  input{
-    display: none!important;
+
+  input {
+    display: none !important;
   }
 </style>
