@@ -77,10 +77,7 @@
          },
          verifyCode(){
              if(this.regStatus == 'REGISTER'){
-                 this.$router.push({
-                   path:'/register',
-                   query:{cid:this.cid,codeValue:this.codeValue}
-                 })
+                 this.$router.push('/register')
              }else if(this.regStatus == 'BIND'){
                api("nethos.pat.wechat.bind",{
 //                token:`OPENID_`+localStorage.getItem("token"),
@@ -94,6 +91,11 @@
                  if(data.code == 0){
                    this.$router.push({
                      path:'/login',
+                   })
+                 }else if(data.msg = ''){
+                   this.$router.push({
+                     path:'/register',
+                     query:{cid:this.cid,codeValue:this.codeValue}
                    })
                  }else{
                    alert(data.msg)
