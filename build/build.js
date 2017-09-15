@@ -10,6 +10,9 @@ var webpack = require('webpack')
 var config = require('../config')
 var webpackConfig = require('./webpack.prod.conf')
 
+var glob = require("glob");
+var shelljs = require("shelljs");
+
 var spinner = ora('building for production...')
 spinner.start()
 
@@ -26,7 +29,17 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
       chunkModules: false
     }) + '\n\n')
 
-    console.log(chalk.cyan('  Build complete.\n'))
+    const dir = path.resolve(__dirname, "../dist/static/img");
+    var imgs = glob.sync(`${dir}/**/*.*`);
+    imgs.forEach((res) => {
+      var file = (path.basename(res));
+      if (file.split('.').length < 3) {
+        console.log(chalk.cyan('delete ' + file));
+        shelljs.rm("-f", res);
+      }
+    });
+
+    console.log(chalk.cyan('  Build complete.\n'));
     console.log(chalk.yellow(
       '  Tip: built files are meant to be served over an HTTP server.\n' +
       '  Opening index.html over file:// won\'t work.\n'
