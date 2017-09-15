@@ -24,7 +24,7 @@
                    </div>
                  </div>
                  <div class="buttonWrap">
-                   <button class="bottom" @click="verifyCode()">这是我的手机号</button>
+                   <button class="bottom" @touchend="verifyCode()">这是我的手机号</button>
                  </div>
                </div>
              </div>
@@ -36,6 +36,7 @@
    import header from '../../base/header'
    import api from '../../lib/api.js'
    import mask from '../../base/mask'
+   import {openidCache} from '../../lib/cache'
    import { required, minLength, between } from 'vuelidate/lib/validators'
    export default{
        data(){
@@ -44,7 +45,8 @@
                code:"",
                cid:"",
                codeValue:"",
-             showMask:false
+             showMask:false,
+             regStatus:""
            }
        },
        validations: {
@@ -65,6 +67,8 @@
            api("nethos.system.captcha.pat.wechat.bind",{
              mobile:this.phone,
            }).then((data)=>{
+               console.log(data)
+               this.regStatus = data.regStatus
                this.cid = data.obj.cid
                this.codeValue = data.obj.value
                console.log(this.cid)
@@ -72,12 +76,32 @@
            })
          },
          verifyCode(){
+             if(this.regStatus == 'REGISTER'){
+                 this.$router.push({
+                   path:'/register',
+                   query:{cid:this.cid,codeValue:this.codeValue}
+                 })
+             }else if(this.regStatus == 'BIND'){
+               api("nethos.pat.wechat.bind",{
+//                token:`OPENID_`+localStorage.getItem("token"),
+                 captcha:this.codeValue,
+                 cid:this.cid,
+                 openid:openidCache.get()
+               }).then((data)=>{
+                 console.log(this.codeValue)
+                 console.log(this.cid)
+                 console.log(openidCache.get())
+                 if(data.code == 0){
+                   this.$router.push({
+                     path:'/login',
+                   })
+                 }else{
+                   alert(data.msg)
+                 }
+                 console.log(data)
+               })
+             }
              console.log(this.cid)
-           this.$router.push({
-             path:'/register',
-             query:{cid:this.cid,codeValue:this.codeValue}
-           })
-
          },
          focus(){
 //            this.showMask = true

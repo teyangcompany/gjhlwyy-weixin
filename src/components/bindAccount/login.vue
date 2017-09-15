@@ -32,15 +32,15 @@
     },
     methods:{
       login(){
-          this.password = sha512(hex_md5('a12345678') + 'a12345678' );
-          api("nethos.pat.login",{
-            patMobile:"17130049182",
-            patPassword:this.password
-          }).then((data)=>{
-              localStorage.setItem("token",data.token)
-              this.$router.push('/myProfile/index')
-              console.log(data)
-          })
+//          this.password = sha512(hex_md5('a12345678') + 'a12345678' );
+//          api("nethos.pat.login",{
+//            patMobile:"17130049182",
+//            patPassword:this.password
+//          }).then((data)=>{
+//              localStorage.setItem("token",data.token)
+//              console.log(data)
+//          })
+        this.$router.push('/myProfile/index')
       }
     },
     components:{

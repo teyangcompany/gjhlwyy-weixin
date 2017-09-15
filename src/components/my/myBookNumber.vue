@@ -70,7 +70,7 @@
       },
       methods:{
         goMyProfile(){
-            this.$router.push('/myProfile')
+            this.$router.push('/Profile')
         },
         iKnow(){
               this.showAlert = false

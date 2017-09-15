@@ -2,6 +2,7 @@
  * Created by Administrator on 2017/8/26.
  */
 import axios from 'axios';
+import {openidCache} from "./cache"
 
 let url = "https://nethos.diandianys.com/api/app";
 let random = Math.round(Math.random() * 10000);
@@ -13,10 +14,17 @@ let base = {
   random: random,
   sign: "test",
   spid: "1001",
-  test: true
+  test: true,
 };
 export default function (service, options) {
   let obj = {...base, service, ...options}
+
+  let openid=openidCache.get();
+
+  if(openid){
+    obj.token="OPENID_"+openid;
+  }
+
   let config = {
     headers: {
       "Content-Type": "application/json",

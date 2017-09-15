@@ -25,7 +25,7 @@
             </div>
           </div>
           <div class="buttonWrap">
-            <button class="bottom" @click="confirmRegister()">确认</button>
+            <button class="bottom" @touchend="confirmRegister()">确认</button>
           </div>
         </div>
       </div>
@@ -34,6 +34,7 @@
 </template>
 <script>
   import header from '../../base/header'
+  import {openidCache} from '../../lib/cache'
   import api from '../../lib/api'
   export default{
     data(){
@@ -50,17 +51,26 @@
     created(){
        this.cid = this.$route.query.cid
        this.codeValue = this.$route.query.codeValue
+      console.log(this.cid)
+      console.log(this.codeValue)
     },
     methods:{
       confirmRegister(){
+          console.log("123")
           api("nethos.pat.register.v3",{
             captcha:this.codeValue,
             cid:this.cid,
             patPassword:this.passWord,
             patName:this.realName,
             patIdcard:this.idCard,
+            openid:openidCache.get()
           }).then((data)=>{
               console.log(data)
+              if(data.code == 0){
+                  this.$router.push('/login')
+              }else{
+                  alert(data.msg)
+              }
           })
       },
       focus(){
