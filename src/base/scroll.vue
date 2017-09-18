@@ -28,6 +28,12 @@
       data1:{
         type:Boolean,
       },
+      dataNumber:{
+        type:Number,
+      },
+      dataString:{
+        type:String
+      },
       pullup: {
         type: Boolean,
         default: false
@@ -114,6 +120,11 @@
         setTimeout(() => {
           this.refresh()
         }, this.refreshDelay)
+      },
+      dataString(){
+        setTimeout(() => {
+          this.refresh()
+        }, 201)
       },
       data1(){
         setTimeout(() => {

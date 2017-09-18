@@ -38,7 +38,7 @@
       },
       methods:{
         goProfile(){
-            this.$router.push('/myProfile')
+//            this.$router.push('/myProfile')
         },
         goInternet(){
             this.$router.push('/internetRoom')

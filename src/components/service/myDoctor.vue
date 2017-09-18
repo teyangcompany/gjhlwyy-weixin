@@ -1,10 +1,8 @@
 <template>
     <div class="myDoctor">
-        <div class="myDoctorWrap">
-          <v-header :title="title" :rightTitle="rightTitle" v-if="tellPath == '/myDoctor/recentChat'" @on-main="goMain()"></v-header>
-          <v-header :title="title" :rightTitle="rightTitle" v-else @on-main="goMain()"></v-header>
-          <nav-bar :tagNames="tagNames" v-if="tellPath == '/myDoctor/recentChat'"></nav-bar>
-          <nav-bar :tagNames="tagNames" v-else></nav-bar>
+        <div class="navigator border-1px">
+             <router-link tag="div" to="/myDoctor/recentChat">最近消息</router-link>
+             <router-link tag="div" to="/myDoctor/followDoctor">关注医生</router-link>
         </div>
        <router-view></router-view>
     </div>
@@ -18,10 +16,6 @@
               title:"我的医生",
               rightTitle:"",
               tellPath:"",
-              tagNames:[
-                {title1:"最近消息",tabLink:'/myDoctor/recentChat'},
-                {title1:"我的医生",tabLink:'/myDoctor/followDoctor'},
-              ],
           }
       },
       mounted(){
@@ -54,12 +48,28 @@
     left:0;
     right:0;
     bottom:0;
-    .myDoctorWrap{
-      position: fixed;
-      top:0;
-      left:0;
-      right:0;
-      height: 100px;
+    /*z-index:1000;*/
+    background-color: #ffffff;
+    .navigator{
+      height: 50px;
+      width:100%;
+      background-color: #ffffff;
+      display: flex;
+      z-index:1000;
+      >div{
+        width:50%;
+        height: 50px;
+        display: flex;
+        font-size: 32rem/$rem;
+        color: #333333;
+        align-items: center;
+        justify-content: center;
+      }
+      .router-link-exact-active{
+        background-color: $bgColor2;
+        color: $buttonColor;
+        border-bottom:2px solid $buttonColor;
+      }
     }
   }
 </style>

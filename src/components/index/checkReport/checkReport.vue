@@ -123,7 +123,7 @@
         this.$router.push('/checkTogglePatient')
       },
       goIndex(){
-          this.$router.push('/myProfile/index')
+//          this.$router.push('/myProfile/index')
       }
     },
     components:{

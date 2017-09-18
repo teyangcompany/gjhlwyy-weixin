@@ -5,22 +5,28 @@
       <img src="../../../static/img/loading.gif" alt="">
       <span>正在很努力的加载中...</span>
     </div>
-    <div class="myBookNumber" v-else>
-      <router-link tag="div" :to="{path:'/bookNumberDetail',query:{bookHosId:item.bookHosId,index:index}}" class="numberCenter" v-for="(item,index) in orderList" :key="item.id">
-        <ul>
-          <li>
-            <p class="hosTitle">{{ item.hosName }}</p>
-            <p class="date border-1px">{{ item.bookTime }}</p>
-            <p class="aboutRoom"> <span>{{ item.deptName }}</span> <span>{{ item.docName }}</span> </p>
-          </li>
-        </ul>
-      </router-link>
+    <div class="myBookNumber" v-else ref="myBookNumber">
+      <div>
+        <router-link tag="div" :to="{path:'/bookNumberDetail',query:{bookHosId:item.bookHosId,index:index}}" class="numberCenter" v-for="(item,index) in orderList" :key="item.id">
+          <ul>
+            <li>
+              <p class="hosTitle">{{ item.hosName }}</p>
+              <p class="date border-1px">{{ item.bookTime }}</p>
+              <p class="aboutRoom"> <span>{{ item.deptName }}</span> <span>{{ item.docName }}</span> </p>
+            </li>
+          </ul>
+        </router-link>
+        <div class="assistScroll">
+
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
   import header from '../../base/header'
   import api from '../../lib/api'
+  import BScroll from 'better-scroll'
   export default{
     data(){
       return{
@@ -40,10 +46,24 @@
     methods:{
       goMyProfile(){
         this.$router.push('/myProfile')
+      },
+      _initMyBookNumber(){
+          this.bookNumber = new BScroll(this.$refs.myBookNumber,{
+              click:true
+          })
       }
     },
     components:{
       "VHeader":header
+    },
+    watch:{
+      orderList(){
+          this.$nextTick(()=>{
+              setTimeout(()=>{
+                  this._initMyBookNumber()
+              },20)
+          })
+      }
     }
   }
 </script>
@@ -100,6 +120,9 @@
         color: #999999;
         justify-content: space-between;
       }
+    }
+    .assistScroll{
+      height: 20px;
     }
   }
 </style>

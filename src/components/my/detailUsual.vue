@@ -40,6 +40,7 @@
       <v-mask v-if="fail || success"></v-mask>
     <alert :firstLine="firstLine" :secondLine="secondLine" :bottomLine="bottomLine" v-if="showAlert" @on-iKnow="iKnow()"></alert>
     <toast v-if="showToast"></toast>
+    <v-dialog v-if="showDialog" @on-cancel="cancel()" @on-download="confirmDelete()" :dialogMain="dialogMain" :dialogLeftFoot="dialogLeftFoot" :dialogRightFoot="dialogRightFoot"></v-dialog>
   </div>
 </template>
 <script>
@@ -50,6 +51,7 @@
   import VMask from '../../base/mask'
   import Alert from '../../base/alert'
   import Toast from '../../base/toast'
+  import Dialog from '../../base/dialog'
   export default{
     data(){
       return{
@@ -69,6 +71,10 @@
         secondLine:"",
         bottomLine:"确定",
         showAlert:false,
+        dialogMain:"确定删除就诊人",
+        dialogLeftFoot:"取消",
+        dialogRightFoot:"确定",
+        showDialog:false,
         changeName:"",
         changeID:"",
         allPatient:[],
@@ -114,6 +120,9 @@
       iKnow(){
          this.showAlert = false
       },
+      cancel(){
+          this.showDialog= false
+      },
       goChangePatient(){
           api("nethos.pat.compat.modify",{
              token:localStorage.getItem("token"),
@@ -132,21 +141,25 @@
       },
       deletePatient(){
           console.log("123")
-          api("nethos.pat.compat.delete",{
-            token:localStorage.getItem("token"),
-            compatId:this.allPatient[this.index].compatId
-          }).then((data)=>{
-              console.log(this.allPatient[this.index].compatId)
-              console.log(data)
-
-              if(data.code == 0){
-                  this.$router.push('/usualPatient')
-              }else{
-                  this.firstLine = data.msg
-                  this.showAlert = true
-              }
-          })
+        this.showDialog= true
+      },
+      confirmDelete(){
+        api("nethos.pat.compat.delete",{
+          token:localStorage.getItem("token"),
+          compatId:this.allPatient[this.index].compatId
+        }).then((data)=>{
+          console.log(this.allPatient[this.index].compatId)
+          console.log(data)
+          if(data.code == 0){
+            this.$router.push('/usualPatient')
+          }else{
+            this.firstLine = data.msg
+            this.showAlert = true
+          }
+        })
+        this.showDialog= false
       }
+
     },
     components:{
       "VHeader":header,
@@ -154,7 +167,8 @@
       VMask,
       bindFail,
       Alert,
-      Toast
+      Toast,
+      "VDialog":Dialog
     }
   }
 </script>

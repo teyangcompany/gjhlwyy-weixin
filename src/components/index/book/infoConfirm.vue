@@ -8,7 +8,7 @@
           <div class="circleAngle">
             <ul>
               <li>
-                <div class="cancelImg" v-if="allInfoArray.docName == '普通号'">
+                <div class="cancelImg" v-if="!(allInfoArray.bookDocId)">
                   <img src="../../../../static/img/普通-门诊.png" alt="">
                 </div>
                 <div class="cancelImg" v-else>
@@ -45,24 +45,27 @@
           <div class="leftTitle">
             <span>姓&nbsp;&nbsp;名:</span>
             <span>身份证号:</span>
-            <span>手&nbsp;机&nbsp;号:</span>
+            <span>手机号:</span>
+            <span>病案号:</span>
           </div>
           <div class="rightMatch" v-if="compatInfo">
             <span>{{ compatInfo[index].compatName }}</span>
             <span>{{ compatInfo[index].compatIdcard }}</span>
             <span>{{ compatInfo[index].compatMobile }}</span>
+            <span v-if=" compatInfo[index].compatMedicalRecord">{{ compatInfo[index].compatMedicalRecord }} </span>
+            <span v-else>暂未绑定病案号</span>
           </div>
         </div>
-        <div class="aboutCode">
-           <div>
-             <p>验证码</p>
-             <input type="text" v-model="writeCode">
-             <p class="codeDisplay">
-               <img :src="'data:image/png;base64,'+verifyCode" alt="">
-             </p>
-             <p @click="getCode()" style="color: #2AB6B3;">刷新验证码</p>
-           </div>
-        </div>
+        <!--<div class="aboutCode">-->
+           <!--<div>-->
+             <!--<p>验证码</p>-->
+             <!--<input type="text" v-model="writeCode">-->
+             <!--<p class="codeDisplay">-->
+               <!--<img :src="'data:image/png;base64,'+verifyCode" alt="">-->
+             <!--</p>-->
+             <!--<p @click="getCode()" style="color: #2AB6B3;">刷新验证码</p>-->
+           <!--</div>-->
+        <!--</div>-->
         <div class="assistScroll">
 
         </div>
@@ -153,6 +156,7 @@
         this.allInfoArray = JSON.parse(this.allInfo)
         this.listIndex = this.$route.query.listIndex
         this.bookSort = this.$route.query.bookSort
+        console.log(this.bookSort)
         if(this.$route.query.index){
           this.index = this.$route.query.index
         }else{
@@ -164,7 +168,9 @@
         api("nethos.book.doc.info",{
           bookDocId: this.allInfoArray.bookDocId
         }).then((data)=>{
-            this.docAvatar = data.obj.docAvatar
+            if(data.obj.docAvatar){
+              this.docAvatar = data.obj.docAvatar
+            }
             console.log(data)
         })
         api("nethos.book.doc.list.scheme.list",{
@@ -185,19 +191,20 @@
                patId:this.selfInfo.patId
              }).then((data)=>{
                this.compatInfo = data.list
+               console.log("下面的data")
                console.log(data)
                if(data.code == 0){
                  //        获取验证码
-                 api("nethos.book.captcha.generate",{
-                   token:localStorage.getItem("token"),
-                   compatId:this.compatInfo[this.index].compatId,
-                   bookHosId:this.allInfoArray.bookHosId,
-                   bookNumId: this.bookNumId,
-                 }).then((data)=>{
-                   this.verifyCode = data.obj.captcha
-                   this.cid = data.obj.cid
-                   console.log(data)
-                 })
+//                 api("nethos.book.captcha.generate",{
+//                   token:localStorage.getItem("token"),
+//                   compatId:this.compatInfo[this.index].compatId,
+//                   bookHosId:this.allInfoArray.bookHosId,
+//                   bookNumId: this.bookNumId,
+//                 }).then((data)=>{
+//                   this.verifyCode = data.obj.captcha
+//                   this.cid = data.obj.cid
+//                   console.log(data)
+//                 })
                }
              })
            }
@@ -246,29 +253,44 @@
          })
       },
       goBookService(){
-          api("nethos.system.captcha.checkcaptcha",{
-            captcha:this.writeCode,
-            cid:this.cid
-          }).then((data)=>{
-              console.log(data)
-              if(data.code == 0){
+//          api("nethos.system.captcha.checkcaptcha",{
+//            captcha:this.writeCode,
+//            cid:this.cid
+//          }).then((data)=>{
+//              console.log(data)
+//              if(data.code == 0){
                 if(this.bookSort == '预约挂号'){
                   api("nethos.book.order.register",{
                     token:localStorage.getItem("token"),
                     bookNumId: this.bookNumId,
                     bookHosId:this.allInfoArray.bookHosId,
                     compatId:this.compatInfo[this.index].compatId,
-                    captcha:this.writeCode
+                    captcha:"1234"
                   }).then((data)=>{
                       console.log("下面挂号部分")
                       console.log(data)
                     console.log("上面挂号部分")
+
+                    console.log(this.bookNumId)
+                    console.log(this.allInfoArray.bookHosId)
+                    console.log(this.compatInfo[this.index].compatId)
+                    console.log(this.writeCode)
+
+
+
+
+
                     if(data.code == 0){
                      this.orderInfo = JSON.stringify(data.obj)
                       this.$router.push({
                         path:'/bookSuccess',
                         query:{orderInfo:this.orderInfo}
                       })
+                    }else if(data.msg == '请先绑定病历号'){
+                      this.showDialog = true
+                    }else if(!(data.msg)){
+                      this.showAlert = true
+                      this.secondLine = "服务器错误"
                     }else{
                       this.showAlert = true
                       this.secondLine = data.msg
@@ -280,11 +302,15 @@
                     bookNumId: this.bookNumId,
                     bookHosId:this.allInfoArray.bookHosId,
                     compatId:this.compatInfo[this.index].compatId,
-                    captcha:this.writeCode
+//                    captcha:this.writeCode
                   }).then((data)=>{
                     console.log("下面挂号部分")
                     console.log(data)
                     console.log("上面挂号部分")
+
+
+
+
                     if(data.code == 0){
                       this.orderInfo = JSON.stringify(data.obj)
                       this.$router.push({
@@ -293,34 +319,34 @@
                       })
                     }else if(data.msg == '请先绑定就诊卡号'){
                         this.showDialog = true
-                    }else if(data.code == '02020801'){
+                    }else if(!(data.msg)){
                       this.showAlert = true
-                      this.secondLine = "排班信息已过期，请重新查询排班数据"
+                      this.secondLine = "服务器错误"
                     }else{
                       this.showAlert = true
                       this.secondLine = data.msg
                     }
                   })
                 }
-              }else{
-                  this.showAlert = true
-                  this.secondLine = data.msg
-              }
-          })
+//              }else{
+//                  this.showAlert = true
+//                  this.secondLine = data.msg
+//              }
+//          })
 
       },
-      getCode(){
-          api("nethos.book.captcha.generate",{
-           token:localStorage.getItem("token"),
-            compatId:this.compatInfo[this.index].compatId,
-            bookHosId:this.allInfoArray.bookHosId,
-            bookNumId: this.bookNumId,
-          }).then((data)=>{
-            this.verifyCode = data.obj.captcha
-            this.cid = data.obj.cid
-              console.log(data)
-          })
-      }
+//      getCode(){
+//          api("nethos.book.captcha.generate",{
+//           token:localStorage.getItem("token"),
+//            compatId:this.compatInfo[this.index].compatId,
+//            bookHosId:this.allInfoArray.bookHosId,
+//            bookNumId: this.bookNumId,
+//          }).then((data)=>{
+//            this.verifyCode = data.obj.captcha
+//            this.cid = data.obj.cid
+//              console.log(data)
+//          })
+//      }
     },
     components:{
       'VHeader':header,
@@ -587,7 +613,7 @@
       }
     }
     .assistScroll{
-      height: 200px;
+      height: 50px;
     }
   }
 </style>

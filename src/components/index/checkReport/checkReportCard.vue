@@ -2,7 +2,7 @@
   <div>
     <v-header :title="title" :rightTitle="rightTitle"></v-header>
     <div class="reportDetail">
-      <div class="testType">
+      <div class="testType" v-if="allPatient">
         <div class="type">
           <h4>[医疗名称]</h4>
         </div>
@@ -24,7 +24,7 @@
           <p>具体报告信息请以医院纸质报告为准！</p>
         </div>
       </div>
-      <div class="blank border-1px"></div>
+      <div class="blank"></div>
       <div class="testInfo">
         <div class="result">
           <h5>检验结果:</h5>
@@ -77,12 +77,12 @@
     left:0;
     right:0;
     bottom:0;
-    background-color: white;
+    background-color: rgb(250,250,250);
     .testType{
-      width:720rem/$rem;
+      width:750rem/$rem;
       height: 240px;
-      margin:10px auto;
-      background-color: $bgColor2;
+      margin:0 auto;
+      background-color: #ffffff;
       .type{
         display: flex;
         justify-content: space-between;
@@ -103,7 +103,7 @@
       .name{
         display: flex;
         justify-content: space-between;
-        margin-bottom: 3px;
+        margin-bottom: 8px;
         p{
           font-size: 28rem/$rem;
           color: #999999;
@@ -135,11 +135,10 @@
       background-color: rgb(245,245,245);
     }
     .testInfo{
-      width:720rem/$rem;
-      height: 300px;
+      width:750rem/$rem;
+      height: 500px;
       margin: 0 auto;
-      margin-top: 10px;
-      background-color: $bgColor2;
+      background-color: #ffffff;
       .result,.resultDes{
         h5{
           font-weight: normal;

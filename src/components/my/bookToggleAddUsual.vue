@@ -70,17 +70,22 @@
         this.showAlert = false
       },
       getCode(){
-        api("nethos.system.captcha.generate",{
-          captchaType:"SMS",
-          mobile:this.compatMobile
-        }).then((data)=>{
-          if(data.code == 0){
-            this.cid = data.obj
-            this.a = setInterval(()=>{
-              this.countdown--
-            },1000)
-          }
-        })
+        if(this.compatMobile == ''){
+            this.alertContent = "手机号不能为空"
+            this.showAlert = true
+        }else{
+          api("nethos.system.captcha.generate",{
+            captchaType:"SMS",
+            mobile:this.compatMobile
+          }).then((data)=>{
+            if(data.code == 0){
+              this.cid = data.obj
+              this.a = setInterval(()=>{
+                this.countdown--
+              },1000)
+            }
+          })
+        }
       },
       goAdd(){
         console.log(this.cid)
@@ -167,7 +172,7 @@
       right:0;
       height: 30px;
       line-height: 30px;
-      width: 200rem/$rem;
+      width: 220rem/$rem;
       border:none;
       border-radius: 7px;
       outline:medium;

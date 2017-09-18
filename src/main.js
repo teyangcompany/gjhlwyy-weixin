@@ -5,44 +5,46 @@ import App from './App'
 import router from './router'
 import Vuelidate from 'vuelidate'
 
+import auth2 from "./lib/auth2";
 
-Vue.use(Vuelidate)
-Vue.config.productionTip = false
-Vue.mixin({
-  created: function () {
-    var myOption = this.$options.myOption
-    var token = localStorage.getItem("token")
-    if (!token) {
-     this.$router.push('/login')
-    }
-  }
-})
 let UA = window.navigator.userAgent.toLocaleLowerCase();
 if (/iphone/.test(UA)) {
-  window.device = "iphone";
+    window.device = "iphone";
 }
 if (/android/.test(UA)) {
-  window.device = "android";
+    window.device = "android";
 }
 
 if (/micromessenger/.test(UA)) {
-  window.brower = "weixin";
+    window.brower = "weixin";
 } else {
-  window.brower = "";
+    window.brower = "";
 }
+
+
+Vue.use(Vuelidate)
+Vue.config.productionTip = false
+
 /*
  * 移动端rem布局
  * width:20rem
  * */
+
 if (window.device == "iphone" || window.device == "android") {
-  let w = window.innerWidth;
-  document.querySelector('html').style.fontSize = `${w/ 20}px`;
+    let w = window.innerWidth;
+    document.querySelector('html').style.fontSize = `${w / 20}px`;
 }
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  template: '<App/>',
-  components: { App },
-  myOption: 'hello!'
-})
+
+
+auth2(init);
+
+function init() {
+    /* eslint-disable no-new */
+    new Vue({
+        el: '#app',
+        router,
+        template: '<App/>',
+        components: {App},
+        myOption: 'hello!'
+    });
+}

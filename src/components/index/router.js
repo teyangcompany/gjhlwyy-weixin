@@ -44,6 +44,12 @@ import togglePatient from './togglePatient/togglePatient'
 import bookTogglePatient from './togglePatient/bookTogglePatient'
 import waitTogglePatient from './togglePatient/waitTogglePatient'
 import checkTogglePatient from './togglePatient/checkTogglePatient'
+import nowBook from './book/nowBook'
+import articleDetail from './onlineDoctor/articleDetail'
+import commentDetail from './onlineDoctor/commentDetail'
+import articleList from './onlineDoctor/articleList'
+import todayBook from './todayBook'
+import bookTerms from './book/bookTerms'
 export default[
   {
     path:"/quickConsult",
@@ -64,6 +70,10 @@ export default[
   {
     path:'/book',
     component:book
+  },
+  {
+    path:"/todayBook",
+    component:todayBook
   },
   {
     path:"/selectType",
@@ -218,5 +228,25 @@ export default[
   {
     path:"/checkTogglePatient",
     component:checkTogglePatient
+  },
+  {
+    path:"/nowBook",
+    component:nowBook
+  },
+  {
+    path:"/articleDetail",
+    component:articleDetail
+  },
+  {
+    path:"/commentDetail",
+    component:commentDetail
+  },
+  {
+    path:"/articleList",
+    component:articleList
+  },
+  {
+    path:"/bookTerms",
+    component:bookTerms
   }
 ]

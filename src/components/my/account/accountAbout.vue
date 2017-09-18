@@ -23,9 +23,15 @@
 
           </div>
         </div>
-        <div class="btn" @click="quit">
-          <a style="background: rgb(48, 207, 208);" href="javascript:;" class="weui-btn weui-btn_primary">退出登录</a>
-        </div>
+
+        <!--<div class="btn" @click="quit">-->
+          <!--<a style="background: rgb(48, 207, 208);" href="javascript:;" class="weui-btn weui-btn_primary">退出登录</a>-->
+        <!--</div>-->
+
+        <!--<div class="btn" @click="quit">-->
+          <!--<a style="background: rgb(48, 207, 208);" href="javascript:;" class="weui-btn weui-btn_primary">退出登录</a>-->
+        <!--</div>-->
+
       </div>
     </div>
 </template>

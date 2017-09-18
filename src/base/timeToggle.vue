@@ -8,8 +8,11 @@
       </div>
       <div class="main" id="wrapper">
         <div>
-          <div v-for="(item,index) in patList" @click="checkDoctor(index)">
+          <div v-for="(item,index) in patList" @click="checkDoctor(index)" v-if="patList.length != 0">
             <p class="dark border-1px">{{item.numNo}}号，时间 {{ item.numTime }}</p>
+          </div>
+          <div v-else>
+             <p>暂无可用号源</p>
           </div>
           <!--<p class="lightBlue border-1px" @click="addPat()" v-if="path !='/bookService'">添加家庭成员 <span> <img src="../../static/img/add.png"></span></p>-->
         </div>

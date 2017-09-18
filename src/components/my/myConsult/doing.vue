@@ -155,6 +155,7 @@
             overflow: hidden;
             font-size: 15px;
             color: #666666;
+            word-break: break-all;
             /*height: 52px;*/
             padding: 5px 5px 5px 5px;
             /*<!--background-color: $bgColor2;-->*/

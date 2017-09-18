@@ -23,20 +23,22 @@
               </li>
             </div>
           </ul>
-          <div class="blank"></div>
-          <div class="blank border-1px"></div>
-          <div class="list border-1px" v-if="commonNumDetail">
-            <p>{{ commonNumDetail[0].deptName }}<img src="../../../../static/img/book/left-arrow.png" alt=""> </p>
-          </div>
-          <div class="list border-1px" v-for="(item,index) in commonNumDetail[0].schemeList" @click="book(item,index)">
-            <p class="specialBlack">{{ (item.schemeDate).substr(0,10) }} {{ weekNum }} {{ item.schemeAmpm == 'pm'? '下午':'上午' }}
-              <span class="year gray" v-if="item.schemeStats == 0">无</span>
-              <span class="year gray" v-if="item.schemeStats == 1">停诊</span>
-              <span class="year gray" v-if="item.schemeStats == 2">已满</span>
-              <span class="year" v-if="item.schemeStats == 3">即将(未放号或号子被锁定)</span>
-              <!--<span class="year" >预约</span>-->
-              <span class="specialMoney" v-if="item.schemeStats == 4" >预约{{ item.bookFee }}元</span>
-            </p>
+          <div v-for="parentItem in commonNumDetail">
+            <div class="blank"></div>
+            <div class="blank border-1px"></div>
+            <div class="list border-1px" v-if="commonNumDetail">
+              <p>{{ parentItem.deptName }}<img src="../../../../static/img/book/left-arrow.png" alt=""> </p>
+            </div>
+            <div class="list border-1px" v-for="(item,index) in parentItem.schemeList" @click="book(item,index)">
+              <p class="specialBlack">{{ (item.schemeDate).substr(0,10) }} {{ weekNum }} {{ item.schemeAmpm == 'pm'? '下午':'上午' }}
+                <span class="year gray" v-if="item.schemeStats == 0">无</span>
+                <span class="year gray" v-if="item.schemeStats == 1">停诊</span>
+                <span class="year gray" v-if="item.schemeStats == 2">已满</span>
+                <span class="year" v-if="item.schemeStats == 3">即将(未放号或号子被锁定)</span>
+                <!--<span class="year" >预约</span>-->
+                <span class="specialMoney" v-if="item.schemeStats == 4" >预约{{ item.bookFee }}元</span>
+              </p>
+            </div>
           </div>
           <!--<div class="list border-1px">-->
             <!--<p class="specialBlack">2017-08-24 周四 上午 <span class="specialMoney">预约10元</span> </p>-->
@@ -45,6 +47,9 @@
           <div class="blank border-1px"></div>
           <div class="list border-1px">
             <p>科室介绍<img src="../../../../static/img/book/left-arrow.png" alt=""> </p>
+          </div>
+          <div class="deptDescription">
+              <p>{{ deptDescription }}</p>
           </div>
         </div>
         </div>
@@ -64,7 +69,7 @@
              patientAll:[],
              showPat:false,
              patOption:"",
-             title:"",
+             title:"科室",
              rightTitle:"",
              commonNumDetail:"",
              bookDeptId:"",
@@ -72,7 +77,8 @@
              bookSchemeId:"",
              showToast:false,
              clickedIndex:"",
-             bookSort:""
+             bookSort:"",
+           deptDescription:""
          }
       },
     mounted(){
@@ -86,6 +92,9 @@
       api("nethos.book.doc.normal.scheme.list",{
         bookDeptId:this.bookDeptId
       }).then((data)=>{
+        console.log("下面是data")
+        console.log(data)
+        console.log("上面是data")
         this.commonNumDetail = data.obj.deptSchemeList
         console.log(this.commonNumDetail)
         for(var i=0;i<this.commonNumDetail[0].schemeList.length;i++){
@@ -114,6 +123,12 @@
 
           }
         }
+      })
+      api("nethos.book.dept.info",{
+        bookDeptId:this.bookDeptId
+      }).then((data)=>{
+          this.deptDescription = data.obj.deptDescription
+          console.log(data)
       })
     },
     methods:{
@@ -329,6 +344,13 @@
              color: #999999;
            }
          }
+       }
+     }
+     .deptDescription{
+       p{
+         width:690rem/$rem;
+         font-size: 32rem/$rem;
+         margin:10rem/$rem auto;
        }
      }
    }

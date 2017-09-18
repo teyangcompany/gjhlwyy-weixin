@@ -157,6 +157,7 @@
             color: gray;
             height: 52px;
             padding-top: 5px;
+            word-break: break-all;
             /*background-color: #E64340;*/
           }
         }

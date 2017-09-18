@@ -2,44 +2,35 @@
   <div>
     <v-header :title="title" :rightTitle="rightTitle"></v-header>
     <div class="checkList">
-      <div class="topMenu border-1px">
-          <p class="picked" @click="seeTime('一周内')">一周内</p>
-          <p @click="seeTime('三个月')">三个月</p>
+      <div>
+        <div class="topMenu border-1px">
+          <!--<p class="picked" @click="seeTime('一周内')">一周内</p>-->
+          <p class="picked" @click="seeTime('三个月')">三个月</p>
           <p @click="seeTime('半年内')">半年内</p>
           <p @click="seeTime('一年内')">一年内</p>
-      </div>
-      <div v-if="reportInfo == 1" class="loading">
-        <img src="../../../../static/img/loading.gif" alt="">
-        <span>正在很努力的加载中...</span>
-      </div>
-      <div v-else-if="reportInfo.length == 0" class="loading">
-        <span>抱歉，未能查询到您的相关报告</span>
-      </div>
-      <div v-else>
-        <router-link tag="div" :to="{path:'/testReportCard',query:{index:index,recordId:item.recordId,item:reportInfoString}}" class="checkCenter" style="display: block" v-for="(item,index) in reportInfo" :key="item.id">
-          <div class="reportList">
-            <h3 class="border-1px">{{ item.inspectDept }}报告</h3>
-            <p><span>{{ item.name }}</span><span>{{ item.inspectDate }}</span></p>
-          </div>
-        </router-link>
-        <!--<router-link tag="div" to="/testReportCard" class="checkCenter">-->
-          <!--<div class="reportList">-->
-            <!--<h3 class="border-1px">三个月报告</h3>-->
-            <!--<p><span>张三</span><span>2016/07/08</span></p>-->
-          <!--</div>-->
-        <!--</router-link>-->
-        <!--<router-link tag="div" to="/testReportCard" class="checkCenter">-->
-          <!--<div class="reportList">-->
-            <!--<h3 class="border-1px">半年内报告</h3>-->
-            <!--<p><span>张三</span><span>2016/07/08</span></p>-->
-          <!--</div>-->
-        <!--</router-link>-->
-        <!--<router-link tag="div" to="/testReportCard" class="checkCenter">-->
-          <!--<div class="reportList">-->
-            <!--<h3 class="border-1px">一年内报告</h3>-->
-            <!--<p><span>张三</span><span>2016/07/08</span></p>-->
-          <!--</div>-->
-        <!--</router-link>-->
+        </div>
+        <div class="wrapContent" ref="wrapContent">
+           <div>
+             <div v-if="reportInfo == 1" class="loading">
+               <img src="../../../../static/img/loading.gif" alt="">
+               <span>正在很努力的加载中...</span>
+             </div>
+             <div v-else-if="reportInfo.length == 0" class="loading">
+               <span>抱歉，未能查询到您的相关报告</span>
+             </div>
+             <div v-else-if="reportInfo.length > 0">
+               <router-link tag="div" :to="{path:'/testReportCard',query:{index:index,recordId:item.recordId,item:reportInfoString}}" class="checkCenter" style="display: block" v-for="(item,index) in reportInfo" :key="item.id">
+                 <div class="reportList">
+                   <h3 class="border-1px">{{ item.diagnosis }}</h3>
+                   <p><span>{{ item.name }}</span><span>{{ item.inspectDate }}</span></p>
+                 </div>
+               </router-link>
+             </div>
+             <div class="assistScroll" style="height: 20px;">
+
+             </div>
+           </div>
+        </div>
       </div>
     </div>
   </div>
@@ -47,6 +38,7 @@
 <script>
   import header from '../../../base/header'
   import api from '../../../lib/api'
+  import BScroll from 'better-scroll'
   export default{
     data(){
       return{
@@ -95,21 +87,36 @@
           this.index= this.$route.query.index
           this.patCard = this.$route.query.patCard
           this.compatId = this.$route.query.compatId
+          this.nowTime = this.getNow()
+          this.threeMonth = this.getMonth(3)
           if(this.selectValue == '检验报告'){
-              api("nethos.book.inspect.list",{
-                token:localStorage.getItem("token"),
-                startDate:this.oneWeek,
-                endDate:this.nowTime,
-                patCard:this.patCard,
-                compatId:this.compatId
-              }).then((data)=>{
-                  this.reportInfo = data.list
-                  this.reportInfoString = JSON.stringify(this.reportInfo)
-                  console.log(data)
-              })
+              if(this.threeMonth != ''){
+                api("nethos.book.inspect.list",{
+                  token:localStorage.getItem("token"),
+                  startDate:this.threeMonth,
+                  endDate:this.nowTime,
+                  patCard:this.patCard,
+                  compatId:this.compatId
+                }).then((data)=>{
+                  if(data.code == 0){
+                    console.log(this.threeMonth)
+                    console.log(data)
+                    this.reportInfo = data.list
+                    this.reportInfoString = JSON.stringify(this.reportInfo)
+                    console.log(data)
+                  }else{
+                    this.reportInfo = 2
+                  }
+                })
+              }
           }
     },
     methods:{
+      _initTestScroll(){
+         this.testScroll = new BScroll(this.$refs.wrapContent,{
+             click:true
+         })
+      },
       GetDateStr(i){
         var dd = new Date();
         dd.setDate(dd.getDate()-i);//获取AddDayCount天后的日期
@@ -144,9 +151,13 @@
                 patCard:this.patCard,
                 compatId:this.compatId
               }).then((data)=>{
-                this.reportInfo = data.list
-                this.reportInfoString = JSON.stringify(this.reportInfo)
-                console.log(data)
+                if(data.code == 0){
+                  this.reportInfo = data.list
+                  this.reportInfoString = JSON.stringify(this.reportInfo)
+                  console.log(data)
+                }else{
+                  this.reportInfo = 2
+                }
               })
             }
           }else if(time == '三个月'){
@@ -159,9 +170,13 @@
                 patCard:this.patCard,
                 compatId:this.compatId
               }).then((data)=>{
-                this.reportInfo = data.list
-                this.reportInfoString = JSON.stringify(this.reportInfo)
-                console.log(data)
+                if(data.code == 0){
+                  this.reportInfo = data.list
+                  this.reportInfoString = JSON.stringify(this.reportInfo)
+                  console.log(data)
+                }else{
+                  this.reportInfo = 2
+                }
               })
             }
           }else if(time == '半年内'){
@@ -174,9 +189,13 @@
                 patCard:this.patCard,
                 compatId:this.compatId
               }).then((data)=>{
-                this.reportInfo = data.list
-                this.reportInfoString = JSON.stringify(this.reportInfo)
-                console.log(data)
+                 if(data.code == 0){
+                   this.reportInfo = data.list
+                   this.reportInfoString = JSON.stringify(this.reportInfo)
+                   console.log(data)
+                 }else{
+                   this.reportInfo = 2
+                 }
               })
             }
           }else{
@@ -189,16 +208,29 @@
                 patCard:this.patCard,
                 compatId:this.compatId
               }).then((data)=>{
-                this.reportInfo = data.list
-                this.reportInfoString = JSON.stringify(this.reportInfo)
-                console.log(data)
+                 if(data.code == 0){
+                   this.reportInfo = data.list
+                   this.reportInfoString = JSON.stringify(this.reportInfo)
+                   console.log(data)
+                 }else{
+                   this.reportInfo = 2
+                 }
               })
             }
           }
       }
     },
     components:{
-      "VHeader":header
+      "VHeader":header,
+    },
+    watch:{
+      reportInfo(){
+          this.$nextTick(()=>{
+              setTimeout(()=>{
+                  this._initTestScroll()
+              },100)
+          })
+      }
     }
   }
 </script>
@@ -230,9 +262,11 @@
     right:0;
     bottom:0;
     .topMenu{
-      height:90rem/$rem;
+      height:50px;
       display: flex;
+      z-index:200;
       align-items: center;
+      background-color: #FFFFFF;
       P{
         flex:1;
         text-align: center;
@@ -247,33 +281,46 @@
       }
     }
     >div{
-      .checkCenter{
-        width:690rem/$rem;
-        margin: 0 auto;
-        display: none;
-        .reportList{
-          margin-top: 10px;
-          border-radius: 7px;
-          background-color: $bgColor2;
-          h3{
-            font-weight: normal;
-            font-size: 32rem/$rem;
-            color: #323333;
-            padding-bottom: 30rem/$rem;
-            padding-left: 15rem/$rem;
-          }
-          p{
-            margin-top: 30rem/$rem;
-            font-size: 28rem/$rem;
-            color: #999899;
-            font-family: PingFangSC;
-            display: flex;
-            justify-content: space-between;
-            span:nth-child(1){
-              margin-left: 15rem/$rem;
-            }
-            span:nth-child(2){
-              margin-right: 15rem/$rem;
+      .wrapContent{
+        position: fixed;
+        top:100px;
+        left:0;
+        right:0;
+        bottom:0;
+        >div{
+          >div{
+            .checkCenter{
+              width:690rem/$rem;
+              margin: 0 auto;
+              display: none;
+              .reportList{
+                margin-top: 10px;
+                border-radius: 7px;
+                background-color: $bgColor2;
+                h3{
+                  font-weight: normal;
+                  font-size: 32rem/$rem;
+                  color: #323333;
+                  padding-top: 15rem/$rem;
+                  padding-bottom: 15rem/$rem;
+                  padding-left: 15rem/$rem;
+                }
+                p{
+                  margin-top: 15rem/$rem;
+                  padding-bottom: 15rem/$rem;
+                  font-size: 28rem/$rem;
+                  color: #999899;
+                  font-family: PingFangSC;
+                  display: flex;
+                  justify-content: space-between;
+                  span:nth-child(1){
+                    margin-left: 15rem/$rem;
+                  }
+                  span:nth-child(2){
+                    margin-right: 15rem/$rem;
+                  }
+                }
+              }
             }
           }
         }

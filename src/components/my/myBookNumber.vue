@@ -5,13 +5,16 @@
           <img src="../../../static/img/loading.gif" alt="">
           <span>正在很努力的加载中...</span>
         </div>
+        <div v-else-if="orderList.length == 0" class="loading">
+             <span>暂无挂号记录，去挂号吧</span>
+        </div>
          <div class="myBookNumber" v-else ref="myBookNumber">
            <div>
              <router-link tag="div" :to="{path:'/bookNumberDetail',query:{bookHosId:item.bookHosId,index:index}}" class="numberCenter" v-for="(item,index) in orderList" :key="item.id">
                <ul>
                  <li>
                    <p class="hosTitle">{{ item.hosName }}</p>
-                   <p class="date border-1px">{{ item.bookTime }}</p>
+                   <p class="date border-1px">{{ item.bookTime }} {{ item.bookAmpm == 'pm' ? '下午':'上午' }} {{ item.gotoTime }}</p>
                    <p class="aboutRoom"> <span>{{ item.deptName }}</span> <span>{{ item.docName }}</span> </p>
                  </li>
                </ul>
@@ -21,31 +24,56 @@
              </div>
            </div>
          </div>
+        <div v-if="showAlertTips" class="loading">
+             <alert-tips ></alert-tips>
+        </div>
+       <alert v-if="showAlert" :firstLine="firstLine" :bottomLine="bottomLine" @on-iKnow="iKnow"></alert>
     </div>
 </template>
 <script>
   import header from '../../base/header'
   import BScroll from 'better-scroll'
   import api from '../../lib/api'
+  import AlertTips from '../../base/alertTips'
+  import Alert from '../../base/alert'
   export default{
       data(){
           return{
               title:"我的挂号",
               rightTitle:"",
-              orderList:""
+              orderList:"",
+            showAlertTips:false,
+            firstLine:"",
+            bottomLine:"",
+            showAlert:false
           }
       },
       created(){
             api("nethos.book.order.list",{
                 token:localStorage.getItem('token')
             }).then((data)=>{
-                this.orderList = data.list
+                if(data.code == 0){
+                  this.orderList = data.list
+                }else if(!(data.msg)){
+                     this.orderList = true
+                      this.showAlertTips = true
+                     setTimeout(()=>{
+                        this.showAlertTips = false
+                     },1000)
+                }else{
+                     this.orderList = true
+                     this.showAlert = true
+                     this.firstLine = data.msg
+                }
                 console.log(data)
             })
       },
       methods:{
         goMyProfile(){
-            this.$router.push('/myProfile')
+            this.$router.push('/Profile')
+        },
+        iKnow(){
+              this.showAlert = false
         },
         _initBookNumberScroll(){
             if(this.orderList){
@@ -56,7 +84,9 @@
         }
       },
       components:{
-          "VHeader":header
+          "VHeader":header,
+           AlertTips,
+           Alert
       },
       watch:{
         orderList(){

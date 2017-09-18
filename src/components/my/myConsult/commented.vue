@@ -156,6 +156,7 @@
             overflow: hidden;
             font-size: 30rem/$rem;
             color: #666666;
+            word-break: break-all;
             /*height: 52px;*/
             padding: 5px 5px 5px 5px;
             border-radius: 7px;
@@ -163,13 +164,15 @@
         }
         div.ConsultRelate {
           margin-top: 5px;
+          display: flex;
+          justify-content: space-between;
           span.name {
             font-size: 28rem/$rem;
             color: #999999;
             .circle {
               display: inline-block;
-              width: 13px;
-              height: 13px;
+              width: 10px;
+              height: 10px;
               margin-right: 3px;
               background-color: red;
               border-radius: 50%;

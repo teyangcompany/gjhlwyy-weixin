@@ -50,7 +50,7 @@
 
           </div>
           <div class="three">
-            <router-link tag="div" to="/book" class="eyeSick border-1px-right">
+            <router-link tag="div" to="/bookTerms" class="eyeSick border-1px-right">
               <img src="../../../static/img/预约挂号.png" alt="">
               <span>预约挂号</span>
             </router-link>

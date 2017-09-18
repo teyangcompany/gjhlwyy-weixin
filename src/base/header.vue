@@ -17,16 +17,16 @@
       <img src="../../static/img/返回.png" alt="">
     </section>
     <section class="goBack"  v-else-if="path == '/myConsult/waitPay'" @click="goProfile()">
-      <img src="../../static/img/返回.png" alt="">
+      <!--<img src="../../static/img/返回.png" alt="">-->
     </section>
     <section class="goBack"  v-else-if="path == '/myConsult/doing'" @click="goProfile()">
-      <img src="../../static/img/返回.png" alt="">
+      <!--<img src="../../static/img/返回.png" alt="">-->
     </section>
     <section class="goBack"  v-else-if="path == '/myConsult/waitComment'" @click="goProfile()">
-      <img src="../../static/img/返回.png" alt="">
+      <!--<img src="../../static/img/返回.png" alt="">-->
     </section>
     <section class="goBack"  v-else-if="path == '/myConsult/commented'" @click="goProfile()">
-      <img src="../../static/img/返回.png" alt="">
+      <!--<img src="../../static/img/返回.png" alt="">-->
     </section>
     <section class="goBack"  v-else-if="path == '/myConsult/online/waitPay'" @click="goInternet()">
       <img src="../../static/img/返回.png" alt="">
@@ -41,19 +41,19 @@
       <img src="../../static/img/返回.png" alt="">
     </section>
     <section class="goBack"  v-else-if="path == '/internetRoom'" @click="goIndex()">
-      <img src="../../static/img/返回.png" alt="">
+      <!--<img src="../../static/img/返回.png" alt="">-->
     </section>
     <section class="goBack"  v-else-if="path == '/selectType'" @click="gohosList()">
       <img src="../../static/img/返回.png" alt="">
     </section>
-    <section class="goBack"  v-else-if="path == '/selectType'" @click="goMyBookNumber()">
-      <img src="../../static/img/返回.png" alt="">
-    </section>
+    <!--<section class="goBack"  v-else-if="path == '/selectType'" @click="goMyBookNumber()">-->
+      <!--<img src="../../static/img/返回.png" alt="">-->
+    <!--</section>-->
     <section class="goBack"  v-else-if="path == '/book'" @click="goIndex()">
-      <img src="../../static/img/返回.png" alt="">
+      <!--<img src="../../static/img/返回.png" alt="">-->
     </section>
     <section class="goBack"  v-else-if="path == '/checkReport'" @click="goIndex()">
-      <img src="../../static/img/返回.png" alt="">
+      <!--<img src="../../static/img/返回.png" alt="">-->
     </section>
     <section class="goBack"  v-else-if="path == '/waitCallNumber'" @click="goIndex()">
       <img src="../../static/img/返回.png" alt="">
@@ -65,6 +65,12 @@
       <img src="../../static/img/返回.png" alt="">
     </section>
     <section class="goBack"  v-else-if="path == '/myProfile'">
+    </section>
+    <section class="goBack"  v-else-if="path == '/bookTerms'">
+    </section>
+    <section class="goBack"  v-else-if="path == '/todayBook'">
+    </section>
+    <section class="goBack"  v-else-if="path == '/Profile'">
     </section>
     <section class="goBack"  v-else-if="path == '/myProfile/healthIndex'">
     </section>
@@ -303,7 +309,11 @@
     width:100%;
     top:0;
     display: flex;
+
+    z-index:160;
+
     z-index:6;
+
     section{
       text-align: center;
       .word{

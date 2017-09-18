@@ -35,7 +35,7 @@
               <i class="weui-icon-checked"></i>
             </div>
             <div class="weui-cell__bd">
-              <p>我已阅读并同意<span>浙二网络医学中心服务协议</span> </p>
+              <p>我已阅读并同意<router-link tag="span" to="/internetTerms">浙二网络医学中心服务协议</router-link> </p>
             </div>
           </label>
         </div>

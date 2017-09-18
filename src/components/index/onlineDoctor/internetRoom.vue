@@ -266,15 +266,15 @@
                     </div>
                     <div class="cancelIntro">
                       <div>
-                        <span class="myDoctor"><span class="titleName">{{ item.docName }}</span> <span class="rankName">{{ item.docTitle }}  {{ item.docDeptName }}</span></span>
-                        <p>{{ item.docHosName }}</p>
-                        <p class="sortName"><span>{{ item.docPicConsultStatus == true ? "图文咨询":"" }}</span>
-                          <span>{{ item.docVideoConsultStatus == true ? "视频问诊":"" }}</span>
+                        <span class="myDoctor"><span class="titleName">{{ item.docName }}</span> <span class="rankName">{{ item.docTitle }} </span></span>
+                        <p>{{ item.docHosName }}  {{ item.docDeptName }} </p>
+                        <p class="sortName"><span> <img src="../../../../static/img/11.png" alt="" v-if="item.docPicConsultStatus == true"> {{ item.docPicConsultStatus == true ? "图文咨询":"" }}</span>
+                          <span> <img src="../../../../static/img/shipin.png" alt="" v-if="item.docVideoConsultStatus == true"> {{ item.docVideoConsultStatus == true ? "视频问诊":"" }}</span>
                         </p>
                       </div>
                     </div>
                     <span class="distance">
-                      <span class="score">{{ item.docScoure }}</span> 星
+                      <span class="score" v-if="item.docScoure">{{ item.docScoure.toFixed(1) }}</span> 星
                       <img src="../../../../static/img/left-arrow.png" alt="">
                     </span>
                   </li>
@@ -398,7 +398,7 @@
             this.$router.push('/myConsult/online/commented')
         },
         goIndex(){
-            this.$router.push('/myProfile/index')
+//            this.$router.push('/myProfile/index')
         },
         chooseType(type){
           if(this.sortBy !== type){
@@ -419,19 +419,149 @@
         displayAll(){
 
         },
-        selectCategoryName(id, index){
+        selectCategoryName(item, index){
           this.clickIndex = index
           this.categoryDetail = this.together[index].sonGbDeptList;
+          if(this.arrow[index] == 0){
+              console.log(item,"此处为空白")
+            this.gbDeptCode = item.gbDeptCode
+            this.sortPick = item.gbDeptName
+            this.sortBy = ''
+            if(this.typePick == "视频问诊"){
+              if(this.defaultPick == '按好评排'){
+                api("nethos.doc.list",{
+                  gbDeptCode:this.gbDeptCode,
+                  docVideoConsultStatus:true,
+                  sort:"docScoure.desc",
+                }).then((data)=>{
+                  this.doctorList = data.list
+                  console.log(data.list)
+                })
+              }else{
+                api("nethos.doc.list",{
+                  gbDeptCode:this.gbDeptCode,
+                  docVideoConsultStatus:true,
+                }).then((data)=>{
+                  this.doctorList = data.list
+                  console.log(data.list)
+                })
+              }
+              this.$set(this.$data,'showVideo',true)
+            }else if(this.typePick == "图文咨询"){
+              if(this.defaultPick == '按好评排'){
+                api("nethos.doc.list",{
+                  gbDeptCode:this.gbDeptCode,
+                  docPicConsultStatus:true,
+                  sort:"docScoure.desc",
+                }).then((data)=>{
+                  this.doctorList = data.list
+                  console.log(data.list)
+                })
+              }else{
+                api("nethos.doc.list",{
+                  gbDeptCode:this.gbDeptCode,
+                  docPicConsultStatus:true,
+                }).then((data)=>{
+                  this.doctorList = data.list
+                  console.log(data.list)
+                })
+              }
+              this.$set(this.$data,'showVideo',false)
+              this.$set(this.$data,'showPicture',true)
+            }else{
+              if(this.defaultPick == '按好评排'){
+                api("nethos.doc.list",{
+                  gbDeptCode:this.gbDeptCode,
+                  sort:"docScoure.desc",
+                }).then((data)=>{
+                  this.doctorList = data.list
+                  console.log(data.list)
+                })
+              }else{
+                api("nethos.doc.list",{
+                  gbDeptCode:this.gbDeptCode,
+                }).then((data)=>{
+                  this.doctorList = data.list
+                  console.log(data.list)
+                })
+              }
+              this.$set(this.$data,'showVideo',false)
+              this.$set(this.$data,'showPicture',false)
+              this.$set(this.$data,'showAllType',true)
+            }
+          }
         },
         selectSecond(index,item){
             this.gbDeptCode = item.gbDeptCode
             console.log(this.gbDeptCode)
-          api("nethos.doc.list",{
-            gbDeptCode:this.gbDeptCode
-          }).then((data)=>{
-            this.doctorList = data.list
-            console.log(data.list)
-          })
+          if(this.typePick == "视频问诊"){
+            if(this.defaultPick == '按好评排'){
+              api("nethos.doc.list",{
+                gbDeptCode:this.gbDeptCode,
+                docVideoConsultStatus:true,
+                sort:"docScoure.desc",
+              }).then((data)=>{
+                this.doctorList = data.list
+                console.log(data.list)
+              })
+            }else{
+              api("nethos.doc.list",{
+                gbDeptCode:this.gbDeptCode,
+                docVideoConsultStatus:true,
+              }).then((data)=>{
+                this.doctorList = data.list
+                console.log(data.list)
+              })
+            }
+            this.$set(this.$data,'showVideo',true)
+          }else if(this.typePick == "图文咨询"){
+            if(this.defaultPick == '按好评排'){
+              api("nethos.doc.list",{
+                gbDeptCode:this.gbDeptCode,
+                docPicConsultStatus:true,
+                sort:"docScoure.desc",
+              }).then((data)=>{
+                this.doctorList = data.list
+                console.log(data.list)
+              })
+            }else{
+              api("nethos.doc.list",{
+                gbDeptCode:this.gbDeptCode,
+                docPicConsultStatus:true,
+              }).then((data)=>{
+                this.doctorList = data.list
+                console.log(data.list)
+              })
+            }
+            this.$set(this.$data,'showVideo',false)
+            this.$set(this.$data,'showPicture',true)
+          }else{
+            if(this.defaultPick == '按好评排'){
+              api("nethos.doc.list",{
+                gbDeptCode:this.gbDeptCode,
+                sort:"docScoure.desc",
+              }).then((data)=>{
+                this.doctorList = data.list
+                console.log(data.list)
+              })
+            }else{
+              api("nethos.doc.list",{
+                gbDeptCode:this.gbDeptCode,
+              }).then((data)=>{
+                this.doctorList = data.list
+                console.log(data.list)
+              })
+            }
+            this.$set(this.$data,'showVideo',false)
+            this.$set(this.$data,'showPicture',false)
+            this.$set(this.$data,'showAllType',true)
+          }
+//          api("nethos.doc.list",{
+//            gbDeptCode:this.gbDeptCode
+//          }).then((data)=>{
+//            this.doctorList = data.list
+//            console.log(data.list)
+//          })
         }
       },
       components:{
@@ -454,28 +584,63 @@
       typePick(){
         this.sortBy = ''
        if(this.typePick == "视频问诊"){
-         api("nethos.doc.list",{
-           docVideoConsultStatus:true
-         }).then((data)=>{
-           this.doctorList = data.list
-           console.log(data.list)
-         })
+            if(this.defaultPick == '按好评排'){
+              api("nethos.doc.list",{
+                gbDeptCode:this.gbDeptCode,
+                docVideoConsultStatus:true,
+                sort:"docScoure.desc",
+              }).then((data)=>{
+                this.doctorList = data.list
+                console.log(data.list)
+              })
+            }else{
+              api("nethos.doc.list",{
+                gbDeptCode:this.gbDeptCode,
+                docVideoConsultStatus:true,
+              }).then((data)=>{
+                this.doctorList = data.list
+                console.log(data.list)
+              })
+            }
          this.$set(this.$data,'showVideo',true)
        }else if(this.typePick == "图文咨询"){
-         api("nethos.doc.list",{
-           docPicConsultStatus:true
-         }).then((data)=>{
-           this.doctorList = data.list
-           console.log(data.list)
-         })
+           if(this.defaultPick == '按好评排'){
+             api("nethos.doc.list",{
+               gbDeptCode:this.gbDeptCode,
+               docPicConsultStatus:true,
+               sort:"docScoure.desc",
+             }).then((data)=>{
+               this.doctorList = data.list
+               console.log(data.list)
+             })
+           }else{
+             api("nethos.doc.list",{
+               gbDeptCode:this.gbDeptCode,
+               docPicConsultStatus:true,
+             }).then((data)=>{
+               this.doctorList = data.list
+               console.log(data.list)
+             })
+           }
          this.$set(this.$data,'showVideo',false)
          this.$set(this.$data,'showPicture',true)
        }else{
-         api("nethos.doc.list",{
-         }).then((data)=>{
-           this.doctorList = data.list
-           console.log(data.list)
-         })
+           if(this.defaultPick == '按好评排'){
+             api("nethos.doc.list",{
+               gbDeptCode:this.gbDeptCode,
+               sort:"docScoure.desc",
+             }).then((data)=>{
+               this.doctorList = data.list
+               console.log(data.list)
+             })
+           }else{
+             api("nethos.doc.list",{
+               gbDeptCode:this.gbDeptCode,
+             }).then((data)=>{
+               this.doctorList = data.list
+               console.log(data.list)
+             })
+           }
          this.$set(this.$data,'showVideo',false)
          this.$set(this.$data,'showPicture',false)
          this.$set(this.$data,'showAllType',true)
@@ -489,18 +654,58 @@
       defaultPick(){
         this.sortBy = ''
         if(this.defaultPick == '按好评排'){
-          api("nethos.doc.list",{
-              sort:"docScoure.desc"
-          }).then((data)=>{
-            this.doctorList = data.list
-            console.log(data.list)
-          })
+            if(this.typePick == "视频问诊"){
+              api("nethos.doc.list",{
+                sort:"docScoure.desc",
+                gbDeptCode:this.gbDeptCode,
+                docVideoConsultStatus:true
+              }).then((data)=>{
+                this.doctorList = data.list
+                console.log(data.list)
+              })
+            }else if(this.typePick == "图文咨询"){
+              api("nethos.doc.list",{
+                sort:"docScoure.desc",
+                gbDeptCode:this.gbDeptCode,
+                docPicConsultStatus:true
+              }).then((data)=>{
+                this.doctorList = data.list
+                console.log(data.list)
+              })
+            }else{
+              api("nethos.doc.list",{
+                sort:"docScoure.desc",
+                gbDeptCode:this.gbDeptCode,
+              }).then((data)=>{
+                this.doctorList = data.list
+                console.log(data.list)
+              })
+            }
         }else{
-          api("nethos.doc.list",{
-          }).then((data)=>{
-            this.doctorList = data.list
-            console.log(data.list)
-          })
+            if(this.typePick == "视频问诊"){
+              api("nethos.doc.list",{
+                gbDeptCode:this.gbDeptCode,
+                docVideoConsultStatus:true
+              }).then((data)=>{
+                this.doctorList = data.list
+                console.log(data.list)
+              })
+            }else if(this.typePick == "图文咨询"){
+              api("nethos.doc.list",{
+                gbDeptCode:this.gbDeptCode,
+                docPicConsultStatus:true
+              }).then((data)=>{
+                this.doctorList = data.list
+                console.log(data.list)
+              })
+            }else{
+              api("nethos.doc.list",{
+                gbDeptCode:this.gbDeptCode,
+              }).then((data)=>{
+                this.doctorList = data.list
+                console.log(data.list)
+              })
+            }
         }
       },
       doctorList(){
@@ -554,7 +759,7 @@
       /*top: 15px;*/
       /*right: 5px;*/
       transition: 0.3s;
-      fill:#ededed;
+      fill:#666;
     }
     /*position: relative;*/
     /*background-color: #0BB20C;*/
@@ -731,10 +936,19 @@
               font-size: 28rem/$rem;
             }
             p.sortName{
-              width:350rem/$rem;
+              width:400rem/$rem;
               color: $mainColor;
               display: flex;
               justify-content: space-between;
+              span{
+                display: flex;
+                align-items: center;
+                img{
+                  width:40rem/$rem;
+                  height:40rem/$rem;
+                  margin-right: 8px;
+                }
+              }
             }
           }
         }

@@ -13,10 +13,13 @@
           <img src="../../../../static/img/loading.gif" alt="">
           <span>正在很努力的加载中...</span>
         </div>
+        <div v-else-if="commonRoom.length == 0" class="loading">
+          <tips></tips>
+        </div>
         <div class="contentWrap" ref="contentWrap">
           <div>
             <div class="content" style="display: block">
-                <div  class="border-1px" v-if="!item.docAvatar" v-for="(item,index) in commonRoom">
+                <div  class="border-1px" v-if="!item.bookDocId" v-for="(item,index) in commonRoom">
                   <div  class="border-1px" @click="selectTime(single,index)"  v-for="(single,index) in item.deptSchemeList[0].schemeList">
                       <div class="cancelImg">
                         <img src="../../../../static/img/普通-门诊.png" alt="">
@@ -44,7 +47,7 @@
             </div>
             <div class="blank border-1px"></div>
             <div class="content" style="display: block">
-                  <div class="border-1px"  v-if="item.docAvatar" v-for="item in commonRoom">
+                  <div class="border-1px"  v-if="item.bookDocId" v-for="item in commonRoom">
                     <div  class="border-1px" @click="selectTime(single,index)"  v-for="(single,index) in item.deptSchemeList[0].schemeList">
                       <div class="cancelImg">
                         <img class="avartarImg" :src="item.docAvatar" alt="">
@@ -93,6 +96,9 @@
             </div>
           </div>
         </div>
+        <div v-if="showAlertTips" class="loading">
+          <alert-tips ></alert-tips>
+        </div>
       </div>
       <time-toggle :patList="patientAll" :showPat="showPat" :option="patOption" @activate="check" @toggleClosed="closeTime()"></time-toggle>
       <toast v-if="showToast"></toast>
@@ -101,6 +107,8 @@
 <script>
   import TimeToggle from '../../../base/timeToggle'
   import Toast from '../../../base/toast'
+  import Tips from '../../../base/tips'
+  import AlertTips from '../../../base/alertTips'
   import BScroll from 'better-scroll'
   import api from '../../../lib/api'
   export default{
@@ -108,6 +116,7 @@
          return{
            patientAll:[],
            showPat:false,
+           showAlertTips:false,
            patOption:"",
            commonRoom:"",
            commonDoctor:"",
@@ -122,7 +131,7 @@
            showToast:false,
            clickedIndex:"",
            listIndex:"",
-           allInfo:[]
+           allInfo:[],
          }
       },
       created(){
@@ -148,7 +157,10 @@
             date:this.completeTimeArray[this.selected]
           }).then((data)=>{
             console.log("123")
+            console.log(this.completeTimeArray[this.selected])
+            console.log("456")
             console.log(data)
+            console.log("456")
             if(data.code == 0){
               this.commonRoom = data.list
               for(var i=0;i<this.commonRoom.length;i++){
@@ -165,6 +177,15 @@
               console.log()
               console.log(this.infoWrap)
               console.log(this.isImg)
+            }else if(!(data.msg)){
+              this.commonRoom = true
+                this.showAlertTips = true
+                setTimeout(()=>{
+                  this.showAlertTips = false
+                },1000)
+            }else{
+              this.commonRoom = true
+                alert(data.msg)
             }
           })
         }
@@ -256,6 +277,15 @@
             console.log(data)
             if(data.code == 0){
               this.commonRoom = data.list
+            }else if(!(data.msg)){
+              this.commonRoom = true
+              this.showAlertTips = true
+              setTimeout(()=>{
+                this.showAlertTips = false
+              },1000)
+            }else{
+              this.commonRoom = true
+                alert(data.msg)
             }
           })
         },
@@ -290,10 +320,21 @@
               token:localStorage.getItem("token"),
               bookSchemeId:this.bookSchemeId
             }).then((data)=>{
-              this.patientAll = data.list
-              this.showPat=true;
-              this.showToast = false
-              console.log(data)
+              if(data.code == 0){
+                this.patientAll = data.list
+                this.showPat=true;
+                this.showToast = false
+                console.log(data)
+              }else if(!(data.msg)){
+                this.showToast = false
+                this.showAlertTips = true
+                setTimeout(()=>{
+                  this.showAlertTips = false
+                },1000)
+              }else{
+                this.showToast = false
+                  alert(data.msg)
+              }
             })
           }
 
@@ -310,7 +351,9 @@
       },
       components:{
         TimeToggle,
-        Toast
+        Toast,
+        Tips,
+        AlertTips
       },
       watch:{
         commonRoom(){
