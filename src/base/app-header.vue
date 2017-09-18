@@ -72,8 +72,8 @@
   position: absolute;
   top:0px;
   left: 10px;
-  height: 45px;
-  line-height: 45px;
+  /*height: 45px;*/
+  /*line-height: 45px;*/
   z-index: 998;
 }
   .right{

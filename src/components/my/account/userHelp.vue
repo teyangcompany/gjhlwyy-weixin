@@ -5,7 +5,7 @@
         </top>
 
         <div class="wrap" ref="wrapper">
-          <div>
+          <div >
             <div class="project">
               <div class="weui-cells">
                 <a class="weui-cell weui-cell_access" href="javascript:;" @click="goDetail(1)">
@@ -121,9 +121,12 @@
             return {}
         },
         mounted(){
-          this.scroll = new BScroll(this.$refs.wrapper,{
-            click:true
-          })
+          this.$nextTick(()=>{
+            this.scroll = new BScroll(this.$refs.wrapper,{
+              click:true
+            })
+          });
+
         },
         methods: {
           goDetail(state){
@@ -147,7 +150,7 @@
     flex-direction: column;
   }
   .wrap{
-    overflow: auto;
+    overflow: hidden;
     -webkit-overflow-scrolling: touch;
     /*margin-bottom: 10px;*/
     position: fixed;
@@ -156,4 +159,5 @@
     right: 0;
     bottom: 0;
   }
+
 </style>
