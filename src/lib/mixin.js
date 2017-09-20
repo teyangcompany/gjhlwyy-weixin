@@ -4,7 +4,7 @@ export const isLoginMixin = {
   created() {
     let openid = openidCache.get();
     if (!openid) {
-      this.$router.push("/bindRelativePhone")
+      this.$router.push("/profile")
     }
   }
 }
