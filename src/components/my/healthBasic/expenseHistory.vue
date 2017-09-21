@@ -78,7 +78,7 @@
         }
     }
 </script>
-<style lang="scss">
+<style scoped lang="scss">
     @import "../../../common/public.scss";
   #onlinepage{
     flex: 1;
