@@ -29,8 +29,10 @@
   import BScroll from 'better-scroll'
   import api from '../../../lib/api'
   import Scroll from '../../../base/scroll'
+  import {isLoginMixin} from "../../../lib/mixin"
   import {formatDate} from '../../../utils/formatTimeStamp'
   export default{
+    mixins: [isLoginMixin],
     data(){
         return{
           consultList:[],
@@ -45,6 +47,18 @@
 
     },
     created(){
+      api("nethos.pat.info.get", {
+        token:localStorage.getItem('token')
+      }).then((data) => {
+        if (data.code == 0) {
+//          this.patientInfo = data.obj
+        } else {
+          this.$router.push({
+            path:"/bindRelativePhone",
+            query:{backPath:this.path}
+          });
+        }
+      })
        api("nethos.consult.info.list",{
            pageNo:1,
            pageSize:10,

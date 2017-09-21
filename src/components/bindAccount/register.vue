@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-header :title="title" :rightTitle="rightTitle"></v-header>
+    <!--<v-header :title="title" :rightTitle="rightTitle"></v-header>-->
     <div class="bindPhone">
       <div class="bindPhoneCenter">
         <div class="bigMiddle">
@@ -17,7 +17,7 @@
             </div>
             <div class="form phone border-1px">
               <label for="" class="phoneLabel"> <img class="idImg" src="../../../static/img/身份证.png" alt=""> </label>
-              <input type="text" placeholder="请输入您的身份证号" class="numberInput" @focus="focus()" v-model="idCard">
+              <input type="number" placeholder="请输入您的身份证号" class="numberInput" @focus="focus()" v-model="idCard">
             </div>
             <div class="form verifyCode border-1px">
               <label for="" class="codeLabel"> <img src="../../../static/img/密码.png" alt=""> </label>
@@ -29,12 +29,16 @@
           </div>
         </div>
       </div>
+      <div class="verifyCenter"  v-if="showVerify">
+        <verify :verifyTips="verifyTips"></verify>
+      </div>
     </div>
   </div>
 </template>
 <script>
   import header from '../../base/header'
   import {openidCache} from '../../lib/cache'
+  import verify from '../../base/verify'
   import api from '../../lib/api'
   export default{
     data(){
@@ -45,10 +49,14 @@
         codeValue:"",
         realName:"",
         idCard:"",
-        passWord:""
+        passWord:"",
+        backPath:"",
+        showVerify:false,
+        verifyTips:"姓名不能为空",
       }
     },
     created(){
+        this.backPath = this.$route.query.backPath
        this.cid = this.$route.query.cid
        this.codeValue = this.$route.query.codeValue
       console.log(this.cid)
@@ -57,28 +65,64 @@
     methods:{
       confirmRegister(){
           console.log("123")
-          api("nethos.pat.register.v3",{
-            captcha:this.codeValue,
-            cid:this.cid,
-            patPassword:this.passWord,
-            patName:this.realName,
-            patIdcard:this.idCard,
-            openid:openidCache.get()
-          }).then((data)=>{
+          if(this.realName == ''){
+            this.verifyTips = "姓名不能为空"
+            this.showVerify = true
+            setTimeout(()=>{
+              this.verifyTips = '姓名不能为空'
+              this.showVerify = false
+            },1000)
+          }else if(this.idCard == ''){
+            this.verifyTips = "身份证号不能为空"
+            this.showVerify = true
+            setTimeout(()=>{
+              this.verifyTips = '身份证号不能为空'
+              this.showVerify = false
+            },1000)
+          }else if(this.passWord == ''){
+            this.verifyTips = "密码不能为空"
+            this.showVerify = true
+            setTimeout(()=>{
+              this.verifyTips = '密码不能为空'
+              this.showVerify = false
+            },1000)
+          }else if(this.passWord.length < 8){
+            this.verifyTips = "密码长度太短"
+            this.showVerify = true
+            setTimeout(()=>{
+              this.verifyTips = '密码长度太短'
+              this.showVerify = false
+            },1000)
+          }else{
+            this.passWord = sha512(hex_md5(this.passWord) + this.passWord );
+            api("nethos.pat.register.v3",{
+              captcha:this.codeValue,
+              cid:this.cid,
+              patPassword:this.passWord,
+              patName:this.realName,
+              patIdcard:this.idCard,
+              openid:openidCache.get()
+            }).then((data)=>{
               console.log(data)
               if(data.code == 0){
-                  this.$router.push('/login')
+                this.$router.push({
+                  path:'/login',
+                  query:{backPath:this.backPath}
+                })
               }else{
-                  alert(data.msg)
+                this.passWord = ''
+                alert(data.msg)
               }
-          })
+            })
+          }
       },
       focus(){
 //          document.getElementsByClassName("")
       }
     },
     components:{
-      "VHeader":header
+      "VHeader":header,
+      verify
     }
   }
 </script>
@@ -90,6 +134,17 @@
     left:0;
     right:0;
     bottom:0;
+    z-index:100;
+    .verifyCenter{
+      position: fixed;
+      left:0;
+      right:0;
+      top:0;
+      bottom:0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     .bindPhoneCenter{
       width:690rem/$rem;
       margin:0 auto;

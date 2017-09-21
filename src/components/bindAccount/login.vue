@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-header :title="title" :rightTitle="rightTitle"></v-header>
+    <!--<v-header :title="title" :rightTitle="rightTitle"></v-header>-->
     <div class="bindPhone">
       <div class="bindPhoneCenter">
         <div class="bigMiddle">
@@ -26,9 +26,12 @@
       return{
         title:"广济互联网医院",
         rightTitle:"",
-        password:""
-
+        password:"",
+        backPath:""
       }
+    },
+    created(){
+       this.backPath = this.$route.query.backPath
     },
     methods:{
       login(){
@@ -40,7 +43,15 @@
 //              localStorage.setItem("token",data.token)
 //              console.log(data)
 //          })
-        this.$router.push('/myProfile/index')
+        if(this.backPath == '/infoConfirm'){
+            this.$router.push('/book')
+        }else if(this.backPath == '/pictureConsultNext'){
+            this.$router.push('/internetRoom')
+        }else{
+          this.$router.push({
+            path:this.backPath
+          })
+        }
       }
     },
     components:{

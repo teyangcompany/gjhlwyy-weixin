@@ -89,7 +89,11 @@
     <section class="goBack" @click="back()" v-else>
       <img src="../../static/img/返回.png" alt="">
     </section>
-    <section class="title">
+    <section class="title" v-if="path == '/waitArrange'">
+      <img :src="waitImg" alt="">
+      <span class="word">{{title}}</span>
+    </section>
+    <section class="title" v-else>
       <span class="word">{{title}}</span>
     </section>
     <section class="nav"  @click="detailPage()" v-if="path == '/addRecord'">
@@ -194,6 +198,9 @@
       },
       rightTitle:{
         type:String
+      },
+      waitImg:{
+
       },
       imgSrc:{
         default:"../../static/img/返回.png"
@@ -302,7 +309,7 @@
     z-index:6;
   }
   .top_bar{
-    position: fixed;
+    position: relative;
     background-color: white;
     height: 50px;
     line-height: 50px;
@@ -310,7 +317,7 @@
     top:0;
     display: flex;
 
-    z-index:160;
+    /*z-index:160;*/
 
     z-index:6;
 
@@ -351,6 +358,14 @@
       span{
         font-size: 36rem/$rem!important;
         color: #333333;
+      }
+      img{
+        width:40rem/$rem;
+        height:40rem/$rem;
+        position: absolute;
+        left:270rem/$rem;
+        top:15px;
+        border-radius: 50%;
       }
     }
     .nav{

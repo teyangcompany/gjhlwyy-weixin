@@ -32,7 +32,8 @@
           <div class="upload">
             <div class="addPicture" v-for="(singleImage,index) in displayImg" v-if="displayImg.length != 0">
               <!--<span class="deleteImg">X</span>-->
-              <img :src="singleImage" alt="" ref="replaceImg" @click="deleteImg(index)">
+              <img :src="singleImage" alt="" ref="replaceImg"  @click="makeBig(index)">
+              <div class="mask" v-if="progress < 100"> {{ progress }}%</div>
             </div>
             <div class="addPicture" v-if="displayImg.length < 9">
               <input type="file" name="upload" id="upload" ref="upload" multiple="multiple" @change="onFileChange">
@@ -48,6 +49,16 @@
       <patient-toggle :patList="patientAll" :showPat="showPat" :option="patOption" @activate="check" @toggleClosed="closePatient()"></patient-toggle>
       <alert :firstLine="firstLine" :secondLine="secondLine" :bottomLine="bottomLine" v-if="showAlert" @on-iKnow="iKnow()"></alert>
       <v-dialog v-if="showDialog" @on-cancel="cancel()" @on-download="confirmDelete()" :dialogMain="dialogMain" :dialogLeftFoot="dialogLeftFoot" :dialogRightFoot="dialogRightFoot"></v-dialog>
+      <div class="verifyTips" v-if="showVerify">
+          <verify :verifyTips="verifyTips"></verify>
+      </div>
+      <div class="largeImg" v-if="showLarge">
+        <div>
+          <img :src="largeImg" alt="" @click="makeSmall">
+        </div>
+        <i class="weui-icon-delete weui-icon_gallery-delete" @click="deleteImg"></i>
+
+      </div>
     </div>
   </transition>
 </template>
@@ -57,7 +68,11 @@
   import Alert from '../../../base/alert'
   import Dialog from '../../../base/dialog'
   import api from '../../../lib/api'
+  import upload from '../../../lib/upload'
+  import verify from '../../../base/verify'
+  import {isLoginMixin} from "../../../lib/mixin"
   export default{
+    mixins: [isLoginMixin],
     data(){
       return{
         title:"图文问诊",
@@ -88,25 +103,45 @@
         textLength:0,
         text:"",
         uploadTips:"",
-        deleteImgIndex:""
+        deleteImgIndex:"",
+        progress:'',
+        verifyTips:"图片已全部上传",
+        showVerify:false,
+        largeImg:"",
+        showLarge:false
       }
     },
     created(){
-       this.doctorId = this.$route.query.docId
-      api("nethos.pat.info.get",{
-        token:localStorage.getItem("token")
-      }).then((data)=>{
-        this.patientInfo = data.obj
-        this.patId = data.obj.patId
-        console.log(this.patientInfo)
-        api("nethos.pat.compat.list",{
-          token:localStorage.getItem("token"),
-          patId:this.patId
-        }).then((data)=>{
-          this.patientAll = data.list
-          console.log(this.patientAll)
-        })
+      this.doctorId = this.$route.query.docId
+      api("nethos.pat.info.get", {
+        token:localStorage.getItem('token')
+      }).then((data) => {
+        if (data.code == 0) {
+          this.patientInfo = data.obj
+          this.patId = data.obj.patId
+          console.log(this.patientInfo)
+          api("nethos.pat.compat.list",{
+            token:localStorage.getItem("token"),
+            patId:this.patId
+          }).then((data)=>{
+            this.patientAll = data.list
+            console.log(this.patientAll)
+          })
+        } else {
+          this.$router.push({
+            path:"/bindRelativePhone",
+            query:{backPath:this.path}
+          });
+        }
       })
+
+
+
+//      api("nethos.pat.info.get",{
+//        token:localStorage.getItem("token")
+//      }).then((data)=>{
+//
+//      })
     },
     methods:{
       keypress(){
@@ -126,11 +161,20 @@
          this.$set(this.$data,'displayImg',this.displayImg)
          this.showDialog = false
       },
+      makeBig(index){
+        this.deleteImgIndex = index
+         this.largeImg = this.displayImg[index]
+        this.showLarge = true
+      },
+      makeSmall(){
+        this.showLarge = false
+      },
       deleteImg(index){
-          console.log(index)
-          this.deleteImgIndex = index
+//          console.log(index)
+//          this.deleteImgIndex = index
           if(this.uploadTips = '上传完毕'){
             this.showDialog = true
+            this.showLarge = false
           }
       },
       goAlert(){
@@ -213,22 +257,67 @@
             let that =this
             reader.onload = function () {
               that.previewImg = this.result
-              api("nethos.system.atta.upload.image.base64",{
-                base64:that.previewImg,
-                originalName:that.fileName
-              }).then((data)=>{
-                  if(data.code == 0){
-                    that.attaId.push(data.obj.attaId)
-                    that.displayImg.push(that.previewImg)
-                    console.log(i)
+
+              that.displayImg.push(that.previewImg)
+
+
+
+              let xhr = new XMLHttpRequest()
+              let formData = new FormData()
+              formData.append("file",file[i-1])
+              for(let key in upload.base){
+                formData.append(key,upload.base[key])
+              }
+              xhr.open('POST','https://nethos.diandianys.com/api/app')
+              xhr.setRequestHeader('sign','test')
+              xhr.upload.onprogress = function(event){
+//                var done = e.position || e.loaded, total = e.totalSize || e.total;
+                console.log( Math.floor(event.loaded / event.total * 100));
+                that.progress = Math.floor(event.loaded / event.total * 100)
+
+              }
+              xhr.onreadystatechange = function(e){
+                  if(xhr.readyState == 4){
+                      if(xhr.status == 200){
+                          let ret = xhr.response || xhr.responseText || {}
+                          ret = typeof ret == 'string' ? JSON.parse(ret) : ret;
+                          if(ret.code == 0){
+                              console.log(ret,666)
+
+                            that.attaId.push(ret.obj.attaId)
+                             that.createImage(file,--i)
+                          }
+                          console.log(i)
+                          if(i ==0){
+                            that.uploadTips = '上传完毕'
+                            that.showVerify = true
+                            setTimeout(()=>{
+                              that.showVerify = false
+                            },2000)
+
+                          }
+                      }
                   }
-                that.createImage(file,--i)
-                console.log(data.obj.attaId)
-                console.log("123")
-                if(i = 1){
-                     this.uploadTips = '上传完毕'
-                }
-              })
+              }
+              xhr.send(formData)
+
+
+//              api("nethos.system.atta.upload.image.base64",{
+//                base64:that.previewImg,
+//                originalName:that.fileName
+//              }).then((data)=>{
+//                  if(data.code == 0){
+//                    that.attaId.push(data.obj.attaId)
+//                    that.displayImg.push(that.previewImg)
+//                    console.log(i)
+//                  }
+//                that.createImage(file,--i)
+//                console.log(data.obj.attaId)
+//                console.log("123")
+//                if(i = 1){
+//                     this.uploadTips = '上传完毕'
+//                }
+//              })
             }
 //            console.log(this.previewImg)
           }
@@ -239,7 +328,8 @@
       "VHeader":header,
       patientToggle,
       Alert,
-      "VDialog":Dialog
+      "VDialog":Dialog,
+      verify
     },
     watch:{
       description(){
@@ -262,6 +352,45 @@
 </script>
 <style scoped lang="scss">
   @import '../../../common/public.scss';
+  .largeImg{
+    position: fixed;
+    left:0;
+    right:0;
+    top:0px;
+    bottom:0px;
+    display: flex;
+    z-index:1000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #666666;
+    >div{
+      position: absolute;
+      top: 50px;
+      bottom: 50px;
+      display: flex;
+      /*background-color: #3CC51F;*/
+      align-items: center;
+      img{
+        width:100%;
+      }
+    }
+    i{
+      position: fixed;
+      left:47%;
+      bottom: 10px;
+    }
+  }
+  .verifyTips{
+    position: fixed;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .want{
     position: fixed;
     top: 50px;
@@ -348,6 +477,7 @@
       /*display: flex;*/
       .addPicture{
         float: left;
+        position: relative;
         margin-right: 16.2px;
         .deleteImg{
           position: absolute;
@@ -361,6 +491,19 @@
         img{
           width: 140rem/$rem;
           height: 140rem/$rem;
+        }
+        div.mask{
+          width: 140rem/$rem;
+          height: 140rem/$rem;
+          position: absolute;
+          top:0rem/$rem;
+          opacity: 0.5;
+          background-color: rgba(0, 0, 0, .4);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          z-index:100;
         }
       }
       .wordFor{

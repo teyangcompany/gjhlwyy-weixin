@@ -9,18 +9,18 @@
         </div>
         <div class="form verifyCode">
           <label for="">身份证号</label>
-          <input type="text" placeholder="请输入您的身份证号" v-model="compatIdcard">
+          <input type="number" placeholder="请输入您的身份证号" v-model="compatIdcard">
         </div>
       </div>
       <div class="formContent">
         <div class="form phone">
           <label for="">手机号</label>
-          <input type="text" placeholder="请输入真实的手机号" v-model="compatMobile">
+          <input type="number" placeholder="请输入真实的手机号" v-model="compatMobile">
           <img src="../../../static/img/u691.png" alt="" @click="showInfo()" >
         </div>
         <div class="form verifyCode">
           <label for="">验证码</label>
-          <input type="text" placeholder="请输入验证码" v-model="captcha">
+          <input type="number" placeholder="请输入验证码" v-model="captcha">
           <button @click="getCode()" v-if="countdown == 60 || countdown == 0">获取验证码</button>
           <button  v-else>{{ countdown }}s后重新获取</button>
         </div>
@@ -28,11 +28,15 @@
     </div>
     <alert v-show="infoDisplay" @on-iKnow="iKnow()" :firstLine="firstLine" :secondLine="secondLine" :bottomLine="bottomLine"></alert>
     <alert v-show="showAlert" @on-iKnow="iKnow()" :firstLine="alertContent" :secondLine="alertSecond" :bottomLine="bottomLine"></alert>
+    <div class="verifyCenter" v-if="showVerify">
+         <verify  :verifyTips="verifyTips"></verify>
+    </div>
   </div>
 </template>
 <script>
   import header from '../../base/header'
   import Alert from '../../base/alert'
+  import verify from '../../base/verify'
   import api from '../../lib/api'
   export default{
     data(){
@@ -52,7 +56,9 @@
         captcha:"",
         cid:0,
         countdown:60,
-        a:""
+        a:"",
+        showVerify:false,
+        verifyTips:"手机号不能为空"
       }
     },
 //    validations:{
@@ -72,47 +78,94 @@
       getCode(){
           console.log("123")
           if(this.compatMobile == ''){
-            this.alertContent = '请先输入您的手机号'
-            this.showAlert = true
+             this.showVerify = true
+            this.verifyTips = '手机号不能为空'
+            setTimeout(()=>{
+              this.showVerify = false
+            },1000)
+//            this.alertContent = '请先输入您的手机号'
+//            this.showAlert = true
           }else{
-            api("nethos.system.captcha.generate",{
-              captchaType:"SMS",
+            api("nethos.system.captcha.commpat.add",{
               mobile:this.compatMobile
             }).then((data)=>{
+               console.log(this.compatMobile)
               if(data.code == 0){
-                this.cid = data.obj
+                this.cid = data.obj.cid
                 this.a = setInterval(()=>{
                   this.countdown--
                 },1000)
+                console.log(data)
+              }else{
+                this.showVerify = true
+                this.verifyTips = data.msg
+                setTimeout(()=>{
+                  this.showVerify = false
+                },1000)
+                  console.log(data)
               }
             })
           }
       },
       goAdd(){
         console.log(this.cid)
-          api("nethos.pat.compat.add",{
-            token:localStorage.getItem("token"),
-            compatName:this.compatName,
-            compatMobile:this.compatMobile,
-            compatIdcard:this.compatIdcard,
-            cid:this.cid,
-            captcha:this.captcha
-          }).then((data)=>{
-              console.log(this.cid)
-              console.log(this.compatIdcard)
-              console.log(data)
+        if(this.compatName == ''){
+          this.showVerify = true
+          this.verifyTips = "姓名不能为空"
+          setTimeout(()=>{
+            this.showVerify = false
+          },1000)
+        }else if(this.compatIdcard == ''){
+          this.showVerify = true
+          this.verifyTips = "身份证号不能为空"
+          setTimeout(()=>{
+            this.showVerify = false
+          },1000)
+        }else{
+            api("nethos.system.captcha.checkcaptcha.v2",{
+              captcha:this.captcha,
+              cid:this.cid,
+            }).then((data)=>{
+                console.log(data)
               if(data.code == 0){
-                  this.$router.push('/usualPatient')
+                api("nethos.pat.compat.add.v2",{
+                  token:localStorage.getItem("token"),
+//                  patId:
+                  compatName:this.compatName,
+                  compatIdcard:this.compatIdcard,
+                  cid:this.cid,
+                  captcha:this.captcha
+                }).then((data)=>{
+                  console.log(this.cid)
+                  console.log(this.compatIdcard)
+                  console.log(data)
+                  if(data.code == 0){
+                    this.$router.push('/usualPatient')
+                  }else{
+                    this.showVerify = true
+                    this.verifyTips = data.msg
+                    setTimeout(()=>{
+                      this.showVerify = false
+                    },1000)
+                  }
+                })
               }else{
-                  this.alertContent = data.msg
-                  this.showAlert = true
+                this.showVerify = true
+                this.verifyTips = data.msg
+                setTimeout(()=>{
+                  this.showVerify = false
+                },1000)
               }
-          })
+            })
+
+        }
+
       }
     },
     components:{
       "VHeader":header,
-      Alert
+      Alert,
+      verify
     },
     watch:{
       countdown(){
@@ -126,6 +179,16 @@
 </script>
 <style scoped lang="scss">
   @import '../../common/public.scss';
+  .verifyCenter{
+    position: fixed;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .verifyArea{
     position: fixed;
     top: 50px;

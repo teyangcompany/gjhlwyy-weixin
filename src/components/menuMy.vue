@@ -5,9 +5,9 @@
       <!--<div class="blank border-1px"></div>-->
       <div class="avatar border-1px">
         <div class="avatarCenter">
-          <div class="leftWord">
-            <img class="profile" :src="patientInfo.patAvatar" alt="" v-if="!previewImg" @click="selectImg()">
-            <img class="profile" :src="previewImg" alt="" v-else @click="selectImg()">
+          <div class="leftWord" v-if="patientInfo">
+            <img class="profile" alt="" v-if="patientInfo.patAvatar" :src="patientInfo.patAvatar" @click="selectImg()">
+            <img class="profile" src="../../static/img/患者男.jpg" alt="" v-else @click="selectImg()">
             <input type="file" name="upload" id="upload" ref="upload" @change="onFileChange">
           </div>
           <!--<router-link tag="div" to="/personInfo" class="rightWord">-->
@@ -99,16 +99,25 @@
         indexRightTitle: "",
         patientInfo: "",
         previewImg: null,
+        tellPath:""
       }
     },
     created() {
       console.log(document.getElementsByTagName('title')[0])
+      this.tellPath = this.$route.path
+      console.log(this.tellPath)
 //      document.getElementsByTagName('title')[0].innerText= '我的'
-      api("nethos.pat.info.get", {}).then((data) => {
+      api("nethos.pat.info.get", {
+          token:localStorage.getItem('token')
+      }).then((data) => {
+         console.log(data.obj)
         if (data.code == 0) {
           this.patientInfo = data.obj
         } else {
-         this.$router.push("/bindRelativePhone");
+         this.$router.push({
+           path:"/bindRelativePhone",
+           query:{backPath:this.path}
+         });
         }
       })
     },
@@ -165,16 +174,18 @@
             base64: this.result,
             originalName: fileName
           }).then((data) => {
-            this.previewImg = data.obj.url
-            that.$set(that.$data, 'previewImg', data.obj.url)
+            this.previewImg = data.obj.attaId
+            that.$set(that.$data, 'previewImg', data.obj.attaId)
             console.log(this.previewImg)
             api("nethos.pat.info.modify", {
               token: localStorage.getItem("token"),
               patId: that.patientInfo.patId,
               patAvatar: this.previewImg,
             }).then((data) => {
-
+              console.log(that.patientInfo.patId)
+              console.log(this.previewImg)
               console.log(data, '666')
+//              location.reload()
             })
           })
         }

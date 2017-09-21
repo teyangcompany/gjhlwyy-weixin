@@ -261,8 +261,9 @@
               <ul class="border-1px" v-for=" item in doctorList">
                 <router-link tag="div" :to="{ path:'/onlineDoctorCard',query:{docId:item.docId} }">
                   <li>
-                    <div class="cancelImg">
-                      <img :src="item.docAvatar" alt="">
+                    <div class="cancelImg" v-if="item.docAvatar">
+                      <img v-if="item.docAvatar" :src="item.docAvatar" alt="">
+                      <img  src="../../../../static/img/医生男.jpg" alt="" v-else>
                     </div>
                     <div class="cancelIntro">
                       <div>
@@ -273,8 +274,12 @@
                         </p>
                       </div>
                     </div>
-                    <span class="distance">
-                      <span class="score" v-if="item.docScoure">{{ item.docScoure.toFixed(1) }}</span> 星
+                    <span class="distance" v-if="item.docScoure">
+                      <span class="score" >{{ item.docScoure.toFixed(1) }}</span> 星
+                      <img src="../../../../static/img/left-arrow.png" alt="">
+                    </span>
+                    <span class="distance" v-else>
+                      <span class="score" >0.0</span> 星
                       <img src="../../../../static/img/left-arrow.png" alt="">
                     </span>
                   </li>
@@ -288,7 +293,9 @@
   import header from '../../../base/header'
   import BScroll from 'better-scroll'
   import api from '../../../lib/api'
+
   export default{
+
       data(){
           return{
               title:"网络诊间",
@@ -309,11 +316,7 @@
               allRoom:[
                 {
                   gbDeptName:"全部科室",
-                  sonGbDeptList:[
-                    {
-                      gbDeptName:"全部科室"
-                    }
-                  ]
+
                 }
               ],
               together:"",
@@ -738,7 +741,7 @@
     position: fixed;
     width:100%;
     height:100%;
-    z-index: 10;
+    z-index: 3;
     opacity: 0.3;
     background-color: rgb(0,0,0);
   }
@@ -749,7 +752,7 @@
     position: fixed;
     top: 50px;
     line-height: 40px;
-    z-index:80;
+    z-index:60;
     background-color: white;
   .tab-item{
     flex:1;
@@ -792,7 +795,7 @@
   }
   .dropType{
     position: fixed;
-    z-index:11;
+    z-index:4;
     top: 90px;
     width:100%;
     /*background-color: #0BB20C;*/

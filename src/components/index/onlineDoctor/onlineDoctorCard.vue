@@ -17,7 +17,7 @@
             </h4>
             <h6>{{aboutDoctor.docDeptName}}&nbsp; {{aboutDoctor.docTitle}}</h6>
             <h6>{{aboutDoctor.docHosName}}</h6>
-            <router-link tag="div" :to="{path:'/commentDetail',query:{docId:aboutDoctor.docId}}" class="checkRating">  <star :size="24" :score="aboutDoctor.docScoure"></star><span v-if="aboutDoctor.docScoure">{{ aboutDoctor.docScoure.toFixed(1) }}分 </span><span>查看评价</span> </router-link>
+            <router-link tag="div" :to="{path:'/commentDetail',query:{docId:aboutDoctor.docId}}" class="checkRating">  <star :size="24" :score="aboutDoctor.docScoure"></star><span v-if="aboutDoctor.docScoure">{{ aboutDoctor.docScoure.toFixed(1) }}星 </span><span>查看评价</span> </router-link>
           </div>
         </div>
         <div class="sortFunc">
@@ -111,8 +111,10 @@
   import Dialog from '../../../base/dialog'
   import api from '../../../lib/api'
   import Star from '../../../base/star/star'
+
   import { formatDate } from '../../../utils/formatTimeStamp'
   export default{
+
     data(){
       return{
         title:"",

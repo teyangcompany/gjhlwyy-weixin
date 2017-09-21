@@ -99,7 +99,9 @@
   import VMask from '../../../base/mask'
   import Toast from '../../../base/toast'
   import Alert from '../../../base/alert'
+  import {isLoginMixin} from "../../../lib/mixin"
   export default{
+    mixins: [isLoginMixin],
     data(){
       return{
         title:'就诊信息确认',
@@ -180,21 +182,21 @@
             this.selectedInfo = data.list
             console.log(data)
         })
-        api('nethos.pat.info.get',{
-            token:localStorage.getItem("token")
-        }).then((data)=>{
+
+      api("nethos.pat.info.get", {
+        token:localStorage.getItem('token')
+      }).then((data) => {
+        if (data.code == 0) {
+          this.selfInfo = data.obj
+          api("nethos.pat.compat.list",{
+            token:localStorage.getItem("token"),
+            patId:this.selfInfo.patId
+          }).then((data)=>{
+            this.compatInfo = data.list
+            console.log("下面的data")
             console.log(data)
-           if(data.code == 0){
-             this.selfInfo = data.obj
-             api("nethos.pat.compat.list",{
-               token:localStorage.getItem("token"),
-               patId:this.selfInfo.patId
-             }).then((data)=>{
-               this.compatInfo = data.list
-               console.log("下面的data")
-               console.log(data)
-               if(data.code == 0){
-                 //        获取验证码
+            if(data.code == 0){
+              //        获取验证码
 //                 api("nethos.book.captcha.generate",{
 //                   token:localStorage.getItem("token"),
 //                   compatId:this.compatInfo[this.index].compatId,
@@ -205,10 +207,47 @@
 //                   this.cid = data.obj.cid
 //                   console.log(data)
 //                 })
-               }
-             })
-           }
-        })
+            }
+          })
+        } else {
+          this.$router.push({
+            path:"/bindRelativePhone",
+            query:{backPath:this.path}
+          });
+        }
+      })
+
+
+
+//        api('nethos.pat.info.get',{
+//            token:localStorage.getItem("token")
+//        }).then((data)=>{
+//            console.log(data)
+//           if(data.code == 0){
+//             this.selfInfo = data.obj
+//             api("nethos.pat.compat.list",{
+//               token:localStorage.getItem("token"),
+//               patId:this.selfInfo.patId
+//             }).then((data)=>{
+//               this.compatInfo = data.list
+//               console.log("下面的data")
+//               console.log(data)
+//               if(data.code == 0){
+//                 //        获取验证码
+////                 api("nethos.book.captcha.generate",{
+////                   token:localStorage.getItem("token"),
+////                   compatId:this.compatInfo[this.index].compatId,
+////                   bookHosId:this.allInfoArray.bookHosId,
+////                   bookNumId: this.bookNumId,
+////                 }).then((data)=>{
+////                   this.verifyCode = data.obj.captcha
+////                   this.cid = data.obj.cid
+////                   console.log(data)
+////                 })
+//               }
+//             })
+//           }
+//        })
     },
     methods:{
       cancelDialog(){

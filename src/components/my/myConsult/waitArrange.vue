@@ -1,9 +1,9 @@
 <template>
   <div class="chat">
-    <v-header :title="title" :rightTitle="goingTitle" v-if="aboutConsult.consultStatus == 'NEEDPAY' && aboutConsult.consultTypeName == '图文咨询' && aboutReplyMessage.length == 0" @on-cancel="goCancel"> </v-header>
-    <v-header :title="title" :rightTitle="goingTitle" v-else-if="aboutConsult.consultStatus == 'GOING'&& aboutConsult.consultTypeName == '全科分诊' && aboutReplyMessage.length == 0" @on-cancel="goAllCancel"> </v-header>
-    <v-header :title="title" :rightTitle="overConsultTitle" v-else-if="aboutConsult.consultStatus == 'GOING'&& aboutConsult.consultTypeName == '图文咨询' && aboutReplyMessage.length != 0" @on-cancel="goOverConsult"> </v-header>
-    <v-header :title="title" :rightTitle="rightTitle" v-else> </v-header>
+    <v-header :title="title" :rightTitle="goingTitle" :waitImg="waitImg" v-if="aboutConsult.consultStatus == 'NEEDPAY' && aboutConsult.consultTypeName == '图文咨询' && aboutReplyMessage.length == 0" @on-cancel="goCancel"> </v-header>
+    <v-header :title="title" :rightTitle="goingTitle" :waitImg="waitImg" v-else-if="aboutConsult.consultStatus == 'GOING'&& aboutConsult.consultTypeName == '全科分诊' && aboutReplyMessage.length == 0" @on-cancel="goAllCancel"> </v-header>
+    <v-header :title="title" :rightTitle="overConsultTitle" :waitImg="waitImg" v-else-if="aboutConsult.consultStatus == 'GOING'&& aboutConsult.consultTypeName == '图文咨询' && aboutReplyMessage.length != 0" @on-cancel="goOverConsult"> </v-header>
+    <v-header :title="title" :rightTitle="rightTitle" :waitImg="waitImg" v-else> </v-header>
     <div class="tips" v-if="aboutConsult">
       <span v-if="aboutConsult.consultStatusDescription.substr(15,16) == '按钮'">进行中</span>
       <span v-else> {{aboutConsult.consultStatusDescription}}</span>
@@ -136,6 +136,7 @@
       return{
         title:"医助",
         rightTitle:"",
+        waitImg:"",
         goingTitle:"取消申请",
         dialogTitle:"取消申请",
         overConsultTitle:"结束咨询",
@@ -191,6 +192,8 @@
               this.aboutConsult = data.obj.consult
               this.aboutReplyMessage = data.obj.messageList
               this.attachImg = data.obj.attaList
+              this.title = this.aboutConsult.docName
+              this.waitImg = this.aboutConsult.docAvatar
               console.log("下面data")
               console.log(data)
               console.log("上面的data")
