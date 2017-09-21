@@ -6,14 +6,14 @@
         <div class="bigMiddle">
           <p>
             <img src="../../../static/img/绑定成功.png" alt="">
-            <span>绑定成功</span>
+            <span>您已绑定成功，请直接使用</span>
           </p>
         </div>
-          <div class="aboutNumber">
-            <div class="buttonWrap">
-              <button class="bottom" @click="login()">继续使用</button>
-            </div>
+        <div class="aboutNumber">
+          <div class="buttonWrap">
+            <button class="bottom" @click="login()">继续使用</button>
           </div>
+        </div>
       </div>
     </div>
   </div>
@@ -21,17 +21,19 @@
 <script>
   import header from '../../base/header'
   import api from '../../lib/api'
+
   export default{
+
     data(){
       return{
         title:"广济互联网医院",
         rightTitle:"",
-        password:"",
-        backPath:""
+        password:""
+
       }
     },
     created(){
-       this.backPath = this.$route.query.backPath
+      this.backPath = this.$route.query.backPath
     },
     methods:{
       login(){
@@ -43,15 +45,9 @@
 //              localStorage.setItem("token",data.token)
 //              console.log(data)
 //          })
-        if(this.backPath == '/infoConfirm'){
-            this.$router.push('/book')
-        }else if(this.backPath == '/pictureConsultNext'){
-            this.$router.push('/internetRoom')
-        }else{
-          this.$router.push({
-            path:this.backPath
-          })
-        }
+        this.$router.push({
+          path:'/Profile'
+        })
       }
     },
     components:{

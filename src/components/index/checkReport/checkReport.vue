@@ -41,7 +41,9 @@
   import bindFail from '../../../base/bindFail/bindFail'
   import VMask from '../../../base/mask'
   import Toast from '../../../base/toast'
+  import {isLoginMixin} from "../../../lib/mixin"
   export default{
+    mixins: [isLoginMixin],
     data(){
       return{
         title:"查报告单",
@@ -72,6 +74,18 @@
       }else{
         this.index= 0
       }
+      api("nethos.pat.info.get", {
+        token:localStorage.getItem('token')
+      }).then((data) => {
+        if (data.code == 0) {
+//          this.patientInfo = data.obj
+        } else {
+          this.$router.push({
+            path:"/bindRelativePhone",
+            query:{backPath:this.path}
+          });
+        }
+      })
       api("nethos.pat.compat.list",{
         token:localStorage.getItem("token")
       }).then((data)=>{

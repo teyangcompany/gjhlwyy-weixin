@@ -31,7 +31,14 @@
                           <p>{{ single.schemeDate.substr(0,10) }} {{ single.schemeAmpm == 'am'? '上午':'下午' }} {{ single.docName }}</p>
                         </div>
                       </div>
-                      <div class="cancelTime">
+                      <div class="cancelTime specialCancel"  v-if="single.schemeStats == 4">
+                        <div >
+                          <p>预约</p>
+                          <p> {{ single.bookFee }}元 </p>
+                        </div>
+                        <!--<img src="../../../../static/img/查看更多.png" alt="">-->
+                      </div>
+                      <div class="cancelTime" v-else>
                         <div >
                           <span class="year gray" v-if="single.schemeStats == 0">无</span>
                           <span class="year gray" v-if="single.schemeStats == 1">停诊</span>
@@ -39,7 +46,7 @@
                           <span class="year" v-if="single.schemeStats == 3">即将(未放号或号子被锁定)</span>
                           <!--<span class="year" >预约</span>-->
                           <span class="specialMoney" v-if="single.schemeStats == 4">预约{{ single.bookFee }}元</span>
-                          <img src="../../../../static/img/查看更多.png" alt="">
+                          <!--<img src="../../../../static/img/查看更多.png" alt="">-->
                         </div>
                       </div>
                   </div>
@@ -59,7 +66,14 @@
                           <p>{{ single.schemeDate.substr(0,10) }} {{ single.schemeAmpm == 'am'? '上午':'下午' }} 专家</p>
                         </div>
                       </div>
-                      <div class="cancelTime">
+                      <div class="cancelTime specialCancel" id="" v-if="single.schemeStats == 4">
+                        <div >
+                          <p>预约</p>
+                          <p> {{ single.bookFee }}元 </p>
+                        </div>
+                        <!--<img src="../../../../static/img/查看更多.png" alt="">-->
+                      </div>
+                      <div class="cancelTime" v-else>
                         <div >
                           <span class="year gray" v-if="single.schemeStats == 0">无</span>
                           <span class="year gray" v-if="single.schemeStats == 1">停诊</span>
@@ -67,7 +81,7 @@
                           <span class="year" v-if="single.schemeStats == 3">即将(未放号或号子被锁定)</span>
                           <!--<span class="year" >预约</span>-->
                           <span class="specialMoney" v-if="single.schemeStats == 4">预约{{ single.bookFee }}元</span>
-                          <img src="../../../../static/img/查看更多.png" alt="">
+                          <!--<img src="../../../../static/img/查看更多.png" alt="">-->
                         </div>
                       </div>
                     </div>
@@ -521,6 +535,26 @@
                      color: #999999;
                      margin-right: 5px;
                    }
+                 }
+               }
+               .specialCancel{
+                 >div{
+                   display: flex;
+                   flex-direction: column;
+                   align-items: center;
+                   justify-content: center;
+                   /*<!--margin-right: 10rem/$rem;-->*/
+                   p:nth-child(1){
+                     height:60rem/$rem;
+                     margin-bottom: 10rem/$rem;
+                   }
+                   p:nth-child(2){
+                     color: $assistWordBrown;
+                   }
+                 }
+                 img{
+                   width:16rem/$rem;
+                   height:24rem/$rem;
                  }
                }
              }

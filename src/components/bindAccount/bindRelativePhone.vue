@@ -15,12 +15,13 @@
           <div class="formContent" ref="formContent">
             <div class="form phone border-1px">
               <label for="" class="phoneLabel"> <img src="../../../static/img/手机号.png" alt=""> </label>
-              <input type="text" placeholder="请输入手机号"  @focus="focus()" @blur="blur()" v-model.trim="phone" @input="$v.phone.$touch()" class="numberInput">
+              <input type="number" placeholder="请输入手机号"  @focus="focus()" @blur="blur()" v-model.trim="phone" @input="$v.phone.$touch()" class="numberInput">
             </div>
             <div class="form verifyCode border-1px">
               <label for="" class="codeLabel"> <img src="../../../static/img/验证码.png" alt=""> </label>
-              <input type="text" placeholder="请输入验证码" class="codeInput" v-model="code">
-              <span @click="getCode">获取验证码</span>
+              <input type="number" placeholder="请输入验证码" class="codeInput" v-model="code">
+              <span @click="getCode" v-if="countdown == 60 || countdown == 0">获取验证码</span>
+              <span v-else>{{ countdown }}s后重新获取</span>
             </div>
           </div>
           <div class="buttonWrap">
@@ -29,6 +30,9 @@
         </div>
       </div>
       <v-mask v-if="showMask"></v-mask>
+      <div class="verifyCenter">
+        <verify v-if="showVerify" :verifyTips="verifyTips"></verify>
+      </div>
     </div>
   </div>
 </template>
@@ -36,9 +40,12 @@
   import header from '../../base/header'
   import api from '../../lib/api.js'
   import mask from '../../base/mask'
+  import verify from '../../base/verify'
   import {openidCache} from '../../lib/cache'
+  import {isLoginMixin} from "../../lib/mixin"
   import { required, minLength, between } from 'vuelidate/lib/validators'
   export default{
+    mixins: [isLoginMixin],
     data(){
       return{
         phone:"",
@@ -46,7 +53,12 @@
         cid:"",
         codeValue:"",
         showMask:false,
-        regStatus:""
+        regStatus:"",
+        showVerify:false,
+        verifyTips:"手机号不能为空",
+        countdown:60,
+        a:"",
+        backPath:""
       }
     },
     validations: {
@@ -59,50 +71,115 @@
       }
     },
     created(){
+       this.backPath = this.$route.query.backPath
       console.log(document.getElementsByTagName("body")[0].offsetHeight)
       console.log(window.innerHeight)
+      api("nethos.pat.info.get", {
+        token:localStorage.getItem('token')
+      }).then((data) => {
+        if (data.code == 0) {
+//          this.patientInfo = data.obj
+          this.$router.push({
+            path:"/repeatBind",
+            query:{backPath:this.path}
+          });
+        } else {
+
+        }
+      })
     },
     methods:{
       getCode(){
-        api("nethos.system.captcha.pat.wechat.bind",{
-          mobile:this.phone,
-        }).then((data)=>{
-          console.log(data)
-          this.regStatus = data.regStatus
-          this.cid = data.obj.cid
-          this.codeValue = data.obj.value
-          console.log(this.cid)
-          console.log(this.codeValue)
-        })
-      },
-      verifyCode(){
-        if(this.regStatus == 'REGISTER'){
-          this.$router.push('/register')
-        }else if(this.regStatus == 'BIND'){
-          api("nethos.pat.wechat.bind",{
-//                token:`OPENID_`+localStorage.getItem("token"),
-            captcha:this.codeValue,
-            cid:this.cid,
-            openid:openidCache.get()
+        if(this.phone == ''){
+          this.verifyTips = "手机号不能为空"
+          this.showVerify = true
+          setTimeout(()=>{
+            this.verifyTips = '手机号不能为空'
+            this.showVerify = false
+          },1000)
+        }else{
+          api("nethos.system.captcha.pat.wechat.bind",{
+            mobile:this.phone,
           }).then((data)=>{
-            console.log(this.codeValue)
-            console.log(this.cid)
-            console.log(openidCache.get())
             if(data.code == 0){
-              this.$router.push({
-                path:'/login',
-              })
-            }else if(data.msg = ''){
-              this.$router.push({
-                path:'/register',
-                query:{cid:this.cid,codeValue:this.codeValue}
-              })
+              console.log(data)
+              this.regStatus = data.regStatus
+              this.cid = data.obj.cid
+              this.codeValue = data.obj.value
+              console.log(this.cid)
+              console.log(this.codeValue)
+              this.a = setInterval(()=>{
+                this.countdown--
+              },1000)
             }else{
-              alert(data.msg)
+              this.verifyTips = data.msg
+              this.showVerify = true
+              setTimeout(()=>{
+                this.verifyTips = '手机号不能为空'
+                this.showVerify = false
+              },1000)
             }
-            console.log(data)
           })
         }
+      },
+      verifyCode(){
+          if(this.phone == ''){
+            this.verifyTips = "手机号不能为空"
+            this.showVerify = true
+            setTimeout(()=>{
+              this.verifyTips = '手机号不能为空'
+              this.showVerify = false
+            },1000)
+          }else if(this.code == ''){
+            this.verifyTips = "验证码不能为空"
+            this.showVerify = true
+            setTimeout(()=>{
+              this.verifyTips = '验证码不能为空'
+              this.showVerify = false
+            },1000)
+          }else if(this.code != this.codeValue){
+            this.verifyTips = "验证码输入错误"
+            this.showVerify = true
+            setTimeout(()=>{
+              this.verifyTips = '验证码输入错误'
+              this.showVerify = false
+            },1000)
+          }else{
+            if(this.regStatus == 'REGISTER'){
+              this.$router.push({
+                path:'/register',
+                query:{cid:this.cid,codeValue:this.codeValue,backPath:this.backPath}
+              })
+            }else if(this.regStatus == 'BIND'){
+              api("nethos.pat.wechat.bind",{
+//                token:`OPENID_`+localStorage.getItem("token"),
+                captcha:this.code,
+                cid:this.cid,
+                openid:openidCache.get()
+              }).then((data)=>{
+                console.log(data)
+                console.log(this.codeValue)
+                console.log(this.cid)
+                console.log(openidCache.get())
+                if(data.code == 0){
+                  this.$router.push({
+                    path:'/login',
+                    query:{backPath:this.backPath}
+                  })
+                } else if(data.msg = ''){
+                  this.verifyTips = '网络错误，稍候重试'
+                  this.showVerify = true
+                  setTimeout(()=>{
+                    this.verifyTips = '手机号不能为空'
+                    this.showVerify = false
+                  },1000)
+            } else{
+                  alert(data.msg)
+                }
+                console.log(data)
+              })
+            }
+          }
         console.log(this.cid)
       },
       focus(){
@@ -122,7 +199,24 @@
     },
     components:{
       "VHeader":header,
-      "VMask":mask
+      "VMask":mask,
+      verify
+    },
+    watch:{
+        phone(){
+            if(!this.$v.phone.required){
+                this.showVerify = true
+                setTimeout(()=>{
+                  this.showVerify = false
+                },1000)
+            }
+        },
+        countdown(){
+          if(this.countdown == 0){
+            clearInterval(this.a)
+            this.countdown = 60
+          }
+        }
     }
   }
 </script>
@@ -134,6 +228,16 @@
     left:0;
     right:0;
     bottom:0;
+    .verifyCenter{
+      position: fixed;
+      left:0;
+      right:0;
+      top:0;
+      bottom:0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     .bindPhoneCenter{
       width:690rem/$rem;
       margin:0 auto;
@@ -241,7 +345,7 @@
             right:0;
             height: 57rem/$rem;
             line-height: 57rem/$rem;
-            width: 154rem/$rem;
+            width: 180rem/$rem;
             font-size: 26rem/$rem;
             border:1px solid #3Dccc2;
             border-radius: 5px;

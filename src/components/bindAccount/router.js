@@ -4,6 +4,7 @@
 import bindRelativePhone from './bindRelativePhone'
 import register from './register'
 import login from './login'
+import repeatBind from './repeatBind'
 export default[
   {
     path:"/bindRelativePhone",
@@ -16,5 +17,9 @@ export default[
   {
     path:"/login",
     component:login
+  },
+  {
+    path:"/repeatBind",
+    component:repeatBind
   }
 ]

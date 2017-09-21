@@ -23,8 +23,11 @@
       </div>
       <div class="text border-1px">
         <div>
-          <textarea placeholder="请输入评论（可以不填）" v-model="commentContent"></textarea>
+          <textarea placeholder="请输入评论（可以不填）" onselectstart="return false;" @keyup="keypress()" id="myArea" v-model="commentContent"></textarea>
         </div>
+        <p class="limitNumber">
+             {{textLength}}/200
+        </p>
       </div>
       <div class="submitComment">
         <div @click="throwComment">
@@ -44,13 +47,22 @@
         rightTitle:"",
         inputdata:'',
         commentContent:"",
-        consultId:""
+        consultId:"",
+        textLength:0
       }
     },
     created(){
         this.consultId = this.$route.query.consultId
     },
     methods:{
+      keypress(){
+        this.text = document.getElementById("myArea").value
+        this.textLength = this.text.length
+        if(this.textLength > 200){
+          document.getElementById("myArea").value = this.text.substr(0,200)
+          alert("字数不能超过200")
+        }
+      },
       throwComment(){
         api("nethos.consult.info.comment",{
           token:localStorage.getItem("token"),
@@ -74,6 +86,14 @@
       inputdata(value) {
         console.log(value)
         console.log(this.inputdata)
+      },
+      commentContent(){
+        this.text = document.getElementById("myArea").value
+        this.textLength = this.text.length
+        if(this.textLength > 200){
+          document.getElementById("myArea").value = this.text.substr(0,200)
+          alert("字数不能超过200")
+        }
       }
     }
   }
@@ -118,7 +138,12 @@
         >div{
           width:690rem/$rem;
           margin:0 auto;
-          -top: 5px;
+          top: 5px;
+        }
+        p.limitNumber{
+          position: absolute;
+          top:-24px;
+          right:10px;
         }
         textarea{
           width:690rem/$rem;
