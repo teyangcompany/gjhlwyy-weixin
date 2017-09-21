@@ -8,7 +8,7 @@
         <div class="weui-cell">
           <div class="weui-cell__hd"><label class="weui-label bf">手机号</label></div>
           <div class="weui-cell__bd" v-bind:class="{ 'form-group--error': $v.mobile.$error }">
-            <input  @blur="$v.mobile.$touch()" class="weui-input" type="number" v-model="mobile" placeholder="请输入手机号"/>
+            <input  @blur="$v.mobile.$touch()" readonly="readonly" class="weui-input" type="number" v-model="mobile" placeholder="请输入手机号"/>
           </div>
         </div>
         <span class="form-group__message" v-show="!$v.mobile.phone&&showError">请输入正确的手机号</span>

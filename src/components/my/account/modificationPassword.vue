@@ -6,26 +6,25 @@
       <div>
         <div class="weui-cells weui-cells_form">
           <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label bf">旧密码</label></div>
+            <div class="weui-cell__hd"><label class="weui-label bf">新密码</label></div>
             <div class="weui-cell__bd" >
-              <input   class="weui-input" type="password" v-model="patPassword"  placeholder="请输入密码"/>
+              <input   class="weui-input" type="password" v-model="patPassword"  placeholder="请输入8-20位密码"/>
             </div>
           </div>
-
+          <span class="form-group__message" v-show="equal">俩次密码不一致</span>
           <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label bf">新密码</label></div>
+            <div class="weui-cell__hd"><label class="weui-label bf">确认密码</label></div>
             <div class="weui-cell__bd" :class="{ 'form-group--error':$v.againPatPassword.$error }">
-              <input   @blur="$v.againPatPassword.$touch()"  class="weui-input" type="password" v-model="againPatPassword"  placeholder="请输入密码"/>
+              <input @focus="getValue"  @blur="$v.againPatPassword.$touch()"  class="weui-input" type="password" v-model="againPatPassword"  placeholder="请输入8-20位密码"/>
             </div>
           </div>
         </div>
-        <span class="form-group__message" v-show="!$v.againPatPassword.minLength&&showPatPassWord">密码至少6位</span>
+        <span class="form-group__message" v-show="showPatPassWord">密码必须是8-20字母和数字组合</span>
       </div>
       <div class="btn">
         <a style="background: rgb(48, 207, 208)" href="javascript:;" class="weui-btn weui-btn_primary" @click="goNext">下一步</a>
       </div>
     </div>
-
 
 
 </template>
@@ -62,6 +61,7 @@
         },
       watch:{
         againPatPassword(){
+          console.log(21212)
           this.equal = (this.patPassword===this.againPatPassword?false:true)
         }
       },
@@ -69,9 +69,17 @@
 //        goNext(){
 //          this.$router.push('/succeed')
 //        },
-
+        getValue(){
+          if(!/^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?!\W+$)\S{8,20}$/g.test(this.patPassword)){
+            console.log(21212121)
+            this.$set(this.$data,'showPatPassWord',true)
+          }else {
+            this.$set(this.$data,'showPatPassWord',false)
+          }
+        },
         goNext(){
-          if(this.$v.againPatPassword.$invalid){
+          if(!/^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?!\W+$)\S{8,20}$/g.test(this.patPassword)){
+            console.log(21212121)
             this.$set(this.$data,'showPatPassWord',true)
           }else {
             var patPassword = sha512(hex_md5(this.patPassword) + this.patPassword );
