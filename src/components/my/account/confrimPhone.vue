@@ -65,25 +65,44 @@
     methods:{
       goNext(){
 //        this.$router.push('/changePhoneSucc')
-        Api("nethos.pat.mobile.modify",{
+        if(this.mobile.length!=11){
+          alert('请输入手机号')
+        }else if(this.captcha.length!==4) {
+          alert('请输入正确的验证码')
+        }else{
+          Api('nethos.system.captcha.checkcaptcha.v2',{
             captcha:this.captcha,
-            cid:this.cid,
-            newCid:this.newCid,
-            newCaptcha:this.newCaptcha,
-            token:this.token
+            cid:this.cid
           }).then(res=>{
-            console.log(res,3363663)
             if(res.succ){
-              this.$router.push({
-                name:'succeed',
-                params:{
-                  msg:'成功修改绑定手机号'
-                }
-              })
+              this.getSucc()
             }else {
-              alert(res.msg)
+              alert('验证码错误')
             }
           })
+        }
+
+      },
+      getSucc(){
+        Api("nethos.pat.mobile.modify",{
+          captcha:this.captcha,
+          cid:this.cid,
+          newCid:this.newCid,
+          newCaptcha:this.newCaptcha,
+          token:this.token
+        }).then(res=>{
+          console.log(res,3363663)
+          if(res.succ){
+            this.$router.push({
+              name:'succeed',
+              params:{
+                msg:'成功修改绑定手机号'
+              }
+            })
+          }else {
+            alert(res.msg)
+          }
+        })
       },
       getCode(){
         console.log(this.$v.$invalid);

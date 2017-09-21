@@ -20,12 +20,13 @@
             <input class="weui-input" type="tel" v-model="captcha" placeholder="请输入验证码"/>
           </div>
           <div class="weui-cell__ft">
-            <button class="weui-vcode-btn" @click="getCode">获取验证码</button>
+            <button v-show="!(msg>0)" class="weui-vcode-btn" @click="getCode">{{msg}}</button>
+            <button v-show="msg>0" class="weui-vcode-btn" @click="getCode">有效期{{msg}}s</button>
           </div>
         </div>
       </div>
       <div class="btn">
-        <a href="javascript:;" style="background: #0aace9" class="weui-btn weui-btn_primary" @click="goNext">下一步</a>
+        <a href="javascript:;" style="background: rgb(48, 207, 208)" class="weui-btn weui-btn_primary" @click="goNext">下一步</a>
       </div>
     </div>
   </div>
@@ -41,10 +42,11 @@
     },
     data(){
       return {
-        mobile:'',
+        mobile:localStorage.getItem('patMobile'),
         captcha:'',
         cid:'',
         showError:false,
+        msg:"获取验证码"
       }
     },
     validations: {
@@ -58,32 +60,41 @@
     },
     methods:{
       goNext(){
+        console.log(this.captcha,77777)
         if(this.mobile.length!=11){
           alert('请输入手机号')
+        }else if(this.captcha.length!==4) {
+          alert('请输入正确的验证码')
         }else {
-          this.$router.push({
-            name: "modificationPassword", params: {
-              mobile: this.mobile
+          Api('nethos.system.captcha.checkcaptcha.v2',{
+            captcha:this.captcha,
+            cid:this.cid
+          }).then(res=>{
+            if(res.succ){
+              this.$router.push({
+                name: "modificationPassword", params: {
+                  mobile: this.mobile
+                }
+              })
+            }else {
+              alert('验证码错误')
             }
           })
         }
-
-
-//        if(this.mobile.length!=11){
-//          alert('请输入手机号')
-//        }else {
-//          this.$router.push({
-//            name:'confrimPhone',
-//            params:{
-//              captcha:this.captcha,
-//              cid:this.cid
-//            }
-//          })
-//        }
-
       },
+
+
+
       getCode(){
         console.log(this.$v.$invalid);
+        this.msg = 60;
+         var time = setInterval(()=>{
+          this.msg -=1;
+           if(this.msg==0){
+             this.msg='重新获取';
+             clearInterval(time)
+           }
+        },1000)
         if(this.$v.$invalid){
           this.$set(this.$data,'showError',true)
         }else {
@@ -103,15 +114,14 @@
 </script>
 <style scoped lang="scss">
   @import '../../../common/public.scss';
+
   .btn{
     box-sizing: border-box;
     text-align: center;
     margin: 142rem/$rem auto 0 auto;
     width: 670rem/$rem;
   }
-  .weui-btn_primary{
-    background: #0aace9;
-  }
+
   .page{
     display: flex;
     overflow: auto;
@@ -128,8 +138,12 @@
     padding-left: 15px;
     font-size: 12px;
   }
+
   .weui-vcode-btn{
-    color:  #0aace9;
+    color: rgb(48, 207, 208);
     padding: 0 .5rem 0 .6rem;
+  }
+  .weui-btn_primary{
+    background: #0aace9;
   }
 </style>
