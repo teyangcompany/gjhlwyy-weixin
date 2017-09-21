@@ -355,16 +355,22 @@
     }
     .title{
       flex:2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       span{
         font-size: 36rem/$rem!important;
         color: #333333;
+        display: inline-block;
       }
       img{
-        width:40rem/$rem;
-        height:40rem/$rem;
-        position: absolute;
-        left:270rem/$rem;
-        top:15px;
+        width:55rem/$rem;
+        height:55rem/$rem;
+        display: inline-block;
+        margin-right: 10rem/$rem;
+        /*<!--position: absolute;-->*/
+        /*<!--left:270rem/$rem;-->*/
+        /*<!--top:15px;-->*/
         border-radius: 50%;
       }
     }

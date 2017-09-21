@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <top>
-      <div class="middle big bf">修改绑定手机号</div>
+      <div class="middle big bf">修改绑定手机号1</div>
     </top>
     <div >
       <div class="weui-cells weui-cells_form">

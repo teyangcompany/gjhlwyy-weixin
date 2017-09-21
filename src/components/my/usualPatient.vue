@@ -8,8 +8,8 @@
             <div class="usualCenter">
               <ul>
                 <li><span class="patientName">{{ item.compatName }}</span><span>{{ item.compatAge }} &nbsp;{{ item.compatGender == "M" ? "男":"女"}}</span></li>
-                <li>身份证号： <span>{{ item.compatIdcard }}</span></li>
-                <li>电话号码：<span>{{ item.compatMobile }}</span></li>
+                <li>身份证号： <span>{{ item.compatIdcard.substr(0,6) }}********{{item.compatIdcard.substr(14)}}</span></li>
+                <li>电话号码：<span>{{ item.compatMobile.substr(0,3) }}****{{item.compatMobile.substr(7)}}</span></li>
                 <li v-if="!(item.compatMedicalRecord)">病案号：<span >暂未绑定病案号</span></li>
                 <li v-else>病案号：<span >{{ item.compatMedicalRecord }}</span></li>
               </ul>
