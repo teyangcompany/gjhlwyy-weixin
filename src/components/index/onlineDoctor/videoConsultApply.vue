@@ -7,7 +7,7 @@
           <ul>
             <li>
               <div class="cancelImg">
-                <img src="../../../../static/img/ys2.jpg" alt="">
+                <img src="" alt="">
               </div>
               <div class="cancelIntro">
                 <div class="introTitle">

@@ -6,7 +6,7 @@
           <router-link tag="div" to="/sendMessage">
             <li>
               <div class="cancelImg">
-                <img src="../../../static/img/ys1.jpg" alt="">
+                <img src="" alt="">
               </div>
               <div class="cancelIntro">
                 <div>
@@ -32,7 +32,7 @@
           <router-link tag="div" to="/sendMessage">
             <li>
               <div class="cancelImg">
-                <img src="../../../static/img/ys2.jpg" alt="">
+                <img src="" alt="">
               </div>
               <div class="cancelIntro">
                 <div>
@@ -58,7 +58,7 @@
           <router-link tag="div" to="/sendMessage">
             <li>
               <div class="cancelImg">
-                <img src="../../../static/img/ys3.jpg" alt="">
+                <img src="" alt="">
               </div>
               <div class="cancelIntro">
                 <div>
@@ -84,7 +84,7 @@
           <router-link tag="div" to="/sendMessage">
             <li>
               <div class="cancelImg">
-                <img src="../../../static/img/ys4.jpg" alt="">
+                <img src="" alt="">
               </div>
               <div class="cancelIntro">
                 <div>
@@ -110,7 +110,7 @@
           <router-link tag="div" to="/signSingle">
             <li>
               <div class="cancelImg">
-                <img src="../../../static/img/ys5.jpg" alt="">
+                <img src="" alt="">
               </div>
               <div class="cancelIntro">
                 <div>
@@ -136,7 +136,7 @@
           <router-link tag="div" to="/signSingle">
             <li>
               <div class="cancelImg">
-                <img src="../../../static/img/ys6.jpg" alt="">
+                <img src="" alt="">
               </div>
               <div class="cancelIntro">
                 <div>

@@ -18,9 +18,9 @@
       </div>
       <div class="wrapImg">
         <div>
-          <img src="../../../../static/img/c10.jpg" alt="">
-          <img src="../../../../static/img/c12.jpg" alt="">
-          <img src="../../../../static/img/c15.jpg" alt="">
+          <img src="" alt="">
+          <img src="" alt="">
+          <img src="" alt="">
         </div>
       </div>
     </div>

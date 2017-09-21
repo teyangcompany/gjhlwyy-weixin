@@ -40,7 +40,7 @@
         <ul>
           <li  ref="chatLi">
             <div class="other">
-              <img src="../../../static/img/ys1.jpg" alt="" >
+              <img src="" alt="" >
               <div class="whatsay">
                 <div class="whatsay_svg">
                   <svg>
@@ -76,7 +76,7 @@
         <ul>
           <li  ref="chatLi">
             <div class="other">
-              <img src="../../../static/img/ys1.jpg" alt="" >
+              <img src="" alt="" >
               <div class="whatsay">
                 <div class="whatsay_svg">
                   <svg>
