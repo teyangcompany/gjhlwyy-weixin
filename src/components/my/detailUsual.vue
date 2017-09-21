@@ -124,20 +124,25 @@
           this.showDialog= false
       },
       goChangePatient(){
-          api("nethos.pat.compat.modify",{
-             token:localStorage.getItem("token"),
-            compatName:this.changeName,
-            compatMobile:this.allPatient[this.index].compatMobile,
-            compatIdcard:this.allPatient[this.index].compatIdcard,
-            compatId:this.allPatient[this.index].compatId
-          }).then((data)=>{
+          if(this.allPatient[this.index].compatMedicalRecord){
+            this.showAlert = true
+            this.secondLine = "不能修改已绑定病案号的就诊人信息"
+          }else{
+            api("nethos.pat.compat.modify",{
+              token:localStorage.getItem("token"),
+              compatName:this.changeName,
+              compatMobile:this.allPatient[this.index].compatMobile,
+              compatIdcard:this.allPatient[this.index].compatIdcard,
+              compatId:this.allPatient[this.index].compatId
+            }).then((data)=>{
               console.log(this.changeName)
               console.log(this.allPatient[this.index].compatId)
               console.log(data)
               if(data.code == 0){
-                  this.$router.push('/usualPatient')
+                this.$router.push('/usualPatient')
               }
-          })
+            })
+          }
       },
       deletePatient(){
           console.log("123")

@@ -8,7 +8,7 @@
           <div class="weui-cells">
             <a class="weui-cell weui-cell_access" href="javascript:;" @click="goChangePhone">
               <div class="weui-cell__bd">
-                <p class="bf">修改绑定手机号</p>
+                <p class="bf">修改绑定手机号1</p>
               </div>
               <div class="weui-cell__ft">
               </div>

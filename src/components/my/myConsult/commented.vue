@@ -23,6 +23,9 @@
         </span>
       </div>
     </div>
+    <div class="emptyTips" v-if="consultList.length == 0 && endStatus== true">
+          暂无问诊记录
+    </div>
   </scroll>
 </template>
 <script>
@@ -40,7 +43,8 @@
           listPage:1,
           dataLength:"",
           loadingStatus:true,
-          createTime:[]
+          createTime:[],
+          endStatus:false
         }
     },
     mounted(){
@@ -66,6 +70,7 @@
            token:localStorage.getItem("token")
        }).then((data)=>{
            this.loadingStatus = false
+           this.endStatus = true
          for(var i=0;i<data.list.length; i++){
            this.consultList.push(data.list[i])
            this.createTime.push(formatDate(new Date(data.list[i].createTime)))
@@ -130,6 +135,17 @@
     left:0;
     right:0;
     bottom:0;
+    .emptyTips{
+      position: absolute;
+      top:0;
+      right:0;
+      left:0;
+      bottom:0;
+      color: #666666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     ul {
       /*margin-top: 10px;*/
       /*padding-bottom: 5px;*/

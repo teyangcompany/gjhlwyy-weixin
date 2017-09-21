@@ -113,7 +113,7 @@
       }).then((data) => {
          console.log(data.obj)
 
-      document.getElementsByTagName('title')[0].innerText= '我的'
+//      document.getElementsByTagName('title')[0].innerText= '我的'
 //      api("nethos.pat.info.get", {}).then((data) => {
 
         if (data.code == 0) {

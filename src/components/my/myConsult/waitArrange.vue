@@ -134,7 +134,7 @@
   export default{
     data(){
       return{
-        title:"医助",
+        title:"",
         rightTitle:"",
         waitImg:"",
         goingTitle:"取消申请",

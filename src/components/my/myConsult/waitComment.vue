@@ -23,6 +23,9 @@
         </span>
       </div>
     </div>
+    <div class="emptyTips" v-if="waitCommentList.length == 0 && endStatus== true">
+      暂无问诊记录
+    </div>
   </scroll>
 </template>
 <script>
@@ -41,6 +44,7 @@
         pullup:true,
         listPage:1,
         dataLength:"",
+        endStatus:false
       }
     },
     mounted(){
@@ -67,6 +71,7 @@
         token:localStorage.getItem("token")
       }).then((data)=>{
         this.loadingStatus = false
+        this.endStatus = true
         console.log(data)
         for(var i=0;i<data.list.length; i++){
           this.waitCommentList.push(data.list[i])
@@ -130,6 +135,17 @@
     left:0;
     right:0;
     bottom:0;
+    .emptyTips{
+      position: absolute;
+      top:0;
+      right:0;
+      left:0;
+      bottom:0;
+      color: #666666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     ul {
       /*margin-top: 10px;*/
       /*padding-bottom: 5px;*/
@@ -214,5 +230,8 @@
         }
       }
     }
+  }
+  .number{
+    color: #3399FF!important;
   }
 </style>
