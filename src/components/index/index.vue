@@ -140,7 +140,7 @@
         console.log(data)
         this.adImg = data.obj.sysAdSettingList
         this.healthList = data.obj.sysInformationList
-        console.log(this.healthList)
+        console.log(this.healthList,33333)
       })
     },
     methods:{

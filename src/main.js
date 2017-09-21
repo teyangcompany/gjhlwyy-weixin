@@ -37,7 +37,6 @@ if (window.device == "iphone" || window.device == "android") {
 
 
 auth2(init);
-
 function init() {
     /* eslint-disable no-new */
     new Vue({

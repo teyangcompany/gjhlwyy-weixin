@@ -104,6 +104,7 @@
     },
     created() {
       console.log(document.getElementsByTagName('title')[0])
+
       this.tellPath = this.$route.path
       console.log(this.tellPath)
 //      document.getElementsByTagName('title')[0].innerText= '我的'
@@ -111,6 +112,10 @@
           token:localStorage.getItem('token')
       }).then((data) => {
          console.log(data.obj)
+
+      document.getElementsByTagName('title')[0].innerText= '我的'
+//      api("nethos.pat.info.get", {}).then((data) => {
+
         if (data.code == 0) {
           this.patientInfo = data.obj
         } else {

@@ -336,7 +336,7 @@ export default[
   },
   {
     path:"",
-    redirect:"/myProfile/index",
+    redirect:"/myProfile",
     component:index
   },
   ]

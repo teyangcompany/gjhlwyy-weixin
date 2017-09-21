@@ -14,7 +14,7 @@ export default (cb) => {
 
   /*微信打开*/
   if (/micromessenger/.test(UA)) {
-
+      console.log('测试')
     /*本地有openid*/
     if (openid || (query && query.openid) || (hash && hash.openid)) {
       openidCache.set(openid);

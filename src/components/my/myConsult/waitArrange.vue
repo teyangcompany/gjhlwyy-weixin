@@ -125,7 +125,7 @@
     ></v-dialog>
   </div>
 </template>
-<script>
+<script type="text/ecmascript-6">
   import header from '../../../base/header'
   import Scroll from '../../../base/scroll'
   import api from '../../../lib/api'
