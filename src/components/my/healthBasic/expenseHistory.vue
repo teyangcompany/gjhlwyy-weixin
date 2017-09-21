@@ -3,8 +3,8 @@
         <top>
             <div class="middle big bf">消费记录</div>
         </top>
-        <div v-show="list.length==0">暂无消费</div>
-        <scroll v-show="list.length>0"  class="page" pullup="true" @scrollToEnd="scrollToEnd" :data="list">
+
+        <scroll v-show="!flag" class="page" pullup="true" @scrollToEnd="scrollToEnd" :data="list">
             <div class="wrap">
                 <div class="detail" v-for="item of list">
                     <div class="patImg">
@@ -27,7 +27,8 @@
                 </div>
             </div>
         </scroll>
-
+        <loading v-show="flag"></loading>
+        <div v-show="!flag&&list.length==0" class="test">暂无消费记录</div>
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -35,10 +36,12 @@
     import scroll from '../../../base/scroll.vue'
     import api from '../../../lib/api'
     import {Todate} from '../../../lib/filter'
+    import loading from '../../../base/loading/loading.vue'
     export default{
         components: {
             top,
-            scroll
+            scroll,
+            loading
         },
         filters:{
             Todate
@@ -48,7 +51,8 @@
                 list:[],
                 token:localStorage.getItem('token'),
                 pageNo:1,
-                pageSize:10
+                pageSize:10,
+                flag:true
             }
         },
         mounted(){
@@ -63,7 +67,7 @@
                 }).then(res=>{
                     if(res.succ){
                         this.list = res.list;
-
+                        this.flag = false
                     }else {
                         alert(res.msg)
                     }
@@ -78,13 +82,15 @@
         }
     }
 </script>
-<style lang="scss">
+<style scoped lang="scss">
     @import "../../../common/public.scss";
+
   #onlinepage{
-    flex: 1;
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
   }
     .page{
         position: fixed;
@@ -100,6 +106,13 @@
   box-sizing: border-box;
   padding-bottom: 10px;
   border-top: 1px solid gainsboro;
+}
+.test{
+    display: flex;
+    flex: 1;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
 }
   .detail{
     display: flex;

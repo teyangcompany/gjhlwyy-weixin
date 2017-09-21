@@ -20,7 +20,8 @@
             <input class="weui-input" type="tel" v-model="captcha" placeholder="请输入验证码"/>
           </div>
           <div class="weui-cell__ft">
-            <button class="weui-vcode-btn" @click="getCode">获取验证码</button>
+            <button v-show="!(msg>0)" class="weui-vcode-btn" @click="getCode">{{msg}}</button>
+            <button v-show="msg>0" class="weui-vcode-btn" @click="getCode">有效期{{msg}}s</button>
           </div>
         </div>
       </div>
@@ -44,10 +45,11 @@
     data(){
       return {
         token:localStorage.getItem('token'),
-        mobile:'',
+        mobile:localStorage.getItem('patMobile'),
         captcha:'',
         cid:'',
         showError:false,
+        msg:"获取验证码"
       }
     },
     validations: {
@@ -61,21 +63,39 @@
     },
     methods:{
       goNext(){
-//        this.$router.push('./confrimPhone')
+        console.log(this.captcha,77777)
         if(this.mobile.length!=11){
           alert('请输入手机号')
+        }else if(this.captcha.length!==4) {
+          alert('请输入正确的验证码')
         }else {
-          this.$router.push({
-            name:'confrimPhone',
-            params:{
-              captcha:this.captcha,
-              cid:this.cid
+          Api('nethos.system.captcha.checkcaptcha.v2',{
+            captcha:this.captcha,
+            cid:this.cid
+          }).then(res=>{
+            if(res.succ){
+              this.$router.push({
+                name:'confrimPhone',
+                params:{
+                  captcha:this.captcha,
+                  cid:this.cid
+                }
+              })
+            }else {
+              alert('验证码错误')
             }
           })
         }
-
       },
       getCode(){
+        this.msg = 60;
+        var time = setInterval(()=>{
+          this.msg -=1;
+          if(this.msg==0){
+            this.msg='重新获取';
+            clearInterval(time)
+          }
+        },1000)
         if(this.$v.$invalid){
           this.$set(this.$data,'showError',true)
         }else {

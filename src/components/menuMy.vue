@@ -80,7 +80,7 @@
     </div>
   </div>
 </template>
-<script>
+<script type="text/ecmascript-6">
   import header from '../base/header'
   import api from '../lib/api'
   import {isLoginMixin} from "../lib/mixin"
@@ -117,7 +117,9 @@
 //      api("nethos.pat.info.get", {}).then((data) => {
 
         if (data.code == 0) {
-          this.patientInfo = data.obj
+          console.log(data,66666)
+          this.patientInfo = data.obj;
+          localStorage.setItem('patMobile',data.obj.patMobile)
         } else {
          this.$router.push({
            path:"/bindRelativePhone",
