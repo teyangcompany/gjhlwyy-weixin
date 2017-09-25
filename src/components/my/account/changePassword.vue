@@ -66,25 +66,35 @@
         }else if(this.captcha.length!==4) {
           alert('请输入正确的验证码')
         }else {
-          Api('nethos.system.captcha.checkcaptcha.v2',{
-            captcha:this.captcha,
-            cid:this.cid
+          api('smarthos.captcha.check',{
+            "cid": this.cid,
+            "captcha": this.captcha
           }).then(res=>{
             if(res.succ){
-              this.$router.push({
-                name: "modificationPassword", params: {
-                  mobile: this.mobile
-                }
-              })
+              this.getSucc()
             }else {
-              alert('验证码错误')
+              alert(res.msg)
             }
           })
         }
       },
 
-
-
+      getSucc(){
+        Api('nethos.system.captcha.checkcaptcha.v2',{
+          captcha:this.captcha,
+          cid:this.cid
+        }).then(res=>{
+          if(res.succ){
+            this.$router.push({
+              name: "modificationPassword", params: {
+                mobile: this.mobile
+              }
+            })
+          }else {
+            alert('验证码错误')
+          }
+        })
+      },
       getCode(){
         console.log(this.$v.$invalid);
         this.msg = 60;

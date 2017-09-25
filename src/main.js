@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Vuelidate from 'vuelidate'
-
+// localStorage.setItem('gjhlwyy_openid_',"59c36e06e4b04bf65c099cfa")
 import auth2 from "./lib/auth2";
 
 let UA = window.navigator.userAgent.toLocaleLowerCase();

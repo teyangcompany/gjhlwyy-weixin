@@ -20,7 +20,8 @@
             <input class="weui-input" type="tel" v-model="newCaptcha" placeholder="请输入验证码"/>
           </div>
           <div class="weui-cell__ft">
-            <button class="weui-vcode-btn" @click="getCode">获取验证码</button>
+            <button v-show="!(msg>0)" class="weui-vcode-btn" @click="getCode">{{msg}}</button>
+            <button v-show="msg>0" class="weui-vcode-btn" @click="getCode">有效期{{msg}}s</button>
           </div>
         </div>
       </div>
@@ -48,7 +49,8 @@
         cid:'',
         showError:false,
         newCid:'',
-        newCaptcha:''
+        newCaptcha:'',
+        msg:"获取验证码"
       }
     },
     validations: {
@@ -110,6 +112,14 @@
           this.$set(this.$data,'showError',true)
         }else {
           console.log(898989)
+          this.msg = 60;
+          var time = setInterval(()=>{
+            this.msg -=1;
+            if(this.msg==0){
+              this.msg='重新获取';
+              clearInterval(time)
+            }
+          },1000)
           Api('nethos.system.captcha.generate',{
             captchaType:'SMS',
             mobile:this.mobile
