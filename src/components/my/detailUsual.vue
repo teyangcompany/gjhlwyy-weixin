@@ -8,7 +8,7 @@
           <input  type="text" placeholder="请输入真实的姓名"  :value="changeName" v-model="changeName">
         </div>
         <div class="form verifyCode">
-          <label for="">身份证号：</label>
+          <label for="">身份证：</label>
           <input  type="text" placeholder="请输入真实的身份证号" :value="changeID" v-model="changeID">
         </div>
       </div>
@@ -28,7 +28,7 @@
            + 绑定病案号
       </div>
     </div>
-    <div class="deletePatient" @click="deletePatient()">
+    <div class="deletePatient" @click="deletePatient()" v-if="!(allPatient[index].compatMedicalRecord)">
         <img src="../../../static/img/错误-拷贝.png" alt="">删除就诊人
     </div>
     <div class="emptyHistory" v-if="fail">
@@ -52,6 +52,7 @@
   import Alert from '../../base/alert'
   import Toast from '../../base/toast'
   import Dialog from '../../base/dialog'
+  import {tokenCache} from '../../lib/cache'
   export default{
     data(){
       return{
@@ -85,7 +86,7 @@
     created(){
         this.index = this.$route.query.index
        api("nethos.pat.compat.list",{
-         token:localStorage.getItem("token")
+         token:tokenCache.get()
        }).then((data)=>{
            this.allPatient= data.list
            this.changeName = this.allPatient[this.index].compatName
@@ -98,15 +99,16 @@
       bindSuccess(){
           this.showToast = true
           api("nethos.book.compat.bind",{
-            token:localStorage.getItem("token"),
+            token:tokenCache.get(),
             compatId:this.allPatient[this.index].compatId
           }).then((data)=>{
             this.showToast = false
-            this.alertStatus = data.msg
               if(data.code == 0){
+                this.alertStatus = data.obj.compatMedicalRecord
                 this.fail = false
                 this.success = true
               }else{
+                this.alertStatus = data.msg
                 this.success = false
                 this.fail = true
               }
@@ -129,7 +131,7 @@
             this.secondLine = "不能修改已绑定病案号的就诊人信息"
           }else{
             api("nethos.pat.compat.modify",{
-              token:localStorage.getItem("token"),
+              token:tokenCache.get(),
               compatName:this.changeName,
               compatMobile:this.allPatient[this.index].compatMobile,
               compatIdcard:this.allPatient[this.index].compatIdcard,
@@ -150,7 +152,7 @@
       },
       confirmDelete(){
         api("nethos.pat.compat.delete",{
-          token:localStorage.getItem("token"),
+          token:tokenCache.get(),
           compatId:this.allPatient[this.index].compatId
         }).then((data)=>{
           console.log(this.allPatient[this.index].compatId)
@@ -180,18 +182,19 @@
 <style scoped lang="scss">
   @import '../../common/public.scss';
   .verifyArea{
-    position: fixed;
-    top: 50px;
-    left:0;
-    right:0;
-    bottom:0;
+    /*position: absolute;*/
+    /*top: 50px;*/
+    /*left:0;*/
+    /*right:0;*/
+    /*bottom:0;*/
+    /*overflow: auto;*/
   }
   .deletePatient{
+    /*position: absolute;*/
+    /*bottom: 50px;*/
     width:100%;
     height:80rem/$rem;
-    margin: 0 auto;
-    position: fixed;
-    bottom:20rem/$rem;
+    margin: 100px auto;
     font-size: 32rem/$rem;
     color: #333333;
     /*background-color: #3CC51F;*/
@@ -211,7 +214,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 100;
+    z-index: 10000;
     animation:makeBigger 0.6s;
     @keyframes makeBigger {
       0%{
@@ -243,7 +246,7 @@
       display: flex;
       background-color:$bgColor2;
       label{
-        width: 160rem/$rem;
+        width: 165rem/$rem;
         font-size: 32rem/$rem;
         padding-left: 10px;
         color: #333333;
@@ -291,6 +294,7 @@
           span{
             font-size: 32rem/$rem;
             color: #999999;
+            margin-left: 7rem/$rem;
           }
         }
         li:last-child{
@@ -304,7 +308,7 @@
     width:690rem/$rem;
     height:90rem/$rem;
     line-height: 90rem/$rem;
-    margin: 40rem/$rem auto;
+    margin: 10rem/$rem auto;
     text-align: center;
     color: $mainColor;
     font-size: 32rem/$rem;

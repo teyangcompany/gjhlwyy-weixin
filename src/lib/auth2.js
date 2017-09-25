@@ -1,10 +1,11 @@
 import api from "./api";
-import {openidCache, userCache} from "./cache"
+import {openidCache, userCache,tokenCache} from "./cache"
 
-const APPID = "wx6e3551dee5f7e716";
+const APPID = "wxa49f90b4ff678ef2";
 const COMPONENT_APPID = "wxe24cab30ebb1e366";
 
 export default (cb) => {
+  // .replace()
   let href = location.href;
   let redirect_uri = encodeURIComponent(href);
   alert(6666)
@@ -32,14 +33,15 @@ export default (cb) => {
             if (res.code == 0 && res.obj) {
               return res.obj;
             } else {
-              return api("nethos.pat.login", {
-                patMobile: "17130049182",
-                patPassword: sha512(hex_md5('a12345678') + 'a12345678')
-              })
+              alert("无openid")
+              // return api("nethos.pat.login", {
+              //   patMobile: "17130049182",
+              //   patPassword: sha512(hex_md5('a12345678') + 'a12345678')
+              // })
             }
           }).then((data) => {
           if (data.code == 0) {
-            localStorage.setItem("token", data.token);
+            tokenCache.set(data.token)
             cb();
           } else {
             userCache.set(data);

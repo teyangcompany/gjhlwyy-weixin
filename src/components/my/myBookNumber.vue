@@ -36,6 +36,7 @@
   import api from '../../lib/api'
   import AlertTips from '../../base/alertTips'
   import Alert from '../../base/alert'
+  import {tokenCache} from '../../lib/cache'
   export default{
       data(){
           return{
@@ -50,7 +51,7 @@
       },
       created(){
             api("nethos.book.order.list",{
-                token:localStorage.getItem('token')
+                token:tokenCache.get()
             }).then((data)=>{
                 if(data.code == 0){
                   this.orderList = data.list
@@ -102,7 +103,7 @@
 <style scoped lang="scss">
   @import '../../common/public.scss';
   .loading{
-    position: fixed;
+    position: absolute;
     top: 90px;
     left:0;
     right:0;
@@ -121,7 +122,7 @@
     }
   }
 .myBookNumber{
-  position: fixed;
+  position: absolute;
   top:60px;
   left:0;
   right:0;

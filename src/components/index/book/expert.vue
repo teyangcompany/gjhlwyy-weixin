@@ -22,7 +22,7 @@
                 </div>
               </div>
               <div class="cancelTime">
-                <div >
+                <div>
                   <span class="year gray" v-if="item.schemeStatus == 0">无</span>
                   <span class="year gray" v-if="item.schemeStatus == 1">停诊</span>
                   <span class="year gray" v-if="item.schemeStatus == 2">已满</span>
@@ -89,6 +89,7 @@
   import Tips from '../../../base/tips'
   import AlertTips from '../../../base/alertTips'
   import api from '../../../lib/api'
+  import {tokenCache} from '../../../lib/cache'
 //  import Loading from '../../../..base/loading/loading'
   export default{
     data(){

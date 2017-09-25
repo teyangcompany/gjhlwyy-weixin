@@ -36,6 +36,7 @@
   import top from '../../../base/app-header.vue'
   import Api from '../../../lib/api'
   import phone from '../../../lib/regex'
+  import {tokenCache} from '../../../lib/cache'
   export default{
     components:{
       top

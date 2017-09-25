@@ -41,7 +41,9 @@
   import bindFail from '../../../base/bindFail/bindFail'
   import VMask from '../../../base/mask'
   import Toast from '../../../base/toast'
+  import weui from 'weui.js'
   import {isLoginMixin} from "../../../lib/mixin"
+  import {tokenCache} from '../../../lib/cache'
   export default{
     mixins: [isLoginMixin],
     data(){
@@ -75,7 +77,7 @@
         this.index= 0
       }
       api("nethos.pat.info.get", {
-        token:localStorage.getItem('token')
+        token:tokenCache.get()
       }).then((data) => {
         if (data.code == 0) {
 //          this.patientInfo = data.obj
@@ -87,9 +89,15 @@
         }
       })
       api("nethos.pat.compat.list",{
-        token:localStorage.getItem("token")
+        token:tokenCache.get()
       }).then((data)=>{
-        this.allPatient=data.list
+          if(data.code == 0){
+            this.allPatient=data.list
+          }else if(!(data.msg)){
+              weui.alert("网络错误，请稍后重试")
+          }else{
+              weui.alert(data.msg)
+          }
 //        this.changeName = this.allPatient[this.index].compatName
 //        this.changeID = this.allPatient[this.index].compatIdcard
 //        this.compatId = this.allPatient[this.index].compatId
@@ -104,7 +112,7 @@
         this.showDialog = false
         this.showToast = true
         api("nethos.book.compat.bind",{
-          token:localStorage.getItem("token"),
+          token:tokenCache.get(),
           compatId:this.allPatient[this.index].compatId
         }).then((data)=>{
           this.alertStatus = data.msg
@@ -182,7 +190,7 @@
   .usual{
     width:100%;
     height: 100%;
-    position: fixed;
+    position: absolute;
     top: 50px;
     background-color: white;
     .usualLine{

@@ -31,6 +31,7 @@
 </template>
 <script>
   import header from '../../../base/header'
+  import {tokenCache} from '../../../lib/cache'
   export default{
       data(){
           return{
@@ -57,7 +58,7 @@
 <style scoped lang="scss">
   @import '../../../common/public.scss';
 .checkList{
-   position: fixed;
+   position: absolute;
   top: 50px;
   left:0;
   right:0;

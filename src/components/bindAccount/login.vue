@@ -47,6 +47,18 @@
             this.$router.push('/book')
         }else if(this.backPath == '/pictureConsultNext'){
             this.$router.push('/internetRoom')
+        }else if(this.backPath == '/pictureConsultApply'){
+          this.$router.push('/internetRoom')
+        }else if(this.backPath == '/famousPage'){
+          this.$router.push('/book')
+        }else if(this.backPath == '/expertDetail'){
+          this.$router.push('/book')
+        }else if(this.backPath == '/bookType/date'){
+          this.$router.push('/book')
+        }else if(this.backPath == '/selectType'){
+          this.$router.push('/book')
+        }else if(this.backPath == '/onlineDoctorCard'){
+          this.$router.push('/internetRoom')
         }else{
           this.$router.push({
             path:this.backPath

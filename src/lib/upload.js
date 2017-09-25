@@ -3,7 +3,7 @@
  */
 export default{
    base :{
-    channel: "4",
+    channel: "3",
     format: "JSON",
     oper: "127.0.0.1",
     random: Math.round(Math.random()*10000),

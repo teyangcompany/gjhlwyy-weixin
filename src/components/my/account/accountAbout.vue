@@ -38,6 +38,7 @@
 <script type="text/ecmascript-6">
     import top from '../../../base/app-header.vue'
     import api from '../../../lib/api'
+    import {tokenCache} from '../../../lib/cache'
 //    var token = localStorage.getItem('token')
     export default{
         components: {
@@ -45,7 +46,7 @@
         },
         data(){
             return {
-              token:localStorage.getItem('token')
+              token:tokenCache.get()
             }
         },
         mounted(){

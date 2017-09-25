@@ -63,7 +63,10 @@
   import api from '../../../lib/api'
   import TimeToggle from '../../../base/timeToggle'
   import Toast from '../../../base/toast'
+  import {isLoginMixin} from "../../../lib/mixin"
+  import {tokenCache} from '../../../lib/cache'
   export default{
+    mixins: [isLoginMixin],
       data(){
          return{
              patientAll:[],
@@ -161,18 +164,34 @@
         console.log(this.patOption)
         this.allInfo = JSON.stringify(index)
         this.bookSchemeId = index.bookSchemeId
-        if(index.schemeStats == 4 ){
-          this.showToast = true
-          api("nethos.book.num.list",{
-            token:localStorage.getItem("token"),
-            bookSchemeId:this.bookSchemeId
-          }).then((data)=>{
-            this.patientAll = data.list
-            this.showPat=true;
-            this.showToast = false
-            console.log(data)
-          })
-        }
+
+
+        api("nethos.pat.info.get", {
+          token:tokenCache.get()
+        }).then((data) => {
+          console.log(data.obj)
+          if (data.code == 0) {
+            console.log(data,66666)
+            if(index.schemeStats == 4 ){
+              this.showToast = true
+              api("nethos.book.num.list",{
+                token:tokenCache.get(),
+                bookSchemeId:this.bookSchemeId
+              }).then((data)=>{
+                this.patientAll = data.list
+                this.showPat=true;
+                this.showToast = false
+                console.log(data)
+              })
+            }
+          } else {
+            this.$router.push({
+              path:"/bindRelativePhone",
+              query:{backPath:this.path}
+            });
+          }
+        })
+
       }
     },
     components:{

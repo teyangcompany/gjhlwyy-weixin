@@ -20,7 +20,7 @@
           <ul>
             <li>
               <div class="cancelImg">
-                <img src="../../../../static/img/ys2.jpg" alt="">
+                <img src="" alt="">
               </div>
               <div class="cancelIntro">
                 <div class="introTitle">
@@ -55,11 +55,11 @@
             你只分管馆范德萨刚发的割发代首那个放到讽德诵功发的官方肯定是个红烧冬瓜单方事故会计分录多少个涸鲋得水讽德诵功讽德诵功
           </p>
           <div>
-            <img src="../../../../static/img/chatOrigin.jpg" alt="">
-            <img src="../../../../static/img/chatOrigin.jpg" alt="">
-            <img src="../../../../static/img/chatOrigin.jpg" alt="">
-            <img src="../../../../static/img/chatOrigin.jpg" alt="">
-            <img src="../../../../static/img/chatOrigin.jpg" alt="">
+            <img src="" alt="">
+            <img src="" alt="">
+            <img src="" alt="">
+            <img src="" alt="">
+            <img src="" alt="">
           </div>
         </div>
         <div class="patientInfo">

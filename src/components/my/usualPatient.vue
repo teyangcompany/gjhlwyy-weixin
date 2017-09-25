@@ -8,8 +8,8 @@
             <div class="usualCenter">
               <ul>
                 <li><span class="patientName">{{ item.compatName }}</span><span>{{ item.compatAge }} &nbsp;{{ item.compatGender == "M" ? "男":"女"}}</span></li>
-                <li>身份证号： <span>{{ item.compatIdcard.substr(0,6) }}********{{item.compatIdcard.substr(14)}}</span></li>
-                <li>电话号码：<span>{{ item.compatMobile.substr(0,3) }}****{{item.compatMobile.substr(7)}}</span></li>
+                <li>身份证号：<span>{{ item.compatIdcard.substr(0,6) }}********{{item.compatIdcard.substr(14)}}</span></li>
+                <li>手机号：<span>{{ item.compatMobile.substr(0,3) }}****{{item.compatMobile.substr(7)}}</span></li>
                 <li v-if="!(item.compatMedicalRecord)">病案号：<span >暂未绑定病案号</span></li>
                 <li v-else>病案号：<span >{{ item.compatMedicalRecord }}</span></li>
               </ul>
@@ -24,6 +24,8 @@
   import header from '../../base/header'
   import BScroll from 'better-scroll'
   import api from '../../lib/api'
+  import weui from 'weui.js'
+  import {tokenCache} from '../../lib/cache'
   export default{
     data(){
       return{
@@ -34,10 +36,16 @@
     },
     created(){
        api("nethos.pat.compat.list",{
-             token:localStorage.getItem("token")
+             token:tokenCache.get()
        }).then((data)=>{
-           this.patientList = data.list
-           console.log(this.patientList)
+           if(data.code == 0){
+             this.patientList = data.list
+             console.log(this.patientList)
+           }else if(!(data.msg)){
+               weui.alert("网络错误，请稍后重试")
+           }else{
+               weui.alert(data.msg)
+           }
        })
     },
     methods:{

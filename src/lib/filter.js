@@ -1,13 +1,13 @@
 //time为时间戳格式，如"1487555260448"
 const Todate = (time)=> {
 	let now = new Date(time)
- 
+
 	let mm = now.getMonth() + 1     //月
 	let dd = now.getDate()          //日
 	let hh = now.getHours()        //时
 	let ii = now.getMinutes()      //分
 	let clock=''
- 
+
 	if(mm < 10) clock += "0"
 	clock += mm + "-"
 	if(dd < 10) clock += "0"
@@ -34,10 +34,10 @@ const Getdate = (time)=> {
 	clock += mm + "-"
 	if(dd < 10) clock += "0"
 	clock += dd + " "
-	// if(hh < 10) clock += "0"
-	// clock += hh + ":"
-	// if (ii < 10) clock += "0"
-	// clock += ii
+	if(hh < 10) clock += "0"
+	clock += hh + ":"
+	if (ii < 10) clock += "0"
+	clock += ii
   	return  clock
   }
   //time为datetime格式，如"2017-02-03 00:00:00"

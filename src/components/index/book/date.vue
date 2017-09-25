@@ -125,7 +125,10 @@
   import AlertTips from '../../../base/alertTips'
   import BScroll from 'better-scroll'
   import api from '../../../lib/api'
+  import {isLoginMixin} from "../../../lib/mixin"
+  import {tokenCache} from '../../../lib/cache'
   export default{
+    mixins: [isLoginMixin],
       data(){
          return{
            patientAll:[],
@@ -328,29 +331,44 @@
           console.log(this.patOption)
           this.allInfo = JSON.stringify(index)
           this.bookSchemeId = index.bookSchemeId
-          if(index.schemeStats == 4 ){
-            this.showToast = true
-            api("nethos.book.num.list",{
-              token:localStorage.getItem("token"),
-              bookSchemeId:this.bookSchemeId
-            }).then((data)=>{
-              if(data.code == 0){
-                this.patientAll = data.list
-                this.showPat=true;
-                this.showToast = false
-                console.log(data)
-              }else if(!(data.msg)){
-                this.showToast = false
-                this.showAlertTips = true
-                setTimeout(()=>{
-                  this.showAlertTips = false
-                },1000)
-              }else{
-                this.showToast = false
-                  alert(data.msg)
+
+          api("nethos.pat.info.get", {
+            token:tokenCache.get()
+          }).then((data) => {
+            console.log(data.obj)
+            if (data.code == 0) {
+              console.log(data,66666)
+              if(index.schemeStats == 4 ){
+                this.showToast = true
+                api("nethos.book.num.list",{
+                  token:tokenCache.get(),
+                  bookSchemeId:this.bookSchemeId
+                }).then((data)=>{
+                  if(data.code == 0){
+                    this.patientAll = data.list
+                    this.showPat=true;
+                    this.showToast = false
+                    console.log(data)
+                  }else if(!(data.msg)){
+                    this.showToast = false
+                    this.showAlertTips = true
+                    setTimeout(()=>{
+                      this.showAlertTips = false
+                    },1000)
+                  }else{
+                    this.showToast = false
+                    alert(data.msg)
+                  }
+                })
               }
-            })
-          }
+            } else {
+              this.$router.push({
+                path:"/bindRelativePhone",
+                query:{backPath:this.path}
+              });
+            }
+          })
+
 
         },
         closeTime(){
@@ -547,9 +565,11 @@
                    p:nth-child(1){
                      height:60rem/$rem;
                      margin-bottom: 10rem/$rem;
+                     font-size: 32rem/$rem;
                    }
                    p:nth-child(2){
                      color: $assistWordBrown;
+                     font-size: 32rem/$rem;
                    }
                  }
                  img{

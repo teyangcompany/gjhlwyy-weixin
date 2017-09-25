@@ -1,8 +1,7 @@
 <template>
   <transition name="slide">
-    <div class="apply">
-      <v-header :title="title" :rightTitle="rightTitle"></v-header>
-      <div class="applyInfo">
+    <div>
+        <v-header :title="title" :rightTitle="rightTitle"></v-header>
         <div class="doctorInfo">
           <ul>
             <li>
@@ -52,7 +51,6 @@
             <button>下一步</button>
           </div>
         </div>
-      </div>
       <router-view></router-view>
       <alert :firstLine="firstLine" :secondLine="secondLine" :bottomLine="bottomLine" @on-iKnow="iKnow()" v-if="showAlert"></alert>
     </div>
@@ -62,7 +60,10 @@
   import header from '../../../base/header'
   import Alert from '../../../base/alert'
   import api from '../../../lib/api'
+  import {isLoginMixin} from "../../../lib/mixin"
+  import {tokenCache} from '../../../lib/cache'
   export default{
+    mixins: [isLoginMixin],
     data(){
       return{
         title:"申请须知",
@@ -74,11 +75,15 @@
         path:"",
         doctorId:"",
         doctorInfo:"",
-        picked:true
+        picked:true,
+        price:""
       }
     },
     mounted(){
       this.path = this.$route.path
+      this.$nextTick(()=>{
+//        document.addEventListener('touchmove', function(e){e.preventDefault()}, false);
+      })
     },
     created(){
         this.doctorId = this.$route.query.docId
@@ -86,6 +91,7 @@
           docId:this.doctorId
         }).then((data)=>{
             this.doctorInfo = data.obj.sysDoc
+            this.price = this.doctorInfo.docPicConsultPrice
             console.log(this.doctorInfo)
         })
     },
@@ -98,14 +104,27 @@
           this.showAlert= false
       },
       goNextStep(){
-        if(this.picked === true){
-          this.$router.push({
-            path:'/pictureConsultNext',
-            query:{docId:this.doctorId}
-          })
-        }else{
-          this.showAlert = true
-        }
+        api("nethos.pat.info.get", {
+          token:tokenCache.get()
+        }).then((data) => {
+          console.log(data.obj)
+          if (data.code == 0) {
+            console.log(data,66666)
+            if(this.picked === true){
+              this.$router.push({
+                path:'/pictureConsultNext',
+                query:{docId:this.doctorId,price:this.price}
+              })
+            }else{
+              this.showAlert = true
+            }
+          } else {
+            this.$router.push({
+              path:"/bindRelativePhone",
+              query:{backPath:this.path}
+            });
+          }
+        })
       },
       back(){
         this.$router.back(-1)
@@ -130,18 +149,12 @@
   .slide-enter,.slide-leave-to{
     transform:  translate3d(100%,0,0);
   }
-  .apply{
-    position: fixed;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    .applyInfo{
-      position: fixed;
-      top:50px;
-      left:0;
-      right:0;
-      bottom:0;
+  /*.apply{*/
+    /*position: fixed;*/
+    /*top:0;*/
+    /*left:0;*/
+    /*right:0;*/
+    /*bottom:0;*/
       .doctorInfo{
         margin-top: 10px;
         ul{
@@ -161,6 +174,10 @@
               display: flex;
               justify-content: center;
               align-items: center;
+              img{
+                width:140rem/$rem;
+                height:140rem/$rem;
+              }
               /*padding-left: 15px;*/
             }
             .cancelIntro{
@@ -262,7 +279,9 @@
         }
       }
       .nextStep{
-        position: fixed;
+        position: absolute;
+        left:0;
+        right:0;
         bottom:50rem/$rem;
         width:100%;
         >div{
@@ -281,6 +300,5 @@
           color: white;
         }
       }
-    }
-  }
+  /*}*/
 </style>

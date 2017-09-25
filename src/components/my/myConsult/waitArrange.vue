@@ -5,14 +5,14 @@
     <v-header :title="title" :rightTitle="overConsultTitle" :waitImg="waitImg" v-else-if="aboutConsult.consultStatus == 'GOING'&& aboutConsult.consultTypeName == '图文咨询' && aboutReplyMessage.length != 0" @on-cancel="goOverConsult"> </v-header>
     <v-header :title="title" :rightTitle="rightTitle" :waitImg="waitImg" v-else> </v-header>
     <div class="tips" v-if="aboutConsult">
-      <span v-if="aboutConsult.consultStatusDescription.substr(15,16) == '按钮'">进行中</span>
-      <span v-else> {{aboutConsult.consultStatusDescription}}</span>
+      <!--<span v-if="aboutConsult.consultStatusDescription.substr(15,16) == '按钮'">进行中</span>-->
+      <span> {{aboutConsult.consultStatusDescription}}</span>
     </div>
     <!--<div class="tips" v-else>-->
       <!--{{ aboutConsult.consultStatusDescription }}-->
     <!--</div>-->
     <scroll class="conversation"  :data="aboutReplyMessage"   @click="goDown()" ref="conversation" :listen-scroll="listenScroll" :probe-type="probeType">
-      <section class="conversationList" ref="slideList" >
+      <section class="conversationList" ref="slideList" @touchstart.prevent="hideKeyBoard()">
         <ul v-if="aboutConsult != ''">
           <li ref="chatLi">
             <div class=" other mysay">
@@ -27,7 +27,7 @@
                 </div>
                 <div class="whatsay_text">
                   <p>{{ aboutConsult.consultContent }}</p>
-                  <img v-for="item in attachImg" :src="item.url" alt="">
+                  <img v-for="(item,index) in attachImg" :src="item.url" alt="" @click="makePatientBig(item,index)">
                   <!--<p>就诊人:{{ aboutConsult.consulterName }} {{ aboutConsult.consulterGender == "M"?"男":"女" }} {{ aboutConsult.consulterAge }}岁</p>-->
                   <!--<p>手机号:{{ aboutConsult.consulterMobile }} </p>-->
                   <!--<p>身份证号:{{ aboutConsult.consulterIdcard }} </p>-->
@@ -36,7 +36,7 @@
             </div>
           </li>
         </ul>
-        <ul>
+        <ul >
           <li v-for="item in aboutReplyMessage" ref="chatLi">
             <div class="other" :class="{mysay:item.replierType == 'PAT'}">
               <img :src="aboutConsult.patAvatar" alt="" v-if="item.replierType == 'PAT'">
@@ -54,7 +54,7 @@
                   {{ item.replyContent }}
                 </div>
                 <div class="whatsay_text" v-else>
-                  <img v-for="image in item.attaList" :src="image.url" alt="">
+                  <img v-for="(image,index) in item.attaList" :src="image.url" alt="" @click="makeLarge(image,index)">
                 </div>
               </div>
             </div>
@@ -81,7 +81,7 @@
     <footer :class="{footshow:seeMore}" ref="footer" v-else-if="aboutConsult.consultStatus == 'GOING' && aboutReplyMessage.length != 0">
       <section class="foot_top">
         <div class="chatInput">
-          <input type="text"  maxlength="100"  @blur="blured" ref="inputFocus" v-model="inputInfo" @input="whatInput" @keyup.enter="enterThing()">
+          <input type="text" id="forInput"  maxlength="100"  @blur="blured" @focus="focus()" ref="inputFocus" v-model="inputInfo" @input="whatInput" @keyup.enter="enterThing()">
         </div>
         <div class="chatSend">
           <div class="send" @touchstart.prevent="send()" v-if="light">
@@ -98,11 +98,11 @@
           <img src="../../../../static/img/图片.png" alt="" @click="selectImg()">
           <span>图片</span>
         </div>
-        <div class="camera">
-          <input type="file" name="picture"  ref="picture" @change="onFileChange">
-          <img src="../../../../static/img/拍照.png" alt="" @click="selectImg()">
-          <span>拍照</span>
-        </div>
+        <!--<div class="camera">-->
+          <!--<input type="file" name="picture"  ref="picture" @change="onFileChange">-->
+          <!--<img src="../../../../static/img/拍照.png" alt="" @click="selectImg()">-->
+          <!--<span>拍照</span>-->
+        <!--</div>-->
       </section>
     </footer>
     <v-dialog @on-cancel="close" @on-download="closeCancel" v-if="showDialog"
@@ -123,6 +123,10 @@
               :dialogLeftFoot="dialogOverLeft"
               :dialogRightFoot="dialogOverRight"
     ></v-dialog>
+    <div class="largePicArea" v-if="showLargePic">
+      <img :src="largePic" alt="" @click="makeSmall">
+    </div>
+    <toast v-if="showToast"></toast>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -130,7 +134,10 @@
   import Scroll from '../../../base/scroll'
   import api from '../../../lib/api'
   import dialog from '../../../base/dialog'
-  const socket = io("nethoswebsocket.diandianys.com");
+  import Toast from '../../../base/toast'
+  import weui from 'weui.js'
+  import {tokenCache} from '../../../lib/cache'
+  import {openidCache} from "../../../lib/cache"
   export default{
     data(){
       return{
@@ -166,13 +173,18 @@
         sendContent:"",
         attaId:[],
 //        推送时得到的
-        pushConsultId:""
+        pushConsultId:"",
+        returnInfo:"",
+        showLargePic:false,
+        largePic:"",
+        showToast:false
       }
     },
     components:{
       "VHeader":header,
       "VDialog":dialog,
-       Scroll
+       Scroll,
+       Toast
     },
     created(){
       this.listenScroll = true
@@ -181,12 +193,15 @@
       this.displayMessage = this.$route.query.message
       this.displayPicked = this.$route.query.picked
       console.log(this.displayDate)
-        this.consultId = this.$route.query.consultId
+      this.consultId = this.$route.query.consultId
+      this.showToast = true
       this.$nextTick(()=>{
         api("nethos.consult.info.detail",{
-          token:localStorage.getItem("token"),
+          token:tokenCache.get(),
           consultId:this.consultId
         }).then((data)=>{
+           console.log(data)
+          this.showToast = false
           if(data.code == 0){
             this.$nextTick(()=>{
               this.aboutConsult = data.obj.consult
@@ -207,7 +222,7 @@
 
 
                 setTimeout(()=>{
-                  if(this.$refs.slideList.offsetHeight > content){
+                  if(this.$refs.slideList.offsetHeight > content-10){
                     this.$refs.conversation.scrollTo(0,content-this.$refs.slideList.offsetHeight-140)
                     console.log(this.$refs.slideList.offsetHeight)
                     console.log(content)
@@ -216,34 +231,38 @@
 
 
             })
-          }else{
+          }else if(!(data.msg)){
+              weui.alert("网络错误，请稍后重试")
               console.log("错误的data")
               console.log(data)
               console.log("上面是错误的data")
+          }else{
+              weui.alert(data.msg)
           }
 //          console.log(this.attachImg)
         })
       })
       api("nethos.pat.info.get",{
-          token:localStorage.getItem("token")
+          token:tokenCache.get()
       }).then((data)=>{
           console.log(data)
       })
     },
     mounted(){
-         socket.on("connect",function(){
-             console.log("这里是socket.id")
-             api("nethos.push.deviceid.register",{
-               token:localStorage.getItem("token"),
-               deviceId:socket.id
-             }).then((data)=>{
-                 console.log(data)
-             })
-         })
+//      const socket = io("nethoswebsocket.diandianys.com");
+//         socket.on("connect",function(){
+//             console.log("这里是socket.id")
+//             api("nethos.push.deviceid.register",{
+//               token:tokenCache.get(),
+//               deviceId:socket.id
+//             }).then((data)=>{
+//                 console.log(data)
+//             })
+//         })
          let that = this
-         socket.on("pushevent",function(data){
+         window.socket.on("pushevent",function(data){
            api("nethos.consult.info.detail",{
-             token:localStorage.getItem("token"),
+             token:tokenCache.get(),
              consultId:that.consultId
            }).then((data)=>{
              if(data.code == 0){
@@ -255,8 +274,9 @@
                  let content = h
                  console.log(o)
                  setTimeout(()=>{
-                   if(this.$refs.slideList.offsetHeight > content){
-                     console.log(that.$refs.slideList.offsetHeight)
+                   if(that.$refs.slideList.offsetHeight > content-10){
+//                     console.log(that.$refs.slideList.offsetHeight)
+                     console.log("医生回复你了")
                      that.$refs.conversation.scrollTo(0,content-that.$refs.slideList.offsetHeight-140)
                    }
                  },300)
@@ -274,7 +294,7 @@
              let content = h
              console.log(o)
              setTimeout(()=>{
-               if(this.$refs.slideList.offsetHeight > content){
+               if(this.$refs.slideList.offsetHeight > content-10){
                  console.log(this.$refs.slideList.offsetHeight)
                  this.$refs.conversation.scrollTo(0,content-this.$refs.slideList.offsetHeight-140)
                }
@@ -302,11 +322,25 @@
       over(){
         this.showOverConsult = false
       },
+      makePatientBig(item,index){
+          console.log(item)
+        this.largePic = item.url
+        this.showLargePic =true
+      },
+      makeLarge(image,index){
+          console.log(image)
+          console.log(index)
+          this.largePic = image.url
+           this.showLargePic =true
+      },
+      makeSmall(){
+        this.showLargePic =false
+      },
 //      结束咨询
       overConsult(){
         this.showOverConsult = false
         api("nethos.consult.info.complete",{
-          token:localStorage.getItem("token"),
+          token:tokenCache.get(),
           consultId:this.consultId
         }).then((data)=>{
           console.log(data)
@@ -314,14 +348,136 @@
         })
       },
       pay(){
-            location.href=`http://weixin.diandianys.com/wxpay/pay.html?back=${encodeURIComponent("https://nethosweb.diandianys.com/wechat/#/blankPage"+this.consultId)}&amount=${(this.aboutConsult.consultFee)*100}&obj=${this.consultId}`
+//            location.href=`http://weixin.diandianys.com/wxpay/pay.html?back=${encodeURIComponent("https://nethosweb.diandianys.com/wechat/#/blankPage"+this.consultId)}&amount=${(this.aboutConsult.consultFee)*100}&obj=${this.consultId}`
+
+        let that = this
+        this.showToast = true
+        api("nethos.consult.info.pay",{
+          consultId:this.consultId,
+          payChannel:"WECHAT"
+        }).then((data)=>{
+          console.log(data)
+          this.showToast = false
+          if(data.code == 0 &&　data.obj){
+            this.returnInfo =  JSON.parse(data.obj)
+            console.log(this.returnInfo)
+
+            let conf={
+              "appId":this.returnInfo.appid,     //公众号名称，由商户传入
+              "timeStamp":this.returnInfo.time_stamp,         //时间戳，自1970年以来的秒数
+              "nonceStr":this.returnInfo.nonce_str, //随机串
+              "package":`prepay_id=${this.returnInfo.prepay_id}`,
+              "signType":"MD5",         //微信签名方式：
+              "paySign":this.returnInfo.pay_sign //微信签名
+            }
+//                alert(JSON.stringify(conf))
+
+            WeixinJSBridge.invoke(
+              'getBrandWCPayRequest',
+              conf,
+
+              function(res){
+
+                if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+
+                  that.showToast = true
+                  api("nethos.consult.info.detail",{
+                    token:tokenCache.get(),
+                    consultId:that.consultId
+                  }).then((data)=>{
+                    console.log(data)
+                    that.showToast = false
+                    if(data.code == 0){
+                      that.$nextTick(()=>{
+                        that.aboutConsult = data.obj.consult
+                        that.aboutReplyMessage = data.obj.messageList
+                        that.attachImg = data.obj.attaList
+                        that.title = that.aboutConsult.docName
+                        that.waitImg = that.aboutConsult.docAvatar
+                        console.log("下面data")
+                        console.log(data)
+                        console.log("上面的data")
+                        console.log(this.aboutReplyMessage)
+                        console.log(this.aboutConsult)
+
+                        let o = document.getElementsByClassName("chat")[0];
+                        let h = o.offsetHeight;  //高度
+                        let content = h
+                        console.log(o)
+
+
+                        setTimeout(()=>{
+                          if(that.$refs.slideList.offsetHeight > content-10){
+                            that.$refs.conversation.scrollTo(0,content-that.$refs.slideList.offsetHeight-140)
+                            console.log(that.$refs.slideList.offsetHeight)
+                            console.log(content)
+                          }
+                        },300)
+
+
+                      })
+                    }else if(!(data.msg)){
+                      weui.alert("网络错误，请稍后重试")
+                      console.log("错误的data")
+                      console.log(data)
+                      console.log("上面是错误的data")
+                    }else{
+                      weui.alert(data.msg)
+                    }
+//          console.log(this.attachImg)
+                  })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                       location.reload()
+                }else if(res.err_msg == "get_brand_wcpay_request:cancel" ){
+                  console.log("支付过程中用户取消")
+                }else if(res.err_msg == "get_brand_wcpay_request:fail"){
+                  console.log("支付失败")
+                  alert(JSON.stringify(res))
+
+                }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+              }
+            );
+
+            if (typeof WeixinJSBridge == "undefined"){
+              if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+              }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+              }
+            }
+          }else if(data.code == -2 &&　data.msg == '当前订单已支付'){
+               weui.alert('当前订单已支付')
+          }else{
+               weui.alert(data.msg)
+          }
+        })
+
+
+
+
+
+
       },
 //      图文问诊取消
       closeCancel(){
         this.showDialog = false
         console.log("123")
         api("nethos.consult.info.docpic.cancel",{
-          token:localStorage.getItem("token"),
+          token:tokenCache.get(),
           consultId:this.consultId
         }).then((data)=>{
             console.log(data)
@@ -335,7 +491,7 @@
       closeAllCancel(){
         this.showAllDialog = false
         api("nethos.consult.info.pic.cancel",{
-          token:localStorage.getItem("token"),
+          token:tokenCache.get(),
           consultId:this.consultId
         }).then((data)=>{
             console.log(data)
@@ -363,12 +519,13 @@
       },
       send(){
         api("nethos.consult.info.reply",{
-          token:localStorage.getItem("token"),
+          token:tokenCache.get(),
           consultId:this.consultId,
           replyContent:this.inputInfo,
-          attaIdList:this.attaId
+//          attaIdList:this.attaId
         }).then((data)=>{
             console.log(data)
+           this.seeMore = false
             this.$nextTick(()=>{
               this.aboutReplyMessage.push(data.obj)
               console.log(this.aboutReplyMessage)
@@ -377,7 +534,7 @@
               let content = h
               console.log(o)
               setTimeout(()=>{
-                if(this.$refs.slideList.offsetHeight > content){
+                if(this.$refs.slideList.offsetHeight > content-10){
                   console.log(this.$refs.slideList.offsetHeight)
                   this.$refs.conversation.scrollTo(0,content-this.$refs.slideList.offsetHeight-140)
                 }
@@ -394,10 +551,11 @@
         console.log(e)
         var file = e.target.files[0]
         this.createImage(file)
+        this.seeMore = false
       },
       createImage(file){
         if(typeof FileReader === "undefined"){
-          alert("您的浏览器不支持图片上传，请升级您的浏览器")
+          weui.alert("您的浏览器不支持图片上传，请升级您的浏览器")
           return false
         }
         let that = this
@@ -413,7 +571,7 @@
             that.attaId.push(data.obj.attaId)
             console.log(that.attaId)
             api("nethos.consult.info.reply",{
-              token:localStorage.getItem("token"),
+              token:tokenCache.get(),
               consultId:that.consultId,
               replyContent:"",
               attaIdList:that.attaId
@@ -421,12 +579,99 @@
                 console.log(that.attaId)
                 console.log(data)
               location.reload()
+              if(data.code == 0){
+//                location.reload()
+
+
+
+                api("nethos.consult.info.detail",{
+                  token:tokenCache.get(),
+                  consultId:that.consultId
+                }).then((data)=>{
+                  console.log(data)
+                  that.showToast = false
+                  if(data.code == 0){
+                    that.$nextTick(()=>{
+                      that.aboutConsult = data.obj.consult
+                      that.aboutReplyMessage = data.obj.messageList
+                      that.attachImg = data.obj.attaList
+                      that.title = that.aboutConsult.docName
+                      that.waitImg = that.aboutConsult.docAvatar
+                      console.log("下面data")
+                      console.log(data)
+                      console.log("上面的data")
+                      console.log(this.aboutReplyMessage)
+                      console.log(this.aboutConsult)
+
+                      let o = document.getElementsByClassName("chat")[0];
+                      let h = o.offsetHeight;  //高度
+                      let content = h
+                      console.log(o)
+
+
+                      setTimeout(()=>{
+                        if(that.$refs.slideList.offsetHeight > content-10){
+                          that.$refs.conversation.scrollTo(0,content-that.$refs.slideList.offsetHeight-140)
+                          console.log(that.$refs.slideList.offsetHeight)
+                          console.log(content)
+                        }
+                      },300)
+
+
+                    })
+                  }else if(!(data.msg)){
+                    weui.alert("网络错误，请稍后重试")
+                    console.log("错误的data")
+                    console.log(data)
+                    console.log("上面是错误的data")
+                  }else{
+                    weui.alert(data.msg)
+                  }
+//          console.log(this.attachImg)
+                })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              }else{
+                  weui.alert(data.msg)
+              }
             })
           })
         }
       },
+      hideKeyBoard(){
+        this.seeMore = false
+        document.getElementById('forInput').blur()
+      },
       upMore(){
         this.seeMore = !this.seeMore
+      },
+      focus(){
+        this.seeMore = false
+
+          document.getElementsByClassName("foot_top")[0].scrollIntoView()
+
+
       },
 //      inputHide(e){
 //        this.seeMore = false
@@ -453,7 +698,23 @@
     position: fixed;
     top:0;
     bottom:0;
+    .largePicArea{
+      position: fixed;
+      top:50px;
+      left:0;
+      right:0;
+      bottom:0;
 
+
+      /*background-color: #999999;*/
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img{
+        width:100%;
+        z-index:2000;
+      }
+    }
   }
   .tips{
     position: fixed;
