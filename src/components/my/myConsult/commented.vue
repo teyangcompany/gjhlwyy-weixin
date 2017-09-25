@@ -11,7 +11,7 @@
             <p>{{ item.consultContent }}</p>
           </div>
           <div class="ConsultRelate">
-            <span class="name"><span class="circle" v-if="(item.docName)"> </span><span class="number">{{ item.docName }}</span></span>
+            <span class="name"><span class="number">{{ item.docName }}</span></span>
             <span class="money">{{ item.consultStatusDescription }}</span>
           </div>
         </li>
@@ -32,7 +32,9 @@
   import BScroll from 'better-scroll'
   import api from '../../../lib/api'
   import Scroll from '../../../base/scroll'
+  import weui from 'weui.js'
   import {isLoginMixin} from "../../../lib/mixin"
+  import {tokenCache} from '../../../lib/cache'
   import {formatDate} from '../../../utils/formatTimeStamp'
   export default{
     mixins: [isLoginMixin],
@@ -52,7 +54,7 @@
     },
     created(){
       api("nethos.pat.info.get", {
-        token:localStorage.getItem('token')
+        token:tokenCache.get()
       }).then((data) => {
         if (data.code == 0) {
 //          this.patientInfo = data.obj
@@ -67,14 +69,22 @@
            pageNo:1,
            pageSize:10,
            sort:"create_time.desc",
-           token:localStorage.getItem("token")
+           token: tokenCache.get(),
        }).then((data)=>{
-           this.loadingStatus = false
-           this.endStatus = true
-         for(var i=0;i<data.list.length; i++){
-           this.consultList.push(data.list[i])
-           this.createTime.push(formatDate(new Date(data.list[i].createTime)))
-         }
+          if(data.code == 0){
+            this.loadingStatus = false
+            this.endStatus = true
+            for(var i=0;i<data.list.length; i++){
+              this.consultList.push(data.list[i])
+              this.createTime.push(formatDate(new Date(data.list[i].createTime)))
+            }
+          }else if(!(data.msg)){
+            this.loadingStatus = false
+              weui.alert("网络错误，请稍后重试")
+          }else{
+            this.loadingStatus = false
+              weui.alert(data.msg)
+          }
 //          this.consultList.push(data.list)
          console.log(data)
          console.log(this.createTime)
@@ -96,19 +106,27 @@
         this.listPage +=1;
         let that = this
         api("nethos.consult.info.list",{
-          token:localStorage.getItem("token"),
+          token: tokenCache.get(),
           sort:"create_time.desc",
           pageNo:that.listPage,
           pageSize:"10"
         }).then((data)=>{
-          for(var i=0;i<data.list.length; i++){
-            this.consultList.push(data.list[i])
-            this.createTime.push(formatDate(new Date(data.list[i].createTime)))
-          }
-          this.loadingStatus = false
-          that.dataLength = data.list.length
-          if(data.list.length >= 10){
-            this.preventRepeatRequest = false;
+          if(data.code == 0){
+            for(var i=0;i<data.list.length; i++){
+              this.consultList.push(data.list[i])
+              this.createTime.push(formatDate(new Date(data.list[i].createTime)))
+            }
+            this.loadingStatus = false
+            that.dataLength = data.list.length
+            if(data.list.length >= 10){
+              this.preventRepeatRequest = false;
+            }
+          }else if(!(data.msg)){
+            this.loadingStatus = false
+              weui.alert("网络错误，请稍后重试")
+          }else{
+            this.loadingStatus = false
+              weui.alert(data.msg)
           }
         })
       },
@@ -130,7 +148,7 @@
 <style scoped lang="scss">
   @import '../../../common/public.scss';
   .canceled{
-    position: fixed;
+    position: absolute;
     top: 90px;
     left:0;
     right:0;

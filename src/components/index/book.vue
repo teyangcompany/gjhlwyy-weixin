@@ -17,6 +17,7 @@
                   </div>
                 </div>
               </li>
+
             </div>
           </ul>
         </div>
@@ -102,11 +103,12 @@
 <style scoped lang="scss">
   @import '../../common/public.scss';
   .book{
-    position: fixed;
+    position: absolute;
     top: 50px;
     left:0;
     right:0;
     bottom:0;
+    overflow: auto;
     >div{
       ul{
         padding:0;

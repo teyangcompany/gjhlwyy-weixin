@@ -4,23 +4,26 @@
             <div class="middle big bf">消费记录</div>
         </top>
 
-        <scroll v-show="!flag" class="page" pullup="true" @scrollToEnd="scrollToEnd" :data="list">
+        <scroll v-show="!flag" class="page" :pullup="pullup" @scrollToEnd="scrollToEnd" :data="list">
             <div class="wrap">
-                <div class="detail" v-for="item of list">
-                    <div class="patImg">
-                        <img :src="item.patAvatar" alt="">
+                <div class="detail" v-for="item in list">
+                    <div class="patImg" v-if="item.docAvatar">
+                        <img :src="item.docAvatar" alt="">
+                    </div>
+                    <div class="patImg" v-else>
+                      <img src="../../../../static/img/医生男.jpg" alt="">
                     </div>
                     <div class="patName">
                         <ul>
-                            <li class="bf">{{item.patName}} {{item.createTime | Todate}}</li>
+                           <li class="bf"> <span>{{ item.docName }}</span> <span style="color: #666666;">{{item.createTime | Getdate}}</span></li>
                             <li class="bf"> {{item.paySubject}}</li>
                         </ul>
                     </div>
                     <div class="state bf">
-                       <span style="color: blue" v-show="item.payType=='PAY'||item.payType=='CASHOUT'">{{item.payType=='PAY'?'支付':'提现'}}</span>
-                       <span v-show="item.payType=='REFUND'">退款</span>
+                       <span style="color: #2AB6B3" v-show="item.payType=='PAY'||item.payType=='CASHOUT'">{{item.payType=='PAY'?'支付':'支付'}}</span>
+                       <span style="color: #FAAC79;" v-show="item.payType=='REFUND'">退款</span>
                         <span>
-                            {{item.payFee}}
+                            ¥{{item.payFee/100}}
                         </span>
 
                     </div>
@@ -35,8 +38,9 @@
     import top from '../../../base/app-header.vue'
     import scroll from '../../../base/scroll.vue'
     import api from '../../../lib/api'
-    import {Todate} from '../../../lib/filter'
+    import {Getdate} from '../../../lib/filter'
     import loading from '../../../base/loading/loading.vue'
+    import {tokenCache} from '../../../lib/cache'
     export default{
         components: {
             top,
@@ -44,15 +48,16 @@
             loading
         },
         filters:{
-            Todate
+          Getdate
         },
         data(){
             return {
                 list:[],
-                token:localStorage.getItem('token'),
+                token:tokenCache.get(),
                 pageNo:1,
                 pageSize:10,
-                flag:true
+                flag:true,
+                pullup:true
             }
         },
         mounted(){
@@ -65,6 +70,7 @@
                     pageNo:this.pageNo,
                     pageSize:this.pageSize
                 }).then(res=>{
+                    console.log(res)
                     if(res.succ){
                         this.list = res.list;
                         this.flag = false
@@ -95,7 +101,7 @@
     .page{
         position: fixed;
         left: 0;
-        top: 44px;
+        top: 65rem/$rem;
         right: 0;
         bottom: 0;
     }
@@ -122,7 +128,11 @@
     box-sizing: border-box;
     padding: 10px 0;
     border-bottom: 1px solid gainsboro;
-
+    .state{
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+    }
   }
 
   .patImg img{

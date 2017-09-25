@@ -39,6 +39,7 @@
 </template>
 <script>
   import header from '../../../base/header'
+  import {tokenCache} from '../../../lib/cache'
   import api from '../../../lib/api'
   export default{
     data(){
@@ -65,15 +66,15 @@
       },
       throwComment(){
         api("nethos.consult.info.comment",{
-          token:localStorage.getItem("token"),
+          token:tokenCache.get(),
           consultId:this.consultId,
           score:this.inputdata*2,
           content:this.commentContent
         }).then((data)=>{
            if(data.code == 0){
                this.$router.push({
-                 path:'/waitArrange',
-                 query:{consultId:this.consultId}
+                 path:'/myConsult/commented',
+//                 query:{consultId:this.consultId}
                })
            }
         })

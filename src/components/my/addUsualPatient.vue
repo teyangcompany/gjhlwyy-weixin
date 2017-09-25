@@ -9,7 +9,7 @@
         </div>
         <div class="form verifyCode">
           <label for="">身份证号</label>
-          <input type="number" placeholder="请输入您的身份证号" v-model="compatIdcard">
+          <input type="text" placeholder="请输入您的身份证号" v-model="compatIdcard">
         </div>
       </div>
       <div class="formContent">
@@ -37,6 +37,7 @@
   import header from '../../base/header'
   import Alert from '../../base/alert'
   import verify from '../../base/verify'
+  import weui from 'weui.js'
   import api from '../../lib/api'
   export default{
     data(){
@@ -96,13 +97,11 @@
                   this.countdown--
                 },1000)
                 console.log(data)
-              }else{
-                this.showVerify = true
-                this.verifyTips = data.msg
-                setTimeout(()=>{
-                  this.showVerify = false
-                },1000)
+              }else if(!(data.msg)){
+                 weui.alert("网络错误，请稍后重试")
                   console.log(data)
+              }else{
+                  weui.alert(data.msg)
               }
             })
           }
@@ -141,20 +140,16 @@
                   console.log(data)
                   if(data.code == 0){
                     this.$router.push('/usualPatient')
+                  }else if(!(data.msg)){
+                     weui.alert("网络错误，请稍后重试")
                   }else{
-                    this.showVerify = true
-                    this.verifyTips = data.msg
-                    setTimeout(()=>{
-                      this.showVerify = false
-                    },1000)
+                      weui.alert(data.msg)
                   }
                 })
+              }else if(!(data.msg)){
+                 weui.alert("网络错误，请稍后重试")
               }else{
-                this.showVerify = true
-                this.verifyTips = data.msg
-                setTimeout(()=>{
-                  this.showVerify = false
-                },1000)
+                  weui.alert(data.msg)
               }
             })
 
@@ -180,7 +175,7 @@
 <style scoped lang="scss">
   @import '../../common/public.scss';
   .verifyCenter{
-    position: fixed;
+    position: absolute;
     left:0;
     right:0;
     top:0;
@@ -190,7 +185,7 @@
     justify-content: center;
   }
   .verifyArea{
-    position: fixed;
+    position: absolute;
     top: 50px;
     left:0;
     right:0;

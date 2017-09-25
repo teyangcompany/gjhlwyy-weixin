@@ -8,7 +8,7 @@
           <div class="leftWord" v-if="patientInfo">
             <img class="profile" alt="" v-if="patientInfo.patAvatar" :src="patientInfo.patAvatar" @click="selectImg()">
             <img class="profile" src="../../static/img/患者男.jpg" alt="" v-else @click="selectImg()">
-            <input type="file" name="upload" id="upload" ref="upload" @change="onFileChange">
+            <input type="file" accept="image/*" name="upload" id="upload" ref="upload" @change="onFileChange">
           </div>
           <!--<router-link tag="div" to="/personInfo" class="rightWord">-->
           <!--<div v-if="patientInfo">-->
@@ -84,7 +84,7 @@
   import header from '../base/header'
   import api from '../lib/api'
   import {isLoginMixin} from "../lib/mixin"
-
+  import {tokenCache} from '../lib/cache'
   export default {
     mixins: [isLoginMixin],
     data() {
@@ -109,13 +109,9 @@
       console.log(this.tellPath)
 //      document.getElementsByTagName('title')[0].innerText= '我的'
       api("nethos.pat.info.get", {
-          token:localStorage.getItem('token')
+          token:tokenCache.get()
       }).then((data) => {
          console.log(data.obj)
-
-//      document.getElementsByTagName('title')[0].innerText= '我的'
-//      api("nethos.pat.info.get", {}).then((data) => {
-
         if (data.code == 0) {
           console.log(data,66666)
           this.patientInfo = data.obj;
@@ -185,14 +181,18 @@
             that.$set(that.$data, 'previewImg', data.obj.attaId)
             console.log(this.previewImg)
             api("nethos.pat.info.modify", {
-              token: localStorage.getItem("token"),
+              token: tokenCache.get(),
               patId: that.patientInfo.patId,
               patAvatar: this.previewImg,
             }).then((data) => {
-              console.log(that.patientInfo.patId)
-              console.log(this.previewImg)
-              console.log(data, '666')
-//              location.reload()
+               if(data.code == 0){
+                 console.log(that.patientInfo.patId)
+                 console.log(this.previewImg)
+                 console.log(data, '666')
+                 location.reload()
+               }else{
+                   alert(data.msg)
+               }
             })
           })
         }
@@ -217,7 +217,7 @@
   @import '../common/public';
 
   .myArea {
-    position: fixed;
+    position: absolute;
     top: 50px;
     left: 0;
     right: 0;

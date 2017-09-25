@@ -16,4 +16,10 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
+  <script>
+    if (window.device == "iphone" || window.device == "android") {
+      var w = window.innerWidth;
+      document.querySelector('html').style.fontSize = (w / 20) + 'px';
+    }
+  </script>
 </html>

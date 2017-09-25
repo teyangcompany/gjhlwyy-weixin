@@ -502,6 +502,7 @@
               font-family: PingFang-SC-Regular;
               color: #333333;
               line-height: 46rem/$rem;
+              word-break: break-all;
             }
             p:nth-child(2){
               display: -webkit-box;
@@ -511,6 +512,7 @@
               font-size: 28rem/$rem;
               color: #999999;
               line-height: 46rem/$rem;
+              word-break: break-all;
             }
           }
         }

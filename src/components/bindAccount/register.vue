@@ -17,7 +17,7 @@
             </div>
             <div class="form phone border-1px">
               <label for="" class="phoneLabel"> <img class="idImg" src="../../../static/img/身份证.png" alt=""> </label>
-              <input type="number" placeholder="请输入您的身份证号" class="numberInput" @focus="focus()" v-model="idCard">
+              <input type="text" placeholder="请输入您的身份证号" class="numberInput" @focus="focus()" v-model="idCard">
             </div>
             <div class="form verifyCode border-1px">
               <label for="" class="codeLabel"> <img src="../../../static/img/密码.png" alt=""> </label>

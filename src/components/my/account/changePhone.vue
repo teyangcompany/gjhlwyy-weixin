@@ -37,6 +37,7 @@
   import Api from '../../../lib/api'
   import phone from '../../../lib/regex'
   import weui from 'weui.js'
+  import {tokenCache} from '../../../lib/cache'
 //  var token = localStorage.getItem('token')
   export default{
     components:{
@@ -44,7 +45,7 @@
     },
     data(){
       return {
-        token:localStorage.getItem('token'),
+        token:tokenCache.get(),
         mobile:localStorage.getItem('patMobile'),
         captcha:'',
         cid:'',

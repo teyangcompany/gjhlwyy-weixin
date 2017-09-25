@@ -33,10 +33,10 @@
             <div class="addPicture" v-for="(singleImage,index) in displayImg" v-if="displayImg.length != 0">
               <!--<span class="deleteImg">X</span>-->
               <img :src="singleImage" alt="" ref="replaceImg"  @click="makeBig(index)">
-              <div class="mask" v-if="progress < 100"> {{ progress }}%</div>
+              <div class="mask" v-if="progress < 100"> </div>
             </div>
             <div class="addPicture" v-if="displayImg.length < 9">
-              <input type="file" name="upload" id="upload" ref="upload" multiple="multiple" @change="onFileChange">
+              <input type="file" accept="image/*" name="upload" id="upload" ref="upload" multiple="multiple" @change="onFileChange">
               <img src="../../../../static/img/添加图片.png" alt=""  @click="selectImg()">
             </div>
             <div class="wordFor" v-if="displayImg.length == 0">
@@ -70,7 +70,9 @@
   import api from '../../../lib/api'
   import upload from '../../../lib/upload'
   import verify from '../../../base/verify'
+  import weui from 'weui.js'
   import {isLoginMixin} from "../../../lib/mixin"
+  import {tokenCache} from '../../../lib/cache'
   export default{
     mixins: [isLoginMixin],
     data(){
@@ -108,24 +110,33 @@
         verifyTips:"图片已全部上传",
         showVerify:false,
         largeImg:"",
-        showLarge:false
+        showLarge:false,
+        price:""
       }
     },
     created(){
       this.doctorId = this.$route.query.docId
+      this.price = this.$route.query.price
+      console.log(this.price)
       api("nethos.pat.info.get", {
-        token:localStorage.getItem('token')
+        token:tokenCache.get()
       }).then((data) => {
         if (data.code == 0) {
           this.patientInfo = data.obj
           this.patId = data.obj.patId
           console.log(this.patientInfo)
           api("nethos.pat.compat.list",{
-            token:localStorage.getItem("token"),
+            token:tokenCache.get(),
             patId:this.patId
           }).then((data)=>{
-            this.patientAll = data.list
-            console.log(this.patientAll)
+             if(data.code == 0){
+               this.patientAll = data.list
+               console.log(this.patientAll)
+             }else if(!(data.msg)){
+                 weui.alert("网络错误，请稍后重试")
+             }else{
+                 weui.alert(data.msg)
+             }
           })
         } else {
           this.$router.push({
@@ -149,7 +160,7 @@
              this.textLength = this.text.length
              if(this.textLength > 500){
                document.getElementById("myArea").value = this.text.substr(0,500)
-               alert("字数不能超过500")
+               weui.alert("字数不能超过500")
              }
       },
       cancel(){
@@ -160,6 +171,7 @@
          this.attaId.splice(this.deleteImgIndex,1)
          this.$set(this.$data,'displayImg',this.displayImg)
          this.showDialog = false
+         this.showLarge = false
       },
       makeBig(index){
         this.deleteImgIndex = index
@@ -174,11 +186,10 @@
 //          this.deleteImgIndex = index
           if(this.uploadTips = '上传完毕'){
             this.showDialog = true
-            this.showLarge = false
           }
       },
       goAlert(){
-        alert("字数不能超过500")
+        weui.alert("字数不能超过500")
       },
       selectPatient(){
         this.showPat=true;
@@ -199,7 +210,7 @@
           }else{
             console.log("1232413245354364642343243214241")
             api("nethos.consult.info.docpic.issue",{
-              token:localStorage.getItem("token"),
+              token:tokenCache.get(),
               docId:this.doctorId,
               consulterName:this.patientAll[this.chosedIndex].compatName,
               consulterIdcard:this.patientAll[this.chosedIndex].compatIdcard,
@@ -209,17 +220,37 @@
             }).then((data)=>{
               if(data.code == 0){
                 this.consultId = data.obj.consultId
-                this.$router.push({
+
+                if(this.price == 0){
+                    api("nethos.consult.info.pay",{
+                      consultId:this.consultId,
+                      payChannel:"WECHAT"
+                    }).then((data)=>{
+                        console.log(data)
+                        if(data.code == 0){
+                            this.$router.push({
+                              path:"/allConsultSuccess",
+                              query:{consultId:this.consultId}
+                            })
+                        }else if(data.code == -2){
+                            weui.alert("当前订单已支付")
+                        }else{
+                            weui.alert(data.msg)
+                        }
+                    })
+                }else{
+                  this.$router.push({
 //                  path:"/videoPay",
-                  path:"/videoPay",
-                  query:{
-                    consultId:this.consultId
-                  }
-                })
+                    path:"/videoPay",
+                    query:{
+                      consultId:this.consultId
+                    }
+                  })
+                }
                 console.log("成功")
                 console.log(data)
               }else{
-                  alert(data.msg)
+                  weui.alert(data.msg)
               }
             })
           }
@@ -236,19 +267,19 @@
         console.log(e)
         var file = e.target.files
         if(this.displayImg.length + file.length > 9){
-            alert("最多只可上传九张照片")
+            weui.alert("最多只可上传九张照片")
         }else{
           this.createImage(file,file.length)
         }
       },
       createImage(file,i){
         if(i>9){
-            alert("最多只可上传九张照片")
+            weui.alert("最多只可上传九张照片")
         }else if(i<=0){
           return
         }else{
           if(typeof FileReader === "undefined"){
-            alert("您的浏览器不支持图片上传，请升级您的浏览器")
+            weui.alert("您的浏览器不支持图片上传，请升级您的浏览器")
             return false
           }else{
             let reader = new FileReader()
@@ -337,7 +368,7 @@
         this.textLength = this.text.length
         if(this.textLength > 500){
           document.getElementById("myArea").value = this.text.substr(0,500)
-          alert("字数不能超过500")
+          weui.alert("字数不能超过500")
         }
       }
     }
@@ -392,11 +423,11 @@
     justify-content: center;
   }
   .want{
-    position: fixed;
-    top: 50px;
-    bottom:0;
-    left:0;
-    right:0;
+    /*position: fixed;*/
+    /*top: 50px;*/
+    /*bottom:0;*/
+    /*left:0;*/
+    /*right:0;*/
     /*<!--background-color: $bgColor1;-->*/
     .basic,.illness,.history,.family,.alergic,.record{
       width: 100%;

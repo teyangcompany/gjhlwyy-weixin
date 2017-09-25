@@ -28,7 +28,10 @@
   import Toast from '../../base/toast'
   import BScroll from 'better-scroll'
   import api from '../../lib/api'
+  import {isLoginMixin} from "../../lib/mixin"
+  import {tokenCache} from '../../lib/cache'
   export default{
+    mixins: [isLoginMixin],
       data(){
           return{
               title:"网络诊间",
@@ -95,7 +98,22 @@
 //
         },
         goMyBookNumber(){
-          this.$router.push('/myBookNumberSelect')
+          api("nethos.pat.info.get", {
+            token:tokenCache.get()
+          }).then((data) => {
+            console.log(data.obj)
+            if (data.code == 0) {
+              console.log(data,66666)
+              this.$router.push('/myBookNumberSelect')
+            } else {
+              this.$router.push({
+                path:"/bindRelativePhone",
+                query:{backPath:this.path}
+              });
+            }
+          })
+
+
         }
       },
       components:{
@@ -116,7 +134,7 @@
 <style scoped lang="scss">
   @import '../../common/public.scss';
 .typeArea{
-  position: fixed;
+  position: absolute;
   top: 50px;
   right:0;
   left:0;
@@ -140,7 +158,8 @@
       }
       .category_active{
         background-color: white;
-        border-left:2px solid $mainColor;
+        border-left:4px solid $mainColor;
+        color: $mainColor;
       }
     }
   }

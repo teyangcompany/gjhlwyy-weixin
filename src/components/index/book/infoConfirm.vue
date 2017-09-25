@@ -100,6 +100,7 @@
   import Toast from '../../../base/toast'
   import Alert from '../../../base/alert'
   import {isLoginMixin} from "../../../lib/mixin"
+  import {tokenCache} from '../../../lib/cache'
   export default{
     mixins: [isLoginMixin],
     data(){
@@ -184,12 +185,12 @@
         })
 
       api("nethos.pat.info.get", {
-        token:localStorage.getItem('token')
+        token:tokenCache.get()
       }).then((data) => {
         if (data.code == 0) {
           this.selfInfo = data.obj
           api("nethos.pat.compat.list",{
-            token:localStorage.getItem("token"),
+            token:tokenCache.get(),
             patId:this.selfInfo.patId
           }).then((data)=>{
             this.compatInfo = data.list
@@ -260,7 +261,7 @@
            this.showDialog = false
         this.showToast = true
         api("nethos.book.compat.bind",{
-          token:localStorage.getItem("token"),
+          token:tokenCache.get(),
           compatId:this.compatInfo[this.index].compatId,
         }).then((data)=>{
           this.alertStatus = data.msg
@@ -300,7 +301,7 @@
 //              if(data.code == 0){
                 if(this.bookSort == '预约挂号'){
                   api("nethos.book.order.register",{
-                    token:localStorage.getItem("token"),
+                    token:tokenCache.get(),
                     bookNumId: this.bookNumId,
                     bookHosId:this.allInfoArray.bookHosId,
                     compatId:this.compatInfo[this.index].compatId,
@@ -337,7 +338,7 @@
                   })
                 }else{
                   api("nethos.book.z2order.register",{
-                    token:localStorage.getItem("token"),
+                    token:tokenCache.get(),
                     bookNumId: this.bookNumId,
                     bookHosId:this.allInfoArray.bookHosId,
                     compatId:this.compatInfo[this.index].compatId,

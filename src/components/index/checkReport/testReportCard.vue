@@ -70,6 +70,8 @@
   import header from '../../../base/header'
   import BScroll from 'better-scroll'
   import api from '../../../lib/api'
+  import weui from 'weui.js'
+  import {tokenCache} from '../../../lib/cache'
   export default{
       data(){
           return{
@@ -93,7 +95,7 @@
         console.log(this.index)
         console.log(this.reportInfoArray)
         api("nethos.book.inspect.info",{
-          token:localStorage.getItem("token"),
+          token:tokenCache.get(),
           recordId:this.recordId
         }).then((data)=>{
             if(data.code == 0){
@@ -148,8 +150,10 @@
               console.log(this.experiment[0].expResultNum)
               console.log(this.lowValue[0])
               console.log(data)
+            }else if(!(data.msg)){
+               weui.alert("网络错误，请稍后重试")
             }else{
-               alert("服务器错误")
+               weui.alert(data.msg)
             }
         })
       },
@@ -178,7 +182,7 @@
 <style scoped lang="scss">
   @import '../../../common/public.scss';
   .reportDetail{
-    position: fixed;
+    position: absolute;
     top: 55px;
     left:0;
     right:0;

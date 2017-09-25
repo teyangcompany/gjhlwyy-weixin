@@ -24,7 +24,7 @@
   .nav-bar{
     width:100%;
     height: 40px;
-    position: fixed;
+    position: absolute;
     top: 50px;
     left:0;
     z-index:10;

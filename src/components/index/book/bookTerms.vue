@@ -13,8 +13,6 @@
                       <p style="margin: 0;">
                         感谢您对本院的信任，选择来我院就诊，为保证您能顺利完成手机挂号及后续就诊，请您认真阅读并遵守本手机挂号规则，充分理解各条款内容，并选择同意接受或不同意接受。
                       </p>
-                    </section>
-                    <section>
                       <p>
                         1.浙医二院官方掌上医院包括 <span style="color: red;">浙二好医生APP、浙医二院微信公众号等形式</span>，预约挂号实行实名制预约，请您提供准确的档案信息和手机号码，以便医生出诊时间有变动时与您联系。
                       </p>
@@ -141,16 +139,19 @@
 <style scoped lang="scss">
   @import '../../../common/public.scss';
 .termContent{
-  position: fixed;
+  position: absolute;
   top: 50px;
   left:0;
   right:0;
   bottom:170rem/$rem;
   overflow: hidden;
   background-color: $bgColor2;
+  section p{
+    margin-bottom: 0;
+  }
 }
   .call{
-    position: fixed;
+    position: absolute;
     bottom:0;
     left:0;
     right:0;

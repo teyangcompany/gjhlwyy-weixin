@@ -10,13 +10,13 @@ export const isLoginMixin = {
     this.path = this.$route.path
     console.log(this.path)
     let openid = openidCache.get();
-    if (!openid) {
-
-      this.$router.push({
-        path:"/bindRelativePhone",
-        query:{backPath:this.path}
-      })
-    }
+    // if (!openid) {
+    //
+    //   this.$router.push({
+    //     path:"/bindRelativePhone",
+    //     query:{backPath:this.path}
+    //   })
+    // }
   },
   watch:{
     "$route":function(){

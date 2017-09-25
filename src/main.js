@@ -4,6 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Vuelidate from 'vuelidate'
+import api from './lib/api'
+import weui from 'weui.js'
+import {tokenCache} from './lib/cache'
 
 import auth2 from "./lib/auth2";
 
@@ -23,12 +26,23 @@ if (/micromessenger/.test(UA)) {
 
 
 Vue.use(Vuelidate)
+Vue.use(weui)
 Vue.config.productionTip = false
 
 /*
  * 移动端rem布局
  * width:20rem
  * */
+
+window.socket = io("nethoswebsocket.diandianys.com");
+window.socket.on('connect',function () {
+  api("nethos.push.deviceid.register",{
+    token:tokenCache.get(),
+    deviceId:socket.id
+  }).then((data)=>{
+    console.log(data,55555)
+  })
+});
 
 if (window.device == "iphone" || window.device == "android") {
     let w = window.innerWidth;

@@ -293,9 +293,11 @@
   import header from '../../../base/header'
   import BScroll from 'better-scroll'
   import api from '../../../lib/api'
-
+  import weui from 'weui.js'
+  import {isLoginMixin} from "../../../lib/mixin"
+  import {tokenCache} from '../../../lib/cache'
   export default{
-
+    mixins: [isLoginMixin],
       data(){
           return{
               title:"网络诊间",
@@ -331,29 +333,41 @@
       created(){
          api("nethos.doc.list",{
          }).then((data)=>{
-             this.doctorList = data.list
-             console.log(data.list)
+             if(data.code == 0){
+               this.doctorList = data.list
+               console.log(data.list)
+             }else if(!(data.msg)){
+                 weui.alert("网络错误，请稍后重试")
+             }else{
+                 weui.alert(data.msg)
+             }
          })
         api("nethos.system.gbdept.list",{
-               token:localStorage.getItem("token")
+               token:tokenCache.get()
         }).then((data)=>{
-          this.firstRoom =  data.list
-          this.together = this.allRoom.concat(this.firstRoom)
-          this.categoryDetail = this.together[this.clickIndex].sonGbDeptList
+          if(data.code == 0){
+            this.firstRoom =  data.list
+            this.together = this.allRoom.concat(this.firstRoom)
+            this.categoryDetail = this.together[this.clickIndex].sonGbDeptList
 //          console.log(item)
-          console.log("下面是togetrher")
-          console.log(this.together)
-          console.log("上面是together")
-          console.log(this.categoryDetail)
-          this.together.forEach(item =>{
+            console.log("下面是togetrher")
+            console.log(this.together)
+            console.log("上面是together")
+            console.log(this.categoryDetail)
+            this.together.forEach(item =>{
 
-            if (item.hasOwnProperty("sonGbDeptList")) {
-              this.arrow.push('1')
-            }else{
-              this.arrow.push('0')
-            }
-          })
-          console.log(this.arrow)
+              if (item.hasOwnProperty("sonGbDeptList")) {
+                this.arrow.push('1')
+              }else{
+                this.arrow.push('0')
+              }
+            })
+            console.log(this.arrow)
+          }else if(!(data.msg)){
+              weui.alert("网络错误，请稍后重试")
+          }else{
+              weui.alert(data.msg)
+          }
         })
 
 //        api("nethos.hos.list",{
@@ -398,7 +412,22 @@
           }
         },
         goMyConsult(){
-            this.$router.push('/myConsult/online/commented')
+            console.log(this.path)
+          api("nethos.pat.info.get", {
+            token:tokenCache.get()
+          }).then((data) => {
+            console.log(data.obj)
+            if (data.code == 0) {
+              console.log(data,66666)
+              this.$router.push('/myConsult/online/commented')
+            } else {
+              this.$router.push({
+                path:"/bindRelativePhone",
+                query:{backPath:this.path}
+              });
+            }
+          })
+
         },
         goIndex(){
 //            this.$router.push('/myProfile/index')
@@ -749,7 +778,7 @@
     display: flex;
     width:100%;
     height: 40px;
-    position: fixed;
+    position: absolute;
     top: 50px;
     line-height: 40px;
     z-index:60;
@@ -794,7 +823,7 @@
   }
   }
   .dropType{
-    position: fixed;
+    position: absolute;
     z-index:4;
     top: 90px;
     width:100%;
@@ -865,14 +894,14 @@
     }
   }
   .roomList{
-    position: fixed;
+    position: absolute;
     top: 90px;
     left:0;
     right:0;
     bottom:0;
     background-color: white;
     .loading{
-      position: fixed;
+      position: absolute;
       top: 90px;
       left:0;
       right:0;

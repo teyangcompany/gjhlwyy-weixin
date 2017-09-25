@@ -24,6 +24,8 @@
   import header from '../../base/header'
   import BScroll from 'better-scroll'
   import api from '../../lib/api'
+  import weui from 'weui.js'
+  import {tokenCache} from '../../lib/cache'
   export default{
     data(){
       return{
@@ -34,10 +36,16 @@
     },
     created(){
        api("nethos.pat.compat.list",{
-             token:localStorage.getItem("token")
+             token:tokenCache.get()
        }).then((data)=>{
-           this.patientList = data.list
-           console.log(this.patientList)
+           if(data.code == 0){
+             this.patientList = data.list
+             console.log(this.patientList)
+           }else if(!(data.msg)){
+               weui.alert("网络错误，请稍后重试")
+           }else{
+               weui.alert(data.msg)
+           }
        })
     },
     methods:{

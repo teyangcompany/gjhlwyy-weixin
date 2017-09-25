@@ -8,7 +8,7 @@ let url = "https://nethos.diandianys.com/api/app";
 let random = Math.round(Math.random() * 10000);
 let sign = hex_md5(hex_md5("aAr9MVS9j1") + 1001 + random);
 let base = {
-  channel: "4",
+  channel: "3",
   format: "JSON",
   oper: "127.0.0.1",
   random: random,

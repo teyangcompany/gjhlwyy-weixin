@@ -39,6 +39,8 @@
   import header from '../../../base/header'
   import api from '../../../lib/api'
   import BScroll from 'better-scroll'
+  import {tokenCache} from '../../../lib/cache'
+  import weui from 'weui.js'
   export default{
     data(){
       return{
@@ -92,7 +94,7 @@
           if(this.selectValue == '检验报告'){
               if(this.threeMonth != ''){
                 api("nethos.book.inspect.list",{
-                  token:localStorage.getItem("token"),
+                  token:tokenCache.get(),
                   startDate:this.threeMonth,
                   endDate:this.nowTime,
                   patCard:this.patCard,
@@ -104,8 +106,12 @@
                     this.reportInfo = data.list
                     this.reportInfoString = JSON.stringify(this.reportInfo)
                     console.log(data)
+                  }else if(!(data.msg)){
+                    this.reportInfo = 2
+                   weui.alert("网络错误，请稍后重试")
                   }else{
                     this.reportInfo = 2
+                    weui.alert(data.msg)
                   }
                 })
               }
@@ -145,7 +151,7 @@
               this.reportInfo = 1
             if(this.selectValue == '检验报告'){
               api("nethos.book.inspect.list",{
-                token:localStorage.getItem("token"),
+                token:tokenCache.get(),
                 startDate:this.oneWeek,
                 endDate:this.nowTime,
                 patCard:this.patCard,
@@ -164,7 +170,7 @@
             this.reportInfo = 1
             if(this.selectValue == '检验报告'){
               api("nethos.book.inspect.list",{
-                token:localStorage.getItem("token"),
+                token:tokenCache.get(),
                 startDate:this.threeMonth,
                 endDate:this.nowTime,
                 patCard:this.patCard,
@@ -174,8 +180,12 @@
                   this.reportInfo = data.list
                   this.reportInfoString = JSON.stringify(this.reportInfo)
                   console.log(data)
+                }else if(!(data.msg)){
+                  this.reportInfo = 2
+                  weui.alert("网络错误，请稍后重试")
                 }else{
                   this.reportInfo = 2
+                    weui.alert(data.msg)
                 }
               })
             }
@@ -183,7 +193,7 @@
             this.reportInfo = 1
             if(this.selectValue == '检验报告'){
               api("nethos.book.inspect.list",{
-                token:localStorage.getItem("token"),
+                token:tokenCache.get(),
                 startDate:this.halfYear,
                 endDate:this.nowTime,
                 patCard:this.patCard,
@@ -193,8 +203,12 @@
                    this.reportInfo = data.list
                    this.reportInfoString = JSON.stringify(this.reportInfo)
                    console.log(data)
+                 }else if(!(data.msg)){
+                   this.reportInfo = 2
+                   weui.alert("网络错误，请稍后重试")
                  }else{
                    this.reportInfo = 2
+                     weui.alert(data.msg)
                  }
               })
             }
@@ -202,7 +216,7 @@
             this.reportInfo = 1
             if(this.selectValue == '检验报告'){
               api("nethos.book.inspect.list",{
-                token:localStorage.getItem("token"),
+                token:tokenCache.get(),
                 startDate:this.oneYear,
                 endDate:this.nowTime,
                 patCard:this.patCard,
@@ -212,8 +226,12 @@
                    this.reportInfo = data.list
                    this.reportInfoString = JSON.stringify(this.reportInfo)
                    console.log(data)
+                 }else if(!(data.msg)){
+                   this.reportInfo = 2
+                   weui.alert("网络错误，请稍后重试")
                  }else{
                    this.reportInfo = 2
+                     weui.alert(data.msg)
                  }
               })
             }
@@ -256,7 +274,7 @@
     }
   }
   .checkList{
-    position: fixed;
+    position: absolute;
     top: 50px;
     left:0;
     right:0;
@@ -282,8 +300,8 @@
     }
     >div{
       .wrapContent{
-        position: fixed;
-        top:100px;
+        position: absolute;
+        top:50px;
         left:0;
         right:0;
         bottom:0;

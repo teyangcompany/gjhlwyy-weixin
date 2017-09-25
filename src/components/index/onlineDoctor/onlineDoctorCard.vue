@@ -1,9 +1,11 @@
 <template>
   <div class="doctor">
+    <div class="topWrap">
       <img  @click="back()" class="previous" src="../../../../static/img/返回.png" alt="">
       <span @click="follow" class="follow" v-if="isFollow"><img src="../../../../static/img/爱心2.png" alt="">取消</span>
       <span @click="follow" class="follow" v-else><img src="../../../../static/img/爱心1.png" alt="">关注</span>
-    <v-header ref="topHeader" :title="title" :rightTitle="rightTitle" ></v-header>
+    </div>
+    <!--<v-header ref="topHeader" :title="title" :rightTitle="rightTitle" ></v-header>-->
     <div class="doctorCard" ref="doctorCard">
       <div>
         <div class="doctorFunc">
@@ -111,10 +113,12 @@
   import Dialog from '../../../base/dialog'
   import api from '../../../lib/api'
   import Star from '../../../base/star/star'
-
+  import weui from 'weui.js'
+  import {isLoginMixin} from "../../../lib/mixin"
+  import {tokenCache} from '../../../lib/cache'
   import { formatDate } from '../../../utils/formatTimeStamp'
   export default{
-
+    mixins: [isLoginMixin],
     data(){
       return{
         title:"",
@@ -147,16 +151,22 @@
          api("nethos.doc.card",{
            docId:this.doctorId
          }).then((data)=>{
-             console.log(data)
-             this.aboutDoctor = data.obj.sysDoc
-             this.doctorIntro = data.obj.sysDocNotice
-             this.doctorArticle = data.obj.docArticleList
-             for(var i=0;i<this.doctorArticle.length;i++){
-               this.articleTime.push(formatDate( new Date(this.doctorArticle[i].createTime)))
+             if(data.code == 0){
+               console.log(data)
+               this.aboutDoctor = data.obj.sysDoc
+               this.doctorIntro = data.obj.sysDocNotice
+               this.doctorArticle = data.obj.docArticleList
+               for(var i=0;i<this.doctorArticle.length;i++){
+                 this.articleTime.push(formatDate( new Date(this.doctorArticle[i].createTime)))
+               }
+             }else if(!(data.msg)){
+                 weui.alert("网络错误，请稍后重试")
+             }else{
+                 weui.alert(data.msg)
              }
          })
          api("nethos.follow.get",{
-            token:localStorage.getItem("token"),
+            token:tokenCache.get(),
            docId:this.doctorId
          }).then((data)=>{
              console.log("123")
@@ -169,31 +179,31 @@
     },
     methods:{
       _initDoctorScroll(){
-        this.doctorScroll = new BScroll(this.$refs.doctorCard,{
-          click:true,
-          probeType:3
-        })
-        this.doctorScroll.on('scroll', (pos) => {
-            if(pos.y>-40){
-              this.title = ""
-              this.$refs.topHeader.$el.style.opacity = 0
-            }else if(pos.y>-80 && pos.y<-40){
-              this.title = ""
-              this.$refs.topHeader.$el.style.opacity = 0.2
-            }else if(pos.y>-120 && pos.y<-80){
-              this.title = ""
-              this.$refs.topHeader.$el.style.opacity = 0.4
-            }else if(pos.y>-160 && pos.y<-120){
-              this.title = "医生名片"
-              this.$refs.topHeader.$el.style.opacity = 0.6
-            }else if(pos.y>-200 && pos.y<-160){
-              this.title = "医生名片"
-              this.$refs.topHeader.$el.style.opacity = 0.8
-            }else if(pos.y<-200){
-              this.title = "医生名片"
-              this.$refs.topHeader.$el.style.opacity = 1
-            }
-        })
+//        this.doctorScroll = new BScroll(this.$refs.doctorCard,{
+//          click:true,
+//          probeType:3
+//        })
+//        this.doctorScroll.on('scroll', (pos) => {
+//            if(pos.y>-40){
+//              this.title = ""
+//              this.$refs.topHeader.$el.style.opacity = 0
+//            }else if(pos.y>-80 && pos.y<-40){
+//              this.title = ""
+//              this.$refs.topHeader.$el.style.opacity = 0.2
+//            }else if(pos.y>-120 && pos.y<-80){
+//              this.title = ""
+//              this.$refs.topHeader.$el.style.opacity = 0.4
+//            }else if(pos.y>-160 && pos.y<-120){
+//              this.title = "医生名片"
+//              this.$refs.topHeader.$el.style.opacity = 0.6
+//            }else if(pos.y>-200 && pos.y<-160){
+//              this.title = "医生名片"
+//              this.$refs.topHeader.$el.style.opacity = 0.8
+//            }else if(pos.y<-200){
+//              this.title = "医生名片"
+//              this.$refs.topHeader.$el.style.opacity = 1
+//            }
+//        })
       },
       goArticleList(){
            this.$router.push({
@@ -226,34 +236,48 @@
         this.dialogDisplay = false
       },
       download(){
-          this.$router.push('/downloadPage')
+//          this.$router.push('/downloadPage')
+        location.href='http://api.gjwlyy.com/api/download/pat/index.html'
       },
       back(){
         this.$router.back(-1)
       },
       follow(){
           console.log("123")
-          if(this.isFollow == false){
-            api("nethos.follow.dp.add",{
-              token:localStorage.getItem("token"),
-              docId:this.doctorId
-            }).then((data)=>{
-              console.log(data)
-              if(data.code == 0){
-                this.isFollow = true
-              }
-            })
-          }else{
-            api("nethos.follow.cancel",{
-              token:localStorage.getItem("token"),
-              docId:this.doctorId
-            }).then((data)=>{
-              console.log(data)
-              if(data.code == 0){
-                this.isFollow = false
-              }
-            })
+        api("nethos.pat.info.get", {
+          token:tokenCache.get()
+        }).then((data) => {
+          console.log(data.obj)
+          if (data.code == 0) {
+            console.log(data,66666)
+            if(this.isFollow == false){
+              api("nethos.follow.dp.add",{
+                token:tokenCache.get(),
+                docId:this.doctorId
+              }).then((data)=>{
+                console.log(data)
+                if(data.code == 0){
+                  this.isFollow = true
+                }
+              })
+            }else{
+              api("nethos.follow.cancel",{
+                token:tokenCache.get(),
+                docId:this.doctorId
+              }).then((data)=>{
+                console.log(data)
+                if(data.code == 0){
+                  this.isFollow = false
+                }
+              })
+            }
+          } else {
+            this.$router.push({
+              path:"/bindRelativePhone",
+              query:{backPath:this.path}
+            });
           }
+        })
       }
     },
     components:{
@@ -262,27 +286,27 @@
        Star
     },
     watch:{
-      excelAll(){
-        this.$nextTick(()=>{
-          setTimeout(()=>{
-            this._initDoctorScroll()
-          },20)
-        })
-      },
-      introAll(){
-        this.$nextTick(()=>{
-          setTimeout(()=>{
-            this._initDoctorScroll()
-          },20)
-        })
-      },
-      aboutDoctor(){
-        this.$nextTick(()=>{
-          setTimeout(()=>{
-            this._initDoctorScroll()
-          },200)
-        })
-      }
+//      excelAll(){
+//        this.$nextTick(()=>{
+//          setTimeout(()=>{
+//            this._initDoctorScroll()
+//          },20)
+//        })
+//      },
+//      introAll(){
+//        this.$nextTick(()=>{
+//          setTimeout(()=>{
+//            this._initDoctorScroll()
+//          },20)
+//        })
+//      },
+//      aboutDoctor(){
+//        this.$nextTick(()=>{
+//          setTimeout(()=>{
+//            this._initDoctorScroll()
+//          },200)
+//        })
+//      }
     }
   }
 </script>
@@ -291,11 +315,11 @@
   @import '../../../common/var.scss';
   @import '../../../common/mixin.scss';
   .doctor{
-    position: fixed;
-    top:0;
-    left:0;
-    right:0;
-    bottom: 0;
+    /*position: fixed;*/
+    /*top:0;*/
+    /*left:0;*/
+    /*right:0;*/
+    /*bottom: 0;*/
     /*.gradual{*/
       /*<!--position: relative;-->*/
       /*<!--top:0;-->*/
@@ -306,34 +330,44 @@
       /*<!--z-index: 20;-->*/
       /*<!--justify-content: space-between;-->*/
       /*<!--align-items: center;-->*/
-     .follow{
-       position: absolute;
-       right:30rem/$rem;
-       top: 14.5px;
-       z-index:2000;
-       font-size: 32rem/$rem;
-       display: flex;
-       align-items: center;
-       img{
-         width:35rem/$rem;
-         margin-right: 5px;
+     .topWrap{
+       position: fixed;
+       top:0;
+       left:0;
+       right:0;
+       height: 50px;
+       background-color: white;
+       .follow{
+         position: absolute;
+         right:30rem/$rem;
+         top: 14.5px;
+         z-index:2000;
+         font-size: 32rem/$rem;
+         display: flex;
+         align-items: center;
+         img{
+           width:35rem/$rem;
+           margin-right: 5px;
+         }
+       }
+       img.previous{
+         height: 15px;
+         position: absolute;
+         left:30rem/$rem;
+         top: 17.5px;
+         z-index:2000;
        }
      }
-      img.previous{
-        height: 15px;
-        position: absolute;
-        left:30rem/$rem;
-        top: 17.5px;
-        z-index:2000;
-      }
     /*}*/
   }
   .doctorCard{
-    position: fixed;
-    left:0;
-    right:0;
-    bottom: 0px;
-    top: 10px;
+    /*position: fixed;*/
+    /*left:0;*/
+    /*right:0;*/
+    /*bottom: 0px;*/
+    /*top: 10px;*/
+    /*overflow: auto;*/
+    margin-top: 80rem/$rem;
     .doctorFunc{
       width:100%;
       height: 210px;

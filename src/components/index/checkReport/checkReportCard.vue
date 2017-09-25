@@ -1,34 +1,43 @@
 <template>
   <div>
     <v-header :title="title" :rightTitle="rightTitle"></v-header>
-    <div class="reportDetail">
-      <div class="testType" v-if="allPatient">
-        <div class="type">
-          <h4>[医疗名称]</h4>
+    <div class="reportDetail" ref="reportDetail">
+      <div>
+        <div class="testType" v-if="allPatient">
+          <div class="type" style="background-color: #30CFD0;">
+            <h4 style="color: white;">{{  reportInfoArray[index].checkName }}</h4>
+          </div>
+          <div class="name">
+            <p class="first">姓名:{{allPatient[specialIndex].compatName}}</p>
+            <p>送检医生:{{ reportInfoArray[index].sendDoc }}</p>
+          </div>
+          <div class="name">
+            <p class="first">性别:{{allPatient[specialIndex].compatGender == 'F'?'女':'男'}}</p>
+            <p>检验医生:</p>
+          </div>
+          <div class="name">
+            <p class="first">年龄:{{allPatient[specialIndex].compatAge}}</p>
+            <p>审核医生:{{ reportInfoArray[index].examineDoc }}</p>
+          </div>
+          <p>送检时间:{{ reportInfoArray[index].sendTime }}</p>
+          <p>检验时间:{{ reportInfoArray[index].checkTime }}</p>
+          <div class="detailTips">
+            <p>具体报告信息请以医院纸质报告为准！</p>
+          </div>
         </div>
-        <div class="name">
-          <p class="first">姓名:{{allPatient[specialIndex].compatName}}</p>
-          <p>送检医生:{{ reportInfoArray[index].sendDoc }}</p>
+        <div class="blank"></div>
+        <div class="testInfo">
+          <div class="result">
+            <h5>检查结果:</h5>
+            <p>{{ reportInfoArray[index].checkResult }}</p>
+          </div>
+          <div class="result">
+            <h5>检查结果描述:</h5>
+            <p>{{ reportInfoArray[index].checkDetail }}</p>
+          </div>
         </div>
-        <div class="name">
-          <p class="first">性别:{{allPatient[specialIndex].compatGender == 'F'?'女':'男'}}</p>
-          <p>检验医生:</p>
-        </div>
-        <div class="name">
-          <p class="first">年龄:{{allPatient[specialIndex].compatAge}}</p>
-          <p>审核医生:{{ reportInfoArray[index].examineDoc }}</p>
-        </div>
-        <p>采集日期:</p>
-        <p>检验日期:{{ reportInfoArray[index].checkTime }}</p>
-        <div class="detailTips">
-          <p>具体报告信息请以医院纸质报告为准！</p>
-        </div>
-      </div>
-      <div class="blank"></div>
-      <div class="testInfo">
-        <div class="result">
-          <h5>检验结果:</h5>
-          <p>{{ reportInfoArray[index].checkResult }}</p>
+        <div class="assistArea" style="height: 100px;">
+
         </div>
       </div>
     </div>
@@ -37,6 +46,9 @@
 <script>
   import header from '../../../base/header'
   import api from '../../../lib/api'
+  import BScroll from 'better-scroll'
+  import weui from 'weui.js'
+  import {tokenCache} from '../../../lib/cache'
   export default{
     data(){
       return{
@@ -48,6 +60,13 @@
         specialIndex:""
       }
     },
+    methods:{
+        cardScroll(){
+            this.cardScroll = new BScroll(this.$refs.reportDetail,{
+                click:true
+            })
+        }
+    },
     created(){
         this.reportInfoArray = JSON.parse(this.$route.query.reportInfoString)
         this.index = this.$route.query.index
@@ -55,9 +74,16 @@
         console.log( this.index)
         console.log(this.reportInfoArray)
         api("nethos.pat.compat.list",{
-          token:localStorage.getItem("token")
+          token:tokenCache.get()
         }).then((data)=>{
-          this.allPatient=data.list
+          if(data.code == 0){
+            this.allPatient=data.list
+          }else if(!(data.msg)){
+              weui.alert("网络错误，请稍后重试")
+          }else{
+              weui.alert(data.msg)
+          }
+
   //        this.changeName = this.allPatient[this.index].compatName
   //        this.changeID = this.allPatient[this.index].compatIdcard
   //        this.compatId = this.allPatient[this.index].compatId
@@ -66,13 +92,22 @@
     },
     components:{
       "VHeader":header
+    },
+    watch:{
+      allPatient(){
+          this.$nextTick(()=>{
+              setTimeout(()=>{
+                  this.cardScroll()
+              },100)
+          })
+      }
     }
   }
 </script>
 <style scoped lang="scss">
   @import '../../../common/public.scss';
   .reportDetail{
-    position: fixed;
+    position: absolute;
     top: 55px;
     left:0;
     right:0;
@@ -136,7 +171,7 @@
     }
     .testInfo{
       width:750rem/$rem;
-      height: 500px;
+      /*height: 500px;*/
       margin: 0 auto;
       background-color: #ffffff;
       .result,.resultDes{

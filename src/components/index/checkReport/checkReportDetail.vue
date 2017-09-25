@@ -39,6 +39,8 @@
   import header from '../../../base/header'
   import api from '../../../lib/api'
   import BScroll from 'better-scroll'
+  import weui from 'weui.js'
+  import {tokenCache} from '../../../lib/cache'
   export default{
     data(){
       return{
@@ -92,7 +94,7 @@
       this.nowTime = this.getNow()
       if(this.selectValue == '检查报告'){
         api("nethos.book.inspect.examination",{
-          token:localStorage.getItem("token"),
+          token:tokenCache.get(),
           startDate:this.threeMonth ,
           endDate:this.nowTime,
           compatId:this.compatId
@@ -101,8 +103,12 @@
               this.reportInfo = data.list
               this.reportInfoString = JSON.stringify(this.reportInfo)
               console.log(data)
+            }else if(!(data.msg)){
+              this.reportInfo = 2
+              weui.alert("网络错误，请稍后重试")
             }else{
               this.reportInfo = 2
+                weui.alert(data.msg)
             }
         })
       }
@@ -141,7 +147,7 @@
           this.reportInfo = 1
           if(this.selectValue == '检查报告'){
             api("nethos.book.inspect.examination",{
-              token:localStorage.getItem("token"),
+              token:tokenCache.get(),
               startDate:this.oneWeek,
               endDate:this.nowTime,
               compatId:this.compatId
@@ -159,7 +165,7 @@
           this.reportInfo = 1
           if(this.selectValue == '检查报告'){
             api("nethos.book.inspect.examination",{
-              token:localStorage.getItem("token"),
+              token:tokenCache.get(),
               startDate:this.threeMonth,
               endDate:this.nowTime,
               compatId:this.compatId
@@ -168,8 +174,12 @@
                 this.reportInfo = data.list
                 this.reportInfoString = JSON.stringify(this.reportInfo)
                 console.log(data)
+              }else if(!(data.msg)){
+                this.reportInfo = 2
+                weui.alert("网络错误，请稍后重试")
               }else{
                 this.reportInfo = 2
+                weui.alert(data.msg)
               }
             })
           }
@@ -177,7 +187,7 @@
           this.reportInfo = 1
           if(this.selectValue == '检查报告'){
             api("nethos.book.inspect.examination",{
-              token:localStorage.getItem("token"),
+              token:tokenCache.get(),
               startDate:this.halfYear,
               endDate:this.nowTime,
               compatId:this.compatId
@@ -186,8 +196,12 @@
                 this.reportInfo = data.list
                 this.reportInfoString = JSON.stringify(this.reportInfo)
                 console.log(data)
+              }else if(!(data.msg)){
+                this.reportInfo = 2
+                weui.alert("网络错误，请稍后重试")
               }else{
                 this.reportInfo = 2
+                weui.alert(data.msg)
               }
             })
           }
@@ -195,7 +209,7 @@
           this.reportInfo = 1
           if(this.selectValue == '检查报告'){
             api("nethos.book.inspect.examination",{
-              token:localStorage.getItem("token"),
+              token:tokenCache.get(),
               startDate:this.oneYear,
               endDate:this.nowTime,
               compatId:this.compatId
@@ -204,8 +218,12 @@
                 this.reportInfo = data.list
                 this.reportInfoString = JSON.stringify(this.reportInfo)
                 console.log(data)
+              }else if(!(data.msg)){
+                this.reportInfo = 2
+                weui.alert("网络错误，请稍后重试")
               }else{
                 this.reportInfo = 2
+                weui.alert(data.msg)
               }
             })
           }
@@ -248,7 +266,7 @@
     }
   }
   .checkList{
-    position: fixed;
+    position: absolute;
     top: 50px;
     left:0;
     right:0;
@@ -274,8 +292,8 @@
     }
     >div{
       .wrapContent{
-        position: fixed;
-        top:100px;
+        position: absolute;
+        top:50px;
         left:0;
         right:0;
         bottom:0;
