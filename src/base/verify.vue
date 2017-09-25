@@ -21,8 +21,8 @@
     p{
       background-color: #333333;
       color: #ffffff;
-      width: 350rem/$rem;
-      height: 80rem/$rem;
+      min-width: 350rem/$rem;
+      min-height: 80rem/$rem;
       font-size: 32rem/$rem;
       border-radius: 5px;
       display: flex;

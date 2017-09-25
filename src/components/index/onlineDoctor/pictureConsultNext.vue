@@ -184,7 +184,7 @@
       deleteImg(index){
 //          console.log(index)
 //          this.deleteImgIndex = index
-          if(this.uploadTips = '上传完毕'){
+          if(this.uploadTips == '上传完毕'){
             this.showDialog = true
           }
       },
@@ -207,7 +207,12 @@
       goPay(){
           if(this.description == ''){
               this.showAlert = true
-          }else{
+            console.log(this.uploadTips)
+          }
+          else if(this.uploadTips == '正在上传'){
+               weui.alert("图片正在上传，请稍后操作")
+          }
+          else{
             console.log("1232413245354364642343243214241")
             api("nethos.consult.info.docpic.issue",{
               token:tokenCache.get(),
@@ -288,7 +293,7 @@
             let that =this
             reader.onload = function () {
               that.previewImg = this.result
-
+              that.uploadTips = '正在上传'
               that.displayImg.push(that.previewImg)
 
 
@@ -319,8 +324,9 @@
                              that.createImage(file,--i)
                           }
                           console.log(i)
-                          if(i ==0){
+                          if(i == 0){
                             that.uploadTips = '上传完毕'
+                            console.log(that.uploadTips)
                             that.showVerify = true
                             setTimeout(()=>{
                               that.showVerify = false

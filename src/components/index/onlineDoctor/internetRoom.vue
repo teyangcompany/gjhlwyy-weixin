@@ -778,7 +778,7 @@
     display: flex;
     width:100%;
     height: 40px;
-    position: absolute;
+    position: fixed;
     top: 50px;
     line-height: 40px;
     z-index:60;
@@ -894,7 +894,7 @@
     }
   }
   .roomList{
-    position: absolute;
+    position: fixed;
     top: 90px;
     left:0;
     right:0;

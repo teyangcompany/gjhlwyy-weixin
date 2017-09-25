@@ -37,21 +37,38 @@
       return{
         title:"广济互联网医院",
         rightTitle:"",
-        password:""
-
+        password:"",
+        backPath:""
       }
+    },
+    created(){
+      this.backPath = this.$route.query.backPath
     },
     methods:{
       login(){
-        this.password = sha512(hex_md5('lmw123456') + 'lmw123456' );
-        api("nethos.pat.login",{
-          patMobile:"15868823516",
-          patPassword:this.password
-        }).then((data)=>{
-          localStorage.setItem("token",data.token)
-          this.$router.push('/myProfile/index')
-          console.log(data)
-        })
+        if(this.backPath == '/infoConfirm'){
+          this.$router.push('/book')
+        }else if(this.backPath == '/pictureConsultNext'){
+          this.$router.push('/internetRoom')
+        }else if(this.backPath == '/pictureConsultApply'){
+          this.$router.push('/internetRoom')
+        }else if(this.backPath == '/famousPage'){
+          this.$router.push('/book')
+        }else if(this.backPath == '/expertDetail'){
+          this.$router.push('/book')
+        }else if(this.backPath == '/bookType/date'){
+          this.$router.push('/book')
+        }else if(this.backPath == '/selectType'){
+          this.$router.push('/book')
+        }else if(this.backPath == '/onlineDoctorCard'){
+          this.$router.push('/internetRoom')
+        }else if(!(this.backPath)){
+          this.$router.push('/Profile')
+        }else{
+          this.$router.push({
+            path:this.backPath
+          })
+        }
       }
     },
     components:{

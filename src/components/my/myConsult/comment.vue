@@ -41,6 +41,7 @@
   import header from '../../../base/header'
   import {tokenCache} from '../../../lib/cache'
   import api from '../../../lib/api'
+  import weui from 'weui.js'
   export default{
     data(){
       return{
@@ -61,7 +62,7 @@
         this.textLength = this.text.length
         if(this.textLength > 200){
           document.getElementById("myArea").value = this.text.substr(0,200)
-          alert("字数不能超过200")
+          weui.alert("字数不能超过200")
         }
       },
       throwComment(){
@@ -76,6 +77,8 @@
                  path:'/myConsult/commented',
 //                 query:{consultId:this.consultId}
                })
+           }else{
+               weui.alert(data.msg)
            }
         })
       },
@@ -93,7 +96,7 @@
         this.textLength = this.text.length
         if(this.textLength > 200){
           document.getElementById("myArea").value = this.text.substr(0,200)
-          alert("字数不能超过200")
+          weui.alert("字数不能超过200")
         }
       }
     }

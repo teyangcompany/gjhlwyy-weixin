@@ -32,9 +32,9 @@
       <!--<div style="background-color: white" class="layer">-->
         <!--<v-mask v-if="showMask"></v-mask>-->
       <!--</div>-->
-      <!--<div class="verifyCenter">-->
-        <!--<verify v-if="showVerify" :verifyTips="verifyTips"></verify>-->
-      <!--</div>-->
+      <div class="verifyCenter">
+        <verify v-if="showVerify" :verifyTips="verifyTips"></verify>
+      </div>
     </div>
   </div>
 </template>
