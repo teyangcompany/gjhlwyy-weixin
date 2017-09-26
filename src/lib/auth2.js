@@ -1,17 +1,16 @@
 import {openidCache} from "./cache"
 
 const APPID = "wxa49f90b4ff678ef2";
-const COMPONENT_APPID = "wxe24cab30ebb1e366";
 
 export default (cb) => {
-
-  let openid = openidCache.get(), query = url("?"), hash = url("#");
+  let query = url("?"), hash = url("#");
   let UA = window.navigator.userAgent.toLocaleLowerCase();
 
   /*微信打开*/
   if (/micromessenger/.test(UA)) {
     /*本地有openid*/
-    if (openid || (query && query.openid) || (hash && hash.openid)) {
+    let openid = openidCache.get() || (query && query.openid) || (hash && hash.openid) || null;
+    if (openid) {
       openidCache.set(openid);
       cb();
     }

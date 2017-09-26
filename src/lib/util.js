@@ -1,4 +1,4 @@
-import config from "./config"
+import {API_URL} from "./config"
 
 /**
  * 生成指定长度随机数
@@ -38,24 +38,29 @@ export function isBrower(name) {
 }
 
 /**
- * 根据来源获得api_url
+ * 获得api_url
  * @param callback
  * @returns {string}
  */
-export function getApiUrl(callback) {
-  let hostname = url("hostname", callback);
+export function getApiUrl() {
+  let hostname = url("hostname");
   let api_url = "";
-  for (let key in config.api_url) {
+  for (let key in API_URL) {
     if (hostname == key) {
-      api_url = config.api_url[key];
+      api_url = API_URL[key].api;
     }
   }
   if (!api_url) {
-    api_url = config.api_url[Object.keys(config.api_url)[0]];
+    api_url = API_URL[Object.keys(config.api_url)[0]].api;
   }
   return api_url;
 }
 
+/**
+ * 生成返回URL
+ * @param options
+ * @returns {string}
+ */
 export function makeUrl(options) {
   let url = "";
   if (options.protocol) {
