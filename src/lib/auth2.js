@@ -8,7 +8,6 @@ export default (cb) => {
   // .replace()
   let href = location.href;
   let redirect_uri = encodeURIComponent(href);
-  alert(6666)
   let jumpTo = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE&component_appid=${COMPONENT_APPID}#wechat_redirect`;
 
   let openid = openidCache.get(), query = url("?"), hash = url("#");

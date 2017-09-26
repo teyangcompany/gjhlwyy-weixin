@@ -1,17 +1,17 @@
 <template>
   <div>
-    <v-header :title="title" :rightTitle="rightTitle"></v-header>
+    <!--<v-header :title="title" :rightTitle="rightTitle"></v-header>-->
     <div class="bindPhone">
       <div class="bindPhoneCenter">
         <div class="bigMiddle">
           <div class="doctorFunc">
             <div class="doctorImg">
-              <img src="../../../static/img/医生男.jpg" alt="">
+              <img :src="docInfo.docAvatar" alt="">
             </div>
             <div class="doctorIntro">
-              <h4><span class="mainTitle">华佗</span><span class="chief">名医</span></h4>
-              <h6>神经内科&nbsp; 主任医师</h6>
-              <h6>浙医二院</h6>
+              <h4><span class="mainTitle">{{ docInfo.docName }}</span><span class="chief" v-if="docInfo.docFamousConsultStatus == true">名医</span><span v-else>&nbsp;&nbsp;</span> </h4>
+              <h6>{{ docInfo.docDeptName }}&nbsp; {{ docInfo.docTitle }}</h6>
+              <h6>{{ docInfo.docHosName }}</h6>
             </div>
           </div>
         </div>
@@ -49,6 +49,7 @@
   import header from '../../base/header'
   import {openidCache} from '../../lib/cache'
   import verify from '../../base/verify'
+  import weui from 'weui.js'
   import api from '../../lib/api'
   export default{
     data(){
@@ -61,12 +62,21 @@
         realName:"",
         idCard:"",
         passWord:"",
+        docId:"",
+        docInfo:""
       }
     },
     created(){
       this.backPath = this.$route.query.backPath
       this.cid = this.$route.query.cid
       this.codeValue = this.$route.query.codeValue
+      this.docId = this.$route.query.docId
+      api("nethos.doc.card",{
+        docId:this.docId
+      }).then((data)=>{
+        this.docInfo = data.obj.sysDoc
+        console.log(data)
+      })
     },
     methods:{
       confirmRegister(){
@@ -112,12 +122,12 @@
             console.log(data)
             if(data.code == 0){
               this.$router.push({
-                path:'/login',
-                query:{backPath:this.backPath}
+                path:'/scanLogin',
+                query:{backPath:this.backPath,docId:this.docId}
               })
             }else{
               this.passWord = ''
-              alert(data.msg)
+              weui.alert(data.msg)
             }
           })
         }

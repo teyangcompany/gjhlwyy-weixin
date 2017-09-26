@@ -61,7 +61,8 @@
         verifyTips:"手机号不能为空",
         countdown:60,
         a:"",
-        backPath:""
+        backPath:"",
+        docId:""
       }
     },
     validations: {
@@ -75,8 +76,15 @@
     },
     created(){
        this.backPath = this.$route.query.backPath
+      this.docId = this.$route.query.docId
       console.log(document.getElementsByTagName("body")[0].offsetHeight)
       console.log(window.innerHeight)
+      if(this.docId != ''){
+           this.$router.push({
+             path:"/scanBind",
+             query:{docId:this.docId}
+           })
+      }
       api("nethos.pat.info.get", {
         token:tokenCache.get()
       }).then((data) => {

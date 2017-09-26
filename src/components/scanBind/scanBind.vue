@@ -1,17 +1,17 @@
 <template>
   <div>
-    <v-header :title="title" :rightTitle="rightTitle"></v-header>
+    <!--<v-header :title="title" :rightTitle="rightTitle"></v-header>-->
     <div class="bindPhone">
       <div class="bindPhoneCenter">
         <div class="bigMiddle">
           <div class="doctorFunc">
             <div class="doctorImg">
-              <img src="../../../static/img/医生男.jpg" alt="">
+              <img :src="docInfo.docAvatar" alt="">
             </div>
             <div class="doctorIntro">
-              <h4><span class="mainTitle">华佗</span><span class="chief">名医</span></h4>
-              <h6>神经内科&nbsp; 主任医师</h6>
-              <h6>浙医二院</h6>
+              <h4><span class="mainTitle">{{ docInfo.docName }}</span><span class="chief" v-if="docInfo.docFamousConsultStatus == true">名医</span><span v-else>&nbsp;&nbsp; </span> </h4>
+              <h6>{{ docInfo.docDeptName }}&nbsp; {{ docInfo.docTitle }}</h6>
+              <h6>{{ docInfo.docHosName }}</h6>
             </div>
           </div>
         </div>
@@ -62,13 +62,20 @@
         verifyTips:"手机号不能为空",
         showVerify:false,
         a:"",
+        docId:"",
+        docInfo:""
       }
     },
     created(){
-
+         this.docId = this.$route.query.docId
+         api("nethos.doc.card",{
+           docId:this.docId
+         }).then((data)=>{
+             this.docInfo = data.obj.sysDoc
+             console.log(data)
+         })
     },
     methods:{
-
       getCode(){
         if(this.phone == ''){
           this.verifyTips = "手机号不能为空"
@@ -167,7 +174,7 @@
           if(this.regStatus == 'REGISTER'){
             this.$router.push({
               path:'/scanRegister',
-              query:{cid:this.cid,codeValue:this.codeValue,backPath:this.backPath}
+              query:{cid:this.cid,codeValue:this.codeValue,backPath:this.backPath,docId:this.docId}
             })
           }else if(this.regStatus == 'BIND'){
             api("nethos.pat.wechat.bind",{
@@ -183,7 +190,7 @@
               if(data.code == 0){
                 this.$router.push({
                   path:'/scanLogin',
-                  query:{backPath:this.backPath}
+                  query:{backPath:this.backPath,docId:this.docId}
                 })
               } else if(data.msg = ''){
                 this.verifyTips = '网络错误，稍候重试'
@@ -253,7 +260,7 @@
       margin:0 auto;
       .bigMiddle{
         position: fixed;
-        top: 50px;
+        top: 30px;
         left:0;
         right:0;
         bottom:500rem/$rem;
@@ -320,7 +327,7 @@
       }
       .tips{
         position: absolute;
-        top:470rem/$rem;
+        top:450rem/$rem;
         width:690rem/$rem;
         text-align: center;
         border:1px solid #00ced1;
