@@ -56,6 +56,24 @@ export function getApiUrl() {
   return api_url;
 }
 
+
+export function getAppid() {
+  let hostname = url("hostname");
+  let api_url = "";
+  for (let key in API_URL) {
+    if (hostname == key) {
+      api_url = API_URL[key].appid;
+    }
+  }
+  if (!api_url) {
+    api_url = API_URL[Object.keys(config.api_url)[0]].appid;
+  }
+  return api_url;
+}
+
+
+
+
 /**
  * 生成返回URL
  * @param options

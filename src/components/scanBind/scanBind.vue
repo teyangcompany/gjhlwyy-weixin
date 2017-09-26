@@ -327,7 +327,7 @@
       }
       .tips{
         position: absolute;
-        top:450rem/$rem;
+        top:430rem/$rem;
         width:690rem/$rem;
         text-align: center;
         border:1px solid #00ced1;
