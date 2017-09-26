@@ -82,6 +82,11 @@ devMiddleware.waitUntilValid(() => {
 
 var server = app.listen(port)
 
+let autoVersion = require("auto-version");//返回一个generator函数
+let co = require('hprose').co;
+let file = path.join(__dirname, "../package.json");
+co(autoVersion(file));
+
 module.exports = {
   ready: readyPromise,
   close: () => {
