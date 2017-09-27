@@ -87,6 +87,8 @@
     </section>
     <section class="goBack"  v-else-if="path == '/myProfile/index'">
     </section>
+    <section class="goBack"  v-else-if="path == '/waitArrange' && historyLength <= 1">
+    </section>
     <section class="goBack"  v-else-if="path == '/myProfile/serviceIndex'">
     </section>
     <section class="goBack" @click="back()" v-else>
@@ -219,6 +221,7 @@
       console.log(this.path)
       console.log(window.history,"路径")
       this.historyLength = window.history.length
+      console.log(this.historyLength)
     },
     methods:{
       back(){

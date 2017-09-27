@@ -156,22 +156,22 @@
               this.showVerify = false
             },1000)
           }
-//          else if(this.code == ''){
-//            this.verifyTips = "验证码不能为空"
-//            this.showVerify = true
-//            setTimeout(()=>{
-//              this.verifyTips = '验证码不能为空'
-//              this.showVerify = false
-//            },1000)
-//          }
-//          else if(this.code != this.codeValue){
-//            this.verifyTips = "验证码输入错误"
-//            this.showVerify = true
-//            setTimeout(()=>{
-//              this.verifyTips = '验证码输入错误'
-//              this.showVerify = false
-//            },1000)
-//          }
+          else if(this.code == ''){
+            this.verifyTips = "验证码不能为空"
+            this.showVerify = true
+            setTimeout(()=>{
+              this.verifyTips = '验证码不能为空'
+              this.showVerify = false
+            },1000)
+          }
+          else if(this.code != this.codeValue){
+            this.verifyTips = "验证码输入错误"
+            this.showVerify = true
+            setTimeout(()=>{
+              this.verifyTips = '验证码输入错误'
+              this.showVerify = false
+            },1000)
+          }
           else{
             if(this.regStatus == 'REGISTER'){
               this.$router.push({
@@ -181,7 +181,7 @@
             }else if(this.regStatus == 'BIND'){
               api("nethos.pat.wechat.bind",{
 //                token:`OPENID_`+localStorage.getItem("token"),
-                captcha:this.codeValue,
+                captcha:this.code,
                 cid:this.cid,
                 openid:openidCache.get()
               }).then((data)=>{
