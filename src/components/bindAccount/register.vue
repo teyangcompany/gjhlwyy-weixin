@@ -21,7 +21,7 @@
             </div>
             <div class="form verifyCode border-1px">
               <label for="" class="codeLabel"> <img src="../../../static/img/密码.png" alt=""> </label>
-              <input type="text" placeholder="8-20位大小写字母+数字" class="codeInput" @focus="focus()" v-model="passWord">
+              <input type="password" placeholder="8-20位大小写字母+数字" class="codeInput" @focus="focus()" v-model="passWord">
             </div>
           </div>
           <div class="buttonWrap">

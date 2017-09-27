@@ -669,7 +669,7 @@
       focus(){
         this.seeMore = false
 
-          document.getElementsByClassName("foot_top")[0].scrollIntoView()
+//          document.getElementsByClassName("foot_top")[0].scrollIntoView()
 
 
       },

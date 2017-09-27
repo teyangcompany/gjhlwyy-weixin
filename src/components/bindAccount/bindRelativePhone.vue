@@ -32,9 +32,9 @@
       <!--<div style="background-color: white" class="layer">-->
         <!--<v-mask v-if="showMask"></v-mask>-->
       <!--</div>-->
-      <!--<div class="verifyCenter">-->
-        <!--<verify v-if="showVerify" :verifyTips="verifyTips"></verify>-->
-      <!--</div>-->
+      <div class="verifyCenter">
+        <verify v-if="showVerify" :verifyTips="verifyTips"></verify>
+      </div>
     </div>
   </div>
 </template>
@@ -61,7 +61,8 @@
         verifyTips:"手机号不能为空",
         countdown:60,
         a:"",
-        backPath:""
+        backPath:"",
+        docId:""
       }
     },
     validations: {
@@ -75,21 +76,41 @@
     },
     created(){
        this.backPath = this.$route.query.backPath
+      this.docId = this.$route.query.docId
       console.log(document.getElementsByTagName("body")[0].offsetHeight)
       console.log(window.innerHeight)
-      api("nethos.pat.info.get", {
-        token:tokenCache.get()
-      }).then((data) => {
-        if (data.code == 0) {
-//          this.patientInfo = data.obj
-          this.$router.push({
-            path:"/repeatBind",
-            query:{backPath:this.path}
-          });
-        } else {
+//      if(this.docId != ''){
+//          api("nethos.pat.info.get", {
+//            token:tokenCache.get()
+//          }).then((data) => {
+//            if (data.code == 0) {
+//  //          this.patientInfo = data.obj
+//              this.$router.push({
+//                path:"/scanLogin",
+//                query:{docId:this.docId}
+//              })
+//            } else {
+//              this.$router.push({
+//                path:"/scanBind",
+//                query:{docId:this.docId}
+//              })
+//            }
+//          })
+//      }else{
+        api("nethos.pat.info.get", {
+          token:tokenCache.get()
+        }).then((data) => {
+          if (data.code == 0) {
+            //          this.patientInfo = data.obj
+            this.$router.push({
+              path:"/repeatBind",
+              query:{backPath:this.path}
+            });
+          } else {
 
-        }
-      })
+          }
+        })
+//      }
     },
     methods:{
       getCode(){

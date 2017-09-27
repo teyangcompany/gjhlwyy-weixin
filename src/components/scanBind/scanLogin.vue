@@ -1,17 +1,17 @@
 <template>
   <div>
-    <v-header :title="title" :rightTitle="rightTitle"></v-header>
+    <!--<v-header :title="title" :rightTitle="rightTitle"></v-header>-->
     <div class="bindPhone">
       <div class="bindPhoneCenter">
         <div class="bigMiddle">
           <div class="doctorFunc">
             <div class="doctorImg">
-              <img src="../../../static/img/医生男.jpg" alt="">
+              <img :src="docInfo.docAvatar" alt="">
             </div>
             <div class="doctorIntro">
-              <h4><span class="mainTitle">华佗</span><span class="chief">名医</span></h4>
-              <h6>神经内科&nbsp; 主任医师</h6>
-              <h6>浙医二院</h6>
+              <h4><span class="mainTitle">{{ docInfo.docName }}</span><span class="chief" v-if="docInfo.docFamousConsultStatus == true">名医</span><span v-else>&nbsp;&nbsp;</span> </h4>
+              <h6>{{ docInfo.docDeptName}}&nbsp; {{ docInfo.docTitle }}</h6>
+              <h6>{{ docInfo.docHosName }}</h6>
             </div>
           </div>
         </div>
@@ -37,21 +37,51 @@
       return{
         title:"广济互联网医院",
         rightTitle:"",
-        password:""
-
+        password:"",
+        backPath:"",
+        docId:"",
+        docInfo:""
       }
+    },
+    created(){
+      this.backPath = this.$route.query.backPath
+      this.docId = this.$route.query.docId
+      api("nethos.doc.card",{
+        docId:this.docId
+      }).then((data)=>{
+        this.docInfo = data.obj.sysDoc
+        console.log(data)
+      })
     },
     methods:{
       login(){
-        this.password = sha512(hex_md5('lmw123456') + 'lmw123456' );
-        api("nethos.pat.login",{
-          patMobile:"15868823516",
-          patPassword:this.password
-        }).then((data)=>{
-          localStorage.setItem("token",data.token)
-          this.$router.push('/myProfile/index')
-          console.log(data)
-        })
+        if(this.backPath == '/infoConfirm'){
+          this.$router.push('/book')
+        }else if(this.backPath == '/pictureConsultNext'){
+          this.$router.push('/internetRoom')
+        }else if(this.backPath == '/pictureConsultApply'){
+          this.$router.push('/internetRoom')
+        }else if(this.backPath == '/famousPage'){
+          this.$router.push('/book')
+        }else if(this.backPath == '/expertDetail'){
+          this.$router.push('/book')
+        }else if(this.backPath == '/bookType/date'){
+          this.$router.push('/book')
+        }else if(this.backPath == '/selectType'){
+          this.$router.push('/book')
+        }else if(this.backPath == '/onlineDoctorCard'){
+          this.$router.push('/internetRoom')
+        }else if(!(this.backPath)){
+          this.$router.push({
+            path:'/onlineDoctorCard',
+            query:{docId:this.docId}
+          })
+        }else{
+          this.$router.push({
+            path:'/onlineDoctorCard',
+            query:{docId:this.docId}
+          })
+        }
       }
     },
     components:{
@@ -139,7 +169,7 @@
       }
       .tips{
         position: absolute;
-        top:540rem/$rem;
+        top:500rem/$rem;
         width:690rem/$rem;
         text-align: center;
         border:1px solid #00ced1;

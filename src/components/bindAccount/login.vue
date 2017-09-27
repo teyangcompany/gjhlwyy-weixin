@@ -59,6 +59,8 @@
           this.$router.push('/book')
         }else if(this.backPath == '/onlineDoctorCard'){
           this.$router.push('/internetRoom')
+        }else if(!(this.backPath)){
+          this.$router.push('/Profile')
         }else{
           this.$router.push({
             path:this.backPath
