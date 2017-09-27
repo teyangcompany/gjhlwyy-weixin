@@ -157,6 +157,7 @@
                 this.reportInfoString = JSON.stringify(this.reportInfo)
                 console.log(data)
               }else{
+                  weui.alert(data.msg)
                 this.reportInfo = 2
               }
             })

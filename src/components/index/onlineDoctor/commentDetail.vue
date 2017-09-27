@@ -8,7 +8,7 @@
                   <img :src="allInfo[0].sysDoc.docAvatar" alt="">
                 </div>
                 <div class="doctorIntro">
-                  <h4><span class="mainTitle">{{allInfo[0].sysDoc.docName}}</span><span class="chief">名医</span></h4>
+                  <h4><span class="mainTitle">{{allInfo[0].sysDoc.docName}}</span><span class="chief" v-if="allInfo[0].sysDoc.docFamousConsultStatus == true">名医</span><span v-else> &nbsp;</span> </h4>
                   <div class="checkRating"><star :size="36" :score="allInfo[0].sysDoc.docScoure"></star><span v-if="allInfo">{{ allInfo[0].sysDoc.docScoure.toFixed(1) }}分 </span></div>
                 </div>
               </div>

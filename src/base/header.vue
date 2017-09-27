@@ -40,6 +40,9 @@
     <section class="goBack"  v-else-if="path == '/myConsult/online/commented'" @click="goInternet()">
       <img src="../../static/img/返回.png" alt="">
     </section>
+    <section class="goBack"  v-else-if="path == '/usualPatient'" @click="goForceMy()">
+      <img src="../../static/img/返回.png" alt="">
+    </section>
     <section class="goBack"  v-else-if="path == '/internetRoom'" @click="goIndex()">
       <!--<img src="../../static/img/返回.png" alt="">-->
     </section>
@@ -189,7 +192,8 @@
   export default{
     data(){
       return{
-        path:""
+        path:"",
+        historyLength:""
       }
     },
     props:{
@@ -213,6 +217,8 @@
     mounted(){
       this.path = this.$route.path
       console.log(this.path)
+      console.log(window.history,"路径")
+      this.historyLength = window.history.length
     },
     methods:{
       back(){
@@ -226,6 +232,9 @@
       },
       goBookSuccess(){
           this.$emit("on-bookService")
+      },
+      goForceMy(){
+          this.$emit("on-forceMy")
       },
       goAddUsual(){
           this.$emit('0n-addUsual')

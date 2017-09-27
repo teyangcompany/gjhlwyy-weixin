@@ -28,7 +28,7 @@
                         <div>
                           <span class="chatDoctor"></span> <span class="doctorTitle">{{ item.docName }}</span>
                           <p class="oneLine">{{ item.hosName }}</p>
-                          <p>{{ single.schemeDate.substr(0,10) }} {{ single.schemeAmpm == 'am'? '上午':'下午' }} {{ single.docName }}</p>
+                          <p style="color: #333333;">{{ single.schemeDate.substr(0,10) }} <span style="color: #2AB6B3;">{{ single.schemeAmpm == 'am'? '上午':'下午' }}</span> {{ single.docName }}</p>
                         </div>
                       </div>
                       <div class="cancelTime specialCancel"  v-if="single.schemeStats == 4">
@@ -57,13 +57,13 @@
                   <div class="border-1px"  v-if="item.bookDocId" v-for="item in commonRoom">
                     <div  class="border-1px" @click="selectTime(single,index)"  v-for="(single,index) in item.deptSchemeList[0].schemeList">
                       <div class="cancelImg">
-                        <img class="avartarImg" :src="item.docAvatar" alt="">
+                        <img class="avartarImg" :src="item.docAvatar" alt="" >
                       </div>
                       <div class="cancelIntro">
                         <div>
                           <span class="chatDoctor"></span> <span class="doctorTitle">{{ item.docName }}</span>
                           <p class="oneLine">{{ item.hosName }}</p>
-                          <p>{{ single.schemeDate.substr(0,10) }} {{ single.schemeAmpm == 'am'? '上午':'下午' }} 专家</p>
+                          <p style="color: #333333;">{{ single.schemeDate.substr(0,10) }} <span style="color: #2AB6B3"> {{ single.schemeAmpm == 'am'? '上午':'下午' }}</span> 专家</p>
                         </div>
                       </div>
                       <div class="cancelTime specialCancel" id="" v-if="single.schemeStats == 4">
@@ -125,6 +125,7 @@
   import AlertTips from '../../../base/alertTips'
   import BScroll from 'better-scroll'
   import api from '../../../lib/api'
+  import weui from 'weui.js'
   import {isLoginMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   export default{
@@ -202,7 +203,7 @@
                 },1000)
             }else{
               this.commonRoom = true
-                alert(data.msg)
+                weui.alert(data.msg)
             }
           })
         }
@@ -302,7 +303,7 @@
               },1000)
             }else{
               this.commonRoom = true
-                alert(data.msg)
+                weui.alert(data.msg)
             }
           })
         },
@@ -357,7 +358,7 @@
                     },1000)
                   }else{
                     this.showToast = false
-                    alert(data.msg)
+                    weui.alert(data.msg)
                   }
                 })
               }

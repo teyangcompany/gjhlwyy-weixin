@@ -28,6 +28,7 @@
   import Toast from '../../base/toast'
   import BScroll from 'better-scroll'
   import api from '../../lib/api'
+  import weui from 'weui.js'
   import {isLoginMixin} from "../../lib/mixin"
   import {tokenCache} from '../../lib/cache'
   export default{
@@ -58,6 +59,9 @@
                 this.category = data.list
                 this.categoryDetail = this.category[this.clickIndex].deptList
                 console.log(this.category)
+              }else{
+                  this.showToast = false
+                  weui.alert(data.msg)
               }
          })
       },

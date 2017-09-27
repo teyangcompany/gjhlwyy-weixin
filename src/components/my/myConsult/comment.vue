@@ -35,11 +35,15 @@
         </div>
       </div>
     </div>
+    <div class="verifyCenter"  v-if="showVerify">
+      <verify :verifyTips="verifyTips"></verify>
+    </div>
   </div>
 </template>
 <script>
   import header from '../../../base/header'
   import {tokenCache} from '../../../lib/cache'
+  import verify from '../../../base/verify'
   import api from '../../../lib/api'
   import weui from 'weui.js'
   export default{
@@ -50,7 +54,9 @@
         inputdata:'',
         commentContent:"",
         consultId:"",
-        textLength:0
+        textLength:0,
+        showVerify:false,
+        verifyTips:""
       }
     },
     created(){
@@ -66,25 +72,35 @@
         }
       },
       throwComment(){
-        api("nethos.consult.info.comment",{
-          token:tokenCache.get(),
-          consultId:this.consultId,
-          score:this.inputdata*2,
-          content:this.commentContent
-        }).then((data)=>{
-           if(data.code == 0){
-               this.$router.push({
-                 path:'/myConsult/commented',
+        if(this.textLength > 200){
+            weui.alert("字数不能超过200")
+        }else{
+          api("nethos.consult.info.comment",{
+            token:tokenCache.get(),
+            consultId:this.consultId,
+            score:this.inputdata*2,
+            content:this.commentContent
+          }).then((data)=>{
+            if(data.code == 0){
+              this.showVerify = true
+              this.verifyTips = "评价成功"
+              setTimeout(()=>{
+                this.showVerify = false
+                this.$router.push({
+                path:'/myConsult/commented',
 //                 query:{consultId:this.consultId}
-               })
-           }else{
-               weui.alert(data.msg)
-           }
-        })
+                })
+              },1000)
+            }else{
+              weui.alert(data.msg)
+            }
+          })
+        }
       },
     },
     components:{
-      "VHeader":header
+      "VHeader":header,
+       verify
     },
     watch: {
       inputdata(value) {
@@ -111,6 +127,16 @@
     right:0;
     bottom:0;
     background-color: rgb(245,245,245);
+    .verifyCenter{
+      position: fixed;
+      left:0;
+      right:0;
+      top:0;
+      bottom:0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     .commentArea{
       position: fixed;
       top: 50px;

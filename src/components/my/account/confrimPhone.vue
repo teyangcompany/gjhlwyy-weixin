@@ -123,8 +123,13 @@
           Api('nethos.system.captcha.pat.mobile.modify',{
             mobile:this.mobile
           }).then(req=>{
-            this.$set(this.$data,'newCid',req.obj.cid)
-            console.log(this.newCid,'xinxinxin')
+              if(req.succ){
+                this.$set(this.$data,'newCid',req.obj.cid)
+                console.log(this.newCid,'xinxinxin')
+              }else {
+                  alert(req.msg)
+              }
+
           })
         }
 
