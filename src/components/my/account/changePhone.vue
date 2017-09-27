@@ -89,24 +89,27 @@
         }
       },
       getCode(){
-        this.msg = 60;
-        var time = setInterval(()=>{
-          this.msg -=1;
-          if(this.msg==0){
-            this.msg='重新获取';
-            clearInterval(time)
-          }
-        },1000)
         if(this.$v.$invalid){
           this.$set(this.$data,'showError',true)
         }else {
+          this.msg = 60;
+          var time = setInterval(()=>{
+            this.msg -=1;
+            if(this.msg==0){
+              this.msg='重新获取';
+              clearInterval(time)
+            }
+          },1000)
           console.log(898989)
-          Api('nethos.system.captcha.generate',{
-            captchaType:'SMS',
+          Api('nethos.system.captcha.pat.mobile.modify',{
             mobile:this.mobile
-          }).then(req=>{
-            this.$set(this.$data,'cid',req.obj)
-            console.log(this.cid,3333)
+          }).then(res=>{
+            if(res.succ){
+              this.$set(this.$data,'cid',req.obj)
+              console.log(this.cid,3333)
+            }else {
+              alert(res.msg)
+            }
           })
         }
 
