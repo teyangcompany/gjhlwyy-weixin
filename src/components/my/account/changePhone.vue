@@ -21,7 +21,7 @@
           </div>
           <div class="weui-cell__ft">
             <button v-show="!(msg>0)" class="weui-vcode-btn" @click="getCode">{{msg}}</button>
-            <button v-show="msg>0" class="weui-vcode-btn" @click="getCode">有效期{{msg}}s</button>
+            <button v-show="msg>0" class="weui-vcode-btn" >有效期{{msg}}s</button>
           </div>
         </div>
       </div>
@@ -101,13 +101,11 @@
             }
           },1000)
           console.log(898989)
-          Api('nethos.system.captcha.generate',{
-            mobile:this.mobile,
-            captchaType:"SMS",
+          Api('nethos.system.captcha.pat.mobile.modify',{
             token:this.token
           }).then(res=>{
             if(res.succ){
-              this.$set(this.$data,'cid',res.obj)
+              this.$set(this.$data,'cid',res.obj.cid)
               console.log(this.cid,3333)
             }else {
               alert(res.msg)

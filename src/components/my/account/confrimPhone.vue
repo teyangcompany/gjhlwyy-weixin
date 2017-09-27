@@ -8,7 +8,7 @@
         <div class="weui-cell">
           <div class="weui-cell__hd"><label class="weui-label bf">新手机号</label></div>
           <div class="weui-cell__bd" v-bind:class="{ 'form-group--error': $v.mobile.$error }">
-            <input  @blur="$v.mobile.$touch()" class="weui-input" type="number" v-model="mobile" placeholder="请输入手机号"/>
+            <input   @blur="$v.mobile.$touch()" class="weui-input" type="number" v-model="mobile" placeholder="请输入手机号"/>
           </div>
         </div>
         <span class="form-group__message" v-show="!$v.mobile.phone&&showError">请输入正确的手机号</span>
@@ -21,7 +21,7 @@
           </div>
           <div class="weui-cell__ft">
             <button v-show="!(msg>0)"  class="weui-vcode-btn" @click="getCode">{{msg}}</button>
-            <button v-show="msg>0" class="weui-vcode-btn" @click="getCode">有效期{{msg}}s</button>
+            <button v-show="msg>0" class="weui-vcode-btn" >有效期{{msg}}s</button>
           </div>
         </div>
       </div>
@@ -83,10 +83,10 @@
             }
           })
         }
-
       },
+
       getSucc(){
-        Api("nethos.pat.mobile.modify",{
+        Api("nethos.pat.mobile.modify.v2",{
           captcha:this.captcha,
           cid:this.cid,
           newCid:this.newCid,
@@ -106,6 +106,7 @@
           }
         })
       },
+
       getCode(){
         console.log(this.$v.$invalid);
         if(this.$v.$invalid){
@@ -121,7 +122,8 @@
             }
           },1000)
           Api('nethos.system.captcha.pat.mobile.modify',{
-            mobile:this.mobile
+            mobile:this.mobile,
+            token:this.token
           }).then(req=>{
               if(req.succ){
                 this.$set(this.$data,'newCid',req.obj.cid)
