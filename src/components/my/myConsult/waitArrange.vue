@@ -187,6 +187,7 @@
        Toast
     },
     created(){
+      console.log(this.$router.history,"路径")
       this.listenScroll = true
       this.probeType = 3
       this.displayDate = this.$route.query.date
@@ -700,11 +701,11 @@
     bottom:0;
     .largePicArea{
       position: fixed;
-      top:50px;
+      top:0px;
       left:0;
       right:0;
       bottom:0;
-
+      z-index:10000;
 
       /*background-color: #999999;*/
       display: flex;
