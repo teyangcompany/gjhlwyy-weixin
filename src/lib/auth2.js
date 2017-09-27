@@ -30,7 +30,7 @@ export default (cb) => {
   }
   /*非微信打开*/
   else {
-    console.log("openid:" + openid);
+    // console.log("openid:" + openid);
     cb();
   }
 }
