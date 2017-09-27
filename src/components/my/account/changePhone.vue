@@ -101,8 +101,10 @@
             }
           },1000)
           console.log(898989)
-          Api('nethos.system.captcha.pat.mobile.modify',{
-            mobile:this.mobile
+          Api('nethos.system.captcha.generate',{
+            mobile:this.mobile,
+            captchaType:"SMS",
+            token:this.token
           }).then(res=>{
             if(res.succ){
               this.$set(this.$data,'cid',req.obj)

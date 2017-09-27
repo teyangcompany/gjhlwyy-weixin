@@ -120,8 +120,7 @@
               clearInterval(time)
             }
           },1000)
-          Api('nethos.system.captcha.generate',{
-            captchaType:'SMS',
+          Api('nethos.system.captcha.pat.mobile.modify',{
             mobile:this.mobile
           }).then(req=>{
             this.$set(this.$data,'newCid',req.obj)
