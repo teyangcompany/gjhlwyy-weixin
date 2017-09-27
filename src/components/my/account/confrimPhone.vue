@@ -17,10 +17,10 @@
             <label class="weui-label bf">验证码</label>
           </div>
           <div class="weui-cell__bd">
-            <input class="weui-input" type="tel" v-model="newCaptcha" placeholder="请输入验证码"/>
+            <input class="weui-input" type="newCid" v-model="newCaptcha" placeholder="请输入验证码"/>
           </div>
           <div class="weui-cell__ft">
-            <button v-show="!(msg>0)" class="weui-vcode-btn" @click="getCode">{{msg}}</button>
+            <button v-show="!(msg>0)"  class="weui-vcode-btn" @click="getCode">{{msg}}</button>
             <button v-show="msg>0" class="weui-vcode-btn" @click="getCode">有效期{{msg}}s</button>
           </div>
         </div>

@@ -67,16 +67,7 @@
         }else if(this.captcha.length!==4) {
           alert('请输入正确的验证码')
         }else {
-          api('smarthos.captcha.check',{
-            "cid": this.cid,
-            "captcha": this.captcha
-          }).then(res=>{
-            if(res.succ){
-              this.getSucc()
-            }else {
-              alert(res.msg)
-            }
-          })
+            this.getSucc()
         }
       },
 
@@ -88,7 +79,9 @@
           if(res.succ){
             this.$router.push({
               name: "modificationPassword", params: {
-                mobile: this.mobile
+                mobile: this.mobile,
+                captcha:this.captcha,
+                cid:this.cid
               }
             })
           }else {
@@ -110,8 +103,7 @@
           this.$set(this.$data,'showError',true)
         }else {
           console.log(898989)
-          Api('nethos.system.captcha.generate',{
-            captchaType:'SMS',
+          Api('nethos.system.captcha.pat.password.reset',{
             mobile:this.mobile
           }).then(req=>{
             this.$set(this.$data,'cid',req.obj)

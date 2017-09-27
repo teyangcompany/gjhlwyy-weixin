@@ -53,11 +53,15 @@
               showPatPassWord:false,
               againPatPassword:'',
               mobile:"" ,
-              equal:false
+              equal:false,
+              captcha:"",
+              cid:""
             }
         },
         mounted(){
           this.$set(this.$data,'mobile',this.$route.params.mobile)
+          this.$set(this.$data,'captcha',this.$route.params.captcha)
+          this.$set(this.$data,'cid',this.$route.params.cid)
         },
       watch:{
         againPatPassword(){
@@ -82,11 +86,12 @@
             console.log(21212121)
             this.$set(this.$data,'showPatPassWord',true)
           }else {
-            var patPassword = sha512(hex_md5(this.patPassword) + this.patPassword );
-            var againPatPassword = sha512(hex_md5(this.againPatPassword) + this.againPatPassword );
-            Api('nethos.pat.password.modify',{
-              patMobile:this.mobile,
-              patPassword:this.patPassword
+//            var patPassword = sha512(hex_md5(this.patPassword) + this.patPassword );
+//            var againPatPassword = sha512(hex_md5(this.againPatPassword) + this.againPatPassword );
+            Api('nethos.pat.password.modify.v3',{
+              patPassword:this.patPassword,
+              captcha:this.captcha,
+              cid:this.cid
             }).then(req=>{
               console.log(req,999)
               if(req.succ){
