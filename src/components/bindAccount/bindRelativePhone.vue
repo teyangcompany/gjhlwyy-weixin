@@ -102,7 +102,7 @@
         }).then((data) => {
           if (data.code == 0) {
             //          this.patientInfo = data.obj
-            this.$router.push({
+            this.$router.replace({
               path:"/repeatBind",
               query:{backPath:this.path}
             });

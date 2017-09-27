@@ -42,6 +42,25 @@
             <span class="videoWord">¥ {{ aboutDoctor.docVideoConsultPrice }}</span>
           </div>
         </div>
+        <div class="institutionDes border-1px" v-if="doctorIntro">
+          <div class="desCenter team">
+            <h4>医生公告</h4>
+            <div class="line"></div>
+            <div class="forArrowLeft">
+              <h6 class="good" v-if="noticeAll">{{ doctorIntro.noticeContent }}</h6>
+              <p class="good" v-else>{{ doctorIntro.noticeContent }}</p>
+              <div>
+                <div v-if="noticeAll" @touchend="noticeDownMore()">
+                  <img src="../../../../static/img/下.png" alt="" >
+                </div>
+                <div  v-else @touchend="noticeExcelClose()">
+                  <img src="../../../../static/img/上.png" alt="" >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="blank border-1px"></div>
         <div class="institutionDes border-1px">
           <div class="desCenter team">
             <h4>医生擅长</h4>
@@ -127,6 +146,7 @@
         dialogMain:"微信暂不支持该功能，请前往应用商店下载app来和医生视频问诊",
         dialogLeftFoot:"取消",
         dialogRightFoot:"下载app",
+        noticeAll:true,
         excelAll:true,
         introAll:true,
         dialogDisplay:false,
@@ -217,6 +237,12 @@
       },
       goBookNum(){
 
+      },
+      noticeDownMore(){
+        this.noticeAll = false
+      },
+      noticeExcelClose(){
+        this.noticeAll = true
       },
       excelDownMore(){
         this.excelAll = false

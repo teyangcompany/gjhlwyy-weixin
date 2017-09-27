@@ -11,7 +11,7 @@
         <div class="form verifyCode">
           <label for="">身份证：</label>
           <input v-if="allPatient[index].compatMedicalRecord" readonly="readonly" type="text" placeholder="请输入真实的身份证号" :value="changeID" v-model="changeID">
-          <input type="text" placeholder="请输入真实的身份证号" :value="changeID" v-model="changeID">
+          <input v-else type="text" placeholder="请输入真实的身份证号" :value="changeID" v-model="changeID">
         </div>
       </div>
       <div class="usual">

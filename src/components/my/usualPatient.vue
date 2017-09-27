@@ -1,7 +1,7 @@
 <template>
   <transition name="slide">
     <div class="wrapWhole">
-      <v-header :title="title" :rightTitle="rightTitle" @0n-addUsual="addPatient()"></v-header>
+      <v-header :title="title" :rightTitle="rightTitle" @0n-addUsual="addPatient()" @on-forceMy="goForceMy()"></v-header>
       <div class="usual" ref="usual">
         <div>
           <router-link tag="div" :to="{path:'/detailUsual',query:{index:index}}" class="usualLine" v-for="(item,index) in patientList" :key="item.id">
@@ -51,6 +51,9 @@
     methods:{
       addPatient(){
         this.$router.push('/addUsualPatient')
+      },
+      goForceMy(){
+        this.$router.push('/Profile')
       },
       _initUsualScroll(){
         this.usualScroll = new BScroll(this.$refs.usual,{

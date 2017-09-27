@@ -40,6 +40,9 @@
     <section class="goBack"  v-else-if="path == '/myConsult/online/commented'" @click="goInternet()">
       <img src="../../static/img/返回.png" alt="">
     </section>
+    <section class="goBack"  v-else-if="path == '/usualPatient'" @click="goForceMy()">
+      <img src="../../static/img/返回.png" alt="">
+    </section>
     <section class="goBack"  v-else-if="path == '/internetRoom'" @click="goIndex()">
       <!--<img src="../../static/img/返回.png" alt="">-->
     </section>
@@ -229,6 +232,9 @@
       },
       goBookSuccess(){
           this.$emit("on-bookService")
+      },
+      goForceMy(){
+          this.$emit("on-forceMy")
       },
       goAddUsual(){
           this.$emit('0n-addUsual')
