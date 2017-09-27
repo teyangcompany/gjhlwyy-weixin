@@ -69,6 +69,7 @@
   import TimeToggle from '../../../base/timeToggle'
   import Toast from '../../../base/toast'
   import Scroll from '../../../base/scroll'
+  import weui from 'weui.js'
   import {isLoginMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   export default{
@@ -127,10 +128,15 @@
                 token:tokenCache.get(),
                 bookSchemeId:this.bookSchemeId
               }).then((data)=>{
-                this.patientAll = data.list
-                this.showPat=true;
-                this.showToast = false
-                console.log(data)
+                  if(data.code == 0){
+                    this.patientAll = data.list
+                    this.showPat=true;
+                    this.showToast = false
+                    console.log(data)
+                  }else{
+                    this.showToast = false
+                      weui.alert(data.msg)
+                  }
               })
             }
           } else {
@@ -188,6 +194,8 @@
                }
              }
 
+            }else{
+                weui.alert(data.msg)
             }
 
        })

@@ -31,6 +31,7 @@
   import header from "../../../base/header"
   import api from '../../../lib/api'
   import Toast from '../../../base/test'
+  import weui from 'weui.js'
   import {tokenCache} from '../../../lib/cache'
   export default{
     data(){
@@ -55,9 +56,13 @@
           token:tokenCache.get(),
           consultId:this.consultId
         }).then((data)=>{
-            this.aboutConsultFee = data.obj.consult.consultFee
-          console.log(this.aboutConsultFee)
-            console.log(data)
+            if(data.code == 0){
+              this.aboutConsultFee = data.obj.consult.consultFee
+              console.log(this.aboutConsultFee)
+              console.log(data)
+            }else{
+                weui.alert(data.msg)
+            }
         })
     },
     methods:{
@@ -100,7 +105,7 @@
                           console.log("支付过程中用户取消")
                       }else if(res.err_msg == "get_brand_wcpay_request:fail"){
                           console.log("支付失败")
-                          alert(JSON.stringify(res))
+                          weui.alert(JSON.stringify(res))
 
                       }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
                     }
@@ -115,7 +120,7 @@
                   }
                 }
               }else if(data.code == -2 &&　data.msg == '当前订单已支付'){
-                   alert('当前订单已支付')
+                   weui.alert('当前订单已支付')
               }else if(data.code == 0 && !(data.obj)){
                 this.$router.push({
                   path:'/allConsultSuccess',

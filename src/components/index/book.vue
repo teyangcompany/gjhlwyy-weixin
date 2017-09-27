@@ -57,6 +57,7 @@
 </template>
 <script>
   import header from '../../base/header'
+  import weui from 'weui.js'
   import api from '../../lib/api'
   export default{
       data(){
@@ -73,8 +74,12 @@
           api("nethos.book.hos.area.list",{
 
           }).then((data)=>{
-              this.hosList = data.list
-              console.log(this.hosList)
+              if(data.code == 0){
+                this.hosList = data.list
+                console.log(this.hosList)
+              }else{
+                  weui.alert(data.msg)
+              }
           })
       },
       methods:{

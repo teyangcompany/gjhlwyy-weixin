@@ -187,7 +187,7 @@
        Toast
     },
     created(){
-      console.log(this.$router.history,"路径")
+
       this.listenScroll = true
       this.probeType = 3
       this.displayDate = this.$route.query.date

@@ -5,11 +5,13 @@
       <div class="formContent nameContent">
         <div class="form phone">
           <label for="">姓名：</label>
-          <input  type="text" placeholder="请输入真实的姓名"  :value="changeName" v-model="changeName">
+          <input  v-if="allPatient[index].compatMedicalRecord" readonly="readonly" type="text" placeholder="请输入真实的姓名"  :value="changeName" v-model="changeName">
+          <input  v-else type="text" placeholder="请输入真实的姓名"  :value="changeName" v-model="changeName">
         </div>
         <div class="form verifyCode">
           <label for="">身份证：</label>
-          <input  type="text" placeholder="请输入真实的身份证号" :value="changeID" v-model="changeID">
+          <input v-if="allPatient[index].compatMedicalRecord" readonly="readonly" type="text" placeholder="请输入真实的身份证号" :value="changeID" v-model="changeID">
+          <input type="text" placeholder="请输入真实的身份证号" :value="changeID" v-model="changeID">
         </div>
       </div>
       <div class="usual">
@@ -28,7 +30,7 @@
            + 绑定病案号
       </div>
     </div>
-    <div class="deletePatient" @click="deletePatient()" v-if="!(allPatient[index].compatMedicalRecord)">
+    <div class="deletePatient" @click="deletePatient()">
         <img src="../../../static/img/错误-拷贝.png" alt="">删除就诊人
     </div>
     <div class="emptyHistory" v-if="fail">
@@ -52,6 +54,7 @@
   import Alert from '../../base/alert'
   import Toast from '../../base/toast'
   import Dialog from '../../base/dialog'
+  import weui from 'weui.js'
   import {tokenCache} from '../../lib/cache'
   export default{
     data(){
@@ -88,11 +91,15 @@
        api("nethos.pat.compat.list",{
          token:tokenCache.get()
        }).then((data)=>{
-           this.allPatient= data.list
-           this.changeName = this.allPatient[this.index].compatName
-           this.changeID = this.allPatient[this.index].compatIdcard
-           this.compatId = this.allPatient[this.index].compatId
-           console.log(data.list)
+            if(data.code == 0){
+              this.allPatient= data.list
+              this.changeName = this.allPatient[this.index].compatName
+              this.changeID = this.allPatient[this.index].compatIdcard
+              this.compatId = this.allPatient[this.index].compatId
+              console.log(data.list)
+            }else{
+                weui.alert(data.msg)
+            }
        })
     },
     methods:{
@@ -142,6 +149,8 @@
               console.log(data)
               if(data.code == 0){
                 this.$router.push('/usualPatient')
+              }else{
+                  weui.alert(data.msg)
               }
             })
           }

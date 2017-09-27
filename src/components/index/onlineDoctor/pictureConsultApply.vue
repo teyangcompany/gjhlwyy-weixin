@@ -60,6 +60,7 @@
   import header from '../../../base/header'
   import Alert from '../../../base/alert'
   import api from '../../../lib/api'
+  import weui from 'weui.js'
   import {isLoginMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   export default{
@@ -90,9 +91,13 @@
         api("nethos.doc.card",{
           docId:this.doctorId
         }).then((data)=>{
-            this.doctorInfo = data.obj.sysDoc
-            this.price = this.doctorInfo.docPicConsultPrice
-            console.log(this.doctorInfo)
+            if(data.code == 0){
+              this.doctorInfo = data.obj.sysDoc
+              this.price = this.doctorInfo.docPicConsultPrice
+              console.log(this.doctorInfo)
+            }else{
+                weui.alert(data.msg)
+            }
         })
     },
     methods:{

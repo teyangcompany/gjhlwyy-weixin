@@ -99,6 +99,7 @@
   import VMask from '../../../base/mask'
   import Toast from '../../../base/toast'
   import Alert from '../../../base/alert'
+  import weui from 'weui.js'
   import {isLoginMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   export default{
@@ -171,8 +172,12 @@
         api("nethos.book.doc.info",{
           bookDocId: this.allInfoArray.bookDocId
         }).then((data)=>{
-            if(data.obj.docAvatar){
-              this.docAvatar = data.obj.docAvatar
+            if(data.code == 0){
+              if(data.obj.docAvatar){
+                this.docAvatar = data.obj.docAvatar
+              }
+            }else{
+                weui.alert(data.msg)
             }
             console.log(data)
         })
@@ -180,8 +185,12 @@
           bookDeptId:this.bookDeptId,
           date:this.numTime.substr(0,10)
         }).then((data)=>{
-            this.selectedInfo = data.list
-            console.log(data)
+            if(data.code == 0){
+              this.selectedInfo = data.list
+              console.log(data)
+            }else{
+                weui.alert(data.msg)
+            }
         })
 
       api("nethos.pat.info.get", {
@@ -193,10 +202,10 @@
             token:tokenCache.get(),
             patId:this.selfInfo.patId
           }).then((data)=>{
-            this.compatInfo = data.list
-            console.log("下面的data")
-            console.log(data)
             if(data.code == 0){
+              this.compatInfo = data.list
+              console.log("下面的data")
+              console.log(data)
               //        获取验证码
 //                 api("nethos.book.captcha.generate",{
 //                   token:localStorage.getItem("token"),
@@ -208,6 +217,8 @@
 //                   this.cid = data.obj.cid
 //                   console.log(data)
 //                 })
+            }else{
+                weui.alert(data.msg)
             }
           })
         } else {

@@ -69,12 +69,12 @@
 //        this.$router.push('/changePhoneSucc')
         if(this.mobile.length!=11){
           alert('请输入手机号')
-        }else if(this.captcha.length!==4) {
+        }else if(this.newCaptcha.length!==4) {
           alert('请输入正确的验证码')
         }else{
           Api('nethos.system.captcha.checkcaptcha.v2',{
-            captcha:this.captcha,
-            cid:this.cid
+            captcha:this.newCaptcha,
+            cid:this.newCid
           }).then(res=>{
             if(res.succ){
               this.getSucc()
@@ -123,7 +123,7 @@
           Api('nethos.system.captcha.pat.mobile.modify',{
             mobile:this.mobile
           }).then(req=>{
-            this.$set(this.$data,'newCid',req.obj)
+            this.$set(this.$data,'newCid',req.obj.cid)
             console.log(this.newCid,'xinxinxin')
           })
         }

@@ -105,9 +105,10 @@
           console.log(898989)
           Api('nethos.system.captcha.pat.password.reset',{
             mobile:this.mobile
-          }).then(req=>{
-            this.$set(this.$data,'cid',req.obj)
-            console.log(this.cid,3333)
+          }).then(res=>{
+
+            this.$set(this.$data,'cid',res.obj.cid)
+            console.log(res,3333)
           })
         }
 

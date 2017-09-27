@@ -63,6 +63,7 @@
   import api from '../../../lib/api'
   import TimeToggle from '../../../base/timeToggle'
   import Toast from '../../../base/toast'
+  import weui from 'weui.js'
   import {isLoginMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   export default{
@@ -95,43 +96,51 @@
       api("nethos.book.doc.normal.scheme.list",{
         bookDeptId:this.bookDeptId
       }).then((data)=>{
-        console.log("下面是data")
-        console.log(data)
-        console.log("上面是data")
-        this.commonNumDetail = data.obj.deptSchemeList
-        console.log(this.commonNumDetail)
-        for(var i=0;i<this.commonNumDetail[0].schemeList.length;i++){
-          switch (this.commonNumDetail[0].schemeList[i].weekNo){
-            case 1:
-              this.weekNum = "周一"
-              break;
-            case 2:
-              this.weekNum = "周二"
-              break;
-            case 3:
-              this.weekNum = "周三"
-              break;
-            case 4:
-              this.weekNum = "周四"
-              break;
-            case 5:
-              this.weekNum = "周五"
-              break;
-            case 6:
-              this.weekNum = "周六"
-              break;
-            case 7:
-              this.weekNum = "周日"
-              break;
+          if(data.code == 0){
+            console.log("下面是data")
+            console.log(data)
+            console.log("上面是data")
+            this.commonNumDetail = data.obj.deptSchemeList
+            console.log(this.commonNumDetail)
+            for(var i=0;i<this.commonNumDetail[0].schemeList.length;i++){
+              switch (this.commonNumDetail[0].schemeList[i].weekNo){
+                case 1:
+                  this.weekNum = "周一"
+                  break;
+                case 2:
+                  this.weekNum = "周二"
+                  break;
+                case 3:
+                  this.weekNum = "周三"
+                  break;
+                case 4:
+                  this.weekNum = "周四"
+                  break;
+                case 5:
+                  this.weekNum = "周五"
+                  break;
+                case 6:
+                  this.weekNum = "周六"
+                  break;
+                case 7:
+                  this.weekNum = "周日"
+                  break;
 
+              }
+            }
+          }else{
+              weui.alert(data.msg)
           }
-        }
       })
       api("nethos.book.dept.info",{
         bookDeptId:this.bookDeptId
       }).then((data)=>{
-          this.deptDescription = data.obj.deptDescription
-          console.log(data)
+          if(data.code == 0){
+            this.deptDescription = data.obj.deptDescription
+            console.log(data)
+          }else{
+              weui.alert(data.msg)
+          }
       })
     },
     methods:{
@@ -178,10 +187,15 @@
                 token:tokenCache.get(),
                 bookSchemeId:this.bookSchemeId
               }).then((data)=>{
-                this.patientAll = data.list
-                this.showPat=true;
-                this.showToast = false
-                console.log(data)
+                 if(data.code == 0){
+                   this.patientAll = data.list
+                   this.showPat=true;
+                   this.showToast = false
+                   console.log(data)
+                 }else{
+                   this.showToast = false
+                     weui.alert(data.msg)
+                 }
               })
             }
           } else {

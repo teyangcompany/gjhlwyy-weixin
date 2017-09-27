@@ -89,6 +89,7 @@
   import Tips from '../../../base/tips'
   import AlertTips from '../../../base/alertTips'
   import api from '../../../lib/api'
+  import weui from 'weui.js'
   import {tokenCache} from '../../../lib/cache'
 //  import Loading from '../../../..base/loading/loading'
   export default{
@@ -126,7 +127,7 @@
             },1000)
           }else{
             this.doctorList = true
-              alert(data.msg)
+              weui.alert(data.msg)
           }
           console.log(this.doctorList)
             console.log(data)

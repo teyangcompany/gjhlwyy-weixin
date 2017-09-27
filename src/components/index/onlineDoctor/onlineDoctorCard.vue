@@ -19,7 +19,7 @@
             </h4>
             <h6>{{aboutDoctor.docDeptName}}&nbsp; {{aboutDoctor.docTitle}}</h6>
             <h6>{{aboutDoctor.docHosName}}</h6>
-            <router-link tag="div" :to="{path:'/commentDetail',query:{docId:aboutDoctor.docId}}" class="checkRating">  <star :size="24" :score="aboutDoctor.docScoure"></star><span v-if="aboutDoctor.docScoure">{{ aboutDoctor.docScoure.toFixed(1) }}星 </span><span>查看评价</span> </router-link>
+            <router-link tag="div" :to="{path:'/commentDetail',query:{docId:aboutDoctor.docId}}" class="checkRating">  <star :size="24" :score="aboutDoctor.docScoure"></star><span v-if="aboutDoctor.docScoure">{{ aboutDoctor.docScoure.toFixed(1) }}分 </span><span>查看评价</span> </router-link>
           </div>
         </div>
         <div class="sortFunc">
@@ -171,8 +171,12 @@
          }).then((data)=>{
              console.log("123")
              console.log(data)
-             if(data.obj.followDocpat){
+             if(data.code == 0){
+               if(data.obj.followDocpat){
                  this.isFollow = true
+               }
+             }else{
+//                 weui.alert(data.msg)
              }
              console.log("456")
          })
@@ -258,6 +262,8 @@
                 console.log(data)
                 if(data.code == 0){
                   this.isFollow = true
+                }else{
+                    weui.alert(data.msg)
                 }
               })
             }else{
@@ -268,6 +274,8 @@
                 console.log(data)
                 if(data.code == 0){
                   this.isFollow = false
+                }else{
+                    weui.alert(data.msg)
                 }
               })
             }
@@ -336,6 +344,7 @@
        left:0;
        right:0;
        height: 50px;
+       z-index:10000;
        background-color: white;
        .follow{
          position: absolute;

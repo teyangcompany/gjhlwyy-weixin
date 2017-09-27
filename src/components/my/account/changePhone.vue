@@ -107,7 +107,7 @@
             token:this.token
           }).then(res=>{
             if(res.succ){
-              this.$set(this.$data,'cid',req.obj)
+              this.$set(this.$data,'cid',res.obj)
               console.log(this.cid,3333)
             }else {
               alert(res.msg)

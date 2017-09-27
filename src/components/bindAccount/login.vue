@@ -31,6 +31,7 @@
       }
     },
     created(){
+      console.log(window.history,"路径")
        this.backPath = this.$route.query.backPath
     },
     methods:{

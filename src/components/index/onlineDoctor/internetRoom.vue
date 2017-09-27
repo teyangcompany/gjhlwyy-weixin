@@ -261,9 +261,10 @@
               <ul class="border-1px" v-for=" item in doctorList">
                 <router-link tag="div" :to="{ path:'/onlineDoctorCard',query:{docId:item.docId} }">
                   <li>
-                    <div class="cancelImg" v-if="item.docAvatar">
-                      <img v-if="item.docAvatar" :src="item.docAvatar" alt="">
-                      <img  src="../../../../static/img/医生男.jpg" alt="" v-else>
+                    <div class="cancelImg">
+                      <img v-if="item.docAvatar" :src="item.docAvatar" alt="" onerror="javascript:this.src='../../../../static/img/医生男.jpg'">
+                      <img v-else-if="item.docAvatar == ''" src="../../../../static/img/医生男.jpg" alt="">
+                      <img  src="../../../../static/img/医生男.jpg" alt=""  v-else>
                     </div>
                     <div class="cancelIntro">
                       <div>
@@ -275,11 +276,11 @@
                       </div>
                     </div>
                     <span class="distance" v-if="item.docScoure">
-                      <span class="score" >{{ item.docScoure.toFixed(1) }}</span> 星
+                      <span class="score" >{{ item.docScoure.toFixed(1) }}</span> 分
                       <img src="../../../../static/img/left-arrow.png" alt="">
                     </span>
                     <span class="distance" v-else>
-                      <span class="score" >0.0</span> 星
+                      <span class="score" >0.0</span> 分
                       <img src="../../../../static/img/left-arrow.png" alt="">
                     </span>
                   </li>
@@ -337,9 +338,11 @@
                this.doctorList = data.list
                console.log(data.list)
              }else if(!(data.msg)){
+               this.doctorList = false
                  weui.alert("网络错误，请稍后重试")
              }else{
-                 weui.alert(data.msg)
+               this.doctorList = false
+               weui.alert(data.msg)
              }
          })
         api("nethos.system.gbdept.list",{
@@ -466,16 +469,24 @@
                   docVideoConsultStatus:true,
                   sort:"docScoure.desc",
                 }).then((data)=>{
-                  this.doctorList = data.list
-                  console.log(data.list)
+                    if(data.code == 0){
+                      this.doctorList = data.list
+                      console.log(data.list)
+                    }else{
+                        weui.alert(data.msg)
+                    }
                 })
               }else{
                 api("nethos.doc.list",{
                   gbDeptCode:this.gbDeptCode,
                   docVideoConsultStatus:true,
                 }).then((data)=>{
-                  this.doctorList = data.list
-                  console.log(data.list)
+                    if(data.code == 0){
+                      this.doctorList = data.list
+                      console.log(data.list)
+                    }else{
+                        weui.alert(data.msg)
+                    }
                 })
               }
               this.$set(this.$data,'showVideo',true)
@@ -486,16 +497,24 @@
                   docPicConsultStatus:true,
                   sort:"docScoure.desc",
                 }).then((data)=>{
-                  this.doctorList = data.list
-                  console.log(data.list)
+                    if(data.code == 0){
+                      this.doctorList = data.list
+                      console.log(data.list)
+                    }else{
+                        weui.alert(data.msg)
+                    }
                 })
               }else{
                 api("nethos.doc.list",{
                   gbDeptCode:this.gbDeptCode,
                   docPicConsultStatus:true,
                 }).then((data)=>{
-                  this.doctorList = data.list
-                  console.log(data.list)
+                   if(data.code == 0){
+                     this.doctorList = data.list
+                     console.log(data.list)
+                   }else{
+                       weui.alert(data.msg)
+                   }
                 })
               }
               this.$set(this.$data,'showVideo',false)
@@ -506,15 +525,23 @@
                   gbDeptCode:this.gbDeptCode,
                   sort:"docScoure.desc",
                 }).then((data)=>{
-                  this.doctorList = data.list
-                  console.log(data.list)
+                  if(data.code == 0){
+                    this.doctorList = data.list
+                    console.log(data.list)
+                  }else{
+                      weui.alert(data.msg)
+                  }
                 })
               }else{
                 api("nethos.doc.list",{
                   gbDeptCode:this.gbDeptCode,
                 }).then((data)=>{
-                  this.doctorList = data.list
-                  console.log(data.list)
+                   if(data.code == 0){
+                     this.doctorList = data.list
+                     console.log(data.list)
+                   }else{
+                       weui.alert(data.msg)
+                   }
                 })
               }
               this.$set(this.$data,'showVideo',false)
@@ -533,16 +560,24 @@
                 docVideoConsultStatus:true,
                 sort:"docScoure.desc",
               }).then((data)=>{
-                this.doctorList = data.list
-                console.log(data.list)
+                 if(data.code == 0){
+                   this.doctorList = data.list
+                   console.log(data.list)
+                 }else{
+                     weui.alert(data.msg)
+                 }
               })
             }else{
               api("nethos.doc.list",{
                 gbDeptCode:this.gbDeptCode,
                 docVideoConsultStatus:true,
               }).then((data)=>{
-                this.doctorList = data.list
-                console.log(data.list)
+                  if(data.code == 0){
+                    this.doctorList = data.list
+                    console.log(data.list)
+                  }else{
+                      weui.alert(data.msg)
+                  }
               })
             }
             this.$set(this.$data,'showVideo',true)
@@ -553,16 +588,24 @@
                 docPicConsultStatus:true,
                 sort:"docScoure.desc",
               }).then((data)=>{
-                this.doctorList = data.list
-                console.log(data.list)
+                 if(data.code == 0){
+                   this.doctorList = data.list
+                   console.log(data.list)
+                 }else{
+                     weui.alert(data.msg)
+                 }
               })
             }else{
               api("nethos.doc.list",{
                 gbDeptCode:this.gbDeptCode,
                 docPicConsultStatus:true,
               }).then((data)=>{
-                this.doctorList = data.list
-                console.log(data.list)
+                  if(data.code == 0){
+                    this.doctorList = data.list
+                    console.log(data.list)
+                  }else{
+                      weui.alert(data.msg)
+                  }
               })
             }
             this.$set(this.$data,'showVideo',false)
@@ -573,15 +616,23 @@
                 gbDeptCode:this.gbDeptCode,
                 sort:"docScoure.desc",
               }).then((data)=>{
-                this.doctorList = data.list
-                console.log(data.list)
+                 if(data.code == 0){
+                   this.doctorList = data.list
+                   console.log(data.list)
+                 }else{
+                     weui.alert(data.msg)
+                 }
               })
             }else{
               api("nethos.doc.list",{
                 gbDeptCode:this.gbDeptCode,
               }).then((data)=>{
-                this.doctorList = data.list
-                console.log(data.list)
+                  if(data.code == 0){
+                    this.doctorList = data.list
+                    console.log(data.list)
+                  }else{
+                      weui.alert(data.msg)
+                  }
               })
             }
             this.$set(this.$data,'showVideo',false)
@@ -622,16 +673,24 @@
                 docVideoConsultStatus:true,
                 sort:"docScoure.desc",
               }).then((data)=>{
-                this.doctorList = data.list
-                console.log(data.list)
+                 if(data.code == 0){
+                   this.doctorList = data.list
+                   console.log(data.list)
+                 }else{
+                     weui.alert(data.msg)
+                 }
               })
             }else{
               api("nethos.doc.list",{
                 gbDeptCode:this.gbDeptCode,
                 docVideoConsultStatus:true,
               }).then((data)=>{
-                this.doctorList = data.list
-                console.log(data.list)
+                 if(data.code == 0){
+                   this.doctorList = data.list
+                   console.log(data.list)
+                 }else{
+                     weui.alert(data.msg)
+                 }
               })
             }
          this.$set(this.$data,'showVideo',true)
@@ -642,16 +701,24 @@
                docPicConsultStatus:true,
                sort:"docScoure.desc",
              }).then((data)=>{
-               this.doctorList = data.list
-               console.log(data.list)
+                 if(data.code == 0){
+                   this.doctorList = data.list
+                   console.log(data.list)
+                 }else{
+                     weui.alert(data.msg)
+                 }
              })
            }else{
              api("nethos.doc.list",{
                gbDeptCode:this.gbDeptCode,
                docPicConsultStatus:true,
              }).then((data)=>{
-               this.doctorList = data.list
-               console.log(data.list)
+                if(data.code == 0){
+                  this.doctorList = data.list
+                  console.log(data.list)
+                }else{
+                    weui.alert(data.msg)
+                }
              })
            }
          this.$set(this.$data,'showVideo',false)
@@ -662,15 +729,23 @@
                gbDeptCode:this.gbDeptCode,
                sort:"docScoure.desc",
              }).then((data)=>{
-               this.doctorList = data.list
-               console.log(data.list)
+                 if(data.code == 0){
+                   this.doctorList = data.list
+                   console.log(data.list)
+                 }else{
+                     weui.alert(data.msg)
+                 }
              })
            }else{
              api("nethos.doc.list",{
                gbDeptCode:this.gbDeptCode,
              }).then((data)=>{
-               this.doctorList = data.list
-               console.log(data.list)
+                 if(data.code == 0){
+                   this.doctorList = data.list
+                   console.log(data.list)
+                 }else{
+                     weui.alert(data.msg)
+                 }
              })
            }
          this.$set(this.$data,'showVideo',false)
@@ -692,8 +767,12 @@
                 gbDeptCode:this.gbDeptCode,
                 docVideoConsultStatus:true
               }).then((data)=>{
-                this.doctorList = data.list
-                console.log(data.list)
+                 if(data.code == 0){
+                   this.doctorList = data.list
+                   console.log(data.list)
+                 }else{
+                     weui.alert(data.msg)
+                 }
               })
             }else if(this.typePick == "图文咨询"){
               api("nethos.doc.list",{
@@ -701,16 +780,24 @@
                 gbDeptCode:this.gbDeptCode,
                 docPicConsultStatus:true
               }).then((data)=>{
-                this.doctorList = data.list
-                console.log(data.list)
+                if(data.code == 0){
+                  this.doctorList = data.list
+                  console.log(data.list)
+                }else{
+                    weui.alert(data.msg)
+                }
               })
             }else{
               api("nethos.doc.list",{
                 sort:"docScoure.desc",
                 gbDeptCode:this.gbDeptCode,
               }).then((data)=>{
-                this.doctorList = data.list
-                console.log(data.list)
+                 if(data.code == 0){
+                   this.doctorList = data.list
+                   console.log(data.list)
+                 }else{
+                     weui.alert(data.msg)
+                 }
               })
             }
         }else{
@@ -719,23 +806,35 @@
                 gbDeptCode:this.gbDeptCode,
                 docVideoConsultStatus:true
               }).then((data)=>{
-                this.doctorList = data.list
-                console.log(data.list)
+                  if(data.code == 0){
+                    this.doctorList = data.list
+                    console.log(data.list)
+                  }else{
+                      weui.alert(data.msg)
+                  }
               })
             }else if(this.typePick == "图文咨询"){
               api("nethos.doc.list",{
                 gbDeptCode:this.gbDeptCode,
                 docPicConsultStatus:true
               }).then((data)=>{
-                this.doctorList = data.list
-                console.log(data.list)
+                  if(data.code == 0){
+                    this.doctorList = data.list
+                    console.log(data.list)
+                  }else{
+                      weui.alert(data.msg)
+                  }
               })
             }else{
               api("nethos.doc.list",{
                 gbDeptCode:this.gbDeptCode,
               }).then((data)=>{
-                this.doctorList = data.list
-                console.log(data.list)
+                 if(data.code == 0){
+                   this.doctorList = data.list
+                   console.log(data.list)
+                 }else{
+                     weui.alert(data.msg)
+                 }
               })
             }
         }

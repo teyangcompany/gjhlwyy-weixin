@@ -189,7 +189,8 @@
   export default{
     data(){
       return{
-        path:""
+        path:"",
+        historyLength:""
       }
     },
     props:{
@@ -213,6 +214,8 @@
     mounted(){
       this.path = this.$route.path
       console.log(this.path)
+      console.log(window.history,"路径")
+      this.historyLength = window.history.length
     },
     methods:{
       back(){
