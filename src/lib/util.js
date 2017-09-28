@@ -71,6 +71,19 @@ export function getAppid() {
   return api_url;
 }
 
+export function getSocket() {
+  let hostname = url("hostname");
+  let api_url = "";
+  for (let key in API_URL) {
+    if (hostname == key) {
+      api_url = API_URL[key].socket;
+    }
+  }
+  if (!api_url) {
+    api_url = API_URL[Object.keys(config.api_url)[0]].socket;
+  }
+  return api_url;
+}
 
 
 

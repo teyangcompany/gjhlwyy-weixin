@@ -57,7 +57,7 @@
                   <div class="border-1px"  v-if="item.bookDocId" v-for="item in commonRoom">
                     <div  class="border-1px" @click="selectTime(single,index)"  v-for="(single,index) in item.deptSchemeList[0].schemeList">
                       <div class="cancelImg">
-                        <img class="avartarImg" :src="item.docAvatar" alt="" >
+                        <img class="avartarImg" :src="item.docAvatar" alt="" onerror="javascript:this.src='../../../../static/img/医生男.png'">
                       </div>
                       <div class="cancelIntro">
                         <div>

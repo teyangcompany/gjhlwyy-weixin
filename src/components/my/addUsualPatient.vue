@@ -38,6 +38,7 @@
   import Alert from '../../base/alert'
   import verify from '../../base/verify'
   import weui from 'weui.js'
+  import {tokenCache} from '../../lib/cache'
   import api from '../../lib/api'
   export default{
     data(){
@@ -128,7 +129,7 @@
                 console.log(data)
               if(data.code == 0){
                 api("nethos.pat.compat.add.v2",{
-                  token:localStorage.getItem("token"),
+                  token:tokenCache.get(),
 //                  patId:
                   compatName:this.compatName,
                   compatIdcard:this.compatIdcard,

@@ -161,7 +161,7 @@
     <section class="nav"  @click="goChangePhone()" v-else-if="path == '/oldPhone'">
       <span class="rightWord">{{rightTitle}}</span>
     </section>
-    <section class="nav"  @touchstart.prevent="goPhoneConfirm()" v-else-if="path == '/changePhone'">
+    <section class="nav"  @touchstart.prevent="goPhoneConfirm()" v-else-if="path == '/changeUsualPhone'">
       <span class="rightWord">{{rightTitle}}</span>
     </section>
     <section class="nav"  @click="goChangePass()" v-else-if="path == '/oldPass'">

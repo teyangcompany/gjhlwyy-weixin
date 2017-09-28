@@ -2,7 +2,7 @@
   <scroll class="canceled" ref="waitPay" :data="payList" :pullup="pullup" @scrollToEnd="scrollToEnd()">
     <div>
       <router-link tag="ul" :to="{path:'/waitArrange',query:{consultId:item.consultId}}" class="border-1px"  v-for="(item,index) in payList" :key="item.id">
-        <li v-if="item.consultTypeName != '名医视频' && item.consultTypeName != '在线医生视频'">
+        <li v-if="item.consultTypeName != '名医视频' && item.consultTypeName != '在线医生视频'  && item.consultTypeName != '全科分诊'">
           <div>
             <span class="picConsult">{{ item.consultTypeName }}</span>
             <span class="consultTim">{{ createTime[index] }}</span>

@@ -34,6 +34,8 @@
 <script>
   import header from '../../base/header'
   import Alert from '../../base/alert'
+  import weui from 'weui.js'
+  import {tokenCache} from '../../lib/cache'
   import api from '../../lib/api'
   export default{
     data(){
@@ -71,38 +73,59 @@
         this.showAlert = false
       },
       getCode(){
-        api("nethos.system.captcha.generate",{
-          captchaType:"SMS",
-          mobile:this.compatMobile
-        }).then((data)=>{
-          if(data.code == 0){
-            this.cid = data.obj
-            this.a = setInterval(()=>{
-              this.countdown--
-            },1000)
-          }
-        })
+         if(this.compatMobile == ''){
+             weui.alert("手机号不能为空")
+         }else{
+           api("nethos.system.captcha.commpat.add",{
+             mobile:this.compatMobile
+           }).then((data)=>{
+             if(data.code == 0){
+               this.cid = data.obj.cid
+               this.a = setInterval(()=>{
+                 this.countdown--
+               },1000)
+             }else{
+                 weui.alert(data.msg)
+             }
+           })
+         }
       },
       goAdd(){
         console.log(this.cid)
-        api("nethos.pat.compat.add",{
-          token:localStorage.getItem("token"),
-          compatName:this.compatName,
-          compatMobile:this.compatMobile,
-          compatIdcard:this.compatIdcard,
-          cid:this.cid,
-          captcha:this.captcha
-        }).then((data)=>{
-          console.log(this.cid)
-          console.log(this.compatIdcard)
-          console.log(data)
-          if(data.code == 0){
-            this.$router.push('/checkTogglePatient')
-          }else{
-            this.alertContent = data.msg
-            this.showAlert = true
-          }
-        })
+        if(this.compatName == ''){
+            weui.alert("姓名不能为空")
+        }else if(this.compatIdcard == ''){
+          weui.alert("身份证号不能为空")
+        }else{
+          api("nethos.system.captcha.checkcaptcha.v2",{
+            captcha:this.captcha,
+            cid:this.cid,
+          }).then((data)=>{
+              if(data.code == 0){
+                api("nethos.pat.compat.add.v2",{
+                  token:tokenCache.get(),
+                  compatName:this.compatName,
+//                  compatMobile:this.compatMobile,
+                  compatIdcard:this.compatIdcard,
+                  cid:this.cid,
+                  captcha:this.captcha
+                }).then((data)=>{
+                  console.log(this.cid)
+                  console.log(this.compatIdcard)
+                  console.log(data)
+                  if(data.code == 0){
+                    this.$router.push('/checkTogglePatient')
+                  }else{
+                    this.alertContent = data.msg
+                    this.showAlert = true
+                  }
+                })
+              }else{
+                  weui.alert(data.msg)
+              }
+          })
+        }
+
       }
     },
     components:{
@@ -168,7 +191,7 @@
       right:0;
       height: 30px;
       line-height: 30px;
-      width: 200rem/$rem;
+      width: 220rem/$rem;
       border:none;
       border-radius: 7px;
       outline:medium;

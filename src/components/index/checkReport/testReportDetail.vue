@@ -21,7 +21,7 @@
              <div v-else-if="reportInfo.length > 0">
                <router-link tag="div" :to="{path:'/testReportCard',query:{index:index,recordId:item.recordId,item:reportInfoString}}" class="checkCenter" style="display: block" v-for="(item,index) in reportInfo" :key="item.id">
                  <div class="reportList">
-                   <h3 class="border-1px">{{ item.diagnosis }}</h3>
+                   <h3 class="border-1px">{{ item.inspectType }}</h3>
                    <p><span>{{ item.name }}</span><span>{{ item.inspectDate }}</span></p>
                  </div>
                </router-link>

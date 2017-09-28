@@ -13,13 +13,13 @@
               <div class="weui-cell__ft">
               </div>
             </a>
-            <a class="weui-cell weui-cell_access" href="javascript:;" @click="changePassword">
-              <div class="weui-cell__bd">
-                <p class="bf">修改密码</p>
-              </div>
-              <div class="weui-cell__ft">
-              </div>
-            </a>
+            <!--<a class="weui-cell weui-cell_access" href="javascript:;" @click="changePassword">-->
+              <!--<div class="weui-cell__bd">-->
+                <!--<p class="bf">修改密码</p>-->
+              <!--</div>-->
+              <!--<div class="weui-cell__ft">-->
+              <!--</div>-->
+            <!--</a>-->
 
           </div>
         </div>

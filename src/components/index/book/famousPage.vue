@@ -11,7 +11,7 @@
            <div>
              <li>
                <div class="cancelImg" v-if="doctorInfo.docAvatar != ''">
-                 <img :src="doctorInfo.docAvatar" alt="">
+                 <img :src="doctorInfo.docAvatar" alt="" onerror="javascript:this.src='../../../../static/img/医生男.png'">
                </div>
                <div class="cancelImg" v-else>
                  <img src="../../../../static/img/医生男.jpg" alt="">

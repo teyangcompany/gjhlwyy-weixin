@@ -71,6 +71,7 @@
   import upload from '../../../lib/upload'
   import verify from '../../../base/verify'
   import weui from 'weui.js'
+  import {getApiUrl} from "../../../lib/util"
   import {isLoginMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   export default{
@@ -294,7 +295,7 @@
             reader.onload = function () {
               that.previewImg = this.result
               that.uploadTips = '正在上传'
-              that.displayImg.push(that.previewImg)
+//              that.displayImg.push(that.previewImg)
 
 
 
@@ -304,7 +305,9 @@
               for(let key in upload.base){
                 formData.append(key,upload.base[key])
               }
-              xhr.open('POST','https://nethos.diandianys.com/api/app')
+              let url = getApiUrl();
+              console.log(url,66666666)
+              xhr.open('POST',url)
               xhr.setRequestHeader('sign','test')
               xhr.upload.onprogress = function(event){
 //                var done = e.position || e.loaded, total = e.totalSize || e.total;
@@ -319,7 +322,7 @@
                           ret = typeof ret == 'string' ? JSON.parse(ret) : ret;
                           if(ret.code == 0){
                               console.log(ret,666)
-
+                            that.displayImg.push(ret.obj.url)
                             that.attaId.push(ret.obj.attaId)
                              that.createImage(file,--i)
                           }

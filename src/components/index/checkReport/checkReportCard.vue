@@ -22,7 +22,7 @@
           <p>送检时间:{{ reportInfoArray[index].sendTime }}</p>
           <p>检验时间:{{ reportInfoArray[index].checkTime }}</p>
           <div class="detailTips">
-            <p>具体报告信息请以医院纸质报告为准！</p>
+            <p style="color: red;">具体报告信息请以医院纸质报告为准！</p>
           </div>
         </div>
         <div class="blank"></div>
@@ -115,7 +115,7 @@
     background-color: rgb(250,250,250);
     .testType{
       width:750rem/$rem;
-      height: 240px;
+      /*height: 200px;*/
       margin:0 auto;
       background-color: #ffffff;
       .type{

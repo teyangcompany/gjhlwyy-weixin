@@ -18,7 +18,8 @@
         <router-link tag="div" to="/detailUsual" class="usualLine">
           <div class="usualCenter">
             <ul>
-              <router-link tag="li" :to="{path:'/changePhone',query:{index:index}}">电话号码：<span>{{allPatient[index].compatMobile}}</span></router-link>
+              <router-link tag="li" :to="{path:'/changeUsualPhone',query:{index:index}}">手机号：<span>{{allPatient[index].compatMobile}}</span></router-link>
+              <!--<li @click="noChange">电话号码：<span>{{allPatient[index].compatMobile}}</span></li>-->
               <li>年龄： <span>{{allPatient[index].compatAge}} &nbsp;&nbsp;</span></li>
               <li>性别： <span>{{allPatient[index].compatGender == 'M'? '男':'女'}}</span></li>
               <li v-if="allPatient[index].compatMedicalRecord">病案号： <span>{{allPatient[index].compatMedicalRecord}}</span></li>
@@ -218,6 +219,7 @@
   }
   .emptyHistory{
     position: absolute;
+    top:0;
     width:100%;
     height:100%;
     display: flex;

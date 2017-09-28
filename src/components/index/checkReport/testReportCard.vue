@@ -37,7 +37,7 @@
             <p>审核医生：{{ reportInfoArray[index].examineDoc }}</p>
           </div>
           <div class="detailTips">
-            <p>具体报告信息请以医院纸质报告为准！</p>
+            <p style="color: red;">具体报告信息请以医院纸质报告为准！</p>
           </div>
         </div>
         <div class="blank"></div>

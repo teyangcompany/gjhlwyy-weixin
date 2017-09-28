@@ -12,7 +12,7 @@
                   <img src="../../../../static/img/普通-门诊.png" alt="">
                 </div>
                 <div class="cancelImg" v-else>
-                  <img :src="docAvatar" alt="">
+                  <img :src="docAvatar" alt="" onerror="javascript:this.src='../../../../static/img/医生男.png'">
                 </div>
                 <div class="cancelIntro">
                   <div class="introTitle">
@@ -167,8 +167,9 @@
           this.index= 0
         }
         console.log(this.listIndex)
-        console.log(this.allInfoArray)
+        console.log(this.allInfoArray,666666)
         console.log(this.bookSort)
+
         api("nethos.book.doc.info",{
           bookDocId: this.allInfoArray.bookDocId
         }).then((data)=>{
@@ -177,7 +178,7 @@
                 this.docAvatar = data.obj.docAvatar
               }
             }else{
-                weui.alert(data.msg)
+//                weui.alert(data.msg)
             }
             console.log(data)
         })
@@ -189,7 +190,7 @@
               this.selectedInfo = data.list
               console.log(data)
             }else{
-                weui.alert(data.msg)
+//                weui.alert(data.msg)
             }
         })
 

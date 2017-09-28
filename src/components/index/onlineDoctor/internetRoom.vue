@@ -262,7 +262,7 @@
                 <router-link tag="div" :to="{ path:'/onlineDoctorCard',query:{docId:item.docId} }">
                   <li>
                     <div class="cancelImg">
-                      <img v-if="item.docAvatar" :src="item.docAvatar" alt="" onerror="javascript:this.src='../../../../static/img/医生男.jpg'">
+                      <img v-if="item.docAvatar" :src="item.docAvatar" alt="" onerror="javascript:this.src='../../../../static/img/医生男.png'">
                       <img v-else-if="item.docAvatar == ''" src="../../../../static/img/医生男.jpg" alt="">
                       <img  src="../../../../static/img/医生男.jpg" alt=""  v-else>
                     </div>

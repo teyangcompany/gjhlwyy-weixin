@@ -24,6 +24,7 @@
   import header from '../../../base/header'
   import BScroll from 'better-scroll'
   import api from '../../../lib/api'
+  import {tokenCache} from '../../../lib/cache'
   export default{
     data(){
       return{
@@ -34,7 +35,7 @@
     },
     created(){
       api("nethos.pat.compat.list",{
-        token:localStorage.getItem("token")
+        token:tokenCache.get()
       }).then((data)=>{
         this.patientList = data.list
         console.log(this.patientList)

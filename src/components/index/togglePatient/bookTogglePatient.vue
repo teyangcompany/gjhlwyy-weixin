@@ -56,7 +56,10 @@
     },
     methods:{
       addPatient(){
-        this.$router.push('/bookToggleAddUsual')
+        this.$router.push({
+          path:'/bookToggleAddUsual',
+          query:{bookDeptId:this.bookDeptId,bookNumId:this.bookNumId,numTime:this.numTime,allInfo:this.allInfo,listIndex:this.listIndex,bookSort:this.bookSort}
+        })
       },
       _initUsualScroll(){
         this.usualScroll = new BScroll(this.$refs.usual,{

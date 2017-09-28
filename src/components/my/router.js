@@ -36,7 +36,7 @@ import addUsualPatient from './addUsualPatient'
 import detailUsual from './detailUsual'
 import costLog from './costLog'
 import oldPhone from './accountAbout/oldPhone'
-// import changePhone from './accountAbout/changePhone'
+import changeUsualPhone from './accountAbout/changeUsualPhone'
 // import changePhoneSuccess from './accountAbout/changePhoneSuccess'
 import oldPass from './accountAbout/oldPass'
 import changePassWord from './accountAbout/changePassWord'
@@ -286,10 +286,10 @@ export default[
     path:"/oldPhone",
     component:oldPhone
   },
-  // {
-  //   path:"/changePhone",
-  //   component:changePhone
-  // },
+  {
+    path:"/changeUsualPhone",
+    component:changeUsualPhone
+  },
   // {
   //   path:"/changePhoneSuccess",
   //   component:changePhoneSuccess

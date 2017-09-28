@@ -80,6 +80,10 @@
     </footer>
     <footer :class="{footshow:seeMore}" ref="footer" v-else-if="aboutConsult.consultStatus == 'GOING' && aboutReplyMessage.length != 0">
       <section class="foot_top">
+        <div class="picture">
+          <input type="file" name="picture" id="upPicture" ref="picture" @change="onFileChange">
+          <img src="../../../../static/img/图片.png" alt="" @click="selectImg()">
+        </div>
         <div class="chatInput">
           <input type="text" id="forInput"  maxlength="100"  @blur="blured" @focus="focus()" ref="inputFocus" v-model="inputInfo" @input="whatInput" @keyup.enter="enterThing()">
         </div>
@@ -93,16 +97,6 @@
         </div>
       </section>
       <section class="foot_bottom">
-        <div class="picture">
-          <input type="file" name="picture" id="upPicture" ref="picture" @change="onFileChange">
-          <img src="../../../../static/img/图片.png" alt="" @click="selectImg()">
-          <span>图片</span>
-        </div>
-        <!--<div class="camera">-->
-          <!--<input type="file" name="picture"  ref="picture" @change="onFileChange">-->
-          <!--<img src="../../../../static/img/拍照.png" alt="" @click="selectImg()">-->
-          <!--<span>拍照</span>-->
-        <!--</div>-->
       </section>
     </footer>
     <v-dialog @on-cancel="close" @on-download="closeCancel" v-if="showDialog"
@@ -177,7 +171,8 @@
         returnInfo:"",
         showLargePic:false,
         largePic:"",
-        showToast:false
+        showToast:false,
+        messageLength:""
       }
     },
     components:{
@@ -202,6 +197,7 @@
           consultId:this.consultId
         }).then((data)=>{
            console.log(data)
+          this.messageLength = data.obj.messageList.length
           this.showToast = false
           if(data.code == 0){
             this.$nextTick(()=>{
@@ -261,31 +257,41 @@
 //             })
 //         })
          let that = this
-         window.socket.on("pushevent",function(data){
+
+         setInterval(()=>{
            api("nethos.consult.info.detail",{
              token:tokenCache.get(),
              consultId:that.consultId
            }).then((data)=>{
+               console.log(data)
              if(data.code == 0){
-               that.$nextTick(()=>{
-                 that.$set(that.$data,'aboutReplyMessage',data.obj.messageList)
-//                 this.aboutReplyMessage = data.obj.messageList
-                 let o = document.getElementsByClassName("chat")[0];
-                 let h = o.offsetHeight;  //高度
-                 let content = h
-                 console.log(o)
-                 setTimeout(()=>{
-                   if(that.$refs.slideList.offsetHeight > content-10){
-//                     console.log(that.$refs.slideList.offsetHeight)
-                     console.log("医生回复你了")
-                     that.$refs.conversation.scrollTo(0,content-that.$refs.slideList.offsetHeight-140)
-                   }
-                 },300)
+                  console.log(that.messageLength)
 
-               })
+                if(that.messageLength != data.obj.messageList.length){
+                  that.$nextTick(()=>{
+                    that.$set(that.$data,'aboutReplyMessage',data.obj.messageList)
+//                 this.aboutReplyMessage = data.obj.messageList
+                    let o = document.getElementsByClassName("chat")[0];
+                    let h = o.offsetHeight;  //高度
+                    let content = h
+                    console.log(o)
+                    setTimeout(()=>{
+                      if(that.$refs.slideList.offsetHeight > content-10){
+//                     console.log(that.$refs.slideList.offsetHeight)
+                        console.log("医生回复你了")
+                        that.$refs.conversation.scrollTo(0,content-that.$refs.slideList.offsetHeight-140)
+                      }
+                    },10)
+                    that.messageLength = data.obj.messageList.length
+                  })
+                }
              }
            })
-         })
+         },3000)
+
+//         window.socket.on("pushevent",function(data){
+//
+//         })
     },
     watch:{
       seeMore(){
@@ -665,10 +671,10 @@
         document.getElementById('forInput').blur()
       },
       upMore(){
-        this.seeMore = !this.seeMore
+//        this.seeMore = !this.seeMore
       },
       focus(){
-        this.seeMore = false
+//        this.seeMore = false
 
 //          document.getElementsByClassName("foot_top")[0].scrollIntoView()
 
@@ -885,12 +891,39 @@
     background-color: white;
     .foot_top{
       display: flex;
+      .picture{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-left: 10rem/$rem;
+        /*<!--margin-top: 60rem/$rem;-->*/
+        img{
+          width: 60rem/$rem;
+          height: 60rem/$rem;
+          display: block;
+          margin-bottom: 15px;
+        }
+
+        /*<!--span{-->*/
+          /*<!--font-size: 28rem/$rem;-->*/
+          /*<!--color:#666666-->*/
+        /*<!--}-->*/
+        /*<!--span.red{-->*/
+          /*<!--margin-top: 5px;-->*/
+          /*<!--color: red;-->*/
+        /*<!--}-->*/
+      }
+      .picture{
+        >input{
+          display: none;
+        }
+      }
       .chatInput{
-        width: 566rem/$rem;
-        margin-left: 30rem/$rem;
+        width: 520rem/$rem;
+        margin-left: 20rem/$rem;
         text-align: center;
         input{
-          width: 566rem/$rem;
+          width: 520rem/$rem;
           height: 64rem/$rem;
           border:none;
           font-size: 32rem/$rem;
