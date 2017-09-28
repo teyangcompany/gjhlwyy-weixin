@@ -39,10 +39,10 @@
           <div @click="goFamousPage(index)">
             <li>
               <div class="avartarImg" v-if="item.docAvatar != ''">
-                <img :src="item.docAvatar" alt="" onerror="javascript:this.src='../../../../static/img/医生男.png'">
+                <img :src="item.docAvatar" alt="" onerror="javascript:this.src='./static/img/doctorM.png'">
               </div>
               <div class="avartarImg" v-else>
-                <img src="../../../../static/img/医生男.png" alt="">
+                <img src="../../../../static/img/doctorM.png" alt="">
               </div>
               <div class="cancelIntro">
                 <div>

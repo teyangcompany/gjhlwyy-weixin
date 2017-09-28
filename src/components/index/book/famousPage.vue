@@ -11,10 +11,10 @@
            <div>
              <li>
                <div class="cancelImg" v-if="doctorInfo.docAvatar != ''">
-                 <img :src="doctorInfo.docAvatar" alt="" onerror="javascript:this.src='../../../../static/img/医生男.png'">
+                 <img :src="doctorInfo.docAvatar" alt="" onerror="javascript:this.src='./static/img/doctorM.png'">
                </div>
                <div class="cancelImg" v-else>
-                 <img src="../../../../static/img/医生男.jpg" alt="">
+                 <img src="../../../../static/img/doctorM.png" alt="">
                </div>
                <div class="cancelIntro">
                  <div>

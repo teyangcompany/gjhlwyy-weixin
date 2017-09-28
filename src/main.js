@@ -10,7 +10,7 @@ import Vuelidate from 'vuelidate'
 import api from './lib/api'
 import weui from 'weui.js'
 import {tokenCache} from './lib/cache'
-import {getSocket} from "./lib/util"
+// import {getSocket} from "./lib/util"
 import {openidCache} from "./lib/cache"
 
 import auth2 from "./lib/auth2";
@@ -38,7 +38,7 @@ Vue.config.productionTip = false
  * 移动端rem布局
  * width:20rem
  * */
-let socketUrl =  getSocket()
+// let socketUrl =  getSocket()
 window.socket = io("nethoswebsocket.diandianys.com");
 window.socket.on('connect',function () {
   api("nethos.push.deviceid.register",{

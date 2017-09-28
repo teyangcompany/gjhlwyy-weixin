@@ -18,8 +18,8 @@
         <router-link tag="div" to="/detailUsual" class="usualLine">
           <div class="usualCenter">
             <ul>
-              <router-link tag="li" :to="{path:'/changeUsualPhone',query:{index:index}}">手机号：<span>{{allPatient[index].compatMobile}}</span></router-link>
-              <!--<li @click="noChange">电话号码：<span>{{allPatient[index].compatMobile}}</span></li>-->
+              <!--<router-link tag="li" :to="{path:'/changeUsualPhone',query:{index:index}}">手机号：<span>{{allPatient[index].compatMobile}}</span></router-link>-->
+              <li @click="noChange">电话号码：<span>{{allPatient[index].compatMobile}}</span></li>
               <li>年龄： <span>{{allPatient[index].compatAge}} &nbsp;&nbsp;</span></li>
               <li>性别： <span>{{allPatient[index].compatGender == 'M'? '男':'女'}}</span></li>
               <li v-if="allPatient[index].compatMedicalRecord">病案号： <span>{{allPatient[index].compatMedicalRecord}}</span></li>
@@ -132,6 +132,9 @@
       },
       cancel(){
           this.showDialog= false
+      },
+      noChange(){
+          weui.alert("微信不允许修改手机号，请下载app")
       },
       goChangePatient(){
           if(this.allPatient[this.index].compatMedicalRecord){

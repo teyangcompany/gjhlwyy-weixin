@@ -78,7 +78,7 @@
         <button @click="comment()">评价</button>
       </div>
     </footer>
-    <footer :class="{footshow:seeMore}" ref="footer" v-else-if="aboutConsult.consultStatus == 'GOING' && aboutReplyMessage.length != 0">
+    <footer  :class="{footshow:seeMore}" ref="footer" v-else-if="aboutConsult.consultStatus == 'GOING' && aboutReplyMessage.length != 0">
       <section class="foot_top">
         <div class="picture">
           <input type="file" name="picture" id="upPicture" ref="picture" @change="onFileChange">
@@ -92,12 +92,13 @@
             <span>发送</span>
           </div>
           <div v-else @click="upMore()" class="addmore">
-            <img src="../../../../static/img/聊天界面-添加.png" alt="">
+            <span>发送</span>
+            <!--<img src="../../../../static/img/聊天界面-添加.png" alt="">-->
           </div>
         </div>
       </section>
-      <section class="foot_bottom">
-      </section>
+      <!--<section class="foot_bottom">-->
+      <!--</section>-->
     </footer>
     <v-dialog @on-cancel="close" @on-download="closeCancel" v-if="showDialog"
               :dialogTitle="dialogTitle"
@@ -172,7 +173,8 @@
         showLargePic:false,
         largePic:"",
         showToast:false,
-        messageLength:""
+        messageLength:"",
+        inter:""
       }
     },
     components:{
@@ -258,7 +260,7 @@
 //         })
          let that = this
 
-         setInterval(()=>{
+        setInterval(()=>{
            api("nethos.consult.info.detail",{
              token:tokenCache.get(),
              consultId:that.consultId
@@ -518,6 +520,9 @@
         }else{
           this.light=true
         }
+        this.inter=setInterval(()=>{
+          document.getElementsByClassName("foot_top")[0].scrollIntoView()
+        },500)
       },
       enterThing(){
         if(this.light){
@@ -676,8 +681,10 @@
       focus(){
 //        this.seeMore = false
 
-//          document.getElementsByClassName("foot_top")[0].scrollIntoView()
-
+//
+       this.inter = setInterval(()=>{
+            document.getElementsByClassName("foot_top")[0].scrollIntoView()
+          },500)
 
       },
 //      inputHide(e){
@@ -687,6 +694,7 @@
 //      },
       blured(){
 //          this.$refs.footer.style.bottom=-160 + 'px'
+           clearInterval(this.inter)
       },
 //      forceFocused(){
 //        this.$refs.inputFocus.focus()
@@ -702,9 +710,11 @@
   @import '../../../common/public.scss';
   .chat{
     width:100%;
-    position: fixed;
+    position: absolute;
     top:0;
     bottom:0;
+    display: flex;
+    flex-direction: column;
     .largePicArea{
       position: fixed;
       top:0px;
@@ -740,9 +750,10 @@
     /*padding-top: 50px;*/
     /*overflow: auto;*/
     /*height: 500px;*/
-    position: fixed;
+    position: absolute;
     top: 90px;
     bottom: 98rem/$rem;
+    flex:1;
     overflow: hidden;
     /*overflow: auto;*/
     /*-webkit-overflow-scrolling: touch;*/
@@ -880,14 +891,15 @@
       }
     }
     .assistScroll{
-      height: 500px;
+      height: 200px;
     }
   }
   footer{
     width:100%;
-    height: 200px;
-    position: fixed;
-    bottom: -160px;
+    /*height: 200px;*/
+    position: absolute;
+    bottom:0;
+    -webkit-user-select: auto;
     background-color: white;
     .foot_top{
       display: flex;
@@ -895,11 +907,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-left: 10rem/$rem;
+        margin-left: 20rem/$rem;
         /*<!--margin-top: 60rem/$rem;-->*/
         img{
-          width: 60rem/$rem;
-          height: 60rem/$rem;
+          width: 65rem/$rem;
+          height: 65rem/$rem;
           display: block;
           margin-bottom: 15px;
         }
@@ -920,7 +932,7 @@
       }
       .chatInput{
         width: 520rem/$rem;
-        margin-left: 20rem/$rem;
+        margin-left: 30rem/$rem;
         text-align: center;
         input{
           width: 520rem/$rem;
@@ -940,7 +952,7 @@
       .chatSend{
         width: 110rem/$rem;
         height: 70rem/$rem;
-        margin-left: 20rem/$rem;
+        margin-left: 10rem/$rem;
         /*background-color: dodgerblue;*/
         text-align: center;
         .send{
@@ -957,10 +969,13 @@
           }
         }
         .addmore{
-          img{
-            width: 58rem/$rem;
-            height: 58rem/$rem;
+          span{
+            color: #666666;
           }
+          /*<!--img{-->*/
+            /*<!--width: 58rem/$rem;-->*/
+            /*<!--height: 58rem/$rem;-->*/
+          /*<!--}-->*/
         }
       }
     }
