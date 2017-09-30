@@ -7,7 +7,7 @@
         <div class="avatarCenter">
           <div class="leftWord" v-if="patientInfo">
             <img class="profile" alt="" v-if="patientInfo.patAvatar" :src="patientInfo.patAvatar" @click="selectImg()">
-            <img class="profile" src="../../static/img/患者男.jpg" alt="" v-else @click="selectImg()">
+            <img class="profile" src="../../static/img/pat.f.jpg" alt="" v-else @click="selectImg()">
             <input type="file" accept="image/*" name="upload" id="upload" ref="upload" @change="onFileChange">
           </div>
           <!--<router-link tag="div" to="/personInfo" class="rightWord">-->

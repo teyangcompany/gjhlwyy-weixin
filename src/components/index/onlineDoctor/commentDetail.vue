@@ -16,8 +16,8 @@
               <div class="list border-1px" v-for="(item,index) in allInfo">
                   <div class="listWrap">
                     <div class="leftImg">
-                      <img v-if="!(item.sysPat.patAvatar) && item.sysPat.patGender== 'M'" src="../../../../static/img/患者男.jpg" alt="">
-                      <img v-else-if="!(item.sysPat.patAvatar) && item.sysPat.patGender== 'F'" src="../../../../static/img/患者女.jpg" alt="">
+                      <img v-if="!(item.sysPat.patAvatar) && item.sysPat.patGender== 'M'" src="../../../../static/img/doctor.m.png" alt="">
+                      <img v-else-if="!(item.sysPat.patAvatar) && item.sysPat.patGender== 'F'" src="../../../../static/img/pat.f.jpg" alt="">
                       <img v-else :src="item.sysPat.patAvatar" alt="">
                     </div>
                     <div class="rightImg">
