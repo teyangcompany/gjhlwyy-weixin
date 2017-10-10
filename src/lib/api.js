@@ -3,7 +3,7 @@
  */
 import axios from 'axios';
 import {openidCache} from "./cache"
-import {makeRandom,getApiUrl} from "./util"
+import {getApiUrl, makeRandom} from "./util"
 
 const password = "aAr9MVS9j1";
 let base = {
@@ -34,6 +34,7 @@ export default function (service, options) {
     .then((res) => {
       // bus.$emit("loading", {status: 'stop'});
       if (res.status == 200) {
+        console.log(`<==${obj.service}`, res.data)
         return res.data;
       } else {
         return res;

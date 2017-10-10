@@ -6,7 +6,7 @@
           <ul>
             <li>
               <div class="cancelImg">
-                <img :src="doctorInfo.docAvatar" alt="">
+                <img :src="doctorInfo.docAvatar?doctorInfo.docAvatar:'./static/img/doctor.m.png'" alt="">
               </div>
               <div class="cancelIntro">
                 <div class="introTitle">

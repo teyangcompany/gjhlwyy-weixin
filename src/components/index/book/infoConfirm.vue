@@ -12,7 +12,7 @@
                   <img src="../../../../static/img/普通-门诊.png" alt="">
                 </div>
                 <div class="cancelImg" v-else>
-                  <img :src="docAvatar" alt="" onerror="javascript:this.src='./static/img/doctorM.png'">
+                  <img :src="docAvatar" alt="" onerror="javascript:this.src='./static/img/doctor.m.png'">
                 </div>
                 <div class="cancelIntro">
                   <div class="introTitle">

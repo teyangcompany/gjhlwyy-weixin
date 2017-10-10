@@ -10,7 +10,7 @@
       <div>
         <div class="doctorFunc">
           <div class="doctorImg">
-            <img :src="aboutDoctor.docAvatar" alt="">
+            <img :src="aboutDoctor.docAvatar?aboutDoctor.docAvatar:'./static/img/doctor.m.png'" alt="">
           </div>
           <div class="doctorIntro">
             <h4><span class="mainTitle">{{aboutDoctor.docName}}</span>
