@@ -32,7 +32,7 @@
              <p v-if="deptSchemeList.length != 0">{{ parentItem.deptName }}<img src="../../../../static/img/book/left-arrow.png" alt=""> </p>
            </div>
            <div class="list border-1px" v-if="parentItem.schemeList.length != 0" v-for="(item,index) in parentItem.schemeList" @click="book(item,index)">
-             <p class="specialBlack">{{ (item.schemeDate).substr(0,10) }} {{ weekNum  }} {{ item.schemeAmpm == 'am'? '上午':'下午' }}
+             <p class="specialBlack">{{ (item.schemeDate).substr(0,10) }} {{ weekNum[index]  }} {{ item.schemeAmpm == 'am'? '上午':'下午' }}
                <span class="year gray" v-if="item.schemeStats == 0">无</span>
                <span class="year gray" v-if="item.schemeStats == 1">停诊</span>
                <span class="year gray" v-if="item.schemeStats == 2">已满</span>
@@ -84,7 +84,7 @@
         doctorInfo:"",
         deptSchemeList:"",
         schemeList:"",
-        weekNum:"",
+        weekNum:[],
         bookSchemeId:"",
         showToast:false,
         clickedIndex:"",
@@ -169,25 +169,25 @@
                for(var i=0;i<this.schemeList.length;i++){
                  switch (this.schemeList[i].weekNo){
                    case 1:
-                     this.weekNum = "周一"
+                     this.weekNum.push("周一")
                      break;
                    case 2:
-                     this.weekNum = "周二"
+                     this.weekNum.push("周二")
                      break;
                    case 3:
-                     this.weekNum = "周三"
+                     this.weekNum.push("周三")
                      break;
                    case 4:
-                     this.weekNum = "周四"
+                     this.weekNum.push("周四")
                      break;
                    case 5:
-                     this.weekNum = "周五"
+                     this.weekNum.push("周五")
                      break;
                    case 6:
-                     this.weekNum = "周六"
+                     this.weekNum.push("周六")
                      break;
                    case 7:
-                     this.weekNum = "周日"
+                     this.weekNum.push("周日")
                      break;
 
                  }

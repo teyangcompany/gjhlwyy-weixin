@@ -30,7 +30,7 @@
               <p>{{ parentItem.deptName }}<img src="../../../../static/img/book/left-arrow.png" alt=""> </p>
             </div>
             <div class="list border-1px" v-for="(item,index) in parentItem.schemeList" @click="book(item,index)">
-              <p class="specialBlack">{{ (item.schemeDate).substr(0,10) }} {{ weekNum }} {{ item.schemeAmpm == 'pm'? '下午':'上午' }}
+              <p class="specialBlack">{{ (item.schemeDate).substr(0,10) }} {{ weekNum[index] }} {{ item.schemeAmpm == 'pm'? '下午':'上午' }}
                 <span class="year gray" v-if="item.schemeStats == 0">无</span>
                 <span class="year gray" v-if="item.schemeStats == 1">停诊</span>
                 <span class="year gray" v-if="item.schemeStats == 2">已满</span>
@@ -77,7 +77,7 @@
              rightTitle:"",
              commonNumDetail:"",
              bookDeptId:"",
-             weekNum:"",
+             weekNum:[],
              bookSchemeId:"",
              showToast:false,
              clickedIndex:"",
@@ -103,30 +103,57 @@
             this.commonNumDetail = data.obj.deptSchemeList
             console.log(this.commonNumDetail)
             for(var i=0;i<this.commonNumDetail[0].schemeList.length;i++){
-              switch (this.commonNumDetail[0].schemeList[i].weekNo){
-                case 1:
-                  this.weekNum = "周一"
-                  break;
-                case 2:
-                  this.weekNum = "周二"
-                  break;
-                case 3:
-                  this.weekNum = "周三"
-                  break;
-                case 4:
-                  this.weekNum = "周四"
-                  break;
-                case 5:
-                  this.weekNum = "周五"
-                  break;
-                case 6:
-                  this.weekNum = "周六"
-                  break;
-                case 7:
-                  this.weekNum = "周日"
-                  break;
+             console.log(this.commonNumDetail[0].schemeList[i].weekNo)
+              var arr = []
+              arr[i] = this.commonNumDetail[0].schemeList[i].weekNo
+              console.log(arr[i])
+//              let that = this
+//             (function(){
+//                 console.log(i)
+                 switch (arr[i]){
+                   case 1:
+                     this.weekNum.push("周一")
+                     break;
+                   case 2:
+                     this.weekNum.push("周二")
+                     break;
+                   case 3:
+                     this.weekNum.push("周三")
+                     break;
+                   case 4:
+                     this.weekNum.push("周四")
+                     break;
+                   case 5:
+                     this.weekNum.push("周五")
+                     break;
+                   case 6:
+                     this.weekNum.push("周六")
+                     break;
+                   case 7:
+                     this.weekNum.push("周日")
+                     break;
 
-              }
+                 }
+//               })(i)
+//                if(this.commonNumDetail[0].schemeList[i].weekNo == 1){
+//                  this.weekNum = "周一"
+//                }else if(this.commonNumDetail[0].schemeList[i].weekNo == 2){
+//                  this.weekNum = "周二"
+//                }else if(this.commonNumDetail[0].schemeList[i].weekNo == 3){
+//                  this.weekNum = "周三"
+//                }else if(this.commonNumDetail[0].schemeList[i].weekNo == 4){
+//                  this.weekNum = "周四"
+//                }else if(this.commonNumDetail[0].schemeList[i].weekNo == 5){
+//                  this.weekNum = "周五"
+//                }else if(this.commonNumDetail[0].schemeList[i].weekNo == 6){
+//                  this.weekNum = "周六"
+//                }else{
+//                  this.weekNum = "周日"
+//                }
+
+
+
+
             }
           }else{
               weui.alert(data.msg)

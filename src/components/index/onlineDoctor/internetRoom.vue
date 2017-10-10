@@ -312,9 +312,9 @@
                         </p>
                       </div>
                     </div>
-                    <span class="distance" v-if="item.docScoure">
-                      <span class="score" >{{ item.docScoure.toFixed(1) }}</span> 分
-                    </span>
+                    <!--<span class="distance" v-if="item.docScoure">-->
+                      <!--<span class="score" >{{ item.docScoure.toFixed(1) }}</span> 分-->
+                    <!--</span>-->
                     <span class="distance" v-if="item.docScoure">
                       <span class="score">{{ item.docScoure.toFixed(1) }}</span> 分
                       <img src="../../../../static/img/left-arrow.png" alt="">
