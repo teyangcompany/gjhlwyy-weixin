@@ -86,7 +86,6 @@ export function getAppid() {
 // }
 
 
-
 /**
  * 生成返回URL
  * @param options
@@ -123,4 +122,14 @@ export function makeUrl(options) {
     url += "#" + options.hash;
   }
   return url;
+}
+
+/**
+ * debug
+ * @param args
+ */
+export function debug(...args) {
+  if (1 == 1) {
+    console.log.apply(console, args);
+  }
 }

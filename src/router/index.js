@@ -10,25 +10,31 @@ import login from '../components/bindAccount/login'
 import blankPage from '../components/blankPage.vue'
 import menuMy from '../components/menuMy'
 import internetTerms from '../components/internetTerms'
+import download from '../page/download.vue'
+
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path:"/blankPage/:id",
-      component:blankPage
+      path: "/download/:type",
+      component: download
     },
     {
-      path:"",
-      component:login
+      path: "/blankPage/:id",
+      component: blankPage
     },
     {
-      path:"/profile",
-      component:menuMy
+      path: "",
+      component: login
     },
     {
-      path:"/internetTerms",
-      component:internetTerms
+      path: "/profile",
+      component: menuMy
+    },
+    {
+      path: "/internetTerms",
+      component: internetTerms
     },
     ...index,
     ...my,

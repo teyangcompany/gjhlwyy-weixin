@@ -72,9 +72,9 @@
         sort:"create_time.desc",
         token: tokenCache.get(),
       }).then((data)=>{
+        this.endStatus = true
         if(data.code == 0){
           this.loadingStatus = false
-          this.endStatus = true
           for(var i=0;i<data.list.length; i++){
             this.doingList.push(data.list[i])
             this.createTime.push(formatDate(new Date(data.list[i].createTime)))

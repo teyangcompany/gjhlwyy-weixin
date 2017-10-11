@@ -196,13 +196,12 @@
       Toast
     },
     created() {
-
+      this.llunxun = null;
       this.listenScroll = true
       this.probeType = 3
       this.displayDate = this.$route.query.date
       this.displayMessage = this.$route.query.message
       this.displayPicked = this.$route.query.picked
-      console.log(this.displayDate)
       this.consultId = this.$route.query.consultId
       this.showToast = true
       this.$nextTick(() => {
@@ -267,7 +266,7 @@
 //         })
       let that = this
 
-      setInterval(() => {
+      this.lunxun = setInterval(() => {
         api("nethos.consult.info.detail", {
           token: tokenCache.get(),
           consultId: that.consultId
@@ -301,6 +300,10 @@
 //         window.socket.on("pushevent",function(data){
 //
 //         })
+    },
+    beforeDestroy() {
+      clearInterval(this.lunxun);
+      this.lunxun = null;
     },
     watch: {
       seeMore() {
