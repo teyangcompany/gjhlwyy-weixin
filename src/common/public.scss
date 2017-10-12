@@ -1,10 +1,20 @@
 @import './var.scss';
 @import "./mixin.scss";
-html{
-  margin:0;
-  padding:0;
-  font-family:PingFangSC;
+
+html {
+  margin: 0;
+  padding: 0;
+  font-family: PingFangSC;
 }
-li{
+
+li {
   list-style-type: none;
+}
+
+.nodata {
+  @include t_r_b_l();
+  top: 50%;
+  a {
+    color: $mainColor;
+  }
 }

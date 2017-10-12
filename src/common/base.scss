@@ -1,0 +1,109 @@
+* {
+  box-sizing: border-box;
+}
+
+body, p, ul, li, ol, dl, dt, dd {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  line-height: 1;
+  font-size: 14px; /*no*/
+}
+
+li {
+  list-style: none;
+}
+
+input {
+  outline: none;
+  border: 0px none;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+textarea {
+  resize: none;
+  outline: none;
+  border: 0px none;
+  -webkit-appearance: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flex-center {
+  align-items: center;
+}
+
+.flex-center-2 {
+  justify-content: center;
+}
+
+/*h1-h6的字体weight重置*/
+$i: 6;
+@while $i>0 {
+  h#{$i} {
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+  }
+  $i: $i - 1;
+}
+
+/*position原子样式设定*/
+@each $i in absolute, relative, fixed {
+  .#{$i} {
+    position: $i;
+  }
+}
+
+/*display原子化样式*/
+@each $i in flex, block, inline, inline-block {
+  .#{$i} {
+    display: $i;
+  }
+}
+
+/*flex原子化样式*/
+@each $i in 0, 1 {
+  .flex#{$i} {
+    flex: $i $i auto;
+  }
+}
+
+/*text-align原子化样式*/
+@each $i in left, center, right {
+  .#{$i} {
+    text-align: $i;
+  }
+}
+
+/*overflow原子化样式*/
+@each $i in hidden, auto, scroll {
+  .overflow-#{$i} {
+    overflow: $i;
+  }
+  @each $j in x, y {
+    .overflow-#{$j}-#{$i} {
+      overflow-#{$j}: $i;
+    }
+  }
+}
+
+/*float原子化样式*/
+@each $i in left, right {
+  .float-#{$i} {
+    float: $i;
+  }
+}

@@ -87,4 +87,126 @@
   }
 }
 
+/*mixin and function*/
+@mixin h_lh($h,$px2rem:false) {
+  @if ($px2rem==true) {
+    height: $h; /*no*/
+    line-height: $h; /*no*/
+  } @else {
+    height: $h;
+    line-height: $h;
+  }
+
+}
+
+@mixin border($pos:bottom,$color:#ccc,$weilei:after,$type:solid,$weight:1px) {
+  & {
+    position: relative;
+  }
+  &::#{$weilei} {
+    display: block;
+    content: "";
+    position: absolute;
+  }
+  @if ($pos==bottom) {
+    &::#{$weilei} {
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      transform: scaleY(0.5);
+      transform-origin: 100% 100%;
+      @if ($weight==1px) {
+        height: $weight; /*no*/
+        border-bottom: $weight $type $color; /*no*/
+      } @else {
+        height: $weight;
+        border-bottom: $weight $type $color;
+      }
+    }
+  }
+
+  @if ($pos==top) {
+    &::#{$weilei} {
+      left: 0;
+      top: 0;
+      width: 100%;
+      transform: scaleY(0.5);
+      transform-origin: 0 0;
+      @if ($weight==1px) {
+        border-top: 1px $type $color; /*no*/
+        height: 1px; /*no*/
+      } @else {
+        border-top: $weight $type $color;
+        height: $weight;
+      }
+
+    }
+  }
+
+  @if ($pos==right) {
+    &::#{$weilei} {
+      right: 0;
+      top: 0;
+      height: 100%;
+      border-right: 1px $type $color; /*no*/
+      transform: scaleX(0.5);
+      transform-origin: 100% 0;
+    }
+  }
+
+  @if ($pos==left) {
+    &::#{$weilei} {
+      left: 0;
+      top: 0;
+      height: 100%;
+      border-left: $weight $type $color; /*no*/
+      transform: scaleX(0.5);
+      transform-origin: 0 0;
+      @if ($weight==1px) {
+        border-left: $weight $type $color; /*no*/
+      } @else {
+        border-left: $weight $type $color;
+      }
+    }
+  }
+}
+
+@mixin t_r_b_l($top:0,$right:0,$bottom:0,$left:0) {
+  @if ($top==0) {
+    top: 0;
+  }
+  @if ($right==0) {
+    right: 0;
+  }
+  @if ($bottom==0) {
+    bottom: 0;
+  }
+  @if ($left==0) {
+    left: 0;
+  }
+}
+
+@mixin w_h($w,$h) {
+  width: $w;
+  height: $h;
+}
+
+@mixin backgroundImageSet($w:100%,$h:100%,$x:center,$y:center,$repeat:no-repeat) {
+  background-position: $x $y;
+  background-repeat: $repeat;
+
+  @if ($h!=0) {
+    background-size: $w $h;
+  } @else {
+    background-size: $w;
+  }
+}
+
+@mixin thumb($w,$h) {
+  @include w_h($w, $h);
+  img {
+    @include w_h($w, $h);
+  }
+}
+
 
