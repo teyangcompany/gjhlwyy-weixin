@@ -30,3 +30,14 @@ export const userCache = {
     storage.set(WX_USER_KEY, value);
   }
 }
+
+
+const WX_DELPIC_KEY = CACHE_PREFIX + "delpic_";
+export const delpicCache = {
+  get() {
+    return storage.session.get(WX_DELPIC_KEY, null);
+  },
+  set(value) {
+    storage.session.set(WX_DELPIC_KEY, value);
+  }
+}

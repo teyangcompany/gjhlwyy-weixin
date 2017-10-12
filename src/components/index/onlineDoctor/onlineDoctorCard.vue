@@ -39,6 +39,11 @@
           <div  class="videoConsult" @click="makeDisplay">
             <img src="../../../../static/img/index/视频问诊.png" alt="">
             <p class="videoWord">视频问诊</p>
+            <span class="videoWord">¥ {{ aboutDoctor.docFamousConsultPrice }}</span>
+          </div>
+          <div  class="videoConsult" @click="makeDisplay">
+            <img src="../../../../static/img/index/名医.png" alt="">
+            <p class="videoWord">名医视频</p>
             <span class="videoWord">¥ {{ aboutDoctor.docVideoConsultPrice }}</span>
           </div>
         </div>

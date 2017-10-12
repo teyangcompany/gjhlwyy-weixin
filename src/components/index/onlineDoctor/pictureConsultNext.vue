@@ -66,6 +66,7 @@
         <i class="weui-icon-delete weui-icon_gallery-delete" @click="deleteImg"></i>
 
       </div>
+      <router-view></router-view>
     </div>
   </transition>
 </template>
@@ -80,7 +81,7 @@
   import weui from 'weui.js'
   import {getApiUrl, debug} from "../../../lib/util"
   import {isLoginMixin} from "../../../lib/mixin"
-  import {tokenCache} from '../../../lib/cache'
+  import {tokenCache,delpicCache} from '../../../lib/cache'
 
   export default {
     mixins: [isLoginMixin],
@@ -162,6 +163,9 @@
 //
 //      })
     },
+    mounted() {
+      debug("xuanran");
+    },
     methods: {
       keypress() {
         this.text = document.getElementById("myArea").value
@@ -182,9 +186,14 @@
         this.showLarge = false
       },
       makeBig(index) {
-        this.deleteImgIndex = index
+        let query = this.$route.query;
+        query.index = index;
+        query.mode ? delete query.mode : "";
+        query.src = this.displayImg[index];
+        this.$router.push({path: "/pictureConsultNext/picscan", query: query})
+        /*this.deleteImgIndex = index
         this.largeImg = this.displayImg[index]
-        this.showLarge = true
+        this.showLarge = true*/
       },
       makeSmall() {
         this.showLarge = false
@@ -333,16 +342,14 @@
                       setTimeout((res) => {
                         that.createImage(file, --i);
                       }, 100)
-
                     }
-                    if (i == 0) {
+                    if (filesIndex == file.length - 1) {
                       that.uploadTips = '上传完毕'
                       console.log(that.uploadTips)
                       that.showVerify = true
                       setTimeout(() => {
                         that.showVerify = false
                       }, 2000)
-
                     }
                   }
                 }
@@ -386,6 +393,15 @@
         if (this.textLength > 500) {
           document.getElementById("myArea").value = this.text.substr(0, 500)
           weui.alert("字数不能超过500")
+        }
+      },
+      $route(to) {
+        if (to) {
+          if (delpicCache.get()) {
+            this.deleteImg(delpicCache.get());
+            delpicCache.set("");
+          }
+
         }
       }
     }

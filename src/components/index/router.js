@@ -50,203 +50,212 @@ import commentDetail from './onlineDoctor/commentDetail'
 import articleList from './onlineDoctor/articleList'
 import todayBook from './todayBook'
 import bookTerms from './book/bookTerms'
-export default[
+import picScan from "../../plugins/picscan.vue"
+
+
+export default [
   {
-    path:"/quickConsult",
-    component:quickConsult
+    path: "/quickConsult",
+    component: quickConsult
   },
   {
-    path:'/writeInfo',
-    component:writeInfo
+    path: '/writeInfo',
+    component: writeInfo
   },
   {
-    path:"/writeSubmit",
-    component:writeSubmit
+    path: "/writeSubmit",
+    component: writeSubmit
   },
   {
-    path:"/submitSuccess",
-    component:submitSuccess
+    path: "/submitSuccess",
+    component: submitSuccess
   },
   {
-    path:'/book',
-    component:book
+    path: '/book',
+    component: book
   },
   {
-    path:"/todayBook",
-    component:todayBook
+    path: "/todayBook",
+    component: todayBook
   },
   {
-    path:"/selectType",
-    component:selectType
+    path: "/selectType",
+    component: selectType
   },
   {
-    path:"/bookType",
-    component:bookType,
-    children:[
+    path: "/bookType",
+    component: bookType,
+    children: [
       {
-        path:"expert",
-        component:expert
+        path: "expert",
+        component: expert
       },
       {
-        path:"date",
-        component:date
+        path: "date",
+        component: date
       }
     ]
   },
   {
-    path:"/expertDetail",
-    component:expertDetail
+    path: "/expertDetail",
+    component: expertDetail
   },
   {
-    path:"/famousPage",
-    component:famousPage
+    path: "/famousPage",
+    component: famousPage
   },
   {
-    path:"/infoConfirm",
-    component:infoConfirm
+    path: "/infoConfirm",
+    component: infoConfirm
   },
   {
-    path:"/bookSuccess",
-    component:bookSuccess
+    path: "/bookSuccess",
+    component: bookSuccess
   },
   {
-    path:"/videoIndex",
-    component:videoIndex
+    path: "/videoIndex",
+    component: videoIndex
   },
   {
-    path:"/doctorCard",
-    component:doctorCard
+    path: "/doctorCard",
+    component: doctorCard
   },
   {
-    path:"/apply",
-    component:apply
+    path: "/apply",
+    component: apply
   },
   {
-    path:"/videoSubmit",
-    component:videoSubmit
+    path: "/videoSubmit",
+    component: videoSubmit
   },
   {
-    path:"/videoWriteInfo",
-    component:videoWriteInfo
+    path: "/videoWriteInfo",
+    component: videoWriteInfo
   },
   {
-    path:"/videoPay",
-    component:videoPay
+    path: "/videoPay",
+    component: videoPay
   },
   {
-    path:"/internetRoom",
-    component:internetRoom
+    path: "/internetRoom",
+    component: internetRoom
   },
   {
-    path:"/onlineDoctorCard",
-    component:onlineDoctorCard
+    path: "/onlineDoctorCard",
+    component: onlineDoctorCard
   },
   {
-    path:"/pictureConsultApply",
-    component:pictureConsultApply
+    path: "/pictureConsultApply",
+    component: pictureConsultApply
   },
   {
-    path:"/videoConsultApply",
-    component:videoConsultApply
+    path: "/videoConsultApply",
+    component: videoConsultApply
   },
   {
-    path:"/pictureConsultNext",
-    component:pictureConsultNext
+    path: "/pictureConsultNext",
+    component: pictureConsultNext,
+    children: [
+      {
+        path: "picscan",
+        component: picScan
+      }
+    ]
   },
   {
-    path:"/allConsultNext",
-    component:allConsultNext
+    path: "/allConsultNext",
+    component: allConsultNext
   },
   {
-    path:"/allConsultSuccess",
-    component:allConsultSuccess
+    path: "/allConsultSuccess",
+    component: allConsultSuccess
   },
   {
-    path:"/checkReport",
-    component:checkReport
+    path: "/checkReport",
+    component: checkReport
   },
   {
-    path:"/waitCallNumber",
-    component:waitCallNumber
+    path: "/waitCallNumber",
+    component: waitCallNumber
   },
   {
-    path:"/checkSortList",
-    component:checkSortList
+    path: "/checkSortList",
+    component: checkSortList
   },
   {
-    path:"/testReportDetail",
-    component:testReportDetail
+    path: "/testReportDetail",
+    component: testReportDetail
   },
   {
-    path:"/checkReportDetail",
-    component:checkReportDetail
+    path: "/checkReportDetail",
+    component: checkReportDetail
   },
   {
-    path:"/testReportCard",
-    component:testReportCard
+    path: "/testReportCard",
+    component: testReportCard
   },
   {
-    path:"/checkReportCard",
-    component:checkReportCard
+    path: "/checkReportCard",
+    component: checkReportCard
   },
   {
-    path:"/myCallNumber",
-    component:myCallNumber
+    path: "/myCallNumber",
+    component: myCallNumber
   },
   {
-    path:"/downloadPage",
-    component:downloadPage
+    path: "/downloadPage",
+    component: downloadPage
   },
   {
-    path:"/allConsultDetail",
-    component:allConsultDetail
+    path: "/allConsultDetail",
+    component: allConsultDetail
   },
   {
-    path:"/pictureConsultDetail",
-    component:pictureConsultDetail
+    path: "/pictureConsultDetail",
+    component: pictureConsultDetail
   },
   {
-    path:"/famousConsultNext",
-    component:famousConsultNext
+    path: "/famousConsultNext",
+    component: famousConsultNext
   },
   {
-    path:"/videoConsultNext",
-    component:videoConsultNext
+    path: "/videoConsultNext",
+    component: videoConsultNext
   },
   {
-    path:"/togglePatient",
-    component:togglePatient
+    path: "/togglePatient",
+    component: togglePatient
   },
   {
-    path:"/bookTogglePatient",
-    component:bookTogglePatient
+    path: "/bookTogglePatient",
+    component: bookTogglePatient
   },
   {
-    path:"/waitTogglePatient",
-    component:waitTogglePatient
+    path: "/waitTogglePatient",
+    component: waitTogglePatient
   },
   {
-    path:"/checkTogglePatient",
-    component:checkTogglePatient
+    path: "/checkTogglePatient",
+    component: checkTogglePatient
   },
   {
-    path:"/nowBook",
-    component:nowBook
+    path: "/nowBook",
+    component: nowBook
   },
   {
-    path:"/articleDetail",
-    component:articleDetail
+    path: "/articleDetail",
+    component: articleDetail
   },
   {
-    path:"/commentDetail",
-    component:commentDetail
+    path: "/commentDetail",
+    component: commentDetail
   },
   {
-    path:"/articleList",
-    component:articleList
+    path: "/articleList",
+    component: articleList
   },
   {
-    path:"/bookTerms",
-    component:bookTerms
+    path: "/bookTerms",
+    component: bookTerms
   }
 ]

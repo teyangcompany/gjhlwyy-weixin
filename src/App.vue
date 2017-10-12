@@ -31,7 +31,7 @@
     bottom: 0;
   }
 
-  #app > .page {
+  #app  .page {
     position: absolute;
     left: 0;
     right: 0;
