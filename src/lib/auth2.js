@@ -30,6 +30,7 @@ export default (cb) => {
   }
   /*非微信打开*/
   else {
+    openidCache.set("");
     // console.log("openid:" + openid);
     cb();
   }
