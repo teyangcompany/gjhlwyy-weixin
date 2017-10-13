@@ -262,7 +262,7 @@
       }
       .tips {
         position: absolute;
-        top: 430rem/$rem;
+        top: 490rem/$rem;
         width: 690rem/$rem;
         text-align: center;
         border: 1px solid #00ced1;
@@ -301,7 +301,7 @@
         bottom: 0;
         height: 500rem/$rem;
         .formContent {
-          width: 690rem/$rem;
+          width: 630rem/$rem;
           margin: 0 auto;
           margin-top: 10px;
           .form {

@@ -99,7 +99,7 @@ export function makeUrl(options) {
   if (options.hostname) {
     url += options.hostname
   }
-  if (options.port && options.port != 80) {
+  if (options.port && options.port != 80 && options.port != 443) {
     url += options.port
   }
   if (options.path) {
@@ -132,4 +132,19 @@ export function debug(...args) {
   if (1 == 1) {
     console.log.apply(console, args);
   }
+}
+
+/**
+ * 解析url参数
+ * @param from
+ * @returns {{protocol: *, hostname: *, port: *, path: *, query: *, hash: *}}
+ */
+export function getParamsFromUrl(from) {
+  let protocol = url("protocol", from);
+  let hostname = url("hostname", from);
+  let port = url("port", from);
+  let path = url("path", from);
+  let query = url("?", from);
+  let hash = url("hash", from);
+  return {protocol, hostname, port, path, query, hash}
 }

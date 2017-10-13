@@ -10,12 +10,6 @@
             <img class="profile" src="../../static/img/pat.f.jpg" alt="" v-else @click="selectImg()">
             <input type="file" accept="image/*" name="upload" id="upload" ref="upload" @change="onFileChange">
           </div>
-          <!--<router-link tag="div" to="/personInfo" class="rightWord">-->
-          <!--<div v-if="patientInfo">-->
-          <!--<span>姓名:{{ patientInfo.patName }}</span><span>{{ patientInfo.patGender == 'M' ? '男':'女' }} {{ patientInfo.age }}岁</span>-->
-          <!--</div>-->
-          <!--<img class="look" src="../../static/img/查看更多.png" alt="">-->
-          <!--</router-link>-->
           <div class="rightWord" @click="selectImg()">
             <div v-if="patientInfo">
               <span>姓名:{{ patientInfo.patName }}</span><span>{{ patientInfo.patGender == 'M' ? '男' : '女'

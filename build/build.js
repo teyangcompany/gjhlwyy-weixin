@@ -39,6 +39,12 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
       }
     });
 
+    const dist2 = path.resolve(__dirname, "../../../web/gjyy_web/build/gjhlwyy");
+    console.log(dist2);
+    shelljs.rm("-rf", `${dist2}/*`);
+    shelljs.cp("-rf", path.resolve(__dirname, "../dist/*"), `${dist2}`)
+
+
     console.log(chalk.cyan('  Build complete.\n'));
     console.log(chalk.yellow(
       '  Tip: built files are meant to be served over an HTTP server.\n' +

@@ -94,8 +94,8 @@
             <h4>医生介绍</h4>
             <div class="line"></div>
             <div class="forArrowLeft">
-              <h6 class="intro" v-html="aboutDoctor.docResume" v-if="introAll">{{ aboutDoctor.docResume }}</h6>
-              <p class="intro" v-html="aboutDoctor.docResume" v-else>{{ aboutDoctor.docResume }}</p>
+              <h6 class="intro" v-html="aboutDoctor.docResume" v-if="introAll"></h6>
+              <p class="intro" v-html="aboutDoctor.docResume" v-else></p>
               <div>
                 <div v-if="introAll" @touchend="introDownMore()">
                   <img src="../../../../static/img/下.png" alt="">
