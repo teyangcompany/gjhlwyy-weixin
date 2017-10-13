@@ -93,7 +93,6 @@
           api("nethos.system.captcha.pat.wechat.bind", {
             mobile: this.phone,
           }).then((data) => {
-            console.log(data)
             if (data.code == 0) {
               console.log(data)
               this.regStatus = data.regStatus
@@ -115,36 +114,6 @@
           })
         }
       },
-
-
-//      getCode(){
-//        let that = this
-//        api("nethos.system.captcha.generate",{
-//          captchaType:"SMS",
-//          mobile:this.phone,
-//        }).then((data)=>{
-//          that.cid = data.obj
-//          console.log(that.cid)
-//        })
-//      },
-//      verifyCode(){
-//        console.log(this.cid)
-//        api("nethos.pat.checkcaptchamobile",{
-//          captcha:this.code,
-//          patMobile:this.phone,
-//          cid:this.cid,
-//          isType:"register"
-//        }).then((data)=>{
-//          if(data.msg == '该手机号已被注册，请直接登陆'){
-//            this.$router.push('/login')
-//          }else{
-//            this.$router.push("/register")
-//          }
-//          console.log(data)
-//        })
-//      }
-
-
       verifyCode() {
         if (this.phone == '') {
           this.verifyTips = "手机号不能为空"
@@ -154,22 +123,6 @@
             this.showVerify = false
           }, 1000)
         }
-//          else if(this.code == ''){
-//            this.verifyTips = "验证码不能为空"
-//            this.showVerify = true
-//            setTimeout(()=>{
-//              this.verifyTips = '验证码不能为空'
-//              this.showVerify = false
-//            },1000)
-//          }
-//          else if(this.code != this.codeValue){
-//            this.verifyTips = "验证码输入错误"
-//            this.showVerify = true
-//            setTimeout(()=>{
-//              this.verifyTips = '验证码输入错误'
-//              this.showVerify = false
-//            },1000)
-//          }
         else {
           if (this.regStatus == 'REGISTER') {
             this.$router.push({
@@ -183,10 +136,6 @@
               cid: this.cid,
               openid: openidCache.get()
             }).then((data) => {
-              console.log(data)
-              console.log(this.codeValue)
-              console.log(this.cid)
-              console.log(openidCache.get())
               if (data.code == 0) {
                 this.$router.push({
                   path: '/scanLogin',
@@ -206,7 +155,6 @@
             })
           }
         }
-        console.log(this.cid)
       },
     },
     components: {

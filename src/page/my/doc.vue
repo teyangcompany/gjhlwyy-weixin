@@ -88,7 +88,6 @@
                   if (!this.list || this.list.length == 0) {
                     this.nodata = true;
                   }
-                  ///this.list = [];
                 }
               })
           }
