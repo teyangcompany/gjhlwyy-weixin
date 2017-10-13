@@ -2,7 +2,7 @@
     <div class="page flex">
         <app-header class="header flex0" ref="header" title="我的医生">
         </app-header>
-        <scroll ref="scroll" :height="scrollHeight" :data="list" class="flex0 relative overflow-hidden">
+        <scroll ref="scroll" :height="scrollHeight" :data="list" class="flex1 relative overflow-hidden">
             <ul class="list">
                 <router-link :key="index" :to="{path:'/onlineDoctorCard',query:{docId:doc.sysDoc.docId}}" tag="li"
                              class="flex"
