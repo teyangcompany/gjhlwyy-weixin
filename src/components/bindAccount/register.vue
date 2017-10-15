@@ -116,9 +116,6 @@
             })
           }
       },
-      focus(){
-//          document.getElementsByClassName("")
-      }
     },
     components:{
       "VHeader":header,

@@ -102,7 +102,6 @@
     },
     methods:{
       goPicture(){
-
         this.$router.push('apply/picture')
       },
       iKnow(){
@@ -114,7 +113,6 @@
         }).then((data) => {
           console.log(data.obj)
           if (data.code == 0) {
-            console.log(data,66666)
             if(this.picked === true){
               this.$router.push({
                 path:'/pictureConsultNext',

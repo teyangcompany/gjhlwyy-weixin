@@ -64,7 +64,6 @@
           <img :src="largeImg" alt="" @click="makeSmall">
         </div>
         <i class="weui-icon-delete weui-icon_gallery-delete" @click="deleteImg"></i>
-
       </div>
       <router-view></router-view>
     </div>

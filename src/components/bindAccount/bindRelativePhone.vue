@@ -89,6 +89,12 @@
               });
             }
           } else {
+            if (this.docId) {
+              this.$router.push({
+                path: "/scanBind",
+                query: {docId: this.docId}
+              });
+            }
           }
         })
       },

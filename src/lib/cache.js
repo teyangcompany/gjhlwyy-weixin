@@ -41,3 +41,13 @@ export const delpicCache = {
     storage.session.set(WX_DELPIC_KEY, value);
   }
 }
+
+const WX_BACKPATH_KEY = CACHE_PREFIX + "backpath_";
+export const backpathCache = {
+  get() {
+    return storage.session.get(WX_BACKPATH_KEY, null);
+  },
+  set(value) {
+    storage.session.set(WX_BACKPATH_KEY, value);
+  }
+}

@@ -1,8 +1,9 @@
 <template>
   <scroll class="canceled" :data="consultList" :pullup="pullup" @scrollToEnd="scrollToEnd()" ref="cancel">
     <div>
-      <router-link tag="ul" :to="{path:'/waitArrange',query:{consultId:item.consultId}}" class="border-1px" v-for="(item,index) in consultList" :key="item.id">
-        <li v-if="item.consultTypeName != '名医视频' && item.consultTypeName != '在线医生视频' && item.consultTypeName != '全科分诊'" >
+      <router-link tag="ul" :to="{path:'/waitArrange',query:{consultId:item.consultId}}" class="border-1px"
+                   v-for="(item,index) in consultList" :key="item.id">
+        <li v-if="item.consultTypeName != '名医视频' && item.consultTypeName != '在线医生视频' && item.consultTypeName != '全科分诊'">
           <div>
             <span class="picConsult">{{ item.consultTypeName }}</span>
             <span class="consultTim">{{ createTime[index] }}</span>
@@ -24,7 +25,7 @@
       </div>
     </div>
     <div class="emptyTips" v-if="consultList.length == 0 && endStatus== true">
-          暂无问诊记录
+      暂无问诊记录
     </div>
   </scroll>
 </template>
@@ -33,105 +34,106 @@
   import api from '../../../lib/api'
   import Scroll from '../../../base/scroll'
   import weui from 'weui.js'
-  import {isLoginMixin} from "../../../lib/mixin"
+  import {isBindMixin, isLoginMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   import {formatDate} from '../../../utils/formatTimeStamp'
-  export default{
-    mixins: [isLoginMixin],
-    data(){
-        return{
-          consultList:[],
-          pullup:true,
-          listPage:1,
-          dataLength:"",
-          loadingStatus:true,
-          createTime:[],
-          endStatus:false
-        }
+
+  export default {
+    mixins: [isLoginMixin, isBindMixin],
+    data() {
+      return {
+        consultList: [],
+        pullup: true,
+        listPage: 1,
+        dataLength: "",
+        loadingStatus: true,
+        createTime: [],
+        endStatus: false
+      }
     },
-    mounted(){
+    mounted() {
 
     },
-    created(){
-      api("nethos.pat.info.get", {
-        token:tokenCache.get()
-      }).then((data) => {
-        if (data.code == 0) {
-//          this.patientInfo = data.obj
-        } else {
+    created() {
+      this._isBind().then((res) => {
+        if (res === false) {
           this.$router.replace({
-            path:"/bindRelativePhone",
-            query:{backPath:this.path}
+            path: "/bindRelativePhone",
+            query: {backPath: this.path}
           });
+        } else {
+          this.getList();
         }
       })
-       api("nethos.consult.info.list",{
-           pageNo:1,
-           pageSize:10,
-           sort:"create_time.desc",
-           token: tokenCache.get(),
-       }).then((data)=>{
-          if(data.code == 0){
+    },
+    methods: {
+      getList() {
+        api("nethos.consult.info.list", {
+          pageNo: 1,
+          pageSize: 10,
+          sort: "create_time.desc",
+          token: tokenCache.get(),
+        }).then((data) => {
+          if (data.code == 0) {
             this.loadingStatus = false
             this.endStatus = true
-            for(var i=0;i<data.list.length; i++){
+            for (var i = 0; i < data.list.length; i++) {
               this.consultList.push(data.list[i])
               this.createTime.push(formatDate(new Date(data.list[i].createTime)))
             }
-          }else if(!(data.msg)){
+          } else if (!(data.msg)) {
             this.loadingStatus = false
-              weui.alert("网络错误，请稍后重试")
-          }else{
+            weui.alert("网络错误，请稍后重试")
+          } else {
             this.loadingStatus = false
-              weui.alert(data.msg)
+            weui.alert(data.msg)
           }
 //          this.consultList.push(data.list)
-         console.log(data)
-         console.log(this.createTime)
+          console.log(data)
+          console.log(this.createTime)
           console.log(this.consultList)
-       })
-    },
-    methods:{
-      _initCancel(){
-        this.cancel = new BScroll(this.$refs.cancel,{
-          click:true
         })
       },
-      scrollToEnd(){
+      _initCancel() {
+        this.cancel = new BScroll(this.$refs.cancel, {
+          click: true
+        })
+      },
+      scrollToEnd() {
         if (this.preventRepeatRequest) {
           return
         }
         this.loadingStatus = true
         this.preventRepeatRequest = true;
-        this.listPage +=1;
+        this.listPage += 1;
         let that = this
-        api("nethos.consult.info.list",{
+        api("nethos.consult.info.list", {
           token: tokenCache.get(),
-          sort:"create_time.desc",
-          pageNo:that.listPage,
-          pageSize:"10"
-        }).then((data)=>{
-          if(data.code == 0){
-            for(var i=0;i<data.list.length; i++){
+          sort: "create_time.desc",
+          pageNo: that.listPage,
+          pageSize: "10"
+        }).then((data) => {
+          if (data.code == 0) {
+            for (var i = 0; i < data.list.length; i++) {
               this.consultList.push(data.list[i])
               this.createTime.push(formatDate(new Date(data.list[i].createTime)))
             }
             this.loadingStatus = false
             that.dataLength = data.list.length
-            if(data.list.length >= 10){
+            if (data.list.length >= 10) {
               this.preventRepeatRequest = false;
             }
-          }else if(!(data.msg)){
+          } else if (!(data.msg)) {
             this.loadingStatus = false
-              weui.alert("网络错误，请稍后重试")
-          }else{
+            weui.alert("网络错误，请稍后重试")
+          } else {
             this.loadingStatus = false
-              weui.alert(data.msg)
+            weui.alert(data.msg)
           }
         })
       },
     },
-    watch:{
+    watch: {
 //      consultList(){
 //        this.$nextTick(()=>{
 //          setTimeout(()=>{
@@ -140,25 +142,26 @@
 //        })
 //      }
     },
-    components:{
+    components: {
       Scroll
     }
   }
 </script>
 <style scoped lang="scss">
   @import '../../../common/public.scss';
-  .canceled{
+
+  .canceled {
     position: absolute;
     top: 90px;
-    left:0;
-    right:0;
-    bottom:0;
-    .emptyTips{
+    left: 0;
+    right: 0;
+    bottom: 0;
+    .emptyTips {
       position: absolute;
-      top:0;
-      right:0;
-      left:0;
-      bottom:0;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
       color: #666666;
       display: flex;
       align-items: center;
@@ -171,11 +174,11 @@
         width: 690rem/$rem;
         /*<!--height: 200rem/$rem;-->*/
         border-radius: 7px;
-        background-color:white;
+        background-color: white;
         list-style-type: none;
         margin: 0 auto;
         padding: 0px 8px 8px 8px;
-        >div {
+        > div {
           display: flex;
           justify-content: space-between;
           span.picConsult {
@@ -191,8 +194,8 @@
           flex-direction: column;
           justify-content: center;
           height: 52px;
-          >div{
-            img{
+          > div {
+            img {
               width: 22.5%;
               height: 120rem/$rem;
             }
@@ -228,23 +231,23 @@
           }
           span.money {
             font-size: 28rem/$rem;
-            color: $mainColor!important;
+            color: $mainColor !important;
           }
         }
       }
-      li:nth-child(1){
+      li:nth-child(1) {
         padding-top: 5px;
       }
     }
-    .loadMore{
+    .loadMore {
       display: flex;
       justify-content: center;
       align-items: center;
-      span.pullMore{
+      span.pullMore {
         display: flex;
         align-items: center;
         font-size: 12px;
-        img{
+        img {
           width: 16px;
           height: 16px;
           margin-right: 5px;
@@ -252,7 +255,8 @@
       }
     }
   }
-  .number{
-    color: #3399FF!important;
+
+  .number {
+    color: #3399FF !important;
   }
 </style>
