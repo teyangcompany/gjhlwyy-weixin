@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page">
     <v-header :title="title" :rightTitle="rightTitle"></v-header>
     <div class="myArea">
       <!--<div class="blank border-1px"></div>-->
@@ -97,10 +97,7 @@
       }
     },
     created() {
-      console.log(document.getElementsByTagName('title')[0])
-
       this.tellPath = this.$route.path
-      console.log(this.tellPath)
 //      document.getElementsByTagName('title')[0].innerText= '我的'
       api("nethos.pat.info.get", {
           token:tokenCache.get()
