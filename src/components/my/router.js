@@ -60,6 +60,7 @@ import expenseHistory from './healthBasic/expenseHistory.vue'
 
 import detailDescription from './account/detailDescription.vue'
 import myDoc from "../../page/my/doc.vue"
+import myData from "../../page/my/data.vue"
 
 export default [
     {
@@ -344,5 +345,9 @@ export default [
     {
         path: "/my/doc",
         component: myDoc
+    },
+    {
+        path: "/my/data",
+        component: myData
     }
 ]

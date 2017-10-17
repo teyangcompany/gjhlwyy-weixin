@@ -22,7 +22,10 @@
   }
 </script>
 
-<style>
+<style lang="scss">
+  @import "common/var";
+  @import "common/base";
+
   #app, .page {
     /*display: flex;*/
     /*flex-direction: column;*/
