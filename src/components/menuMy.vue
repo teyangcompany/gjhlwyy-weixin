@@ -10,7 +10,7 @@
             <img class="profile" src="../../static/img/pat.f.jpg" alt="" v-else @click="selectImg()">
             <input type="file" accept="image/*" name="upload" id="upload" ref="upload" @change="onFileChange">
           </div>
-          <div class="rightWord" @click="selectImg()">
+          <div class="rightWord">
             <div v-if="patientInfo">
               <span>姓名:{{ patientInfo.patName }}</span><span>{{ patientInfo.patGender == 'M' ? '男' : '女'
               }} {{ patientInfo.age }}岁</span>
