@@ -78,7 +78,7 @@
             this.showToast = false
               if(data.code == 0 &&　data.obj){
                 this.returnInfo =  JSON.parse(data.obj)
-                console.log(this.returnInfo)
+                //console.log(this.returnInfo)
 
                 let conf={
                   "appId":this.returnInfo.appid,     //公众号名称，由商户传入
