@@ -37,8 +37,8 @@ Vue.config.productionTip = false
  * width:20rem
  * */
 // let socketUrl =  getSocket()
-window.socket = io("nethoswebsocket.diandianys.com");
-window.socket.on('connect', function () {
+  window.socket = io("nethoswebsocket.diandianys.com");
+  window.socket.on('connect', function () {
   api("nethos.push.deviceid.register", {
     token: tokenCache.get(),
     deviceId: openidCache.get()
