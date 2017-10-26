@@ -62,6 +62,8 @@ import detailDescription from './account/detailDescription.vue'
 import myDoc from "../../page/my/doc.vue"
 import myData from "../../page/my/data.vue"
 
+import myAuth from "../../page/my/auth.vue"
+
 export default [
     {
         path: "/expenseHistory",
@@ -349,5 +351,9 @@ export default [
     {
         path: "/my/data",
         component: myData
+    },
+    {
+        path: "/my/auth",
+        component: myAuth
     }
 ]
