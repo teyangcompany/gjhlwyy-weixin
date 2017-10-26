@@ -1,33 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>浙江好E生</title>
-    <meta name="version" content="<%= htmlWebpackPlugin.options.version %>">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <link rel="stylesheet" href="static/css/weui1.css"/>
-    <script type="text/javascript" src="static/js/url.min.js"></script>
-    <script type="text/javascript" src="static/js/md5-min.js"></script>
-    <script type="text/javascript" src="static/js/sha512.min.js"></script>
-    <script type="text/javascript" src="static/js/socket.io.js"></script>
-    <script type="text/javascript" src="static/js/d3-queue.min.js"></script>
-    <script>
-        /*程序版本号*/
-        window.version = document.querySelector("meta[name='version']").content;
-        /*程序开始时间*/
-        window.appStartTime = new Date().getTime();
-    </script>
+  <meta charset="utf-8">
+  <title>浙江好E生</title>
+  <meta name="version" content="<%= htmlWebpackPlugin.options.version %>">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="static/css/weui1.css"/>
+  <script type="text/javascript" src="static/js/url.min.js"></script>
+  <script type="text/javascript" src="static/js/md5-min.js"></script>
+  <script type="text/javascript" src="static/js/sha512.min.js"></script>
+  <script type="text/javascript" src="static/js/socket.io.js"></script>
+  <script type="text/javascript" src="static/js/d3-queue.min.js"></script>
+  <script>
+    /*程序版本号*/
+    window.version = document.querySelector("meta[name='version']").content;
+    /*程序开始时间*/
+    window.appStartTime = new Date().getTime();
+
+    var UA = window.navigator.userAgent.toLocaleLowerCase();
+    if (/iphone/.test(UA)) {
+      window.device = "iphone";
+    }
+    if (/android/.test(UA)) {
+      window.device = "android";
+    }
+
+    if (/micromessenger/.test(UA)) {
+      window.brower = "weixin";
+    } else {
+      window.brower = "";
+    }
+
+    /*
+ * 移动端rem布局
+ * width:20rem
+ * */
+    if (window.device == "iphone" || window.device == "android") {
+      var w = window.innerWidth;
+      document.querySelector('html').style.fontSize = (w / 20) + 'px';
+    }
+
+
+  </script>
 
 </head>
 <body ontouchstart="">
 <div id="app"></div>
 <!-- built files will be auto injected -->
 </body>
-<script>
-    if (window.device == "iphone" || window.device == "android") {
-        var w = window.innerWidth;
-        document.querySelector('html').style.fontSize = (w / 20) + 'px';
-    }
-</script>
 </html>
