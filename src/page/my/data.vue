@@ -44,7 +44,7 @@
         </div>
       </div>
 
-      <div class="wrap flex">
+      <div class="wrap flex" @click="modifyPhone">
         <div class="label flex0">
           手机号
         </div>
@@ -139,6 +139,18 @@
     },
     methods: {
       patAva, getSex,
+      modifyPhone() {
+        let msg = "\n" +
+          "\n" +
+          "修改手机号将同时更改您的登录手机号；\n" +
+          "\n" +
+          "并导致运营商认证、医院认证、医院帐号绑定失效，确定吗？\n";
+        weuijs.confirm(msg,
+          () => {
+            this.$router.push("/changePhone")
+          })
+      },
+
       handleRealName(isRealnameAuth) {
         if (!isRealnameAuth) {
           api("nethos.sys.user.auth").then((res) => {

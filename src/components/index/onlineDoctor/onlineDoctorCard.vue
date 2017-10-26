@@ -121,11 +121,21 @@
         </div>
         <div class="blank border-1px"></div>
         <div class="institutionDes border-1px">
-          <div class="desCenter team">
+          <ul class="flex ercode">
+            <li class="flex0 center">
+              <img src="../../../../static/img/logo.web.png" alt="">
+              <div><span>APP</span>关注我,功能更丰富</div>
+            </li>
+            <li class="flex0 center">
+              <img src="../../../../static/img/logo.weixin.png" alt="">
+              <div><span>微信</span>关注我,功能更丰富</div>
+            </li>
+          </ul>
+          <!--<div class="desCenter team">
             <h4><span>扫描二维码，关注我</span></h4>
             <h6>
               <img :src="aboutDoctor.docQrcodeUrl " alt=""></h6>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>
@@ -368,21 +378,9 @@
   @import '../../../common/mixin.scss';
 
   .doctor {
-    /*position: fixed;*/
-    /*top:0;*/
-    /*left:0;*/
-    /*right:0;*/
-    /*bottom: 0;*/
-    /*.gradual{*/
-    /*<!--position: relative;-->*/
-    /*<!--top:0;-->*/
-    /*<!--width:690rem/$rem;-->*/
-    /*<!--height: 50px;-->*/
-    /*<!--display: flex;-->*/
-    /*<!--margin:0 auto;-->*/
-    /*<!--z-index: 20;-->*/
-    /*<!--justify-content: space-between;-->*/
-    /*<!--align-items: center;-->*/
+    position: absolute;
+    @include t_r_b_l();
+    overflow-y: auto;
     .topWrap {
       position: fixed;
       top: 0;
@@ -413,6 +411,28 @@
       }
     }
     /*}*/
+  }
+
+  .ercode {
+    li {
+      padding-bottom: 15px;
+      padding-top: 15px;
+      width: 50%;
+      div {
+        display: inline-block;
+        padding: 5px 5px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        margin-top: 5px;
+      }
+      span {
+        color: $mainColor;
+        font-size: 12px;
+      }
+      img {
+        width: 30%;
+      }
+    }
   }
 
   .doctorCard {

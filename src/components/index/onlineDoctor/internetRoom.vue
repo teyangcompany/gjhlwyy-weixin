@@ -155,172 +155,143 @@
         </ul>
       </div>
     </transition>
-    <!--<transition name="showcover">-->
-      <!--<div class="back_cover" v-show="sortBy" @click="hideCover"></div>-->
-    <!--</transition>-->
-    <!--<div class="roomList" @click="hideCover" ref="doctor">-->
-      <!--<div v-if="doctorList.length == 0" class="loading">-->
-        <!--<img src="../../../../static/img/loading.gif" alt="">-->
-        <!--<span>正在很努力的加载中...</span>-->
+    <transition name="showcover">
+      <div class="back_cover" v-show="sortBy" @click="hideCover"></div>
+    </transition>
+    <div class="roomList" @click="hideCover" ref="doctor">
+      <!--<div v-if="showVideo">-->
+      <!--<ul class="border-1px" v-for=" item in doctorList" v-if="showVideo && item.docVideoConsultStatus == true">-->
+      <!--<router-link tag="div" :to="{ path:'/onlineDoctorCard',query:{docId:item.docId} }">-->
+      <!--<li>-->
+      <!--<div class="cancelImg">-->
+      <!--<img :src="item.docAvatar" alt="">-->
       <!--</div>-->
-      <!--<div v-else>-->
-        <!--<ul class="border-1px" v-for=" item in doctorList">-->
-          <!--<router-link tag="div" :to="{ path:'/onlineDoctorCard',query:{docId:item.docId} }">-->
-            <!--<li>-->
-              <!--<div class="cancelImg">-->
-                <!--<img @load="onLoad" v-if="item.docAvatar" :src="item.docAvatar" alt=""-->
-                     <!--onerror="javascript:this.src='./static/img/doctor.m.png'">-->
-                <!--<img v-else-if="item.docAvatar == ''" src="../../../../static/img/doctor.m.png" alt="">-->
-                <!--<img src="../../../../static/img/doctor.m.png" alt="" v-else>-->
-              <!--</div>-->
-              <!--<div class="cancelIntro">-->
-                <!--<div>-->
-                  <!--<span class="myDoctor"><span class="titleName">{{ item.docName }}</span> <span-->
-                    <!--class="rankName">{{ item.docTitle }} </span></span>-->
-                  <!--<p>{{ item.docHosName }}  {{ item.docDeptName }} </p>-->
-                  <!--<p class="sortName"><span> <img src="../../../../static/img/11.png" alt=""-->
-                                                  <!--v-if="item.docPicConsultStatus == true"> {{ item.docPicConsultStatus == true ? "图文咨询" : ""-->
-                    <!--}}</span>-->
-                    <!--<span> <img src="../../../../static/img/shipin.png" alt=""-->
-                                <!--v-if="item.docVideoConsultStatus == true"> {{ item.docVideoConsultStatus == true ? "视频问诊" : ""-->
-                      <!--}}</span>-->
-                  <!--</p>-->
-                <!--</div>-->
-<!--<<<<<<< HEAD-->
-              <!--</ul>```-->
-            <!--</div>-->
-          <!--</transition>-->
-          <transition name="showcover">
-          <div class="back_cover" v-show="sortBy" @click="hideCover"></div>
-          </transition>
-          <div class="roomList" @click="hideCover" ref="doctor">
-            <!--<div v-if="showVideo">-->
-              <!--<ul class="border-1px" v-for=" item in doctorList" v-if="showVideo && item.docVideoConsultStatus == true">-->
-                <!--<router-link tag="div" :to="{ path:'/onlineDoctorCard',query:{docId:item.docId} }">-->
-                  <!--<li>-->
-                    <!--<div class="cancelImg">-->
-                      <!--<img :src="item.docAvatar" alt="">-->
-                    <!--</div>-->
-                    <!--<div class="cancelIntro">-->
-                      <!--<div>-->
-                        <!--<span class="myDoctor"><span class="titleName">{{ item.docName }}</span> <span class="rankName">{{ item.docTitle }}  {{ item.docDeptName }}</span></span>-->
-                        <!--<p>{{ item.docHosName }}</p>-->
-                        <!--<p class="sortName"><span>{{ item.docPicConsultStatus == true ? "图文咨询":"" }}</span>-->
-                          <!--<span>{{ item.docVideoConsultStatus == true ? "视频问诊":"" }}</span>-->
-                        <!--</p>-->
-                      <!--</div>-->
-                    <!--</div>-->
-                    <!--<span class="distance">-->
-                      <!--<span class="score">{{ item.docScoure }}</span> 星-->
-                      <!--<img src="../../../../static/img/left-arrow.png" alt="">-->
-                    <!--</span>-->
-                  <!--</li>-->
-                <!--</router-link>-->
-              <!--</ul>-->
-            <!--</div>-->
-            <!--<div v-if="showPicture">-->
-              <!--<ul class="border-1px" v-for=" item in doctorList" v-if="showPicture && item.docPicConsultStatus == true">-->
-                <!--<router-link tag="div" :to="{ path:'/onlineDoctorCard',query:{docId:item.docId} }">-->
-                  <!--<li>-->
-                    <!--<div class="cancelImg">-->
-                      <!--<img :src="item.docAvatar" alt="">-->
-                    <!--</div>-->
-                    <!--<div class="cancelIntro">-->
-                      <!--<div>-->
-                        <!--<span class="myDoctor"><span class="titleName">{{ item.docName }}</span> <span class="rankName">{{ item.docTitle }}  {{ item.docDeptName }}</span></span>-->
-                        <!--<p>{{ item.docHosName }}</p>-->
-                        <!--<p class="sortName"><span>{{ item.docPicConsultStatus == true ? "图文咨询":"" }}</span>-->
-                          <!--<span>{{ item.docVideoConsultStatus == true ? "视频问诊":"" }}</span>-->
-                        <!--</p>-->
-                      <!--</div>-->
-                    <!--</div>-->
-                    <!--<span class="distance">-->
-                      <!--<span class="score">{{ item.docScoure }}</span> 星-->
-                      <!--<img src="../../../../static/img/left-arrow.png" alt="">-->
-                    <!--</span>-->
-                  <!--</li>-->
-                <!--</router-link>-->
-              <!--</ul>-->
-            <!--</div>-->
-            <!--<div v-if="showAllType">-->
-              <!--<ul class="border-1px" v-for=" item in doctorList" >-->
-                <!--<router-link tag="div" :to="{ path:'/onlineDoctorCard',query:{docId:item.docId} }">-->
-                  <!--<li>-->
-                    <!--<div class="cancelImg">-->
-                      <!--<img :src="item.docAvatar" alt="">-->
-                    <!--</div>-->
-                    <!--<div class="cancelIntro">-->
-                      <!--<div>-->
-                        <!--<span class="myDoctor"><span class="titleName">{{ item.docName }}</span> <span class="rankName">{{ item.docTitle }}  {{ item.docDeptName }}</span></span>-->
-                        <!--<p>{{ item.docHosName }}</p>-->
-                        <!--<p class="sortName"><span>{{ item.docPicConsultStatus == true ? "图文咨询":"" }}</span>-->
-                          <!--<span>{{ item.docVideoConsultStatus == true ? "视频问诊":"" }}</span>-->
-                        <!--</p>-->
-                      <!--</div>-->
-                    <!--</div>-->
-                    <!--<span class="distance">-->
-                      <!--<span class="score">{{ item.docScoure }}</span> 星-->
-                      <!--<img src="../../../../static/img/left-arrow.png" alt="">-->
-                    <!--</span>-->
-                  <!--</li>-->
-                <!--</router-link>-->
-              <!--</ul>-->
-            <!--</div>-->
-            <!--<div v-if="showRoom">-->
-              <!--<ul class="border-1px" v-for=" item in doctorList" v-if="showRoom && item.docDeptName == sortPick">-->
-                <!--<router-link tag="div" :to="{ path:'/onlineDoctorCard',query:{docId:item.docId} }">-->
-                  <!--<li>-->
-                    <!--<div class="cancelImg">-->
-                      <!--<img :src="item.docAvatar" alt="">-->
-                    <!--</div>-->
-                    <!--<div class="cancelIntro">-->
-                      <!--<div>-->
-                        <!--<span class="myDoctor"><span class="titleName">{{ item.docName }}</span> <span class="rankName">{{ item.docTitle }}  {{ item.docDeptName }}</span></span>-->
-                        <!--<p>{{ item.docHosName }}</p>-->
-                        <!--<p class="sortName"><span>{{ item.docPicConsultStatus == true ? "图文咨询":"" }}</span>-->
-                          <!--<span>{{ item.docVideoConsultStatus == true ? "视频问诊":"" }}</span>-->
-                        <!--</p>-->
-                      <!--</div>-->
-                    <!--</div>-->
-                    <!--<span class="distance">-->
-                      <!--<span class="score">{{ item.docScoure }}</span> 星-->
-                      <!--<img src="../../../../static/img/left-arrow.png" alt="">-->
-                    <!--</span>-->
-                  <!--</li>-->
-                <!--</router-link>-->
-              <!--</ul>-->
-            <!--</div>-->
-            <div v-if="doctorList.length == 0" class="loading">
-              <img src="../../../../static/img/loading.gif" alt="">
-              <span>正在很努力的加载中...</span>
-            </div>
-            <div v-else>
-              <ul class="border-1px" v-for=" item in doctorList">
-                <router-link tag="div" :to="{ path:'/onlineDoctorCard',query:{docId:item.docId} }">
-                  <li>
-                    <div class="cancelImg">
-                      <img v-if="item.docAvatar" :src="item.docAvatar" alt="" onerror="javascript:this.src='./static/img/doctorM.png'">
-                      <img v-else-if="item.docAvatar == ''" src="../../../../static/img/doctorM.png" alt="">
-                      <img  src="../../../../static/img/doctorM.png" alt=""  v-else>
-                    </div>
-                    <div class="cancelIntro">
-                      <div>
-                        <span class="myDoctor"><span class="titleName">{{ item.docName }}</span> <span class="rankName">{{ item.docTitle }} </span></span>
-                        <p>{{ item.docHosName }}  {{ item.docDeptName }} </p>
-                        <p class="sortName"><span> <img src="../../../../static/img/11.png" alt="" v-if="item.docPicConsultStatus == true"> {{ item.docPicConsultStatus == true ? "图文咨询":"" }}</span>
-                          <span> <img src="../../../../static/img/shipin.png" alt="" v-if="item.docVideoConsultStatus == true"> {{ item.docVideoConsultStatus == true ? "视频问诊":"" }}</span>
-                        </p>
-                      </div>
-                    </div>
-                    <!--<span class="distance" v-if="item.docScoure">-->
-                      <!--<span class="score" >{{ item.docScoure.toFixed(1) }}</span> 分-->
-                    <!--</span>-->
-                    <span class="distance" v-if="item.docScoure">
+      <!--<div class="cancelIntro">-->
+      <!--<div>-->
+      <!--<span class="myDoctor"><span class="titleName">{{ item.docName }}</span> <span class="rankName">{{ item.docTitle }}  {{ item.docDeptName }}</span></span>-->
+      <!--<p>{{ item.docHosName }}</p>-->
+      <!--<p class="sortName"><span>{{ item.docPicConsultStatus == true ? "图文咨询":"" }}</span>-->
+      <!--<span>{{ item.docVideoConsultStatus == true ? "视频问诊":"" }}</span>-->
+      <!--</p>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<span class="distance">-->
+      <!--<span class="score">{{ item.docScoure }}</span> 星-->
+      <!--<img src="../../../../static/img/left-arrow.png" alt="">-->
+      <!--</span>-->
+      <!--</li>-->
+      <!--</router-link>-->
+      <!--</ul>-->
+      <!--</div>-->
+      <!--<div v-if="showPicture">-->
+      <!--<ul class="border-1px" v-for=" item in doctorList" v-if="showPicture && item.docPicConsultStatus == true">-->
+      <!--<router-link tag="div" :to="{ path:'/onlineDoctorCard',query:{docId:item.docId} }">-->
+      <!--<li>-->
+      <!--<div class="cancelImg">-->
+      <!--<img :src="item.docAvatar" alt="">-->
+      <!--</div>-->
+      <!--<div class="cancelIntro">-->
+      <!--<div>-->
+      <!--<span class="myDoctor"><span class="titleName">{{ item.docName }}</span> <span class="rankName">{{ item.docTitle }}  {{ item.docDeptName }}</span></span>-->
+      <!--<p>{{ item.docHosName }}</p>-->
+      <!--<p class="sortName"><span>{{ item.docPicConsultStatus == true ? "图文咨询":"" }}</span>-->
+      <!--<span>{{ item.docVideoConsultStatus == true ? "视频问诊":"" }}</span>-->
+      <!--</p>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<span class="distance">-->
+      <!--<span class="score">{{ item.docScoure }}</span> 星-->
+      <!--<img src="../../../../static/img/left-arrow.png" alt="">-->
+      <!--</span>-->
+      <!--</li>-->
+      <!--</router-link>-->
+      <!--</ul>-->
+      <!--</div>-->
+      <!--<div v-if="showAllType">-->
+      <!--<ul class="border-1px" v-for=" item in doctorList" >-->
+      <!--<router-link tag="div" :to="{ path:'/onlineDoctorCard',query:{docId:item.docId} }">-->
+      <!--<li>-->
+      <!--<div class="cancelImg">-->
+      <!--<img :src="item.docAvatar" alt="">-->
+      <!--</div>-->
+      <!--<div class="cancelIntro">-->
+      <!--<div>-->
+      <!--<span class="myDoctor"><span class="titleName">{{ item.docName }}</span> <span class="rankName">{{ item.docTitle }}  {{ item.docDeptName }}</span></span>-->
+      <!--<p>{{ item.docHosName }}</p>-->
+      <!--<p class="sortName"><span>{{ item.docPicConsultStatus == true ? "图文咨询":"" }}</span>-->
+      <!--<span>{{ item.docVideoConsultStatus == true ? "视频问诊":"" }}</span>-->
+      <!--</p>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<span class="distance">-->
+      <!--<span class="score">{{ item.docScoure }}</span> 星-->
+      <!--<img src="../../../../static/img/left-arrow.png" alt="">-->
+      <!--</span>-->
+      <!--</li>-->
+      <!--</router-link>-->
+      <!--</ul>-->
+      <!--</div>-->
+      <!--<div v-if="showRoom">-->
+      <!--<ul class="border-1px" v-for=" item in doctorList" v-if="showRoom && item.docDeptName == sortPick">-->
+      <!--<router-link tag="div" :to="{ path:'/onlineDoctorCard',query:{docId:item.docId} }">-->
+      <!--<li>-->
+      <!--<div class="cancelImg">-->
+      <!--<img :src="item.docAvatar" alt="">-->
+      <!--</div>-->
+      <!--<div class="cancelIntro">-->
+      <!--<div>-->
+      <!--<span class="myDoctor"><span class="titleName">{{ item.docName }}</span> <span class="rankName">{{ item.docTitle }}  {{ item.docDeptName }}</span></span>-->
+      <!--<p>{{ item.docHosName }}</p>-->
+      <!--<p class="sortName"><span>{{ item.docPicConsultStatus == true ? "图文咨询":"" }}</span>-->
+      <!--<span>{{ item.docVideoConsultStatus == true ? "视频问诊":"" }}</span>-->
+      <!--</p>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<span class="distance">-->
+      <!--<span class="score">{{ item.docScoure }}</span> 星-->
+      <!--<img src="../../../../static/img/left-arrow.png" alt="">-->
+      <!--</span>-->
+      <!--</li>-->
+      <!--</router-link>-->
+      <!--</ul>-->
+      <!--</div>-->
+      <div v-if="doctorList.length == 0" class="loading">
+        <img src="../../../../static/img/loading.gif" alt="">
+        <span>正在很努力的加载中...</span>
+      </div>
+      <div v-else>
+        <ul class="border-1px" v-for=" item in doctorList">
+          <router-link tag="div" :to="{ path:'/onlineDoctorCard',query:{docId:item.docId} }">
+            <li>
+              <div class="cancelImg">
+                <img v-if="item.docAvatar" :src="item.docAvatar" alt=""
+                     onerror="javascript:this.src='./static/img/doctorM.png'">
+                <img v-else-if="item.docAvatar == ''" src="../../../../static/img/doctorM.png" alt="">
+                <img src="../../../../static/img/doctorM.png" alt="" v-else>
+              </div>
+              <div class="cancelIntro">
+                <div>
+                  <span class="myDoctor"><span class="titleName">{{ item.docName }}</span> <span
+                    class="rankName">{{ item.docTitle }} </span></span>
+                  <p>{{ item.docHosName }}  {{ item.docDeptName }} </p>
+                  <p class="sortName"><span> <img src="../../../../static/img/11.png" alt=""
+                                                  v-if="item.docPicConsultStatus == true"> {{ item.docPicConsultStatus == true ? "图文咨询" : ""
+                    }}</span>
+                    <span> <img src="../../../../static/img/shipin.png" alt=""
+                                v-if="item.docVideoConsultStatus == true"> {{ item.docVideoConsultStatus == true ? "视频问诊" : ""
+                      }}</span>
+                  </p>
+                </div>
+              </div>
+              <!--<span class="distance" v-if="item.docScoure">-->
+              <!--<span class="score" >{{ item.docScoure.toFixed(1) }}</span> 分-->
+              <!--</span>-->
+              <span class="distance" v-if="item.docScoure">
                       <span class="score">{{ item.docScoure.toFixed(1) }}</span> 分
                       <img src="../../../../static/img/left-arrow.png" alt="">
                     </span>
-                    <span class="distance" v-else>
-                      <span class="score">0.0</span> 分
+              <span class="distance" v-else>
+                      暂无评分
                       <img src="../../../../static/img/left-arrow.png" alt="">
                     </span>
             </li>
@@ -432,11 +403,11 @@
     },
     methods: {
       _initScroll() {
-        setTimeout((res)=>{
+        setTimeout((res) => {
           this.doctorScroll = new BScroll(this.$refs.doctor, {
             click: true
           });
-        },200)
+        }, 200)
 
       },
       _initWrapMenu() {

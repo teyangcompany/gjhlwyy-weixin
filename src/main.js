@@ -5,7 +5,6 @@ import App from './App'
 import router from './router'
 import Vuelidate from 'vuelidate'
 import api from './lib/api'
-import weui from 'weui.js'
 import {getParamsFromUrl, makeUrl} from "./lib/util"
 import {openidCache, tokenCache} from './lib/cache'
 
@@ -13,29 +12,13 @@ import auth2 from "./lib/auth2";
 
 // localStorage.setItem('gjhlwyy_openid_',"59c36e06e4b04bf65c099cfa")
 
-let UA = window.navigator.userAgent.toLocaleLowerCase();
-if (/iphone/.test(UA)) {
-  window.device = "iphone";
-}
-if (/android/.test(UA)) {
-  window.device = "android";
-}
 
-if (/micromessenger/.test(UA)) {
-  window.brower = "weixin";
-} else {
-  window.brower = "";
-}
 
 
 Vue.use(Vuelidate)
-Vue.use(weui)
 Vue.config.productionTip = false
 
-/*
- * 移动端rem布局
- * width:20rem
- * */
+
 // let socketUrl =  getSocket()
   window.socket = io("nethoswebsocket.diandianys.com");
   window.socket.on('connect', function () {
