@@ -12,35 +12,38 @@ import menuMy from '../components/menuMy'
 import internetTerms from '../components/internetTerms'
 import download from '../page/download.vue'
 
+import hospital from "./hos"
+
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: "/download/:type",
-      component: download
-    },
-    {
-      path: "/blankPage/:id",
-      component: blankPage
-    },
-    {
-      path: "",
-      component: login
-    },
-    {
-      path: "/profile",
-      component: menuMy
-    },
-    {
-      path: "/internetTerms",
-      component: internetTerms
-    },
-    ...index,
-    ...my,
-    ...bindAccount,
-    ...service,
-    ...health,
-    ...scanBind
-  ]
+    routes: [
+        {
+            path: "/download/:type",
+            component: download
+        },
+        {
+            path: "/blankPage/:id",
+            component: blankPage
+        },
+        {
+            path: "",
+            component: login
+        },
+        {
+            path: "/profile",
+            component: menuMy
+        },
+        {
+            path: "/internetTerms",
+            component: internetTerms
+        },
+        ...index,
+        ...my,
+        ...bindAccount,
+        ...service,
+        ...health,
+        ...scanBind,
+        ...hospital
+    ]
 })
