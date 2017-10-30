@@ -122,11 +122,11 @@
         <div class="blank border-1px"></div>
         <div class="institutionDes border-1px">
           <ul class="flex ercode">
-            <li class="flex0 center">
+            <li class="flex0 center" @click="openShare(aboutDoctor.cardPicUrl)">
               <img src="../../../../static/img/logo.web.png" alt="">
               <div><span>APP</span>关注我,功能更丰富</div>
             </li>
-            <li class="flex0 center">
+            <li class="flex0 center" @click="openShare(aboutDoctor.cardPicWechatUrl)">
               <img src="../../../../static/img/logo.weixin.png" alt="">
               <div><span>微信</span>关注我,功能更丰富</div>
             </li>
@@ -145,6 +145,7 @@
               :dialogLeftFoot="dialogLeftFoot"
               :dialogRightFoot="dialogRightFoot"
     ></v-dialog>
+    <doc-share ref="docShare" :src="shareSrc" :info="aboutDoctor"></doc-share>
   </div>
 </template>
 <script>
@@ -157,6 +158,7 @@
   import {isLoginMixin, isBindMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   import {formatDate} from '../../../utils/formatTimeStamp'
+  import DocShare from "../../../plugins/doc/share.vue"
 
   export default {
     mixins: [isLoginMixin, isBindMixin],
@@ -173,11 +175,12 @@
         introAll: true,
         dialogDisplay: false,
         doctorId: "",
-        aboutDoctor: "",
+        aboutDoctor: {},
         doctorIntro: "",
         doctorArticle: "",
         articleTime: [],
         isFollow: false,
+        shareSrc: ""
       }
     },
     mounted() {
@@ -225,12 +228,20 @@
 //            }
 //        })
       },
+      openShare(src) {
+        this.setShareSrc(src);
+        this.$refs.docShare.show();
+      },
+      setShareSrc(src) {
+        this.shareSrc = src;
+      },
       getDocInfo() {
         api("nethos.doc.card", {
           docId: this.doctorId
         }).then((data) => {
           if (data.code == 0) {
             this.aboutDoctor = data.obj.sysDoc
+            this.shareSrc = this.aboutDoctor.cardPicUrl;
             this.doctorIntro = data.obj.sysDocNotice
             this.doctorArticle = data.obj.docArticleList
             for (var i = 0; i < this.doctorArticle.length; i++) {
@@ -345,7 +356,8 @@
     components: {
       "VHeader": header,
       "VDialog": Dialog,
-      Star
+      Star,
+      DocShare
     },
     watch: {
 //      excelAll(){
