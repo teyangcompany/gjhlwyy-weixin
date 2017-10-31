@@ -119,9 +119,7 @@
         api("nethos.pat.info.get", {
           token:tokenCache.get()
         }).then((data) => {
-          console.log(data.obj)
           if (data.code == 0) {
-            console.log(data,66666)
             if(index.schemeStats == 4 ){
               this.showToast = true
               api("nethos.book.num.list",{

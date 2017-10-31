@@ -90,7 +90,6 @@
             p{
               height: 25px;
               line-height: 25px;
-              width:180rem/$rem;
               border:1px solid $mainColor;
               color: $mainColor;
               font-size: 32rem/$rem;
