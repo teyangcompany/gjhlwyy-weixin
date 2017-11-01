@@ -159,6 +159,7 @@
   import {tokenCache} from '../../../lib/cache'
   import {formatDate} from '../../../utils/formatTimeStamp'
   import DocShare from "../../../plugins/doc/share.vue"
+  import {getParamsFromUrl} from "../../../lib/util"
 
   export default {
     mixins: [isLoginMixin, isBindMixin],
@@ -188,17 +189,23 @@
     created() {
       this.doctorId = this.$route.query.docId
       this.getDocInfo();
-      this.getFollow();
-      this._isBind().then((res) => {
-        if (res === false) {
-          this.$router.push({
-            path: "/scanBind",
-            query: {
-              docId: this.doctorId
-            }
-          })
-        }
-      })
+      let {query} = getParamsFromUrl(location.href);
+      if (query && (query.comefrom == "ios")) {
+
+      } else {
+        this._isBind().then((res) => {
+          if (res === false) {
+            this.$router.push({
+              path: "/scanBind",
+              query: {
+                docId: this.doctorId
+              }
+            })
+          } else {
+            this.getFollow();
+          }
+        })
+      }
     },
     methods: {
       _initDoctorScroll() {
@@ -474,6 +481,7 @@
       .doctorIntro {
         width: 100%;
         height: 70px;
+        line-height: 1.6;
         margin-top: 10px;
         text-align: center;
         h4 {
@@ -576,6 +584,7 @@
           background-color: $assistColorBrown;
         }
         .forArrowLeft {
+          line-height: 1.6;
           display: flex;
           > div {
             > div {
@@ -649,6 +658,7 @@
           color: #666666;
         }
         p.article {
+          line-height: 1.6;
           display: flex;
           justify-content: space-between;
           span:nth-child(1) {

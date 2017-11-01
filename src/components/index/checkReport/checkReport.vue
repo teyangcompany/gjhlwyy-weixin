@@ -105,12 +105,25 @@
           } else {
             weui.alert(data.msg)
           }
-          console.log(data.list)
         })
       },
 
       cancelDialog() {
         this.showDialog = false
+      },
+      async createCard(compatId, bookHosId) {
+        let loading = weui.loading("加载中");
+        let ret = await api("nethos.book.compat.bind.new", {compatId, bookHosId})
+        loading.hide();
+        if (ret.code != 0) {
+          setTimeout(() => {
+            weui.alert(ret.msg, () => {
+
+            });
+          }, 500)
+        } else {
+          this.getList();
+        }
       },
       bindCard() {
         this.showDialog = false
@@ -136,7 +149,37 @@
         this.fail = false
       },
       goCheck() {
-        if (!(this.allPatient[this.index].compatMedicalRecord)) {
+        let compat = this.allPatient[this.index],
+          compatId = compat.compatId,
+          compatMedicalRecord = compat.compatMedicalRecord;
+        if (!compatMedicalRecord) {
+          let loading = weui.loading("提交中...");
+          let bookHosId = "";
+          api("nethos.book.compat.bind.check", {compatId, bookHosId}).then((res) => {
+            loading.hide();
+            if (res.code == 0) {
+              if (res.obj == "needBind") {
+                this.showDialog = true
+              } else if (res.obj == "needCreate") {
+                weui.confirm(
+                  "该就诊人没有病案号，无法执行该操作", {
+                    buttons: [{
+                      label: "取消",
+                      type: "default"
+                    }, {
+                      label: "新建病案号",
+                      type: "primary",
+                      onClick: () => {
+                        this.createCard(compatId, bookHosId);
+                      }
+                    }]
+                  });
+              }
+              else {
+
+              }
+            }
+          });
           this.showDialog = true
         } else {
           this.$router.push({
@@ -240,6 +283,7 @@
       }
     }
     span.change {
+      display: inline-block;
       padding-left: 50rem/$rem;
       font-size: 32rem/$rem;
       color: $mainColor;

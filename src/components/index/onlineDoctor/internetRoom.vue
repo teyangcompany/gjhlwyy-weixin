@@ -1069,6 +1069,7 @@
               display: inline-block;
               font-size: 32rem/$rem;
               color: #333333;
+              line-height: 1.6;
               /*line-height: 18px;*/
               text-align: center;
               .titleName {
