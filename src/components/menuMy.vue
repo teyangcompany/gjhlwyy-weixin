@@ -4,23 +4,22 @@
         <div class="myArea">
             <!--<div class="blank border-1px"></div>-->
             <div class="avatar border-1px">
-                <div class="avatarCenter">
+                <router-link to="/my/data" tag="div" class="avatarCenter">
                     <div class="leftWord" v-if="patientInfo">
-                        <img class="profile" alt="" v-if="patientInfo.patAvatar" :src="patientInfo.patAvatar"
-                             @click="selectImg()">
-                        <img class="profile" src="../../static/img/pat.f.jpg" alt="" v-else @click="selectImg()">
+                        <img class="profile" alt="" v-if="patientInfo.patAvatar" :src="patientInfo.patAvatar">
+                        <img class="profile" src="../../static/img/pat.f.jpg" alt="" v-else>
                         <input type="file" accept="image/*" name="upload" id="upload" ref="upload"
                                @change="onFileChange">
                     </div>
-                    <router-link tag="div" to="/my/data" class="rightWord">
+                    <div  class="rightWord">
                         <div v-if="patientInfo">
                             <span>姓名:{{ patientInfo.patName }} <i>{{patientInfo.sysCommonPatVo.isRealnameAuth ? "已认证" : "未认证"}}</i></span>
                             <span>{{ patientInfo.patGender == 'M' ? '男' : '女'}} {{ patientInfo.age }}岁</span>
 
                         </div>
                         <img class="look" src="../../static/img/查看更多.png" alt="">
-                    </router-link>
-                </div>
+                    </div>
+                </router-link>
             </div>
             <div class="blank border-1px"></div>
             <div class="weui-cells weuiMargin">
