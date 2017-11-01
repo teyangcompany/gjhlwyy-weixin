@@ -159,15 +159,13 @@
       },
 
       handleRealName(isRealnameAuth) {
-        if (!isRealnameAuth) {
-          let query = {
-            compatId: this.sysCommonPatVo.compatId
-          }
-          this.$router.push({
-            path: "/my/auth",
-            query: query
-          })
+        let query = {
+          compatId: this.sysCommonPatVo.compatId
         }
+        this.$router.push({
+          path: "/my/auth",
+          query: query
+        })
       }
     }
   };

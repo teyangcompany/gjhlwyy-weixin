@@ -57,7 +57,7 @@
         allPatient: "",
         index: 0,
         dialogTitle: "",
-        dialogMain: "该就诊人没有绑定病案号，无法执行该操作",
+        dialogMain: "该就诊人没有绑定医院帐号，无法使用该功能。请先绑定医院帐号。",
         dialogLeftFoot: "取消",
         dialogRightFoot: "去绑卡",
         showDialog: false,
@@ -162,7 +162,7 @@
                 this.showDialog = true
               } else if (res.obj == "needCreate") {
                 weui.confirm(
-                  "该就诊人没有病案号，无法执行该操作", {
+                  "该就诊人没有在医院建过档，需要实名认证并新建病案号，才能使用该功能。", {
                     buttons: [{
                       label: "取消",
                       type: "default"
