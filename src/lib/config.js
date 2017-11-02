@@ -33,3 +33,4 @@ export const API_URL = {
 }
 export const openRealNameOauth = false
 
+export const relationship = ["本人", "父母", "配偶", '子女', '亲戚', '朋友', '其他']
