@@ -30,16 +30,15 @@
             <img src="../../../../static/img/index/预约1.png" alt="">
             <p class="grayBookNumber">预约挂号</p>
           </div>
-          <router-link tag="div" v-else :to="{path:'/famousPage',query:{bookDocId:aboutDoctor.docBookId}}"
-                       class="bookNumber" @click="goBookNum()">
+          <div v-else class="bookNumber" @click="goBookNum()">
             <img src="../../../../static/img/index/预约.png" alt="">
             <p class="bookWord">预约挂号</p>
-          </router-link>
-          <router-link tag="div" :to="{path:'/pictureConsultApply',query:{docId:this.doctorId}}" class="pictureConsult">
+          </div>
+          <div @click="goConsult" class="pictureConsult">
             <img src="../../../../static/img/index/图文.png" alt="">
             <p>图文咨询</p>
             <span>¥ {{ aboutDoctor.docPicConsultPrice }}</span>
-          </router-link>
+          </div>
           <div class="videoConsult" @click="makeDisplay">
             <img src="../../../../static/img/index/视频问诊.png" alt="">
             <p class="videoWord">视频问诊</p>
@@ -159,7 +158,7 @@
   import {tokenCache} from '../../../lib/cache'
   import {formatDate} from '../../../utils/formatTimeStamp'
   import DocShare from "../../../plugins/doc/share.vue"
-  import {getParamsFromUrl} from "../../../lib/util"
+  import {getParamsFromUrl, debug} from "../../../lib/util"
 
   export default {
     mixins: [isLoginMixin, isBindMixin],
@@ -189,8 +188,8 @@
     created() {
       this.doctorId = this.$route.query.docId
       this.getDocInfo();
-      let {query} = getParamsFromUrl(location.href);
-      if (query && (query.comefrom == "ios")) {
+      let isshare = this.isShare();
+      if (isshare) {
 
       } else {
         this._isBind().then((res) => {
@@ -209,31 +208,10 @@
     },
     methods: {
       _initDoctorScroll() {
-//        this.doctorScroll = new BScroll(this.$refs.doctorCard,{
-//          click:true,
-//          probeType:3
-//        })
-//        this.doctorScroll.on('scroll', (pos) => {
-//            if(pos.y>-40){
-//              this.title = ""
-//              this.$refs.topHeader.$el.style.opacity = 0
-//            }else if(pos.y>-80 && pos.y<-40){
-//              this.title = ""
-//              this.$refs.topHeader.$el.style.opacity = 0.2
-//            }else if(pos.y>-120 && pos.y<-80){
-//              this.title = ""
-//              this.$refs.topHeader.$el.style.opacity = 0.4
-//            }else if(pos.y>-160 && pos.y<-120){
-//              this.title = "医生名片"
-//              this.$refs.topHeader.$el.style.opacity = 0.6
-//            }else if(pos.y>-200 && pos.y<-160){
-//              this.title = "医生名片"
-//              this.$refs.topHeader.$el.style.opacity = 0.8
-//            }else if(pos.y<-200){
-//              this.title = "医生名片"
-//              this.$refs.topHeader.$el.style.opacity = 1
-//            }
-//        })
+      },
+      isShare() {
+        let {query} = getParamsFromUrl(location.href);
+        return (query && (query.comefrom == 'ios' || query.comefrom == "android"));
       },
       openShare(src) {
         this.setShareSrc(src);
@@ -243,9 +221,13 @@
         this.shareSrc = src;
       },
       getDocInfo() {
-        api("nethos.doc.card", {
+        let options = {
           docId: this.doctorId
-        }).then((data) => {
+        };
+        if (this.isShare()) {
+          options.needToken = false
+        }
+        api("nethos.doc.card", options).then((data) => {
           if (data.code == 0) {
             this.aboutDoctor = data.obj.sysDoc
             this.shareSrc = this.aboutDoctor.cardPicUrl;
@@ -276,13 +258,28 @@
         })
       },
       goArticleList() {
+        if (this.isShare()) {
+          this.openShare(this.aboutDoctor.cardPicWechatUrl);
+          return
+        }
         this.$router.push({
           path: '/articleList',
           query: {docId: this.doctorId}
         })
       },
+      goConsult() {
+        if (this.isShare()) {
+          this.openShare(this.aboutDoctor.cardPicWechatUrl);
+          return
+        }
+        this.$router.push({path: '/pictureConsultApply', query: {docId: this.doctorId}})
+      },
       goBookNum() {
-
+        if (this.isShare()) {
+          this.openShare(this.aboutDoctor.cardPicWechatUrl);
+          return
+        }
+        this.$router.push({path: '/famousPage', query: {bookDocId: this.aboutDoctor.docBookId}})
       },
       noticeDownMore() {
         this.noticeAll = false
@@ -306,6 +303,10 @@
         this.$router.push('/apply')
       },
       makeDisplay() {
+        if (this.isShare()) {
+          this.openShare(this.aboutDoctor.cardPicWechatUrl);
+          return
+        }
         this.dialogDisplay = true
       },
       cancel() {
@@ -319,7 +320,10 @@
         this.$router.back(-1)
       },
       follow() {
-        console.log("123")
+        if (this.isShare()) {
+          this.openShare(this.aboutDoctor.cardPicWechatUrl);
+          return
+        }
         api("nethos.pat.info.get", {
           token: tokenCache.get()
         }).then((data) => {

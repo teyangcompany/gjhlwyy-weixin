@@ -1,7 +1,8 @@
 <template>
   <div class="page flex">
-    <app-header class="header flex0" ref="header" title="就诊人">
+    <app-header class="header flex0" ref="header" title="常用就诊人">
       <i slot="back"></i>
+      <div class="right" slot="right" @click="del">删除</div>
     </app-header>
     <div class="main overflow-y-auto" ref="main">
       <div class="wrap flex" @click="handleRealName(compatInfo.isRealnameAuth)">
@@ -194,14 +195,30 @@
           }
         }
         weui.picker(list, options)
+      },
+      del() {
+        let that = this;
+        weui.confirm("是否删除该常用就诊人?", () => {
+          that.delete()
+        })
+      },
+      async delete() {
+        let compatId = this.compatInfo.compatId, ret = await api("nethos.pat.compat.delete", {compatId})
+        if (ret.code == 0) {
+          weui.toast("删除成功")
+          this.$router.go(-1);
+        } else {
+          setTimeout((res) => {
+            weui.alert(ret.msg);
+          }, 500)
+
+        }
       }
     },
     mixins: [mainHeightMixin],
-    filters:
-      {
-        isAuth, getGender
-      }
-    ,
+    filters: {
+      isAuth, getGender
+    },
     components: {
       AppHeader,
     }

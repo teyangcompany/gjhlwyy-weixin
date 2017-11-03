@@ -20,6 +20,9 @@ export default function (service, options) {
   if (openid) {
     obj.token = "OPENID_" + openid;
   }
+  if (obj.needToken === false) {
+    delete obj.token;
+  }
   let sign = hex_md5(hex_md5(password) + JSON.stringify(obj));
   let config = {
     headers: {

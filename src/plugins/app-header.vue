@@ -45,8 +45,10 @@
     background-color: white;
     @include border(bottom);
     @extend %a;
+    position: relative;
 
     .back {
+      position: absolute;
       @include t_r_b_l(0, 1, 1, 0);
       i {
         display: block;
@@ -60,6 +62,7 @@
     .right {
       right: $commonSpace;
       top: 0px;
+      position: absolute;
       @extend %a;
       font-size: 16px; /*no*/
       color: $mainColor;
