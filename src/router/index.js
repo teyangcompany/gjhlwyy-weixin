@@ -11,13 +11,15 @@ import blankPage from '../components/blankPage.vue'
 import menuMy from '../components/menuMy'
 import internetTerms from '../components/internetTerms'
 import download from '../page/download.vue'
-
+import promote from "../page/promote.vue"
 import hospital from "./hos"
 
 Vue.use(Router)
 
 export default new Router({
     routes: [
+      {path:"/promote",
+      component:promote},
         {
             path: "/download/:type",
             component: download
