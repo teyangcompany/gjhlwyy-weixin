@@ -84,7 +84,7 @@
                     return
                 }
                 let loading = weui.loading('加载中...')
-                let data = api("nethos.system.captcha.commpat.add", {
+                let data = await api("nethos.system.captcha.commpat.add", {
                     mobile: this.compatMobile
                 })
                 loading.hide()

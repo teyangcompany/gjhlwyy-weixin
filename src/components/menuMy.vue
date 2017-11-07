@@ -11,9 +11,10 @@
                         <input type="file" accept="image/*" name="upload" id="upload" ref="upload"
                                @change="onFileChange">
                     </div>
-                    <div  class="rightWord">
+                    <div class="rightWord">
                         <div v-if="patientInfo">
-                            <span>姓名:{{ patientInfo.patName }} <i>{{patientInfo.sysCommonPatVo.isRealnameAuth ? "已认证" : "未认证"}}</i></span>
+                            <span>姓名:{{ patientInfo.patName
+                                }} <i>{{patientInfo.sysCommonPatVo.isRealnameAuth ? "已认证" : "未认证"}}</i></span>
                             <span>{{ patientInfo.patGender == 'M' ? '男' : '女'}} {{ patientInfo.age }}岁</span>
 
                         </div>
@@ -245,7 +246,8 @@
                         font-size: 32rem/$rem;
                         font-family: PingFangSC;
                         color: #333333;
-                        i{
+                        i {
+                            font-style: normal;
                             color: $mainColor;
                         }
                     }
