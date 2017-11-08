@@ -26,7 +26,7 @@ Vue.config.productionTip = false
     token: tokenCache.get(),
     deviceId: openidCache.get()
   }).then((data) => {
-    console.log(data, 55555)
+    //console.log(data, 55555)
   })
 });
 
