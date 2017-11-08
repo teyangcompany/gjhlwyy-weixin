@@ -106,7 +106,6 @@
             let list = ret.list;
             list.forEach((item) => {
               this.$set(this.$data, item.authType.toLowerCase(), item.enabled);
-              debug('data', this.$data);
             });
           }
         } catch (e) {
