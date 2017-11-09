@@ -83,7 +83,7 @@
                 loading.hide();
                 if (ret.code != 0) {
                     setTimeout(() => {
-                        weuijs.alert(ret.msg, () => {
+                        weuijs.alert(ret.msg || "服务端错误" + ret.code, () => {
                             this.$router.go(-1);
                         });
                     }, 500)
