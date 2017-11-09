@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <div class="weui-msg">
+    <div class="weui-msg" v-if="code!=0">
       <div class="weui-msg__icon-area"><i :class="icon" class="weui-icon_msg"></i></div>
       <div class="weui-msg__text-area">
         <h2 class="weui-msg__title">{{code == 2 ? "感谢关注" : "抱歉"}}</h2>
@@ -10,12 +10,12 @@
         <p v-if="code!=3" class="weui-msg__desc">
           推广人:{{record.remark}} <br>
           推广码:{{record.code}} <br>
-          推广时间:{{record.promotedTime}} <br>
+          推广时间:{{record.promotedTime | Todate}} <br>
         </p>
       </div>
       <div class="weui-msg__opr-area">
         <p class="weui-btn-area">
-          <router-link to="/internetRoom" class="weui-btn weui-btn_default">开始使用</router-link>
+          <router-link to="/internetRoom" replace class="weui-btn weui-btn_default">开始使用</router-link>
         </p>
       </div>
     </div>
@@ -27,6 +27,7 @@
   import {debug} from "../lib/util"
   import weui from "weui.js"
   import {isBindMixin} from "../lib/mixin"
+  import {Todate} from "../lib/filter"
 
   export default {
     data() {
@@ -36,6 +37,7 @@
       };
     },
     mixins: [isBindMixin],
+    filters: {Todate},
     computed: {
       icon() {
         let iconClass = "", code = parseInt(this.code);
@@ -94,9 +96,10 @@
     },
     methods: {
       async __init() {
-        let code = 0;
-        this.$router.query && this.$router.query.code && (code = this.$router.query.code);
+        let code = 0, query = this.$route.query, loading = weui.loading("加载中...");
+        query && query.code && (code = query.code);
         let ret = await api("smarthos.promote.record.insert", {code: code});
+        loading.hide();
         this.code = ret.code;
         this.record = ret.obj || {}
       }

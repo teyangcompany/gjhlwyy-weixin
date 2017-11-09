@@ -91,7 +91,7 @@
             </div>
 
             <div class="title">
-                医院账号
+                医院信息
             </div>
 
             <div v-for="hos in sysCommonPatVo.records" class="wrap flex">

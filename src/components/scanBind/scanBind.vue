@@ -181,11 +181,6 @@
     right: 0;
     bottom: 0;
     .verifyCenter {
-      position: fixed;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -194,10 +189,6 @@
       width: 690rem/$rem;
       margin: 0 auto;
       .bigMiddle {
-        position: fixed;
-        top: 30px;
-        left: 0;
-        right: 0;
         bottom: 500rem/$rem;
         font-size: 32rem/$rem;
         color: #333333;
@@ -206,7 +197,6 @@
         justify-content: center;
         .doctorFunc {
           width: 100%;
-          height: 210px;
           background-color: white;
           .doctorImg {
             width: 100%;
@@ -261,12 +251,11 @@
         }
       }
       .tips {
-        position: absolute;
-        top: 490rem/$rem;
         width: 690rem/$rem;
         text-align: center;
         border: 1px solid #00ced1;
         border-radius: 5px;
+        position: relative;
         p {
           width: 650rem/$rem;
           margin: 0 auto;
@@ -282,23 +271,19 @@
         }
         .nav {
           position: absolute;
-          top: -8px;
-          right: 332rem/$rem;
+          left: 50%;
+          margin-left: -7px;
+          top: -7px;
           overflow: hidden;
           width: 13px;
           height: 13px;
           background: white;
           border-left: 1px solid #00ced1;
           border-top: 1px solid #00ced1;
-          -webkit-transform: rotate(45deg);
-          -moz-transform: rotate(45deg);
-          -o-transform: rotate(45deg);
           transform: rotate(45deg);
         }
       }
       .aboutNumber {
-        position: fixed;
-        bottom: 0;
         height: 500rem/$rem;
         .formContent {
           width: 630rem/$rem;

@@ -1,7 +1,6 @@
 //time为时间戳格式，如"1487555260448"
 const Todate = (time) => {
   let now = new Date(time)
-
   let mm = now.getMonth() + 1     //月
   let dd = now.getDate()          //日
   let hh = now.getHours()        //时
@@ -21,7 +20,6 @@ const Todate = (time) => {
 //time为datetime格式，如"2017-02-03 00:00:00"
 
 const Getdate = (time) => {
-
   let now = new Date(time)
   let year = now.getFullYear()
   let mm = now.getMonth() + 1     //月

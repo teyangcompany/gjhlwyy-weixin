@@ -13,20 +13,17 @@ import auth2 from "./lib/auth2";
 // localStorage.setItem('gjhlwyy_openid_',"59c36e06e4b04bf65c099cfa")
 
 
-
-
 Vue.use(Vuelidate)
 Vue.config.productionTip = false
 
 
 // let socketUrl =  getSocket()
-  window.socket = io("nethoswebsocket.diandianys.com");
-  window.socket.on('connect', function () {
+window.socket = io("nethoswebsocket.diandianys.com");
+window.socket.on('connect', function () {
   api("nethos.push.deviceid.register", {
     token: tokenCache.get(),
     deviceId: openidCache.get()
   }).then((data) => {
-    //console.log(data, 55555)
   })
 });
 

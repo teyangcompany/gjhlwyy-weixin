@@ -1,9 +1,16 @@
 <template>
   <div class="doctor">
+    <img @click="showSharePic=false" v-show="showSharePic" class="share-pic" v-if="device=='android'"
+         src="../../../../static/img/share.android.png"
+         alt="">
+    <img @click="showSharePic=false" v-show="showSharePic" class="share-pic" v-if="device=='iphone'"
+         src="../../../../static/img/share.ios.png"
+         alt="">
     <div class="topWrap">
       <img @click="back()" class="previous" src="../../../../static/img/返回.png" alt="">
       <span @click="follow" class="follow" v-if="isFollow"><img src="../../../../static/img/爱心2.png" alt="">取消</span>
       <span @click="follow" class="follow" v-else><img src="../../../../static/img/爱心1.png" alt="">关注</span>
+      <span @click="showShare" class="share"><img src="../../../../static/img/share.icon.png" alt="">分享</span>
     </div>
     <!--<v-header ref="topHeader" :title="title" :rightTitle="rightTitle" ></v-header>-->
     <div class="doctorCard" ref="doctorCard">
@@ -19,9 +26,14 @@
             </h4>
             <h6>{{aboutDoctor.docDeptName}}&nbsp; {{aboutDoctor.docTitle}}</h6>
             <h6>{{aboutDoctor.docHosName}}</h6>
-            <router-link tag="div" :to="{path:'/commentDetail',query:{docId:aboutDoctor.docId}}" class="checkRating">
+
+            <div v-if="!aboutDoctor.docScoure" class="checkRating">
+              <span>暂无评价</span>
+            </div>
+            <router-link v-if="aboutDoctor.docScoure" tag="div"
+                         :to="{path:'/commentDetail',query:{docId:aboutDoctor.docId}}" class="checkRating">
               <star :size="24" :score="aboutDoctor.docScoure"></star>
-              <span v-if="aboutDoctor.docScoure">{{ aboutDoctor.docScoure.toFixed(1) }}分 </span><span>查看评价</span>
+              <span>{{ aboutDoctor.docScoure.toFixed(1) }}分 </span><span>查看评价</span>
             </router-link>
           </div>
         </div>
@@ -127,7 +139,7 @@
             </li>
             <li class="flex0 center" @click="openShare(aboutDoctor.cardPicWechatUrl)">
               <img src="../../../../static/img/logo.weixin.png" alt="">
-              <div><span>微信</span>关注我,功能更丰富</div>
+              <div><span>微信</span>关注我,咨询更方便</div>
             </li>
           </ul>
           <!--<div class="desCenter team">
@@ -164,6 +176,8 @@
     mixins: [isLoginMixin, isBindMixin],
     data() {
       return {
+        showSharePic: false,
+        device: window.device,
         title: "",
         rightTitle: "",
         dialogTitle: "",
@@ -207,6 +221,9 @@
       }
     },
     methods: {
+      showShare() {
+        this.showSharePic = true
+      },
       _initDoctorScroll() {
       },
       isShare() {
@@ -401,6 +418,15 @@
   @import '../../../common/mixin.scss';
 
   .doctor {
+    .share-pic {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      z-index: 20000;
+    }
+
     position: absolute;
     @include t_r_b_l();
     overflow-y: auto;
@@ -412,18 +438,23 @@
       height: 50px;
       z-index: 10000;
       background-color: white;
-      .follow {
-        position: absolute;
-        right: 30rem/$rem;
-        top: 14.5px;
+      .share, .follow {
         z-index: 2000;
         font-size: 32rem/$rem;
         display: flex;
         align-items: center;
+        top: 14.5px;
+        position: absolute;
         img {
           width: 35rem/$rem;
           margin-right: 5px;
         }
+      }
+      .follow {
+        right: 160rem/$rem;
+      }
+      .share {
+        right: 30rem/$rem;
       }
       img.previous {
         height: 15px;
@@ -450,7 +481,7 @@
       }
       span {
         color: $mainColor;
-        font-size: 12px;
+        font-size: 14px;
       }
       img {
         width: 30%;

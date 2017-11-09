@@ -10,7 +10,8 @@
             <div class="usualCenter">
               <ul>
                 <li><span class="patientName">{{ item.compatName }}</span><span>{{ item.compatAge
-                  }} &nbsp;{{ item.compatGender == "M" ? "男" : "女"}}</span> <span>{{item.isRealnameAuth | isAuth}}</span>
+                  }} &nbsp;{{ item.compatGender == "M" ? "男" : "女"}}</span> <span
+                  :class="[item.isRealnameAuth?'ok':'no']">{{item.isRealnameAuth | isAuth}}</span>
                 </li>
                 <li>身份证号：<span>{{ item.compatIdcard.substr(0, 6) }}********{{item.compatIdcard.substr(14)}}</span></li>
                 <li>手机号：<span>{{ item.compatMobile.substr(0, 3) }}****{{item.compatMobile.substr(7)}}</span></li>
@@ -124,6 +125,12 @@
           span {
             font-size: 32rem/$rem;
             color: #999999;
+            &.no {
+              color: red;
+            }
+            &.ok {
+              color: $mainColor;
+            }
           }
           .patientName {
             color: #333333;
