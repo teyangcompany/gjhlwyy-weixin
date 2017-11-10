@@ -8,5 +8,4 @@ export default (consult) => {
   else {
     return `./static/img/pat.m.jpg`
   }
-
 }

@@ -26,9 +26,12 @@
                 }}</span>
             </p>
           </div>
-          <div class="flex0 flex score">
+          <div class="flex0 flex score" v-if="doc.sysDoc.docScoure">
             <span class="">{{doc.sysDoc.docScoure ? doc.sysDoc.docScoure.toFixed(1) : "0.0" }}</span> 分
             <img src="../../../static/img/left-arrow.png" alt="">
+          </div>
+          <div class="flex0 flex score" v-else>
+            暂无评分
           </div>
         </router-link>
       </ul>

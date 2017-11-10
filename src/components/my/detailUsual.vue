@@ -18,7 +18,7 @@
         个人信息
       </div>
 
-      <div class="wrap flex" @click="edit('name')">
+      <div class="wrap flex" @click="edit('name',compatInfo.compatName)">
         <div class="label flex0">
           姓名
         </div>
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div class="wrap flex" @click="edit('idcard')">
+      <div class="wrap flex" @click="edit('idcard',compatInfo.compatIdcard)">
         <div class="label flex0">
           身份证
         </div>
@@ -86,9 +86,10 @@
       </div>
 
       <div v-for="hos in compatInfo.records" class="wrap flex nobg">
-        <div class="label flex0">
-          {{hos.hosName}}({{hos.compatMedicalRecord ? hos.compatMedicalRecord : ""}})
+        <div class="label">
+          {{hos.hosName}}
         </div>
+        <div class="text flex1">({{hos.compatMedicalRecord ? hos.compatMedicalRecord : ""}})</div>
       </div>
       <div class="wrap flex nobg">
         <router-link :to="{path:'/hospital',query:{action:'auth',compatId:compatInfo.compatId}}"
@@ -135,6 +136,17 @@
           })
           return
         }
+
+        this.$router.push({
+          path: "/my/edit",
+          query: {
+            service: "nethos.pat.compat.modify.v2",
+            mode: type,
+            value: value,
+            id: this.compatInfo.compatId
+          }
+        })
+
       },
       noChange() {
         weui.alert("微信不允许修改手机号，请下载app")

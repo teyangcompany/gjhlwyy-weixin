@@ -34,3 +34,16 @@ export const API_URL = {
 export const openRealNameOauth = false
 
 export const relationship = ["本人", "父母", "配偶", '子女', '亲戚', '朋友', '其他']
+
+export const editForm = {
+  "nethos.pat.info.modify": {
+    id: "patId",
+    name: "patName",
+    card: "patIdcard"
+  },
+  "nethos.pat.compat.modify.v2": {
+    id: "compatId",
+    name: "compatName",
+    card: "compatIdcard"
+  }
+}

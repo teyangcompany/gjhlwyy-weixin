@@ -1,6 +1,11 @@
 <template>
   <div>
     <v-header :title="title" :rightTitle="rightTitle" @on-consult="goMyConsult()" @on-index="goIndex()"></v-header>
+    <div class="search border-1px flex" @click>
+      <router-link tag="div" to="/search" class="flex1">
+        <i class="weui-icon-search"></i><span>按科室、姓名搜索医生</span>
+      </router-link>
+    </div>
     <div class="tab border-1px">
       <div class="tab-item" :class="{choose_type:sortBy == 'displaySort'}">
         <div class="tab_item_container">
@@ -862,6 +867,20 @@
 <style scoped lang="scss">
   @import '../../../common/public.scss';
 
+  .search {
+    position: absolute;
+    left: 0;
+    top: 50px;
+    right: 0;
+    background-color: white;
+    z-index: 60;
+    @include h_lh(40px);
+    > div {
+      color: #666666;
+      text-align: center;
+    }
+  }
+
   .showlist-enter-active, .showlist-leave-active {
     transition: all 0.2s ease-out;
     transform: translateY(0);
@@ -894,7 +913,7 @@
     width: 100%;
     height: 40px;
     position: fixed;
-    top: 50px;
+    top: 90px;
     line-height: 40px;
     z-index: 60;
     background-color: white;
@@ -941,7 +960,7 @@
   .dropType {
     position: absolute;
     z-index: 4;
-    top: 90px;
+    top: 130px;
     width: 100%;
     /*background-color: #0BB20C;*/
     background-color: white;
@@ -1013,7 +1032,7 @@
 
   .roomList {
     position: fixed;
-    top: 90px;
+    top: 130px;
     left: 0;
     right: 0;
     bottom: 0;

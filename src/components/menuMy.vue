@@ -6,7 +6,7 @@
       <div class="avatar border-1px">
         <router-link to="/my/data" tag="div" class="avatarCenter">
           <div class="leftWord" v-if="patientInfo">
-            <img class="profile" alt="" :src="patientInfo|patAva">
+            <img class="profile" alt="" :src="patientInfo|patAva" @error="__avaError($event)">
           </div>
           <div class="rightWord">
             <div v-if="patientInfo">
@@ -78,7 +78,7 @@
 <script type="text/ecmascript-6">
   import header from '../base/header'
   import api from '../lib/api'
-  import {isLoginMixin, isBindMixin} from "../lib/mixin"
+  import {isLoginMixin, isBindMixin, avaErrorMixin} from "../lib/mixin"
   import {tokenCache} from '../lib/cache'
   import patAva from "../utils/consultPatAva"
 
@@ -86,7 +86,7 @@
     filters: {
       patAva
     },
-    mixins: [isLoginMixin, isBindMixin],
+    mixins: [isLoginMixin, isBindMixin, avaErrorMixin],
     data() {
       return {
         title: "我的",

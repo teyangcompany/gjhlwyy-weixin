@@ -545,6 +545,7 @@
           }
         }
         h6 {
+          font-size: 28rem/$rem;
           font-weight: normal;
           color: gray;
           margin: 0;
