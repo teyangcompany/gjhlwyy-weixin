@@ -173,7 +173,7 @@
       },
       edit(type, value) {
         if (this.sysCommonPatVo.isRealnameAuth) {
-          weuijs.alert("<i class='weui-icon-warn weui-icon-size70'></i><br/><br/>" +
+          weuijs.alert("<p class='center'><i class='weui-icon-warn weui-icon-size70'></i></p><br>" +
             "您已通过实名认证，无法修改姓名、身份证号", {
             buttons: [
               {

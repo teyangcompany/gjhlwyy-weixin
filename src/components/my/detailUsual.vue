@@ -125,7 +125,7 @@
     methods: {
       edit(type) {
         if (this.compatInfo.isRealnameAuth) {
-          weui.alert("<i class='weui-icon-warn weui-icon-size70'></i><br/><br/>" +
+          weui.alert("<p class='center'><i class='weui-icon-warn weui-icon-size70'></i></p><br>"  +
             "您已通过实名认证，无法修改姓名、身份证号", {
             buttons: [
               {
