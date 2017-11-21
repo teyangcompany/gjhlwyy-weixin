@@ -144,6 +144,7 @@
       left: 45px;
       right: 45px;
       input {
+        font-size: 15px;
         width: 90%;
       }
     }

@@ -60,7 +60,7 @@
         this.$router.push('/addUsualPatient')
       },
       goForceMy() {
-        this.$router.push('/Profile')
+        this.$router.go(-1);
       },
       _initUsualScroll() {
         this.usualScroll = new BScroll(this.$refs.usual, {

@@ -10,16 +10,19 @@
           头像
         </div>
         <div class="text flex0 ava">
-          <img :src="patAva(userInfo)" @error="__avaError($event)" alt="" @click="uploadImg">
+          <img :src="patAva(userInfo)" data-kdkkd="" :data-gender="userInfo.patGender" @error="__avaError($event)"
+               alt=""
+               @click="uploadImg">
         </div>
       </div>
 
-      <div class="wrap flex" @click="handleRealName(sysCommonPatVo.isRealnameAuth)">
+      <div class="auth wrap flex" @click="handleRealName(sysCommonPatVo.isRealnameAuth)">
         <div class="label flex0">
           实名认证
         </div>
         <div class="text flex1">
-          {{sysCommonPatVo.isRealnameAuth ? "已认证" : "未认证"}}
+          <span
+            :class="[sysCommonPatVo.isRealnameAuth?'ok':'no']">{{sysCommonPatVo.isRealnameAuth ? "已认证" : "未认证"}}</span>
         </div>
       </div>
 
@@ -138,7 +141,9 @@
       AppHeader, Uploader
     },
     created() {
+      let loading = weuijs.loading("加载中...");
       this._isBind().then((res) => {
+        loading.hide();
         if (res !== false) {
           if (res.patAreacode && !res.patAreaname) {
             res.patAreaname = getArea(res.patAreacode, "text");
@@ -263,6 +268,14 @@
     @extend %column;
     .wrap + .wrap {
       @include border(top);
+    }
+    .auth {
+      .ok {
+        color: $mainColor;
+      }
+      .no {
+        color: red;
+      }
     }
     .title {
       background-color: $bgColor;

@@ -30,6 +30,7 @@
   import AppHeader from "../../plugins/app-header.vue"
   import api from "../../lib/api"
   import {editForm} from "../../lib/config"
+  import validate from "../../lib/validate"
 
   export default {
     data() {
@@ -57,9 +58,20 @@
     },
     methods: {
       async save() {
-        let form = {};
+        let form = {}, validator = new validate();
         form[editForm[this.service].id] = this.id;
         form[editForm[this.service][this.mode]] = this.value;
+        if (this.mode == "card") {
+          validator.add(form[editForm[this.service][this.mode]], [
+            ['isIdCard', "身份证格式错误"]
+          ])
+          let err = validator.start();
+          if (err) {
+            this.$refs.msg.show(err);
+            return
+          }
+        }
+
         let l = weuijs.loading("修改中...")
         let ret = await api(this.service, form)
         l.hide();
@@ -67,7 +79,7 @@
           weuijs.toast("编辑成功")
           setTimeout((res) => {
             this.$router.go(-1);
-          }, 3000)
+          }, 1000)
         } else {
           this.$refs.msg.show(ret.msg || "服务端错误" + ret.code)
         }

@@ -51,16 +51,29 @@
             <p>图文咨询</p>
             <span>¥ {{ aboutDoctor.docPicConsultPrice }}</span>
           </div>
-          <div class="videoConsult" @click="makeDisplay">
+          <div v-if="aboutDoctor.docVideoConsultStatus" class="videoConsult" @click="makeDisplay">
             <img src="../../../../static/img/index/视频问诊.png" alt="">
             <p class="videoWord">视频问诊</p>
-            <span class="videoWord">¥ {{ aboutDoctor.docFamousConsultPrice }}</span>
-          </div>
-          <div class="videoConsult" @click="makeDisplay">
-            <img src="../../../../static/img/index/名医.png" alt="">
-            <p class="videoWord">名医视频</p>
             <span class="videoWord">¥ {{ aboutDoctor.docVideoConsultPrice }}</span>
           </div>
+          <div v-else class="videoConsult" @click="makeDisplay">
+            <img src="../../../../static/img/index/视频问诊.png" alt="">
+            <p class="videoWord">视频问诊</p>
+            <span class="videoWord">¥ 0.0</span>
+          </div>
+
+          <div v-if="aboutDoctor.docFamousConsultStatus" class="videoConsult" @click="makeDisplay">
+            <img src="../../../../static/img/index/名医.png" alt="">
+            <p class="videoWord">名医视频</p>
+            <span class="videoWord">¥ {{ aboutDoctor.docFamousConsultPrice }}</span>
+          </div>
+
+          <div v-else class="videoConsult" @click="makeDisplay">
+            <img src="../../../../static/img/index/名医.png" alt="">
+            <p class="videoWord">名医视频</p>
+            <span class="videoWord">¥ 0.0</span>
+          </div>
+
         </div>
         <div class="institutionDes border-1px" v-if="doctorIntro">
           <div class="desCenter team">
@@ -135,11 +148,11 @@
           <ul class="flex ercode">
             <li class="flex0 center" @click="openShare(aboutDoctor.cardPicUrl)">
               <img src="../../../../static/img/logo.web.png" alt="">
-              <div><span>APP</span>关注我,功能更丰富</div>
+              <div><span class="app">APP</span>关注我,功能更丰富</div>
             </li>
             <li class="flex0 center" @click="openShare(aboutDoctor.cardPicWechatUrl)">
               <img src="../../../../static/img/logo.weixin.png" alt="">
-              <div><span>微信</span>关注我,咨询更方便</div>
+              <div><span class="weixin">微信</span>关注我,咨询更方便</div>
             </li>
           </ul>
           <!--<div class="desCenter team">
@@ -482,6 +495,9 @@
       span {
         color: $mainColor;
         font-size: 14px;
+        &.weixin {
+          color: green;
+        }
       }
       img {
         width: 30%;

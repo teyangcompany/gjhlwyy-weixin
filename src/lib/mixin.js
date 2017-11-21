@@ -98,7 +98,9 @@ export const isBindMixin = {
 export const avaErrorMixin = {
   methods: {
     __avaError(e) {
-      e.target.src = "./static/img/pat.m.jpg"
+      let dom = e.target, dataset = dom.dataset, src = "./static/img/pat.m.jpg";
+      dataset && dataset.gender && (src = `./static/img/pat.${dataset.gender.toLowerCase()}.jpg`);
+      dom.src = src;
     }
   }
 }

@@ -6,7 +6,8 @@
       <div class="avatar border-1px">
         <router-link to="/my/data" tag="div" class="avatarCenter">
           <div class="leftWord" v-if="patientInfo">
-            <img class="profile" alt="" :src="patientInfo|patAva" @error="__avaError($event)">
+            <img class="profile" alt="" :src="patientInfo|patAva" :data-gender="patientInfo.patGender"
+                 @error="__avaError($event)">
           </div>
           <div class="rightWord">
             <div v-if="patientInfo">
@@ -81,6 +82,7 @@
   import {isLoginMixin, isBindMixin, avaErrorMixin} from "../lib/mixin"
   import {tokenCache} from '../lib/cache'
   import patAva from "../utils/consultPatAva"
+  import weuijs from "weui.js"
 
   export default {
     filters: {
@@ -104,9 +106,11 @@
     },
     created() {
       this.tellPath = this.$route.path
+      let loading = weuijs.loading("加载中...");
       this._isBind().then((res) => {
         if (res !== false) {
           this.patientInfo = res;
+          loading.hide();
           localStorage.setItem('patMobile', res.patMobile)
         } else {
           this.$router.replace({

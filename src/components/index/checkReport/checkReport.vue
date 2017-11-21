@@ -180,7 +180,7 @@
               }
             }
           });
-          this.showDialog = true
+          //this.showDialog = true
         } else {
           this.$router.push({
             path: '/checkSortList',

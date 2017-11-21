@@ -18,7 +18,7 @@
                     <div class="leftImg">
                       <img v-if="!(item.sysPat.patAvatar) && item.sysPat.patGender== 'M'" src="../../../../static/img/doctor.m.png" alt="">
                       <img v-else-if="!(item.sysPat.patAvatar) && item.sysPat.patGender== 'F'" src="../../../../static/img/pat.f.jpg" alt="">
-                      <img v-else :src="item.sysPat.patAvatar" alt="">
+                      <img v-else :src="item.sysPat.patAvatar" onerror="this.src='./static/img/pat.f.jpg'" alt="">
                     </div>
                     <div class="rightImg">
                       <div class="top">

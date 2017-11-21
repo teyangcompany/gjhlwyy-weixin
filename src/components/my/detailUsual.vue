@@ -5,12 +5,12 @@
       <div class="right" slot="right" @click="del">删除</div>
     </app-header>
     <div class="main overflow-y-auto" ref="main">
-      <div class="wrap flex" @click="handleRealName(compatInfo.isRealnameAuth)">
+      <div class="auth wrap flex" @click="handleRealName(compatInfo.isRealnameAuth)">
         <div class="label flex0">
           实名认证
         </div>
         <div class="text flex1">
-          {{compatInfo.isRealnameAuth | isAuth}}
+          <span :class="[compatInfo.isRealnameAuth?'ok':'no']">{{compatInfo.isRealnameAuth | isAuth}}</span>
         </div>
       </div>
 
@@ -265,6 +265,14 @@
     @extend %column;
     .wrap + .wrap {
       @include border(top);
+    }
+    .auth {
+      .ok {
+        color: $mainColor;
+      }
+      .no {
+        color: red;
+      }
     }
     .title {
       background-color: $bgColor;
