@@ -219,18 +219,12 @@
               this.attachImg = data.obj.attaList
               this.title = this.aboutConsult.docName
               this.waitImg = this.aboutConsult.docAvatar ? this.aboutConsult.docAvatar : './static/img/doctor.m.png'
-
               let o = document.getElementsByClassName("chat")[0];
               let h = o.offsetHeight;  //高度
               let content = h
-              console.log(o)
-
-
               setTimeout(() => {
                 if (this.$refs.slideList.offsetHeight > content - 10) {
                   this.$refs.conversation.scrollTo(0, content - this.$refs.slideList.offsetHeight - 140)
-                  console.log(this.$refs.slideList.offsetHeight)
-                  console.log(content)
                 }
               }, 300)
 
@@ -238,9 +232,6 @@
             })
           } else if (!(data.msg)) {
             weui.alert("网络错误，请稍后重试")
-            console.log("错误的data")
-            console.log(data)
-            console.log("上面是错误的data")
           } else {
             weui.alert(data.msg)
           }
@@ -265,16 +256,13 @@
 //             })
 //         })
       let that = this
-
       this.lunxun = setInterval(() => {
         api("nethos.consult.info.detail", {
           token: tokenCache.get(),
           consultId: that.consultId
         }).then((data) => {
-          console.log(data)
           if (data.code == 0) {
-            console.log(that.messageLength)
-
+            this.aboutConsult = data.obj.consult
             if (that.messageLength != data.obj.messageList.length) {
               that.$nextTick(() => {
                 that.$set(that.$data, 'aboutReplyMessage', data.obj.messageList)
@@ -282,11 +270,9 @@
                 let o = document.getElementsByClassName("chat")[0];
                 let h = o.offsetHeight;  //高度
                 let content = h
-                console.log(o)
                 setTimeout(() => {
                   if (that.$refs.slideList.offsetHeight > content - 10) {
 //                     console.log(that.$refs.slideList.offsetHeight)
-                    console.log("医生回复你了")
                     that.$refs.conversation.scrollTo(0, content - that.$refs.slideList.offsetHeight - 140)
                   }
                 }, 10)
@@ -318,7 +304,6 @@
               this.$refs.conversation.scrollTo(0, content - this.$refs.slideList.offsetHeight - 140)
             }
           }, 300)
-
         })
       }
     },
@@ -362,8 +347,11 @@
           token: tokenCache.get(),
           consultId: this.consultId
         }).then((data) => {
-          console.log(data)
-          location.reload()
+          if (data.code == 0) {
+            weui.toast("取消成功")
+          } else {
+            weui.alert(data.msg || "服务端错误");
+          }
         })
       },
       pay() {
@@ -483,7 +471,6 @@
           token: tokenCache.get(),
           consultId: this.consultId
         }).then((data) => {
-          console.log(data)
           location.reload()
         })
       },

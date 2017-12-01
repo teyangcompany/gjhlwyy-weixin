@@ -162,3 +162,8 @@ export function getParamsFromUrl(from) {
   let hash = url("hash", from);
   return {protocol, hostname, port, path, query, hash}
 }
+
+/*首字母大写*/
+export function upper(str) {
+  return str.substr(0, 1).toUpperCase() + str.substr(1);
+}

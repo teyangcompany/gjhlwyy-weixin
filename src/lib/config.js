@@ -47,3 +47,12 @@ export const editForm = {
     card: "compatIdcard"
   }
 }
+
+
+export const docNav = [
+  {name: "book", value: "预约挂号", open: false},
+  {name: "pic", value: "图文问诊", open: true, price: ''},
+  {name: "video", value: "视频问诊", open: true, price: ''},
+  {name: "famous", value: "名医咨询", open: true, price: ''}/*,
+  {name: "team", value: "团队咨询", open: true}*/
+]

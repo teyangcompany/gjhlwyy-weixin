@@ -34,4 +34,9 @@
     width: 100%;
     height: 100%;
   }
+
+  .bullet-active {
+    background-color: $mainColor;
+    opacity: 1;
+  }
 </style>

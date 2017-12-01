@@ -37,44 +37,7 @@
             </router-link>
           </div>
         </div>
-        <div class="sortFunc">
-          <div v-if="!(aboutDoctor.docBookId)" class="bookNumber" @click="goBookNum()">
-            <img src="../../../../static/img/index/预约1.png" alt="">
-            <p class="grayBookNumber">预约挂号</p>
-          </div>
-          <div v-else class="bookNumber" @click="goBookNum()">
-            <img src="../../../../static/img/index/预约.png" alt="">
-            <p class="bookWord">预约挂号</p>
-          </div>
-          <div @click="goConsult" class="pictureConsult">
-            <img src="../../../../static/img/index/图文.png" alt="">
-            <p>图文咨询</p>
-            <span>¥ {{ aboutDoctor.docPicConsultPrice }}</span>
-          </div>
-          <div v-if="aboutDoctor.docVideoConsultStatus" class="videoConsult" @click="makeDisplay">
-            <img src="../../../../static/img/index/视频问诊.png" alt="">
-            <p class="videoWord">视频问诊</p>
-            <span class="videoWord">¥ {{ aboutDoctor.docVideoConsultPrice }}</span>
-          </div>
-          <div v-else class="videoConsult" @click="makeDisplay">
-            <img src="../../../../static/img/index/视频问诊.png" alt="">
-            <p class="videoWord">视频问诊</p>
-            <span class="videoWord">¥ 0.0</span>
-          </div>
-
-          <div v-if="aboutDoctor.docFamousConsultStatus" class="videoConsult" @click="makeDisplay">
-            <img src="../../../../static/img/index/名医.png" alt="">
-            <p class="videoWord">名医视频</p>
-            <span class="videoWord">¥ {{ aboutDoctor.docFamousConsultPrice }}</span>
-          </div>
-
-          <div v-else class="videoConsult" @click="makeDisplay">
-            <img src="../../../../static/img/index/名医.png" alt="">
-            <p class="videoWord">名医视频</p>
-            <span class="videoWord">¥ 0.0</span>
-          </div>
-
-        </div>
+        <doc-nav @click="handleClick" :docInfo="aboutDoctor"></doc-nav>
         <div class="institutionDes border-1px" v-if="doctorIntro">
           <div class="desCenter team">
             <h4>医生公告</h4>
@@ -155,11 +118,6 @@
               <div><span class="weixin">微信</span>关注我,咨询更方便</div>
             </li>
           </ul>
-          <!--<div class="desCenter team">
-            <h4><span>扫描二维码，关注我</span></h4>
-            <h6>
-              <img :src="aboutDoctor.docQrcodeUrl " alt=""></h6>
-          </div>-->
         </div>
       </div>
     </div>
@@ -173,6 +131,7 @@
   </div>
 </template>
 <script>
+  import DocNav from "../../../plugins/doc/nav"
   import header from '../../../base/header'
   import BScroll from 'better-scroll'
   import Dialog from '../../../base/dialog'
@@ -234,6 +193,15 @@
       }
     },
     methods: {
+      handleClick(name) {
+        if (name == "pic") {
+          this.goConsult();
+        } else if (name == 'book') {
+          this.goBookNum();
+        } else {
+          this.makeDisplay();
+        }
+      },
       showShare() {
         this.showSharePic = true
       },
@@ -307,6 +275,9 @@
       goBookNum() {
         if (this.isShare()) {
           this.openShare(this.aboutDoctor.cardPicWechatUrl);
+          return
+        }
+        if (!this.aboutDoctor.docBookId) {
           return
         }
         this.$router.push({path: '/famousPage', query: {bookDocId: this.aboutDoctor.docBookId}})
@@ -398,7 +369,8 @@
       "VHeader": header,
       "VDialog": Dialog,
       Star,
-      DocShare
+      DocShare,
+      DocNav
     },
     watch: {
 //      excelAll(){
