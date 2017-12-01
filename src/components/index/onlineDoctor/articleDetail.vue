@@ -5,7 +5,7 @@
       <div>
         <div class="articleTop">
           <p class="title">{{ article.title }}</p>
-          <p class="time"> {{ time }}  阅读：{{ article.readTimes }}次</p>
+          <p class="time"> {{ time }} 阅读：{{ article.readTimes }}次</p>
         </div>
         <div class="contentWrap">
           <div v-html="article.content">
@@ -28,12 +28,12 @@
         article: "",
         articleId: "",
         time: "",
-        style:{}
+        style: {}
       }
     },
     created() {
-      this.style={
-        height:`${window.innerHeight-50}px`
+      this.style = {
+        height: `${window.innerHeight - 50}px`
       }
       this.articleId = this.$route.query.articleId
       api("nethos.doc.article.detail", {
@@ -49,7 +49,7 @@
     }
   }
 </script>
-<style scoped lang="scss">
+<style lang="scss">
   @import '../../../common/public.scss';
 
   .wrapArticle {
@@ -74,6 +74,9 @@
     .contentWrap {
       width: 690rem/$rem;
       margin: 0 auto;
+      img{
+        width: 100%;
+      }
     }
   }
 </style>
