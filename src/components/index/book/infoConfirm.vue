@@ -50,9 +50,9 @@
             <span>病案号:</span>
           </div>
           <div class="rightMatch" v-if="compatInfo">
-            <span>{{ compatInfo[index].compatName }}</span>
-            <span>{{ compatInfo[index].compatIdcard }}</span>
-            <span>{{ compatInfo[index].compatMobile }}</span>
+            <span>{{compatInfo[index].compatName}}</span>
+            <span>{{ compatInfo[index].compatIdcard|formatCardAndMobile(3,4,12) }}</span>
+            <span>{{ compatInfo[index].compatMobile|formatCardAndMobile(3,4,4) }}</span>
             <span v-if=" compatInfo[index].compatMedicalRecord">{{ compatInfo[index].compatMedicalRecord }} </span>
             <span v-else>暂未绑定病案号</span>
           </div>
@@ -104,6 +104,7 @@
   import {isLoginMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   import {debug} from "../../../lib/util"
+  import {formatCardAndMobile} from "../../../lib/filter";
 
   export default {
     mixins: [isLoginMixin],
@@ -372,6 +373,7 @@
         }
       },
     },
+    filters: {formatCardAndMobile},
     components: {
       'VHeader': header,
       "VDialog": Dialog,

@@ -13,8 +13,9 @@
                   }} &nbsp;{{ item.compatGender == "M" ? "男" : "女"}}</span> <span
                   :class="[item.isRealnameAuth?'ok':'no']">{{item.isRealnameAuth | isAuth}}</span>
                 </li>
-                <li>身份证号：<span>{{ item.compatIdcard.substr(0, 6) }}********{{item.compatIdcard.substr(14)}}</span></li>
-                <li>手机号：<span>{{ item.compatMobile.substr(0, 3) }}****{{item.compatMobile.substr(7)}}</span></li>
+                <li>身份证号：<span>{{item.compatIdcard|formatCardAndMobile(3,4,12)}}</span>
+                </li>
+                <li>手机号：<span>{{ item.compatMobile|formatCardAndMobile(3,4,4)}}</span></li>
                 <li v-if="!(item.compatMedicalRecord)">病案号：<span>暂未绑定病案号</span></li>
                 <li v-else>病案号：<span>{{ item.compatMedicalRecord }}</span></li>
               </ul>
@@ -26,7 +27,7 @@
   </transition>
 </template>
 <script>
-  import {isAuth} from "../../lib/filter"
+  import {isAuth, formatCardAndMobile} from "../../lib/filter"
   import header from '../../base/header'
   import BScroll from 'better-scroll'
   import api from '../../lib/api'
@@ -68,7 +69,7 @@
         })
       }
     },
-    filters: {isAuth},
+    filters: {isAuth, formatCardAndMobile},
     components: {
       "VHeader": header
     },

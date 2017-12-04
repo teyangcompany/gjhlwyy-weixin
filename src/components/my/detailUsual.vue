@@ -32,7 +32,7 @@
           身份证
         </div>
         <div class="text flex1">
-          {{compatInfo.compatIdcard}}
+          {{compatInfo.compatIdcard|formatCardAndMobile(3,4,12)}}
         </div>
       </div>
 
@@ -41,7 +41,7 @@
           手机号
         </div>
         <div class="text flex1">
-          {{compatInfo.compatMobile}}
+          {{compatInfo.compatMobile|formatCardAndMobile(3,4,4)}}
         </div>
       </div>
 
@@ -103,12 +103,11 @@
   import AppHeader from "../../plugins/app-header.vue"
   import api from '../../lib/api'
   import weui from 'weui.js'
-  import {isAuth, getGender} from "../../lib/filter"
+  import {isAuth, formatCardAndMobile, getGender} from "../../lib/filter"
   import {mainHeightMixin} from "../../lib/mixin"
   import {debug} from "../../lib/util"
   import {relationship} from "../../lib/config"
   import getArea from "../../utils/formatArea"
-
 
   export default {
     data() {
@@ -125,7 +124,7 @@
     methods: {
       edit(type) {
         if (this.compatInfo.isRealnameAuth) {
-          weui.alert("<p class='center'><i class='weui-icon-warn weui-icon-size70'></i></p><br>"  +
+          weui.alert("<p class='center'><i class='weui-icon-warn weui-icon-size70'></i></p><br>" +
             "您已通过实名认证，无法修改姓名、身份证号", {
             buttons: [
               {
@@ -247,7 +246,7 @@
     },
     mixins: [mainHeightMixin],
     filters: {
-      isAuth, getGender
+      isAuth, getGender, formatCardAndMobile
     },
     components: {
       AppHeader,

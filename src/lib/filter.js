@@ -164,10 +164,19 @@ const week = function (item) {
   }
   return date;
 }
-
 const isAuth = function (isRealnameAuth) {
   return isRealnameAuth ? "已认证" : "未认证"
 }
+const formatCardAndMobile = function (str, startLength, endLeng, hiddenLeng) {
+  if (!str) {
+    return ""
+  }
+  let hiddenStr = "";
+  for (let i = 0; i < hiddenLeng; i++) {
+    hiddenStr += "*"
+  }
+  return str.substr(0, startLength) + hiddenStr + str.substr(0 - endLeng);
+}
 
-export {Todate, getWeek, getDay, goodTime, getMyDay, getAge, getGender, Getdate, week, isAuth}
+export {Todate, getWeek, getDay, goodTime, getMyDay, getAge, getGender, Getdate, week, isAuth,formatCardAndMobile}
 

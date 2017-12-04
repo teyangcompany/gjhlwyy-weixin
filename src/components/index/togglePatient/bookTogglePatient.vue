@@ -4,14 +4,17 @@
       <v-header :title="title" :rightTitle="rightTitle" @0n-addUsual="addPatient()"></v-header>
       <div class="usual" ref="usual">
         <div>
-          <router-link tag="div" :to="{path:'/infoConfirm',query:{index:index,bookDeptId:bookDeptId,bookNumId:bookNumId,numTime:numTime,allInfo:allInfo,listIndex:listIndex,bookSort:bookSort}}" class="usualLine" v-for="(item,index) in patientList" :key="item.id">
+          <router-link tag="div"
+                       :to="{path:'/infoConfirm',query:{index:index,bookDeptId:bookDeptId,bookNumId:bookNumId,numTime:numTime,allInfo:allInfo,listIndex:listIndex,bookSort:bookSort}}"
+                       class="usualLine" v-for="(item,index) in patientList" :key="item.id">
             <div class="usualCenter">
               <ul>
-                <li><span class="patientName">{{ item.compatName }}</span><span>{{ item.compatAge }} &nbsp;{{ item.compatGender == "M" ? "男":"女"}}</span></li>
-                <li>身份证号： <span>{{ item.compatIdcard }}</span></li>
-                <li>电话号码：<span>{{ item.compatMobile }}</span></li>
-                <li v-if="!(item.compatMedicalRecord)">病案号：<span >暂未绑定病案号</span></li>
-                <li v-else>病案号：<span >{{item.compatMedicalRecord}}</span></li>
+                <li><span class="patientName">{{ item.compatName }}</span><span>{{ item.compatAge }} &nbsp;{{ item.compatGender == "M" ? "男":"女"}}</span>
+                </li>
+                <li>身份证号： <span>{{item.compatIdcard|formatCardAndMobile(3,4,12) }}</span></li>
+                <li>电话号码：<span>{{ item.compatMobile|formatCardAndMobile(3,4,4) }}</span></li>
+                <li v-if="!(item.compatMedicalRecord)">病案号：<span>暂未绑定病案号</span></li>
+                <li v-else>病案号：<span>{{item.compatMedicalRecord}}</span></li>
               </ul>
             </div>
           </router-link>
@@ -25,21 +28,23 @@
   import BScroll from 'better-scroll'
   import api from '../../../lib/api'
   import {tokenCache} from '../../../lib/cache'
-  export default{
-    data(){
-      return{
-        title:"常用就诊人",
-        rightTitle:"添加",
-        patientList:[],
-        bookDeptId:"",
-        bookNumId:"",
-        numTime:"",
-        allInfo:"",
-        listIndex:"",
-        bookSort:""
+  import {formatCardAndMobile} from "../../../lib/filter";
+
+  export default {
+    data() {
+      return {
+        title: "常用就诊人",
+        rightTitle: "添加",
+        patientList: [],
+        bookDeptId: "",
+        bookNumId: "",
+        numTime: "",
+        allInfo: "",
+        listIndex: "",
+        bookSort: ""
       }
     },
-    created(){
+    created() {
       this.bookDeptId = this.$route.query.bookDeptId
       this.bookNumId = this.$route.query.bookNumId
       this.numTime = this.$route.query.numTime
@@ -47,23 +52,30 @@
       this.allInfoArray = JSON.parse(this.allInfo)
       this.listIndex = this.$route.query.listIndex
       this.bookSort = this.$route.query.bookSort
-      api("nethos.pat.compat.list",{
-        token:tokenCache.get()
-      }).then((data)=>{
+      api("nethos.pat.compat.list", {
+        token: tokenCache.get()
+      }).then((data) => {
         this.patientList = data.list
         console.log(this.patientList)
       })
     },
-    methods:{
-      addPatient(){
+    methods: {
+      addPatient() {
         this.$router.push({
-          path:'/bookToggleAddUsual',
-          query:{bookDeptId:this.bookDeptId,bookNumId:this.bookNumId,numTime:this.numTime,allInfo:this.allInfo,listIndex:this.listIndex,bookSort:this.bookSort}
+          path: '/bookToggleAddUsual',
+          query: {
+            bookDeptId: this.bookDeptId,
+            bookNumId: this.bookNumId,
+            numTime: this.numTime,
+            allInfo: this.allInfo,
+            listIndex: this.listIndex,
+            bookSort: this.bookSort
+          }
         })
       },
-      _initUsualScroll(){
-        this.usualScroll = new BScroll(this.$refs.usual,{
-          click:true
+      _initUsualScroll() {
+        this.usualScroll = new BScroll(this.$refs.usual, {
+          click: true
         })
       }
 //      goinfoConfirm(){
@@ -73,15 +85,18 @@
 //        })
 //      }
     },
-    components:{
-      "VHeader":header
+    filters: {
+      formatCardAndMobile
     },
-    watch:{
-      patientList(){
-        this.$nextTick(()=>{
-          setTimeout(()=>{
+    components: {
+      "VHeader": header
+    },
+    watch: {
+      patientList() {
+        this.$nextTick(() => {
+          setTimeout(() => {
             this._initUsualScroll()
-          },20)
+          }, 20)
         })
       }
     }
@@ -89,68 +104,72 @@
 </script>
 <style scoped lang="scss">
   @import '../../../common/public.scss';
-  .wrapWhole{
+
+  .wrapWhole {
     position: fixed;
-    top:0;
-    bottom:0;
-    left:0;
-    right:0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
-  .usual{
+
+  .usual {
     position: fixed;
     top: 50px;
-    left:0;
-    right:0;
+    left: 0;
+    right: 0;
     bottom: 20px;
     background-color: white;
-    .usualLine{
-      width:100%;
+    .usualLine {
+      width: 100%;
       background-color: white;
     }
-    .usualCenter{
-      width:690rem/$rem;
-      margin:0 auto;
+    .usualCenter {
+      width: 690rem/$rem;
+      margin: 0 auto;
       /*margin-top: 5px;*/
       background-color: white;
-      ul{
-        margin:0;
-        padding:0;
+      ul {
+        margin: 0;
+        padding: 0;
         margin-top: 10px;
-        li{
+        li {
           list-style-type: none;
-          height:80rem/$rem;
+          height: 80rem/$rem;
           line-height: 80rem/$rem;
           margin-top: 1px;
           background-color: $bgColor2;
           font-size: 32rem/$rem;
           padding-left: 10px;
-          span{
+          span {
             font-size: 32rem/$rem;
             color: #999999;
           }
-          .patientName{
+          .patientName {
             color: #333333;
             display: inline-block;
-            min-width:150rem/$rem;
+            min-width: 150rem/$rem;
           }
         }
-        li:first-child{
+        li:first-child {
           border-top-left-radius: 7px;
           border-top-right-radius: 7px;
         }
-        li:last-child{
+        li:last-child {
           border-bottom-left-radius: 7px;
           border-bottom-right-radius: 7px;
         }
       }
     }
   }
-  .slide-enter-active,.slide-leave-active{
+
+  .slide-enter-active, .slide-leave-active {
     transition: all 0.3s;
     opacity: 1;
   }
-  .slide-enter,.slide-leave-to{
-    transform:  translate3d(100%,0,0);
+
+  .slide-enter, .slide-leave-to {
+    transform: translate3d(100%, 0, 0);
     opacity: 1;
   }
 </style>
