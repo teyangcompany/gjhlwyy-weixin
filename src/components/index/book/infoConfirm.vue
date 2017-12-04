@@ -67,9 +67,7 @@
         <!--<p @click="getCode()" style="color: #2AB6B3;">刷新验证码</p>-->
         <!--</div>-->
         <!--</div>-->
-        <div class="assistScroll">
-
-        </div>
+        <div class="assistScroll"></div>
       </div>
 
     </div>
