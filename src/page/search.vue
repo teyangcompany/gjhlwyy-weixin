@@ -51,9 +51,8 @@
   import Msg from "../plugins/msg.vue"
   import weuijs from "weui.js"
   import Scroll from "../plugins/scroll.vue"
-  import {scrollHeightMixin, isBindMixin} from "../lib/mixin"
+  import {isBindMixin, scrollHeightMixin} from "../lib/mixin"
   import api from "../lib/api"
-  import {searchCache} from "../lib/cache"
   import {debug} from "../lib/util"
   import docAva from "../utils/docAva"
 

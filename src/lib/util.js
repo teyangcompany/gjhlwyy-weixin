@@ -56,7 +56,6 @@ export function getApiUrl() {
   return api_url;
 }
 
-
 export function getAppid() {
   let hostname = url("hostname");
   let api_url = "";

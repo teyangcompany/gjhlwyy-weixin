@@ -228,6 +228,8 @@
   }
 }
 
-
+@function px2rem($px) {
+  @return (20/375)*($px/1px)*1rem;
+}
 
 

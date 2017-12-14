@@ -1,30 +1,23 @@
 <template>
   <div class="swiper-container" ref="swiper">
-    <div class="swiper-wrapper">
-      <div @click="handlePath(item.name)" class="swiper-slide" v-for="item in nav">
-        <div class="icon" :class="[item.name,item.open?'yes':'no']"></div>
-        <div class="text" :class="[item.open?'yes':'no']">
-          {{item.value}}<br>
-          <span v-if="item.price">￥{{item.price}}</span>
-        </div>
-      </div><!--
-      <div class="swiper-slide">Slide 6</div>
-      <div class="swiper-slide">Slide 7</div>
-      <div class="swiper-slide">Slide 8</div>-->
-    </div>
-    <!--<div class="swiper-pagination"></div>-->
+    <ul class="flex">
+      <li :class="[nav.name,'flex0']" v-for="nav in navs">
+
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
   import {docNav} from "../../lib/config";
-  import {debug, upper} from "../../lib/util";
+  import {upper} from "../../lib/util";
+  import BScroll from "better-scroll"
 
   export default {
     props: ['docInfo'],
     data() {
       return {
-        nav: docNav,
+        navs: docNav,
         mySwiper: null,
       };
     },
@@ -52,14 +45,7 @@
         setTimeout((res) => {
           let dom = this.$refs.swiper;
           if (dom) {
-            this.mySwiper = new Swiper(dom, {
-              slidesPerView: 4,
-              slidesPerGroup: 4,
-              pagination: {
-                el: ".swiper-pagination",
-                bulletActiveClass: "bullet-active"
-              }
-            })
+            this.mySwiper = new BScroll(dom, {})
           } else {
             this.init();
           }
@@ -92,29 +78,24 @@
 <style scoped lang="scss">
   @import "../../common/public";
 
-  .swiper-slide {
-    height: 110px;
-    .icon {
-      height: 60px;
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-size: 40%;
+  ul {
+    padding: px2rem(10px) px2rem(15px);
+    overflow: hidden;
+    li + li {
+      margin-left: px2rem(10px);
     }
-    .text {
-      line-height: 1.3;
-      color: $mainColor;
-      text-align: center;
-      font-size: 14px;
-      &.no {
-        color: #999999;
-      }
-    }
+  }
+
+  ul > li {
+    width: px2rem(68px);
+    height: px2rem(90px);
+    @include backgroundImageSet(px2rem(68px), px2rem(90px));
     @each $nav in book, pic, video, famous, team {
-      .icon.#{$nav} {
-        background-image: url("../../../static/img/index/#{$nav}.png");
+      &.#{$nav} {
+        background-image: url("../../../static/img/doc/#{$nav}.png");
       }
-      .icon.no.#{$nav} {
-        background-image: url("../../../static/img/index/#{$nav}.no.png");
+      &.no.#{$nav} {
+        background-image: url("../../../static/img/doc/#{$nav}.no.png");
       }
     }
   }

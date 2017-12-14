@@ -14,7 +14,7 @@ import download from '../page/download.vue'
 import promote from "../page/promote.vue"
 import Search from "../page/search.vue"
 import hospital from "./hos"
-
+import team from './team'
 
 Vue.use(Router)
 
@@ -54,6 +54,7 @@ export default new Router({
     ...service,
     ...health,
     ...scanBind,
-    ...hospital
+    ...hospital,
+    ...team
   ]
 })

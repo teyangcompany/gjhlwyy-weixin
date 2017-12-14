@@ -53,6 +53,16 @@ export const docNav = [
   {name: "book", value: "预约挂号", open: false},
   {name: "pic", value: "图文问诊", open: true, price: ''},
   {name: "video", value: "视频问诊", open: true, price: ''},
-  {name: "famous", value: "名医咨询", open: true, price: ''}/*,
-  {name: "team", value: "团队咨询", open: true}*/
+  {name: "famous", value: "名医咨询", open: true, price: ''},
+  {name: "team", value: "团队咨询", open: true}
 ]
+
+export const baseParams = {
+  channel: "3",
+  format: "JSON",
+  oper: "127.0.0.1",
+  spid: "1001",
+  version: '2.0.1'
+}
+
+export const password = "aAr9MVS9j1";

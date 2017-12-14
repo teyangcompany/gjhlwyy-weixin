@@ -502,7 +502,7 @@
           this.light = true
         }
         this.inter = setInterval(() => {
-          document.getElementsByClassName("foot_top")[0].scrollIntoView()
+          document.getElementsByClassName("foot_top")[0].scrollIntoViewIfNeed()
         }, 500)
       },
       enterThing() {
@@ -642,7 +642,7 @@
 
 //
         this.inter = setInterval(() => {
-          document.getElementsByClassName("foot_top")[0].scrollIntoView()
+          document.getElementsByClassName("foot_top")[0].scrollIntoViewIfNeed()
         }, 500)
 
       },

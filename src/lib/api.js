@@ -4,14 +4,9 @@
 import axios from 'axios';
 import {openidCache} from "./cache"
 import {getApiUrl, makeRandom} from "./util"
+import {baseParams, password} from "./config";
 
-const password = "aAr9MVS9j1";
-let base = {
-  channel: "3",
-  format: "JSON",
-  oper: "127.0.0.1",
-  spid: "1001",
-};
+let base = baseParams;
 
 export default function (service, options) {
   base.random = makeRandom(4);

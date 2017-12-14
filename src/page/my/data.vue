@@ -4,7 +4,7 @@
       <i slot="back"></i>
     </app-header>
     <div class="main overflow-y-auto" ref="main">
-      <uploader @uploaded="uploaded" ref="uploader"></uploader>
+      <!--<uploader @uploaded="uploaded" ref="uploader"></uploader>-->
       <div class="wrap flex">
         <div class="label flex1">
           头像
@@ -111,6 +111,8 @@
         </router-link>
       </div>
     </div>
+    <!--<uploader @uploaded="uploaded" ref="uploader"></uploader>-->
+    <tailoring @uploaded="uploaded" ref="uploader"></tailoring>
   </div>
 </template>
 
@@ -124,6 +126,7 @@
   import Uploader from "../../plugins/upload.vue"
   import {debug} from "../../lib/util"
   import getArea from "../../utils/formatArea"
+  import Tailoring from "../../plugins/tailoring"
 
   export default {
     mixins: [isBindMixin, mainHeightMixin, avaErrorMixin],
@@ -138,7 +141,7 @@
       }
     },
     components: {
-      AppHeader, Uploader
+      AppHeader, Uploader, Tailoring
     },
     created() {
       let loading = weuijs.loading("加载中...");
@@ -229,6 +232,7 @@
       },
 
       uploadImg() {
+        //let dom = this.$refs.tailoring.$el;
         let dom = this.$refs.uploader.$el;
         dom.querySelector("input").click();
       },

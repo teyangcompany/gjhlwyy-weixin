@@ -7,7 +7,7 @@
         <p class="weui-msg__desc" :class="['color'+this.code]" v-html="text">
           {{text}}
         </p>
-        <p v-if="code!=3" class="weui-msg__desc">
+        <p v-if="[1,2].indexOf(code)>=0" class="weui-msg__desc">
           推广人:{{record.remark}} <br>
           推广码:{{record.code}} <br>
           推广时间:{{record.promotedTime | Todate}} <br>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+  import {openidCache} from "../lib/cache";
   import api from "../lib/api"
   import {debug} from "../lib/util"
   import weui from "weui.js"
@@ -33,7 +34,8 @@
     data() {
       return {
         code: 0,
-        record: {}
+        record: {},
+        msg: ""
       };
     },
     mixins: [isBindMixin],
@@ -54,6 +56,8 @@
           case 3:
             iconClass = "weui-icon-warn"
             break;
+          default :
+            iconClass = "weui-icon-warn"
         }
         return iconClass;
       },
@@ -71,13 +75,16 @@
           case 3:
             showText = "您已经在其他渠道注册过了，<br/>不满足领奖条件。"
             break;
+          default :
+            showText = this.msg;
         }
         return showText;
       }
     },
     components: {},
     created() {
-      this._isBind().then((res) => {
+      this.__init();
+      /*this._isBind().then((res) => {
         if (res !== false) {
           this.__init();
         } else {
@@ -86,7 +93,7 @@
             query: {backPath: this.$route.fullPath}
           });
         }
-      })
+      })*/
     },
     mounted() {
 
@@ -96,12 +103,13 @@
     },
     methods: {
       async __init() {
-        let code = 0, query = this.$route.query, loading = weui.loading("加载中...");
+        let code = 0, openid = openidCache.get(), query = this.$route.query, loading = weui.loading("加载中...");
         query && query.code && (code = query.code);
-        let ret = await api("smarthos.promote.record.insert", {code: code});
+        let ret = await api("smarthos.promote.record.wechat.insert", {code: code, openid});
         loading.hide();
         this.code = ret.code;
         this.record = ret.obj || {}
+        this.msg = ret.msg;
       }
     }
   };
