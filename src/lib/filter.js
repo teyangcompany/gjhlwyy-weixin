@@ -177,6 +177,30 @@ const formatCardAndMobile = function (str, startLength, endLeng, hiddenLeng) {
   }
   return str.substr(0, startLength) + hiddenStr + str.substr(0 - endLeng);
 }
+/**
+ * 价格格式化
+ * @param str
+ * @returns {string}
+ */
+const formatPrice = function (str) {
+  if (!str) {
+    return ""
+  }
+  return "￥" + str;
+}
 
-export {Todate, getWeek, getDay, goodTime, getMyDay, getAge, getGender, Getdate, week, isAuth,formatCardAndMobile}
+export {
+  Todate,
+  getWeek,
+  getDay,
+  goodTime,
+  getMyDay,
+  getAge,
+  getGender,
+  Getdate,
+  week,
+  isAuth,
+  formatCardAndMobile,
+  formatPrice
+}
 
