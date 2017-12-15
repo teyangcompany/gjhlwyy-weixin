@@ -67,7 +67,7 @@
           exif = await readEXIF(ret);
         let {width: pW, height: pH} = img1, windowW = this.width, ratio = pW / pH, showW, showH;
         this.exif = exif;
-        this.ctx = ctx;
+
         if (exif.Orientation == 6) {
           showW = windowW;
           showH = showW / ratio;
@@ -97,6 +97,7 @@
           width: `${this.tailoringWidth}px`,
           height: `${this.tailoringWidth}px`
         }
+        this.ctx = ctx;
         this.move();
 
         /*if (ratio <= 1) {
@@ -141,20 +142,21 @@
           })
           .on('swipeEnd', (res) => {
             if (this.ratio <= 1) {
-              this.delta = parseInt(mask.style.top);
+              this.delta = parseInt(mask.style.top) || 0;
             } else {
-              this.delta = parseInt(mask.style.left);
+              this.delta = parseInt(mask.style.left) || 0;
             }
           })
         this.hasListen = true;
       },
       async ok() {
         let loading = weuijs.loading("上传中...");
-        let imgData;
+        let imgData, canvas1 = this.$refs.ctx, ctx1 = canvas1.getContext('2d');
+        console.log(this.ratio, this.delta, this.tailoringWidth);
         if (this.ratio <= 1) {
-          imgData = this.ctx.getImageData(0, this.delta, this.tailoringWidth, this.tailoringWidth);
+          imgData = ctx1.getImageData(0, this.delta, this.tailoringWidth, this.tailoringWidth);
         } else {
-          imgData = this.ctx.getImageData(this.delta, 0, this.tailoringWidth, this.tailoringWidth);
+          imgData = ctx1.getImageData(this.delta, 0, this.tailoringWidth, this.tailoringWidth);
         }
         let canvas = document.createElement("canvas"), ctx = canvas.getContext('2d');
         canvas.width = imgData.width;

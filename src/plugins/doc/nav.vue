@@ -1,16 +1,16 @@
 <template>
-    <div class="swiper" ref="swiper">
-        <ul class="flex">
-            <li @click="handle(nav.name)" :class="[nav.name,'flex0',nav.open?'yes':'no']" v-for="nav in navs">
-                {{nav.price|formatPrice}}
-            </li>
-        </ul>
-    </div>
+  <div class="swiper" ref="swiper">
+    <ul class="flex">
+      <li @click="handle(nav.name)" :class="[nav.name,'flex0',nav.open?'yes':'no']" v-for="nav in navs">
+        {{nav.price|formatPrice}}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
   import {docNav} from "../../lib/config";
-  import {upper, debug} from "../../lib/util";
+  import {debug, upper} from "../../lib/util";
   import BScroll from "better-scroll"
   import {formatPrice} from "../../lib/filter";
 
@@ -117,36 +117,37 @@
 </script>
 
 <style scoped lang="scss">
-    @import "../../common/public";
+  @import "../../common/public";
 
-    .swiper {
-        margin: 0 px2rem(15px);
-        padding: px2rem(10px) 0;
-        width: px2rem(375px - 30px);
-        height: px2rem(110px);
-        touch-action: none;
-    }
+  .swiper {
+    margin: 0 px2rem(15px);
+    padding: px2rem(10px) 0;
+    width: px2rem(375px - 30px);
+    height: px2rem(110px);
+    touch-action: none;
+  }
 
-    ul {
-        li + li {
-            margin-left: px2rem(10px);
-        }
+  ul {
+    touch-action: none;
+    li + li {
+      margin-left: px2rem(10px);
     }
+  }
 
-    ul > li {
-        padding-top: px2rem(65px);
-        text-align: center;
-        color: #999999;
-        width: px2rem(68px);
-        height: px2rem(90px);
-        @include backgroundImageSet(px2rem(68px), px2rem(90px));
-        @each $nav in book, pic, video, famous, team {
-            &.#{$nav} {
-                background-image: url("../../../static/img/doc/#{$nav}.png");
-            }
-            &.no.#{$nav} {
-                background-image: url("../../../static/img/doc/#{$nav}.no.png");
-            }
-        }
+  ul > li {
+    padding-top: px2rem(65px);
+    text-align: center;
+    color: #999999;
+    width: px2rem(68px);
+    height: px2rem(90px);
+    @include backgroundImageSet(px2rem(68px), px2rem(90px));
+    @each $nav in book, pic, video, famous, team {
+      &.#{$nav} {
+        background-image: url("../../../static/img/doc/#{$nav}.png");
+      }
+      &.no.#{$nav} {
+        background-image: url("../../../static/img/doc/#{$nav}.no.png");
+      }
     }
+  }
 </style>
