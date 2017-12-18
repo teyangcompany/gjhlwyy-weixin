@@ -20,8 +20,6 @@
 </template>
 <script>
   import header from '../../base/header'
-  import api from '../../lib/api'
-  import {debug} from "../../lib/util";
 
   export default {
     data() {

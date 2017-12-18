@@ -39,6 +39,26 @@
           </div>
         </div>
         <doc-nav @click="handleClick" :teamInfo="teamInfo" :docInfo="aboutDoctor"></doc-nav>
+
+        <div class="border-1px"></div>
+        <div class="institutionDes border-1px">
+          <div class="desCenter team">
+            <h4>我的团队</h4>
+            <div class="line"></div>
+            <div class="teaminfo flex">
+              <div class="flex0">
+                <div class="thumb">
+                  <img src="" alt="">
+                </div>
+              </div>
+              <div class="flex1">
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-1px"></div>
         <div class="institutionDes border-1px" v-if="doctorIntro">
           <div class="desCenter team">
             <h4>医生公告</h4>
@@ -57,7 +77,11 @@
             </div>
           </div>
         </div>
-        <div class="blank border-1px"></div>
+
+
+
+
+        <div class="border-1px"></div>
         <div class="institutionDes border-1px">
           <div class="desCenter team">
             <h4>医生擅长</h4>
@@ -76,7 +100,7 @@
             </div>
           </div>
         </div>
-        <div class="blank border-1px"></div>
+        <div class="border-1px"></div>
         <div class="institutionDes border-1px">
           <div class="desCenter team">
             <h4>医生介绍</h4>
@@ -95,7 +119,7 @@
             </div>
           </div>
         </div>
-        <div class="blank border-1px"></div>
+        <div class="border-1px"></div>
         <div class="institutionDes border-1px">
           <div class="desCenter team">
             <h4 class="article">医生文章 <span @click="goArticleList()" v-if="doctorArticle.length !=0">更多<img
@@ -108,7 +132,7 @@
             </router-link>
           </div>
         </div>
-        <div class="blank border-1px"></div>
+        <div class="border-1px"></div>
         <div class="institutionDes border-1px">
           <ul class="flex ercode">
             <li class="flex0 center" @click="openShare(aboutDoctor.cardPicUrl)">
@@ -139,14 +163,14 @@
   import api from '../../../lib/api'
   import Star from '../../../base/star/star'
   import weui from 'weui.js'
-  import {isBindMixin, isLoginMixin} from "../../../lib/mixin"
+  import {isBindMixin, isLoginMixin, jssdkMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   import {formatDate} from '../../../utils/formatTimeStamp'
   import DocShare from "../../../plugins/doc/share.vue"
-  import {getParamsFromUrl} from "../../../lib/util"
+  import {debug, getParamsFromUrl, getShareLink} from "../../../lib/util"
 
   export default {
-    mixins: [isLoginMixin, isBindMixin],
+    mixins: [isLoginMixin, isBindMixin, jssdkMixin],
     data() {
       return {
         showSharePic: false,
@@ -178,7 +202,6 @@
       this.getDocInfo();
       let isshare = this.isShare();
       if (isshare) {
-
       } else {
         this._isBind().then((res) => {
           if (res === false) {
@@ -195,6 +218,32 @@
       }
     },
     methods: {
+      async jssdkShare() {
+        let isOk = await this.jssdkMixin_getJssdkConfig();
+        if (isOk) {
+          let doc = this.aboutDoctor,
+            conf = {
+              title: doc.docName,
+              link: getShareLink(location.href),
+              imgUrl: doc.docAvatar, // 分享图标
+              success: function () {
+                // 用户确认分享后执行的回调函数
+              },
+              cancel: function () {
+                // 用户取消分享后执行的回调函数
+              },
+
+              desc: doc.docResume, // 分享描述
+              type: 'link', // 分享类型,music、video或link，不填默认为link
+              dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            };
+          debug('share', conf);
+          wx.ready(() => {
+            wx.onMenuShareTimeline(conf);
+            wx.onMenuShareAppMessage(conf);
+          })
+        }
+      },
       handleClick(name) {
         if (name == "pic") {
           this.goConsult();
@@ -211,7 +260,7 @@
       },
       isShare() {
         let {query} = getParamsFromUrl(location.href);
-        return (query && (query.comefrom == 'ios' || query.comefrom == "android"));
+        return (query && (query.comefrom == 'ios' || query.comefrom == "android" || query.comefrom == "share"));
       },
       openShare(src) {
         this.setShareSrc(src);
@@ -237,6 +286,7 @@
             for (var i = 0; i < this.doctorArticle.length; i++) {
               this.articleTime.push(formatDate(new Date(this.doctorArticle[i].createTime)))
             }
+            this.jssdkShare();
           } else if (!(data.msg)) {
             weui.alert("网络错误，请稍后重试")
           } else {

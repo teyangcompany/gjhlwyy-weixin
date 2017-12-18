@@ -161,6 +161,20 @@ export function getParamsFromUrl(from) {
   let hash = url("hash", from);
   return {protocol, hostname, port, path, query, hash}
 }
+/**
+ * 获得sharelink
+ * @param link
+ * @returns {string}
+ */
+export function getShareLink(link) {
+  let opt = getParamsFromUrl(link)
+  if (opt.query) {
+    opt.query.comefrom = "share"
+  } else {
+    opt.query = {comefrom: "share"}
+  }
+  return makeUrl(opt);
+}
 
 /*首字母大写*/
 export function upper(str) {

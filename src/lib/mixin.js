@@ -1,6 +1,6 @@
 import {openidCache} from "./cache"
 import api from "./api"
-import {debug} from "./util";
+import {debug, getENV} from "./util";
 
 export const isLoginMixin = {
   data() {
@@ -29,8 +29,6 @@ export const isLoginMixin = {
     }
   }
 }
-
-
 /**
  * 不用滚动组件，中间滚动区域的计算
  * @type {{mounted: (function())}}
@@ -94,13 +92,43 @@ export const isBindMixin = {
     }
   }
 }
-
+/**
+ * 头像错误路径处理
+ * @type {{methods: {__avaError(*): void}}}
+ */
 export const avaErrorMixin = {
   methods: {
     __avaError(e) {
       let dom = e.target, dataset = dom.dataset, src = "./static/img/pat.m.jpg";
       dataset && dataset.gender && (src = `./static/img/pat.${dataset.gender.toLowerCase()}.jpg`);
       dom.src = src;
+    }
+  }
+}
+/**
+ * jssdk
+ * @type {{data(): *, created(): void, methods: {getJssdkConfig(): Promise<undefined>}}}
+ */
+export const jssdkMixin = {
+  data() {
+    return {
+      jssdkConfig: null
+    }
+  },
+  methods: {
+    async jssdkMixin_getJssdkConfig() {
+      if (this.jssdkConfig) {
+        wx.config(this.jssdkConfig);
+        return true;
+      }
+      let appid = getENV().appid,
+        ret = await api('smarthos.wechat.jsapiticket.get', {reqUrl: location.href, appid});
+      if (ret.code == 0) {
+        this.jssdkConfig = ret.obj;
+        wx.config(this.jssdkConfig);
+        return true;
+      }
+      return false;
     }
   }
 }
