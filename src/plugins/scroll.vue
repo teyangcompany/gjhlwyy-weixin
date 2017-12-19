@@ -6,7 +6,6 @@
 
 <script>
   import BScroll from 'better-scroll'
-  import {debug} from "../lib/util"
 
   export default {
     props: {
@@ -94,6 +93,7 @@
       },
       _initScroll() {
         if (!this.$refs.wrapper) {
+          setTimeout(this._initScroll, 20);
           return
         }
         if (this.height) {

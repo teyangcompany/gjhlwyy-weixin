@@ -40,6 +40,9 @@ export const mainHeightMixin = {
   methods: {
     _calcMainHeight() {
       let h = 0;
+      if (this.$refs.bottom) {
+        h += 45;
+      }
       if (this.$refs.footer) {
         h += 60;
       }

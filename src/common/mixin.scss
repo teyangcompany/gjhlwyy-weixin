@@ -228,6 +228,14 @@
   }
 }
 
+@mixin lines($line) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+}
+
 @function px2rem($px) {
   @return (20/375)*($px/1px)*1rem;
 }

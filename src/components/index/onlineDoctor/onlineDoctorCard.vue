@@ -39,20 +39,20 @@
           </div>
         </div>
         <doc-nav @click="handleClick" :teamInfo="teamInfo" :docInfo="aboutDoctor"></doc-nav>
-
         <div class="border-1px"></div>
-        <div class="institutionDes border-1px">
-          <div class="desCenter team">
+        <div class="institutionDes border-1px" v-if="teamInfo">
+          <div class="desCenter team" @click="goTeam(teamInfo.id)">
             <h4>我的团队</h4>
             <div class="line"></div>
             <div class="teaminfo flex">
               <div class="flex0">
                 <div class="thumb">
-                  <img src="" alt="">
+                  <img :src="teamInfo.teamAvatar" alt="">
                 </div>
               </div>
               <div class="flex1">
-
+                <h3>{{teamInfo.teamName}}</h3>
+                <div class="content">{{teamInfo.teamResume}}</div>
               </div>
             </div>
           </div>
@@ -77,9 +77,6 @@
             </div>
           </div>
         </div>
-
-
-
 
         <div class="border-1px"></div>
         <div class="institutionDes border-1px">
@@ -243,6 +240,9 @@
             wx.onMenuShareAppMessage(conf);
           })
         }
+      },
+      goTeam(id) {
+        this.$router.push(`/team/${id}/detail`);
       },
       handleClick(name) {
         if (name == "pic") {
@@ -454,6 +454,25 @@
   @import '../../../common/public.scss';
   @import '../../../common/var.scss';
   @import '../../../common/mixin.scss';
+
+  .teaminfo {
+    padding-top: px2rem(15px);
+    .thumb {
+      margin-right: px2rem(10px);
+      @include thumb(px2rem(110px), px2rem(75px));
+      overflow: hidden;
+      border-radius: 5px;
+    }
+    h3 {
+      font-size: px2rem(16px);
+      color: #333333;
+    }
+    .content {
+      font-size: px2rem(15px);
+      @include lines(2);
+      color: #777777;
+    }
+  }
 
   .doctor {
     position: absolute;
