@@ -11,7 +11,7 @@
         props: {
             delay: {
                 type: Number,
-                default: 5000
+                default: 3000
             }
         },
         data() {
@@ -65,11 +65,12 @@
         right: 0px;
         text-align: center;
         span {
+            font-size: 14px;
             display: inline-block;
             background-color: rgba(0, 0, 0, 0.5);
             color: white;
             border-radius: 10px;
-            padding: 2px 20px;
+            padding: 10px 20px;
         }
     }
 </style>

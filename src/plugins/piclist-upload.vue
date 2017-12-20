@@ -1,22 +1,22 @@
 <template>
-  <div class="piclist-upload">
-    <input ref="input" type="file" @change="change" multiple>
-    <ul class="overflow-hidden">
-      <li v-for="pic in pics" class="float-left">
-        <img :src="pic.url" alt="" @click="scan(pic)">
-        <div class="mask" v-if="pic.status!='end'">
-          {{pic.progress}}%
-        </div>
-      </li>
-      <li class="float-left">
-        <img @click="selectFile" src="../../static/img/添加图片.png" alt="">
-      </li>
-      <li class="float-left">
-        <span>添加图片</span>
-        <span>请上传患处图片,让医生更了解您的病情</span>
-      </li>
-    </ul>
-  </div>
+    <div class="piclist-upload">
+        <input ref="input" type="file" @change="change" multiple>
+        <ul class="overflow-hidden">
+            <li v-for="pic in pics" class="float-left">
+                <img :src="pic.url" alt="" @click="scan(pic)">
+                <div class="mask" v-if="pic.status!='end'">
+                    {{pic.progress}}%
+                </div>
+            </li>
+            <li class="float-left">
+                <img @click="selectFile" src="../../static/img/添加图片.png" alt="">
+            </li>
+            <li class="float-left">
+                <span>添加图片</span>
+                <span>请上传患处图片,让医生更了解您的病情</span>
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script>
@@ -39,6 +39,11 @@
     },
     beforeDestroy() {
 
+    },
+    watch: {
+      pics(newV) {
+        this.$emit('uploaded', newV);
+      }
     },
     methods: {
       scan(pic) {
@@ -96,7 +101,6 @@
           }
         }
         this.$emit("status", 'loaded');
-        this.$emit("uploaded", this.pics);
       },
 
       async addQueue(files) {
@@ -116,47 +120,47 @@
 </script>
 
 <style scoped lang="scss">
-  @import "../common/public";
+    @import "../common/public";
 
-  .piclist-upload {
-    position: relative;
-    input {
-      position: absolute;
-      left: -1000px;
-      top: -1000px;
-    }
-    ul {
-      $w: px2rem(75px);
-      li {
+    .piclist-upload {
         position: relative;
-        padding-right: px2rem(10px);
-        padding-bottom: px2rem(10px);
-        img {
-          width: $w;
-          height: $w;
+        input {
+            position: absolute;
+            left: -1000px;
+            top: -1000px;
         }
-        .mask {
-          background-color: rgba(0, 0, 0, 0.5);
-          color: white;
-          line-height: $w;
-          text-align: center;
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: $w;
-          height: $w;
-          @include t_r_b_l();
+        ul {
+            $w: px2rem(75px);
+            li {
+                position: relative;
+                padding-right: px2rem(10px);
+                padding-bottom: px2rem(10px);
+                img {
+                    width: $w;
+                    height: $w;
+                }
+                .mask {
+                    background-color: rgba(0, 0, 0, 0.5);
+                    color: white;
+                    line-height: $w;
+                    text-align: center;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: $w;
+                    height: $w;
+                    @include t_r_b_l();
+                }
+                span {
+                    padding-top: px2rem(10px);
+                    padding-left: 10px;
+                    color: #777777;
+                    display: block;
+                    &:first-child {
+                        color: #333333;
+                    }
+                }
+            }
         }
-        span {
-          padding-top: px2rem(10px);
-          padding-left: 10px;
-          color: #777777;
-          display: block;
-          &:first-child {
-            color: #333333;
-          }
-        }
-      }
     }
-  }
 </style>

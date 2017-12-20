@@ -86,7 +86,6 @@ const validateFun = {
                 for (let i = 0; i < 17; i++) {
                     sum += parseInt(value.substr(i, 1)) * quan[i];
                 }
-                console.log(sum, value.substr(17, 1))
                 if (last[sum % 11] == value.substr(17, 1)) {
                     return true;
                 }
