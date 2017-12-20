@@ -184,7 +184,7 @@ const formatCardAndMobile = function (str, startLength, endLeng, hiddenLeng) {
  */
 const formatPrice = function (str) {
   if (!str) {
-    return ""
+    str = "0.0";
   }
   return "￥" + str;
 }

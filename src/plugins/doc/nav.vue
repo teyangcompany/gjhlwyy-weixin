@@ -94,7 +94,7 @@
               if (price) {
                 res.price = price;
               } else {
-                res.price = "0.0"
+                res.price = 0
               }
             }
             if (index == 4) {
@@ -103,7 +103,7 @@
                 res.price = price;
               }
               else {
-                res.price = "0.0"
+                res.price = 0
               }
             }
 

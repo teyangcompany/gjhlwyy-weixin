@@ -37,23 +37,24 @@
 
       <div class="wrap">
         <div class="title overflow-hidden">团队成员
-          <span>{{showType=='part'?'查看更多':'收起'}}</span>
+          <a class="float-right" @click="changeType">{{showType=='part'?'查看更多':'收起'}}</a>
         </div>
         <ul class="overflow-hidden">
-          <li class="float-left" v-for="member in info.members">
+          <router-link :to="{path:'/onlineDoctorCard?docId='+member.docId}" :key="index" tag="li" class="float-left"
+                       v-if="index<showNumbers" v-for="(member,index) in info.members">
             <div class="ava center">
               <img :src="member.docAvatar" alt="">
             </div>
             <div class="name center">
               {{member.docName}}
             </div>
-          </li>
+          </router-link>
         </ul>
       </div>
     </div>
-    <div class="bottom" ref="bottom">
-      咨询团队
-    </div>
+    <router-link :to="{path:`/team/${id}/consult`}" tag="div" class="bottom" ref="bottom">
+      咨询团队{{info.consultPrice|formatPrice}}
+    </router-link>
   </div>
 </template>
 
@@ -63,6 +64,7 @@
   import http from "../../lib/api"
   import weuijs from 'weui.js'
   import Star from "../../base/star/star"
+  import {formatPrice} from "../../lib/filter";
 
   const SHOW_MAX = 4;
 
@@ -79,6 +81,7 @@
         return this.showType == 'part' ? SHOW_MAX : this.info.members.length;
       }
     },
+    filters: {formatPrice},
     mixins: [mainHeightMixin],
     components: {
       AppHeader, Star
@@ -94,6 +97,9 @@
 
     },
     methods: {
+      changeType() {
+        this.showType = this.showType == 'part' ? 'all' : 'part';
+      },
       async getDetail() {
         let loading = weuijs.loading("加载中...");
         let ret = await http('smarthos.team.info.card', {id: this.id});
@@ -149,11 +155,16 @@
         background-color: white;
         .title {
           @include h_lh(20px);
-          padding-left: px2rem(15px);
+          padding: 0 px2rem(15px);
           border-left: 3px solid yellow;
-          font-size: px2rem(16px);
+          font-size: px2rem(17px);
+          a {
+            font-size: px2rem(15px);
+            color: $mainColor;
+          }
         }
         ul {
+          padding-bottom: px2rem(10px);
           li {
             padding-top: px2rem(15px);
             width: 25%;
