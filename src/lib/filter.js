@@ -1,3 +1,4 @@
+import timeF from "lmw-time-format"
 //time为时间戳格式，如"1487555260448"
 const Todate = (time) => {
   let now = new Date(time)
@@ -189,6 +190,10 @@ const formatPrice = function (str) {
   return "￥" + str;
 }
 
+const formatTime = function (str, format) {
+  return timeF(parseInt(str), format);
+}
+
 export {
   Todate,
   getWeek,
@@ -201,6 +206,7 @@ export {
   week,
   isAuth,
   formatCardAndMobile,
-  formatPrice
+  formatPrice,
+  formatTime
 }
 

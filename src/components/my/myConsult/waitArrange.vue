@@ -143,7 +143,6 @@
   import weui from 'weui.js'
   import consultPatAva from "../../../utils/consultPatAva"
   import {tokenCache} from '../../../lib/cache'
-  import {openidCache} from "../../../lib/cache"
 
   export default {
     data() {
@@ -222,6 +221,14 @@
               let o = document.getElementsByClassName("chat")[0];
               let h = o.offsetHeight;  //高度
               let content = h
+
+              if (this.aboutConsult.consultType == "TEAMPIC") {
+                this.$router.replace({
+                  path: `/team/consult/${this.consultId}`
+                })
+              }
+
+
               setTimeout(() => {
                 if (this.$refs.slideList.offsetHeight > content - 10) {
                   this.$refs.conversation.scrollTo(0, content - this.$refs.slideList.offsetHeight - 140)
