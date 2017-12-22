@@ -48,6 +48,24 @@
           <div class="weui-cell__ft"></div>
         </a>
         <div class="blank border-1px"></div>
+
+        <router-link to="/coupons/my" class="weui-cell weui-cell_access">
+          <div class="weui-cell__hd"><img src="../../static/img/my/my-coupons.png" alt=""
+                                          style="width:22px;margin-right:7px;display:block"></div>
+          <div class="weui-cell__bd">
+            <p>我的礼券</p>
+          </div>
+          <div class="weui-cell__ft"></div>
+        </router-link>
+        <router-link to="/coupons/recommended" class="weui-cell weui-cell_access">
+          <div class="weui-cell__hd"><img src="../../static/img/my/recommended.png" alt=""
+                                          style="width:22px;margin-right:7px;display:block"></div>
+          <div class="weui-cell__bd">
+            <p>推荐有礼</p>
+          </div>
+          <div class="weui-cell__ft"></div>
+        </router-link>
+
         <a class="weui-cell weui-cell_access" href="javascript:;" @click="goCostLog()">
           <div class="weui-cell__hd"><img src="../../static/img/my/ic_consumption@2x.png" alt=""
                                           style="width:20px;margin-right:7px;display:block"></div>
@@ -79,7 +97,7 @@
 <script type="text/ecmascript-6">
   import header from '../base/header'
   import api from '../lib/api'
-  import {isLoginMixin, isBindMixin, avaErrorMixin} from "../lib/mixin"
+  import {avaErrorMixin, isBindMixin, isLoginMixin} from "../lib/mixin"
   import {tokenCache} from '../lib/cache'
   import patAva from "../utils/consultPatAva"
   import weuijs from "weui.js"

@@ -9,8 +9,8 @@
               <li>{{ allPatient[index].compatName
                 }} <span>&nbsp;&nbsp; {{allPatient[index].compatAge}} &nbsp;&nbsp;{{allPatient[index].compatGender == 'M' ? '男' : '女'}}</span>
               </li>
-              <li>身份证号： <span>{{ allPatient[index].compatIdcard }}</span></li>
-              <li>电话号码：<span>{{allPatient[index].compatMobile}}</span></li>
+              <li>身份证号： <span>{{allPatient[index].compatIdcard |formatCardAndMobile(3,4,11)}}</span></li>
+              <li>电话号码：<span>{{allPatient[index].compatMobile|formatCardAndMobile(3,4,4)}}</span></li>
               <li v-if="!(allPatient[index].compatMedicalRecord)">病&nbsp;&nbsp;案&nbsp;号：<span>暂未绑定病案号</span></li>
               <li v-else>病&nbsp;&nbsp;案&nbsp;号：<span>{{ allPatient[index].compatMedicalRecord }}</span></li>
             </ul>
@@ -45,10 +45,12 @@
   import VMask from '../../../base/mask'
   import Toast from '../../../base/toast'
   import weui from 'weui.js'
-  import {isLoginMixin, isBindMixin} from "../../../lib/mixin"
+  import {isBindMixin, isLoginMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
+  import {formatCardAndMobile} from "../../../lib/filter";
 
   export default {
+    filters: {formatCardAndMobile},
     mixins: [isLoginMixin, isBindMixin],
     data() {
       return {
