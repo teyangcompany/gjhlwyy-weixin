@@ -236,8 +236,8 @@
   -webkit-box-orient: vertical;
 }
 
-@function px2rem($px) {
-  @return (20/375)*($px/1px)*1rem;
+@function px2rem($px,$w:375) {
+  @return (20/$w)*($px/1px)*1rem;
 }
 
 

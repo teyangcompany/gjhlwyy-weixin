@@ -1,6 +1,6 @@
 {
     "name": "zeyk",
-    "version": "1.0.134",
+    "version": "1.0.139",
     "description": "A Vue.js project",
     "author": "TY-089\\Administrator <lmw6412036@sina.com>",
     "private": true,
@@ -68,6 +68,7 @@
         "karma-sourcemap-loader": "^0.3.7",
         "karma-spec-reporter": "0.0.30",
         "karma-webpack": "^2.0.2",
+        "lmw-time-format": "^1.0.1",
         "lolex": "^1.5.2",
         "mocha": "^3.2.0",
         "nightwatch": "^0.9.12",

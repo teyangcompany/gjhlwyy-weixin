@@ -3,7 +3,7 @@
  */
 import axios from 'axios';
 import {openidCache} from "./cache"
-import {getApiUrl, makeRandom} from "./util"
+import {debug, getApiUrl, makeRandom} from "./util"
 import {baseParams, password} from "./config";
 
 let base = baseParams;
@@ -27,12 +27,12 @@ export default function (service, options) {
   }
 
   let url = getApiUrl();
-
+  debug("==>" + service, obj);
   return axios.post(url, obj, config)
     .then((res) => {
       // bus.$emit("loading", {status: 'stop'});
       if (res.status == 200) {
-        console.log(`<==${obj.service}`, res.data)
+        debug(`<==${obj.service}`, res.data)
         return res.data;
       } else {
         return res;

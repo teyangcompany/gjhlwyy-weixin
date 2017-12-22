@@ -52,9 +52,9 @@
         </ul>
       </div>
     </div>
-    <router-link :to="{path:`/team/${id}/consult`}" tag="div" class="bottom" ref="bottom">
+    <!--<router-link :to="{path:`/team/${id}/consult`}" tag="div" class="bottom" ref="bottom">
       咨询团队{{info.consultPrice|formatPrice}}
-    </router-link>
+    </router-link>-->
   </div>
 </template>
 
@@ -156,7 +156,7 @@
         .title {
           @include h_lh(20px);
           padding: 0 px2rem(15px);
-          border-left: 3px solid yellow;
+          border-left: 3px solid #FABE00;
           font-size: px2rem(17px);
           a {
             font-size: px2rem(15px);

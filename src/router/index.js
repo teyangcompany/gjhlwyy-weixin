@@ -15,6 +15,7 @@ import promote from "../page/promote.vue"
 import Search from "../page/search.vue"
 import hospital from "./hos"
 import team from './team'
+import coupons from './coupons'
 
 Vue.use(Router)
 
@@ -55,6 +56,7 @@ export default new Router({
     ...health,
     ...scanBind,
     ...hospital,
-    ...team
+    ...team,
+    ...coupons
   ]
 })
