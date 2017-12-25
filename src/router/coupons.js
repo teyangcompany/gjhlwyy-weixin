@@ -14,5 +14,9 @@ export default [
   {
     path: '/coupons/recommended',
     component: () => import("../page/coupons/register")
+  },
+  {
+    path: '/coupons/share',
+    component: () => import("../page/coupons/share")
   }
 ]
