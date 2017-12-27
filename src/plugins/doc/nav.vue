@@ -96,6 +96,8 @@
               } else {
                 res.price = 0
               }
+              let status = this.docInfo[`doc${upper(res.name)}ConsultStatus`];
+              res.open = status || false;
             }
             if (index == 4) {
               let teamPrice = this.teamInfo.consultPrice;

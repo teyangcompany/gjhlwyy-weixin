@@ -125,7 +125,10 @@ export const jssdkMixin = {
         return true;
       }
       let appid = getENV().appid,
-        ret = await api('smarthos.wechat.jsapiticket.get', {reqUrl: location.href, appid});
+        ret = await api('smarthos.wechat.jsapiticket.get', {
+          reqUrl: location.href.split('#')[0],
+          appid
+        });
       if (ret.code == 0) {
         this.jssdkConfig = ret.obj;
         wx.config(this.jssdkConfig);

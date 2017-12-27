@@ -12,7 +12,7 @@ export default [
     component: () => import("../page/coupons/recommended")
   },
   {
-    path: '/coupons/recommended',
+    path: '/coupons/register',
     component: () => import("../page/coupons/register")
   },
   {

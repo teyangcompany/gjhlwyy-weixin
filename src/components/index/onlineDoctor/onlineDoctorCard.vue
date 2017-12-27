@@ -40,7 +40,7 @@
         </div>
         <doc-nav @click="handleClick" :teamInfo="teamInfo" :docInfo="aboutDoctor"></doc-nav>
         <div class="border-1px"></div>
-        <div class="institutionDes border-1px" v-if="teamInfo">
+        <div class="institutionDes border-1px" v-if="teamInfo&&teamInfo.id">
           <div class="desCenter team" @click="goTeam(teamInfo.id)">
             <h4>我的团队</h4>
             <div class="line"></div>
