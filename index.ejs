@@ -17,6 +17,7 @@
   <script src="static/js/clipboard.min.js"></script>
   <script src="static/js/toucher.js"></script>
   <script>
+    window.appName = 'gjwlyy_weixin';
     /*程序版本号*/
     window.version = document.querySelector("meta[name='version']").content;
     /*程序开始时间*/
@@ -44,6 +45,26 @@
       var w = window.innerWidth;
       document.querySelector('html').style.fontSize = (w / 20) + 'px';
     }
+
+
+    /*var logSocket = io('log.limingwei.name');
+    logSocket.on('opened', (res) => {
+      logSocket.emit('addDevice', {
+        device: window.device,
+        ua: navigator.userAgent
+      });
+      console.log('日志系统连接成功！' + res);
+    })*/
+
+    /**
+     * 错误日志
+     * @param msg
+     * @param url
+     * @param line
+     * @param col
+     * @param error
+     */
+
   </script>
 
 </head>

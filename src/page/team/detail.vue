@@ -52,9 +52,9 @@
         </ul>
       </div>
     </div>
-    <!--<router-link :to="{path:`/team/${id}/consult`}" tag="div" class="bottom" ref="bottom">
+    <router-link :to="{path:`/team/${id}/consult`}" tag="div" class="bottom" ref="bottom">
       咨询团队{{info.consultPrice|formatPrice}}
-    </router-link>-->
+    </router-link>
   </div>
 </template>
 

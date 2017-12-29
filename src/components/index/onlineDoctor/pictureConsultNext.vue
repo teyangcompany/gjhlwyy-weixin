@@ -78,9 +78,9 @@
   import upload from '../../../lib/upload'
   import verify from '../../../base/verify'
   import weui from 'weui.js'
-  import {getApiUrl, debug} from "../../../lib/util"
+  import {debug, getApiUrl} from "../../../lib/util"
   import {isLoginMixin} from "../../../lib/mixin"
-  import {tokenCache,delpicCache} from '../../../lib/cache'
+  import {delpicCache, tokenCache} from '../../../lib/cache'
 
   export default {
     mixins: [isLoginMixin],
@@ -220,17 +220,16 @@
       iKnow() {
         this.showAlert = false
       },
-      goPay() {
+      async goPay() {
         if (this.description == '') {
           this.showAlert = true
-          console.log(this.uploadTips)
         }
         else if (this.uploadTips == '正在上传') {
           weui.alert("图片正在上传，请稍后操作")
         }
         else {
-          console.log("1232413245354364642343243214241")
-          api("nethos.consult.info.docpic.issue", {
+          let loading = weui.loading("加载中...");
+          let data = await api("nethos.consult.info.docpic.issue", {
             token: tokenCache.get(),
             docId: this.doctorId,
             consulterName: this.patientAll[this.chosedIndex].compatName,
@@ -238,42 +237,42 @@
             consulterMobile: this.patientAll[this.chosedIndex].compatMobile,
             consultContent: this.description,
             attaIdList: this.attaId,
-          }).then((data) => {
-            if (data.code == 0) {
-              this.consultId = data.obj.consultId
+          });
+          loading.hide();
+          if (data.code == 0) {
+            this.consultId = data.obj.consultId
 
-              if (this.price == 0) {
-                api("nethos.consult.info.pay", {
-                  consultId: this.consultId,
-                  payChannel: "WECHAT"
-                }).then((data) => {
-                  console.log(data)
-                  if (data.code == 0) {
-                    this.$router.push({
-                      path: "/allConsultSuccess",
-                      query: {consultId: this.consultId}
-                    })
-                  } else if (data.code == -2) {
-                    weui.alert("当前订单已支付")
-                  } else {
-                    weui.alert(data.msg)
-                  }
-                })
-              } else {
-                this.$router.push({
-//                  path:"/videoPay",
-                  path: "/videoPay",
-                  query: {
-                    consultId: this.consultId
-                  }
-                })
-              }
-              console.log("成功")
-              console.log(data)
+            if (this.price == 0) {
+              api("nethos.consult.info.pay", {
+                consultId: this.consultId,
+                payChannel: "WECHAT"
+              }).then((data) => {
+                console.log(data)
+                if (data.code == 0) {
+                  this.$router.push({
+                    path: "/allConsultSuccess",
+                    query: {consultId: this.consultId}
+                  })
+                } else if (data.code == -2) {
+                  weui.alert("当前订单已支付")
+                } else {
+                  weui.alert(data.msg)
+                }
+              })
             } else {
-              weui.alert(data.msg)
+              this.$router.push({
+//                  path:"/videoPay",
+                path: "/videoPay",
+                query: {
+                  consultId: this.consultId
+                }
+              })
             }
-          })
+            console.log("成功")
+            console.log(data)
+          } else {
+            weui.alert(data.msg)
+          }
         }
 
       },

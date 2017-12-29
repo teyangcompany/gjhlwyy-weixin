@@ -1,6 +1,6 @@
 {
     "name": "zeyk",
-    "version": "1.0.147",
+    "version": "1.0.153",
     "description": "A Vue.js project",
     "author": "TY-089\\Administrator <lmw6412036@sina.com>",
     "private": true,
@@ -23,6 +23,7 @@
         "hprose": "^2.0.45",
         "iscroll": "^5.2.0",
         "lmw-time-format": "^1.0.1",
+        "raven-js": "^3.21.0",
         "shelljs": "^0.7.8",
         "vue": "^2.3.3",
         "vue-resource": "^1.3.4",

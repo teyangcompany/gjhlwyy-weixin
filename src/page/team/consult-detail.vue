@@ -3,7 +3,7 @@
     <app-header ref="header" title="团队咨询">
       <i slot="back"></i>
     </app-header>
-    <scroll :height="scrollHeight">
+    <scroll :height="scrollHeight" ref="scroll">
       <div class="main">
         <div class="info">
           <div class="item flex">
@@ -49,11 +49,12 @@
           </ul>
         </div>
         <div class="meaasge">
-          <message-item v-for="message in messageList" :key="message.messageId" :message="message"></message-item>
+          <message-item ref="msg" v-for="message in messageList" :key="message.messageId"
+                        :message="message"></message-item>
         </div>
       </div>
     </scroll>
-    <bottom :status="consult.consultStatus" :message="messageList" :consult="consult"></bottom>
+    <bottom @sendok="sendok" :status="consult.consultStatus" :message="messageList" :consult="consult"></bottom>
   </div>
 </template>
 
@@ -108,6 +109,13 @@
 
     },
     methods: {
+      sendok() {
+        this.getDetail();
+        setTimeout((res)=>{
+          this.$refs.scroll.scrollToElement(this.$refs.msg[this.$refs.msg.length - 1].$el.querySelector('.msg'),300);
+        },200)
+
+      },
       async getDetail() {
         let loading = weuijs.loading("加载中...");
         let ret = await api('nethos.consult.info.detail', {consultId: this.id});
@@ -217,6 +225,9 @@
             }
           }
         }
+      }
+      .meaasge {
+        padding: 20px 0;
       }
     }
   }

@@ -1,27 +1,30 @@
 <template>
   <div class="consult-bottom">
-    <div class="wait center" v-if="status=='GOING' && message.length==0">
+    <div class="wait center" v-if="status=='GOING' && consult.consultStatusDescription">
       {{consult.consultStatusDescription}}
     </div>
     <div class="replay flex">
-      <div class="upload flex0">
-        <img src="../../../static/img/keyboard.png" alt="">
-      </div>
       <div class="input flex1">
-        <input type="text">
+        <input type="text" v-model="replyContent">
       </div>
       <div class="btn flex0">
-        <a class="unactive">发送</a>
+        <a v-if="!replyContent" class="upload center">+</a>
+        <a @click="send" class="sendmsg" v-else>发送</a>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import http from "../../lib/api"
+  import weuijs from "weui.js";
+
   export default {
     props: ['status', 'message', 'consult'],
     data() {
-      return {};
+      return {
+        replyContent: ''
+      };
     },
     computed: {},
     components: {},
@@ -34,7 +37,22 @@
     beforeDestroy() {
 
     },
-    methods: {}
+    methods: {
+      async send() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await http('nethos.consult.info.reply', {
+          consultId: this.consult.consultId,
+          replyContent: this.replyContent
+        });
+        if (ret.code == 0) {
+          this.replyContent = "";
+          this.$emit('sendok', ret);
+        } else {
+
+        }
+        loading.hide();
+      }
+    }
   };
 </script>
 
@@ -53,29 +71,32 @@
     .replay {
       height: $h;
       align-items: center;
-      .upload {
-        padding-left: px2rem(5px);
-        padding-right: px2rem(5px);
-        $w: 30px;
-        @include w_h($w+10px, $w);
-        overflow: hidden;
-        img {
-          @include w_h($w, $w);
+      .btn {
+        padding-right: 10px;
+        .upload {
+          display: block;
+          @include w_h(30px, 30px);
+          line-height: 30px;
+          border: 1px solid #333;
+          border-radius: 15px;
+          color: #333;
+          font-size: 16px;
+        }
+        .sendmsg {
+          color: white;
+          background-color: $mainColor;
+          display: block;
+          @include h_lh(30px);
+          padding: 0 10px;
         }
       }
-      .btn {
-        padding-right: 5px;
-        a {
-          padding: 5px 10px;
-          border-radius: 5px;
-        }
-        a.unactive {
+      .input {
+        padding: 10px;
+        input {
+          width: 100%;
+          height: 30px;
           background-color: #f8f8f8;
-          color: #ccc;
-        }
-        a.active {
-          background-color: $mainColor;
-          color: white;
+          border-radius: 5px;
         }
       }
     }

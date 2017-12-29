@@ -8,9 +8,7 @@
       <div class="content flex1">
         <div class="name">{{message.replierName}}</div>
         <div class="msgbox flex">
-          <div class="arrow">
-
-          </div>
+          <div class="arrow"></div>
           <div class="msg">
             {{message.replyContent}}
             <ul v-if="message.hasAtta">
@@ -49,6 +47,9 @@
 
   .message-item {
     padding: 0 px2rem(15px);
+    .time {
+      @include h_lh(35px);
+    }
     .container {
       .ava {
         padding-top: 15px;
@@ -59,11 +60,44 @@
           border-radius: 50%;
         }
       }
+      .msgbox {
+        align-items: center;
+        margin-top: 5px;
+      }
       .name {
         font-size: 12px;
       }
       .arrow {
-        transform:rotate(45deg);
+        @include w_h(10px, 10px);
+        transform: rotate(45deg);
+      }
+      .msg {
+        max-width: 13rem;
+        padding: 10px;
+        border-radius: 5px;
+      }
+    }
+    &.pat {
+      .container {
+        flex-direction: row-reverse;
+        .content {
+          margin-right: px2rem(10px);
+          .name {
+            text-align: right;
+          }
+          .msgbox {
+            flex-direction: row-reverse;
+            .arrow {
+              background-color: $mainColor;
+            }
+            .msg {
+              transform: translateX(px2rem(5px));
+              color: white;
+              background-color: $mainColor;
+            }
+          }
+
+        }
       }
     }
     &.doc {
@@ -71,17 +105,11 @@
         .content {
           margin-left: px2rem(10px);
           .msgbox {
-            align-items: center;
-            margin-top: 5px;
             .arrow {
-              @include w_h(10px, 10px);
               background-color: white;
             }
             .msg {
-              transform: translateX(-5px);
-              max-width: 13rem;
-              padding: 10px;
-              border-radius: 5px;
+              transform: translateX(px2rem(-5px));
               background-color: white;
             }
           }
