@@ -1,11 +1,11 @@
 <template>
   <div class="consult-bottom">
-    <div class="wait center" v-if="status=='GOING' && consult.consultStatusDescription">
+    <div class="wait center" v-if="(status=='GOING'||status=='CANCEL') && consult.consultStatusDescription">
       {{consult.consultStatusDescription}}
     </div>
-    <div class="replay flex">
+    <div ref="replay" class="replay flex" v-else>
       <div class="input flex1">
-        <input type="text" v-model="replyContent">
+        <input @focus="handler('focus')" @blur="handler('blur')" type="text" v-model="replyContent">
       </div>
       <div class="btn flex0">
         <a v-if="!replyContent" class="upload center">+</a>
@@ -14,7 +14,6 @@
     </div>
   </div>
 </template>
-
 <script>
   import http from "../../lib/api"
   import weuijs from "weui.js";
@@ -29,7 +28,7 @@
     computed: {},
     components: {},
     created() {
-
+      this.scrollTo = null;
     },
     mounted() {
 
@@ -38,6 +37,29 @@
 
     },
     methods: {
+      handler(type) {
+        switch (type) {
+          case 'focus':
+          case 'blur':
+            this.intoView(type);
+            break;
+        }
+      },
+      intoView(type) {
+        let replyEl = this.$refs.reply;
+        switch (type) {
+          case 'focus':
+            replyEl && replyEl.scrollIntoViewIfNeed();
+            this.scrollTo = setInterval((res) => {
+              this.intoView(type);
+            }, 200)
+            break;
+          case 'blur':
+            clearInterval(this.scrollTo);
+            this.scrollTo = null;
+            break;
+        }
+      },
       async send() {
         let loading = weuijs.loading("加载中...");
         let ret = await http('nethos.consult.info.reply', {

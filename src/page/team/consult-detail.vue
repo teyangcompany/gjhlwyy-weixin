@@ -1,9 +1,9 @@
 <template>
-  <div class="page team-consult-detail">
-    <app-header ref="header" title="团队咨询">
+  <div class="page team-consult-detail flex">
+    <app-header ref="header" class="flex0" title="团队咨询">
       <i slot="back"></i>
     </app-header>
-    <scroll :height="scrollHeight" ref="scroll">
+    <scroll :height="scrollHeight" ref="scroll" class="flex1">
       <div class="main">
         <div class="info">
           <div class="item flex">
@@ -54,7 +54,8 @@
         </div>
       </div>
     </scroll>
-    <bottom @sendok="sendok" :status="consult.consultStatus" :message="messageList" :consult="consult"></bottom>
+    <bottom class="flex0" @sendok="sendok" :status="consult.consultStatus" :message="messageList"
+            :consult="consult"></bottom>
   </div>
 </template>
 
@@ -67,6 +68,7 @@
   import Bottom from '../../plugins/consult/bottom'
   import {formatTime, getGender} from "../../lib/filter";
   import MessageItem from "../../plugins/consult/message-item"
+  import {debug} from "../../lib/util";
 
   const MAX = 4;
   export default {
@@ -103,17 +105,24 @@
       id && (this.id = id) && (this.getDetail());
     },
     mounted() {
-
+      window.addEventListener('resize', this.resize);
     },
     beforeDestroy() {
 
     },
     methods: {
+      resize() {
+        let scrollC = (this.$refs.scroll);
+        setTimeout(() => {
+          this._calcScrollHeight();
+          scrollC.refresh();
+        }, 200);
+      },
       sendok() {
         this.getDetail();
-        setTimeout((res)=>{
-          this.$refs.scroll.scrollToElement(this.$refs.msg[this.$refs.msg.length - 1].$el.querySelector('.msg'),300);
-        },200)
+        setTimeout((res) => {
+          this.$refs.scroll.scrollToElement(this.$refs.msg[this.$refs.msg.length - 1].$el.querySelector('.msg'), 300);
+        }, 200)
 
       },
       async getDetail() {
@@ -136,6 +145,7 @@
   @import "../../common/public";
 
   .team-consult-detail {
+    flex-direction: column;
     .scrollwrapper {
       background-color: #F8F8F8;
       overflow: hidden;

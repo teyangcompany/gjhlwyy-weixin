@@ -51,7 +51,7 @@ export function getApiUrl() {
     }
   }
   if (!api_url) {
-    api_url = API_URL[Object.keys(config.api_url)[0]].api;
+    api_url = API_URL[Object.keys(API_URL)[0]].api;
   }
   return api_url;
 }
