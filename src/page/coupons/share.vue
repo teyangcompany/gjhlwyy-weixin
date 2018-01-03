@@ -2,10 +2,10 @@
   <div class="page coupons-share">
     <div class="pat" ref="pat">
       <div class="ava">
-        <img src="../../../static/img/logo.png" alt="">
+        <img :src="userInfo.patAvatar" alt="">
       </div>
       <div class="name center">
-        李明卫
+        {{userInfo.patName}}
       </div>
     </div>
     <div class="main relative" ref="main">
@@ -18,7 +18,7 @@
         <div class="step center">
           <p>1、点击下方按钮，下载APP</p>
           <p>2、复制邀请码，在注册时输入</p>
-          <h3 class="code">ABCD0</h3>
+          <h3 class="code">{{info.inviteCode}}</h3>
           <div class="copy" data-clipboard-text="ABCD0" @click="copy">点击复制</div>
         </div>
       </div>
@@ -39,15 +39,23 @@
 
 <script>
   import weuijs from 'weui.js'
+  import api from '../../lib/api'
+  import {isBindMixin} from "../../lib/mixin";
 
   export default {
     data() {
       return {
+        info: {},
+        userInfo: {},
         inWeixin: false
       };
     },
     computed: {},
     components: {},
+    mixins: [isBindMixin],
+    created() {
+      this.initData();
+    },
     mounted() {
       this.init();
     },
@@ -55,6 +63,7 @@
 
     },
     methods: {
+
       init() {
         let patEl = this.$refs.pat,
           mainEl = this.$refs.main;
@@ -78,6 +87,41 @@
         } else {
 
         }
+      },
+
+      async initData() {
+        let userInfo = await this._isBind();
+        if (userInfo) {
+          this.userInfo = userInfo;
+          await this.getCode();
+        }
+      },
+
+      async getDetail() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api('smarthos.coupon.activity.details', {
+          userScene: 'INVITE_REGISTER'
+        })
+        loading.hide();
+      },
+
+      async getStatus() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api('smarthos.coupon.activity.status', {userScene: 'INVITE_REGISTER'})
+        loading.hide();
+      },
+
+
+      async getCode() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api('smarthos.coupon.pat.code.get', {})
+        loading.hide();
+        if (ret.code == 0) {
+          this.info = ret.obj;
+        } else {
+          weuijs.alert(ret.msg);
+        }
+        return
       }
     }
   };

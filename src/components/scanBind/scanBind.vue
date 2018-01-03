@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!--<v-header :title="title" :rightTitle="rightTitle"></v-header>-->
     <div class="bindPhone">
       <div class="bindPhoneCenter">
         <div class="bigMiddle">
@@ -44,13 +43,15 @@
         <verify :verifyTips="verifyTips"></verify>
       </div>
     </div>
+    <msg ref="msg"></msg>
   </div>
 </template>
 <script>
+  import Msg from '../../plugins/msg'
   import header from '../../base/header'
   import verify from '../../base/verify'
   import api from '../../lib/api.js'
-  import weui from 'weui.js'
+  import weuijs from 'weui.js'
   import {openidCache} from '../../lib/cache'
 
   export default {
@@ -81,47 +82,33 @@
           this.docInfo = data.obj.sysDoc
         });
       },
-      getCode() {
+      async getCode() {
         if (this.phone == '') {
-          this.verifyTips = "手机号不能为空"
-          this.showVerify = true
-          setTimeout(() => {
-            this.verifyTips = '手机号不能为空'
-            this.showVerify = false
-          }, 1000)
+          this.verifyTips = "手机号不能为空";
+          this.$refs.msg.show(this.verifyTips);
         } else {
-          api("nethos.system.captcha.pat.wechat.bind", {
+          let loading = weuijs.loading("加载中...");
+          let data = await api("nethos.system.captcha.pat.wechat.bind", {
             mobile: this.phone,
-          }).then((data) => {
-            if (data.code == 0) {
-              console.log(data)
-              this.regStatus = data.regStatus
-              this.cid = data.obj.cid
-              this.codeValue = data.obj.value
-              console.log(this.cid)
-              console.log(this.codeValue)
-              this.a = setInterval(() => {
-                this.countdown--
-              }, 1000)
-            } else {
-              this.verifyTips = data.msg
-              this.showVerify = true
-              setTimeout(() => {
-                this.verifyTips = '手机号不能为空'
-                this.showVerify = false
-              }, 1000)
-            }
-          })
+          });
+          if (data.code == 0) {
+            this.regStatus = data.regStatus
+            this.cid = data.obj.cid
+            this.codeValue = data.obj.value
+            this.a = setInterval(() => {
+              this.countdown--
+            }, 1000)
+          } else {
+            this.verifyTips = data.msg
+            this.$refs.msg.show(this.verifyTips);
+          }
+          loading.hide();
         }
       },
       verifyCode() {
         if (this.phone == '') {
           this.verifyTips = "手机号不能为空"
-          this.showVerify = true
-          setTimeout(() => {
-            this.verifyTips = '手机号不能为空'
-            this.showVerify = false
-          }, 1000)
+          this.$refs.msg.show(this.verifyTips);
         }
         else {
           if (this.regStatus == 'REGISTER') {
@@ -131,7 +118,6 @@
             })
           } else if (this.regStatus == 'BIND') {
             api("nethos.pat.wechat.bind", {
-//                token:`OPENID_`+localStorage.getItem("token"),
               captcha: this.codeValue,
               cid: this.cid,
               openid: openidCache.get()
@@ -141,17 +127,12 @@
                   path: '/scanLogin',
                   query: {backPath: this.backPath, docId: this.docId}
                 })
-              } else if (data.msg = '') {
+              } else if (data.msg == '') {
                 this.verifyTips = '网络错误，稍候重试'
-                this.showVerify = true
-                setTimeout(() => {
-                  this.verifyTips = '手机号不能为空'
-                  this.showVerify = false
-                }, 1000)
+                this.$refs.msg.show(this.verifyTips);
               } else {
-                weui.alert(data.msg)
+                this.$refs.msg.show(data.msg);
               }
-              console.log(data)
             })
           }
         }
@@ -159,7 +140,7 @@
     },
     components: {
       "VHeader": header,
-      verify
+      verify, Msg
     },
     watch: {
       countdown() {

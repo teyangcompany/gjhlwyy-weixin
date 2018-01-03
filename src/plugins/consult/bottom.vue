@@ -28,7 +28,7 @@
     computed: {},
     components: {},
     created() {
-      this.scrollTo = null;
+      this.timer = null;
     },
     mounted() {
 
@@ -50,13 +50,17 @@
         switch (type) {
           case 'focus':
             replyEl && replyEl.scrollIntoViewIfNeed();
-            this.scrollTo = setInterval((res) => {
+            if (this.timer) {
+              clearTimeout(this.timer);
+              this.timer = null;
+            }
+            this.timer = setTimeout((res) => {
               this.intoView(type);
             }, 200)
             break;
           case 'blur':
-            clearInterval(this.scrollTo);
-            this.scrollTo = null;
+            clearTimeout(this.timer);
+            this.timer = null;
             break;
         }
       },

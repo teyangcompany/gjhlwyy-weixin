@@ -11,6 +11,10 @@ export default[
     component:bindRelativePhone
   },
   {
+    path:"/bind",
+    component:bindRelativePhone
+  },
+  {
     path:"/register",
     component:register
   },
