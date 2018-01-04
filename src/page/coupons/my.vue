@@ -14,7 +14,7 @@
         <div class="weui-cell__ft"></div>
       </router-link>
       <div class="list">
-        <coupons-item :key="index" v-for="index in list" :data="index"></coupons-item>
+        <coupons-item :key="index.id" v-for="index in list" :data="index"></coupons-item>
       </div>
 
       <div class="nodata center" v-if="nodata">

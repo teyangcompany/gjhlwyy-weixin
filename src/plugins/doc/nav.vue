@@ -102,7 +102,7 @@
             if (index == 4) {
               let teamPrice = this.teamInfo.consultPrice;
               if (teamPrice) {
-                res.price = price;
+                res.price = teamPrice;
               }
               else {
                 res.price = 0

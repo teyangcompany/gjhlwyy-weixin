@@ -2,14 +2,18 @@
   <div class="coupons-item relative" :class="['status'+status]">
     <div class="container flex">
       <div class="info flex1">
-        <div class="name">新用户注册礼券</div>
-        <div class="desc">限图文咨询使用</div>
-        <div class="sub">10元直减券</div>
+        <div class="name">{{data.couponName}}</div>
+        <div class="desc">{{data.applyServiceDescribe}}</div>
+        <div class="sub">{{desc}}{{type}}</div>
       </div>
       <div class="price flex0">
-        <div class="num">
-          <i>￥</i><span>10</span>
+        <div class="num" v-if="data.couponType=='DISCOUNT_COUPON'">
+          <span>{{desc}}</span>
         </div>
+        <div class="num" v-else>
+          <i>￥</i><span>{{data.reductionMoney}}</span>
+        </div>
+
         <div class="btn" v-if="status==0">
           <a href="">去使用</a>
         </div>
@@ -17,24 +21,53 @@
     </div>
     <div class="bottom">
       <div class="time">
-        有效期2017.12.22至2018.01.12
+        有效期{{data.startTime|formatTime(-%m-%d')}}至{{data.endTime|formatTime('%Y-%m-%d')}}
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import {couponStatus, couponType} from "../../lib/config";
+  import {formatTime} from "../../lib/filter";
+
   export default {
     props: ['data'],
     data() {
-      return {
-        status: 0
-      };
+      return {};
     },
-    computed: {},
+    computed: {
+      status() {
+        /*1-已失效 2-已使用*/
+        let cs = couponStatus[this.data.couponStatus] || '';
+        return cs ? cs.value : 0;
+      },
+      type() {
+        return couponType[this.data.couponType] || '';
+      },
+      desc() {
+        let type = this.data.couponType,
+          ret = '',
+          reduction = this.data.reductionMoney,
+          full = this.data.fullMoney;
+        switch (type) {
+          case 'DISCOUNT_COUPON':
+            reduction = Math.round(reduction / 10) == reduction / 10 ? reduction / 10 : reduction;
+            ret = `${reduction}折`;
+            break;
+          case 'FULL_REDUCTION_COUPON':
+            ret = `满${full}减${reduction}元`
+            break;
+          case 'DIRECT_REDUCTION_COUPON':
+            ret = `${reduction}元`
+            break;
+        }
+        return ret;
+      }
+    },
+    filters: {formatTime},
     components: {},
     created() {
-      this.status = this.data % 3;
     },
     mounted() {
 

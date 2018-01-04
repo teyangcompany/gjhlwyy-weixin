@@ -19,7 +19,7 @@
           <p>1、点击下方按钮，下载APP</p>
           <p>2、复制邀请码，在注册时输入</p>
           <h3 class="code">{{info.inviteCode}}</h3>
-          <div class="copy" data-clipboard-text="ABCD0" @click="copy">点击复制</div>
+          <div class="copy" :data-clipboard-text="info.inviteCode" @click="copy">点击复制</div>
         </div>
       </div>
     </div>
