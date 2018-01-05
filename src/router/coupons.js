@@ -4,6 +4,10 @@ export default [
     component: () => import("../page/coupons/my")
   },
   {
+    path: '/coupons/select',
+    component: () => import("../page/coupons/select")
+  },
+  {
     path: '/coupons/history',
     component: () => import("../page/coupons/history")
   },

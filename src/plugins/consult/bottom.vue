@@ -1,6 +1,7 @@
 <template>
   <div class="consult-bottom">
-    <div class="wait center" v-if="(status=='GOING'||status=='CANCEL') && consult.consultStatusDescription">
+    <div class="wait center"
+         v-if="(status=='GOING'||status=='CANCEL'||status=='NEEDPAY') && consult.consultStatusDescription">
       {{consult.consultStatusDescription}}
     </div>
     <div ref="replay" class="replay flex" v-else>

@@ -2,7 +2,7 @@
   <div class="page coupons-share">
     <div class="pat" ref="pat">
       <div class="ava">
-        <img :src="userInfo.patAvatar" alt="">
+        <img :src="userInfo.patAvatar||'./null'" :data-gender="userInfo.patGender" @error="__avaError($event)" alt="">
       </div>
       <div class="name center">
         {{userInfo.patName}}
@@ -31,7 +31,7 @@
         浙二好医生，掌上健康管家
       </div>
     </div>
-    <div class="open-in-brower center fixed" v-if="inWeixin">
+    <div class="open-in-brower center fixed" v-if="inWeixin" @click="inWeixin=false">
       <img src="../../../static/img/open-in-brower.png" alt="">
     </div>
   </div>
@@ -40,7 +40,8 @@
 <script>
   import weuijs from 'weui.js'
   import api from '../../lib/api'
-  import {isBindMixin} from "../../lib/mixin";
+  import {avaErrorMixin, isBindMixin} from "../../lib/mixin";
+  import {DOWNLOAD} from "../../lib/config";
 
   export default {
     data() {
@@ -52,7 +53,7 @@
     },
     computed: {},
     components: {},
-    mixins: [isBindMixin],
+    mixins: [isBindMixin, avaErrorMixin],
     created() {
       this.initData();
     },
@@ -63,7 +64,6 @@
 
     },
     methods: {
-
       init() {
         let patEl = this.$refs.pat,
           mainEl = this.$refs.main;
@@ -85,7 +85,7 @@
         if (window.brower == 'weixin') {
           this.inWeixin = true;
         } else {
-
+          location.href = DOWNLOAD;
         }
       },
 

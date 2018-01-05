@@ -84,3 +84,5 @@ export const couponStatus = {
   PAST_DUE: {text: '已过期', value: 1},
   NOT_AVAILABLE: {text: '不可用', value: 1}
 }
+
+export const DOWNLOAD = 'http://api.gjwlyy.com/api/download/pat/index.html';

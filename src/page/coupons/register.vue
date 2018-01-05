@@ -8,40 +8,68 @@
         <div class="icon center">
           <img src="../../../static/img/my/coupons-ok.png" alt="">
         </div>
-        <div class="text center">
-          <p>恭喜您获得了总价值<span>￥980</span>礼券</p>
+        <div class="text center" v-if="list.length>0">
+          <p>恭喜您获得了总价值<span>￥180</span>礼券</p>
           <p>已存入您的账户,您可以前往“我的-我的礼券”查看</p>
+        </div>
+        <div class="text center" v-else>
+          <p>暂无优惠券</p>
         </div>
       </div>
       <div class="btn">
-        <a class="center">立即登录</a>
+        <router-link to="/internetroom" class="center">继续使用</router-link>
       </div>
       <div class="list">
-        <coupons-item v-for="index in 3" :data="index" :key="index"></coupons-item>
+        <coupons-item v-for="index in list" :data="index" :key="index.id"></coupons-item>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import weuijs from 'weui.js'
+  import api from "../../lib/api"
   import AppHeader from "../../plugins/app-header"
   import {mainHeightMixin} from "../../lib/mixin";
   import CouponsItem from '../../plugins/user/coupons-item'
 
   export default {
     data() {
-      return {};
+      return {
+        list: [],
+        nodata: false
+      };
     },
     computed: {},
     mixins: [mainHeightMixin],
     components: {AppHeader, CouponsItem},
+    created() {
+      this.getList();
+    },
     mounted() {
 
     },
     beforeDestroy() {
 
     },
-    methods: {}
+    methods: {
+      async getList() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api('smarthos.coupon.mycoupon.list', {
+          pageSize: 1000
+        })
+        if (ret.code == 0) {
+          if (!ret.list || ret.list.length == 0) {
+            this.nodata = true;
+          }
+          this.list = ret.list;
+        } else {
+          weuijs.alert(ret.msg || "接口错误" + ret.code);
+        }
+        loading.hide();
+      }
+
+    }
   };
 </script>
 

@@ -68,3 +68,17 @@ export const searchCache = {
     storage.session.remove(SEARCH_KEY);
   }
 }
+
+
+const COUPONS_KEY = CACHE_PREFIX + "search_";
+export const couponsCache = {
+  get() {
+    return storage.session.get(COUPONS_KEY, null);
+  },
+  set(value) {
+    storage.session.set(COUPONS_KEY, value);
+  },
+  remove() {
+    storage.session.remove(COUPONS_KEY);
+  }
+}

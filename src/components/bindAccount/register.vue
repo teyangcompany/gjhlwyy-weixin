@@ -94,6 +94,11 @@
           let ret = await api("nethos.pat.register.v3", options);
           loading.hide();
           if (ret.code == 0) {
+            if (options.inviteCode) {
+              this.$router.push('/coupons/register');
+              return
+            }
+
             this.$router.push({
               path: '/login',
               query: {backPath: this.backPath}

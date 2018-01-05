@@ -15,24 +15,26 @@
         </div>
 
         <div class="btn" v-if="status==0">
-          <a href="">去使用</a>
+          <a @click="handler(data.applyService,data)">去使用</a>
         </div>
       </div>
     </div>
     <div class="bottom">
       <div class="time">
-        有效期{{data.startTime|formatTime(-%m-%d')}}至{{data.endTime|formatTime('%Y-%m-%d')}}
+        有效期{{data.startTime|formatTime('%Y-%m-%d')}}至{{data.endTime|formatTime('%Y-%m-%d')}}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import {couponStatus, couponType} from "../../lib/config";
+  import {couponStatus, couponType, DOWNLOAD} from "../../lib/config";
+  import weuijs from 'weui.js'
   import {formatTime} from "../../lib/filter";
+  import {couponsCache} from "../../lib/cache";
 
   export default {
-    props: ['data'],
+    props: ['data', 'next'],
     data() {
       return {};
     },
@@ -75,7 +77,29 @@
     beforeDestroy() {
 
     },
-    methods: {}
+    methods: {
+      handler(opt, data) {
+        if (typeof opt === 'string') {
+          opt = JSON.parse(opt);
+        }
+        if (opt.indexOf('DOCPIC') >= 0) {
+          if (this.next && this.next == 'select') {
+            couponsCache.set(Object.assign(data, {
+              desc: this.desc,
+              type: this.type
+            }));
+            this.$router.go(-1);
+            return;
+          }
+          this.$router.push('/internetroom');
+        }
+        else {
+          weuijs.confirm('微信暂不支持该功能，请前往应用商店下载app来和医生视频问诊', () => {
+            location.href = DOWNLOAD;
+          });
+        }
+      }
+    }
   };
 </script>
 

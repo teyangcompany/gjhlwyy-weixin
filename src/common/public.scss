@@ -23,3 +23,12 @@ li {
 .color_999 {
   color: #999899;
 }
+
+%a{
+  margin: 0 auto;
+  display: block;
+  width: px2rem(630px, 750);
+  @include h_lh(px2rem(80px, 750));
+  color: white;
+  background-color: $mainColor;
+}

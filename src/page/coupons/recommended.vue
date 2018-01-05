@@ -18,7 +18,7 @@
           <a href="">活动说明</a> <img src="../../../static/img/arrow.png" alt="">
         </div>
         <div class="desc center">
-          每邀请<span>1人</span>,您可获得<span>180元</span>礼券
+          每邀请<span>1人</span>,您可获得<span>{{info.activityCouponMoney/100}}元</span>礼券
         </div>
         <div class="line"></div>
         <div class="btn">
@@ -30,12 +30,12 @@
           您还没有成功邀请好友
         </h3>
         <h3 class="center" v-if="!nodata">
-          您已成功邀请了4位好友
+          您已成功邀请了{{list.length}}位好友
         </h3>
         <ul>
-          <li class="flex" v-for="index in 6">
-            <div class="name flex1">姜**</div>
-            <div class="mobile flex0">123****2345</div>
+          <li class="flex" v-for="index in list">
+            <div class="name flex1">{{index.promotedName.substr(0,1)}}**</div>
+            <div class="mobile flex0">{{index.promotedMobile|formatCardAndMobile(3,4,4)}}</div>
           </li>
         </ul>
         <div class="center" v-if="nodata">
@@ -51,6 +51,7 @@
   import {mainHeightMixin} from "../../lib/mixin";
   import api from '../../lib/api'
   import weuijs from 'weui.js'
+  import {formatCardAndMobile} from "../../lib/filter";
 
   export default {
     data() {
@@ -59,7 +60,12 @@
         info: {}
       };
     },
-    computed: {},
+    computed: {
+      list() {
+        return this.info.promoteRecordList ? this.info.promoteRecordList : []
+      }
+    },
+    filters: {formatCardAndMobile},
     mixins: [mainHeightMixin],
     components: {AppHeader},
     created() {
@@ -74,17 +80,17 @@
 
     },
     methods: {
-      async getDetail(){
+      async getDetail() {
         let loading = weuijs.loading("加载中...");
-        let ret = await api('smarthos.coupon.activity.details',{
-          userScene:'INVITE_REGISTER'
+        let ret = await api('smarthos.coupon.activity.details', {
+          userScene: 'INVITE_REGISTER'
         })
         loading.hide();
       },
 
-      async getStatus(){
+      async getStatus() {
         let loading = weuijs.loading("加载中...");
-        let ret = await api('smarthos.coupon.activity.status',{userScene:'INVITE_REGISTER'})
+        let ret = await api('smarthos.coupon.activity.status', {userScene: 'INVITE_REGISTER'})
         loading.hide();
       },
 
@@ -94,6 +100,9 @@
         loading.hide();
         if (ret.code == 0) {
           this.info = ret.obj;
+          if (!this.info.promoteRecordList || this.info.promoteRecordList.length === 0) {
+            this.nodata = true;
+          }
         } else {
           weuijs.alert(ret.msg);
         }

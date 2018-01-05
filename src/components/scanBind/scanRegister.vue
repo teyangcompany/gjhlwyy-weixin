@@ -114,6 +114,10 @@
           let data = await api("nethos.pat.register.v3", options)
           loading.hide();
           if (data.code == 0) {
+            if (options.inviteCode) {
+              this.$router.push('/coupons/register');
+              return
+            }
             this.$router.push({
               path: '/scanLogin',
               query: {backPath: this.backPath, docId: this.docId}
