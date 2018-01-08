@@ -22,7 +22,7 @@
         </div>
         <div class="line"></div>
         <div class="btn">
-          <router-link to="/coupons/share" class="center">立即邀请</router-link>
+          <a @click="share" class="center">立即邀请</a>
         </div>
       </div>
       <div class="list" :class="[nodata?'nodata':'']">
@@ -43,21 +43,32 @@
         </div>
       </div>
     </div>
+    <img class="absolute" v-if="device=='iphone'" v-show="isShowMask" @click="isShowMask=false"
+         src="../../../static/img/share.ios.png" alt="">
+    <img class="absolute" v-if="device=='android'" v-show="isShowMask" @click="isShowMask=false"
+         src="../../../static/img/share.android.png"
+         alt="">
   </div>
 </template>
 
 <script>
   import AppHeader from '../../plugins/app-header'
-  import {mainHeightMixin} from "../../lib/mixin";
+  import {isBindMixin, jssdkMixin, mainHeightMixin} from "../../lib/mixin";
   import api from '../../lib/api'
   import weuijs from 'weui.js'
+  import {debug, getENV, getParamsFromUrl, getShareLink, makeUrl} from "../../lib/util";
   import {formatCardAndMobile} from "../../lib/filter";
+  import {openidCache} from "../../lib/cache";
 
   export default {
     data() {
       return {
+        device: '',
+        isShowMask: false,
+        token: '',
         nodata: false,
-        info: {}
+        info: {},
+        userInfo: {}
       };
     },
     computed: {
@@ -66,12 +77,14 @@
       }
     },
     filters: {formatCardAndMobile},
-    mixins: [mainHeightMixin],
+    mixins: [mainHeightMixin, jssdkMixin, isBindMixin],
     components: {AppHeader},
-    created() {
-      this.getDetail();
-      this.getStatus();
-      this.getCode();
+    async created() {
+      this.device = window.device;
+      this.token = openidCache.get();
+      this.userInfo = await this._isBind();
+      await this.getCode();
+      await this.setShare();
     },
     mounted() {
 
@@ -80,6 +93,58 @@
 
     },
     methods: {
+      share() {
+        if (window.brower == 'weixin') {
+          this.isShowMask = true;
+        }
+      },
+      getShareLink() {
+        let options = getParamsFromUrl(location.href),
+          env = getENV();
+        debug('options', options);
+        options.hash = "/coupons/share?";
+        options.path = '/gjhlwyy';
+        options.hostname = env.jssdk;
+        let params = {
+          name: this.userInfo.patName,
+          avator: this.userInfo.patAvatar,
+          code: this.info.inviteCode
+        }, str = '';
+
+        for (let k in params) {
+          params[k] && (str += `&${k}=${encodeURIComponent(params[k])}`);
+        }
+        options.hash += str.substr(1);
+
+
+        return getShareLink(makeUrl(options));
+      },
+      async setShare() {
+        let isOk = await this.jssdkMixin_getJssdkConfig();
+        if (isOk) {
+          let doc = this.userInfo,
+            conf = {
+              title: doc.patName + ` 送您180元健康礼券邀请您体验浙二好医生`,
+              link: this.getShareLink(),
+              imgUrl: doc.patAvatar, // 分享图标
+              success: function () {
+                // 用户确认分享后执行的回调函数
+              },
+              cancel: function () {
+                // 用户取消分享后执行的回调函数
+              },
+
+              desc: doc.patName + ` 送您180元健康礼券邀请您体验浙二好医生`, // 分享描述
+              type: 'link', // 分享类型,music、video或link，不填默认为link
+              dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            };
+          debug('share', conf);
+          wx.ready(() => {
+            wx.onMenuShareTimeline(conf);
+            wx.onMenuShareAppMessage(conf);
+          })
+        }
+      },
       async getDetail() {
         let loading = weuijs.loading("加载中...");
         let ret = await api('smarthos.coupon.activity.details', {
@@ -113,6 +178,14 @@
 
 <style scoped lang="scss">
   @import "../../common/public";
+
+  .page {
+    > img {
+      @include t_r_b_l();
+      width: 100%;
+      height: 100%;
+    }
+  }
 
   .main {
     * {

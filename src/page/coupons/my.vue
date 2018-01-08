@@ -24,7 +24,7 @@
       <div class="link center">
         <router-link to="/coupons/history">查看历史礼券</router-link>
         <span> | </span>
-        <a href="">礼券说明</a>
+        <router-link to="/coupons/explain">礼券说明</router-link>
       </div>
     </div>
   </div>

@@ -22,5 +22,9 @@ export default [
   {
     path: '/coupons/share',
     component: () => import("../page/coupons/share")
+  },
+  {
+    path: '/coupons/explain',
+    component: () => import("../page/coupons/explain")
   }
 ]

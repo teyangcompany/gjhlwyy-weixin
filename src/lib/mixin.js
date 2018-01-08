@@ -85,7 +85,6 @@ export const isBindMixin = {
   methods: {
     _isBind() {
       return api("nethos.pat.info.get").then((res) => {
-        debug("用户信息", res);
         if (res.code == 0) {
           return res.obj;
         } else {

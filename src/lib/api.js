@@ -12,7 +12,7 @@ export default function (service, options) {
   base.random = makeRandom(4);
   let obj = {...base, service, ...options}
   let openid = openidCache.get();
-  if (openid) {
+  if (openid && !obj.token) {
     obj.token = "OPENID_" + openid;
   }
   if (obj.needToken === false) {

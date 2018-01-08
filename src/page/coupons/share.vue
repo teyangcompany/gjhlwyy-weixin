@@ -2,10 +2,10 @@
   <div class="page coupons-share">
     <div class="pat" ref="pat">
       <div class="ava">
-        <img :src="userInfo.patAvatar||'./null'" :data-gender="userInfo.patGender" @error="__avaError($event)" alt="">
+        <img :src="info.avator||'./null'" :data-gender="info.gender||'M'" @error="__avaError($event)" alt="">
       </div>
       <div class="name center">
-        {{userInfo.patName}}
+        {{info.name}}
       </div>
     </div>
     <div class="main relative" ref="main">
@@ -18,8 +18,8 @@
         <div class="step center">
           <p>1、点击下方按钮，下载APP</p>
           <p>2、复制邀请码，在注册时输入</p>
-          <h3 class="code">{{info.inviteCode}}</h3>
-          <div class="copy" :data-clipboard-text="info.inviteCode" @click="copy">点击复制</div>
+          <h3 class="code">{{info.code}}</h3>
+          <div class="copy" :data-clipboard-text="info.code" @click="copy">点击复制</div>
         </div>
       </div>
     </div>
@@ -47,7 +47,6 @@
     data() {
       return {
         info: {},
-        userInfo: {},
         inWeixin: false
       };
     },
@@ -88,13 +87,9 @@
           location.href = DOWNLOAD;
         }
       },
-
-      async initData() {
-        let userInfo = await this._isBind();
-        if (userInfo) {
-          this.userInfo = userInfo;
-          await this.getCode();
-        }
+      initData() {
+        let {query: info} = this.$route;
+        this.info = info;
       },
 
       async getDetail() {
@@ -114,7 +109,13 @@
 
       async getCode() {
         let loading = weuijs.loading("加载中...");
-        let ret = await api('smarthos.coupon.pat.code.get', {})
+        let query = url("?"), token = '';
+        if (query && query.comefrom && (query.comefrom == 'ios' || query.comefrom == 'android')) {
+          token = this.token;
+        } else {
+          token = "OPENID_" + this.token;
+        }
+        let ret = await api('smarthos.coupon.pat.code.get', {token});
         loading.hide();
         if (ret.code == 0) {
           this.info = ret.obj;
