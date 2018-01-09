@@ -33,7 +33,7 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
     var imgs = glob.sync(`${dir}/**/*.*`);
     imgs.forEach((res) => {
       var file = (path.basename(res));
-      if (file.split('.').length < 3) {
+      if (file.split('.').length < 3 && file.split('.')[0].indexOf('unrm') < 0) {
         console.log(chalk.cyan('delete ' + file));
         shelljs.rm("-f", res);
       }

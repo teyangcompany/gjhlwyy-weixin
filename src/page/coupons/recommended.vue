@@ -100,15 +100,6 @@
           this.isShowMask = true;
         }
       },
-      getLogo() {
-        let options = getParamsFromUrl(location.href),
-          env = getENV();
-        options.path += 'static/img/logo.web.png';
-        options.query = null;
-        options.hash = "";
-        return makeUrl(options);
-
-      },
       getShareLink() {
         let options = getParamsFromUrl(location.href),
           env = getENV();
@@ -137,7 +128,7 @@
             conf = {
               title: doc.patName + ` 送您${this.info.activityCouponMoney / 100}元健康礼券邀请您体验浙二好医生`,
               link: this.getShareLink(),
-              imgUrl: this.getLogo(), // 分享图标
+              imgUrl: 'http://static.hztywl.cn/project/gjyy/img/unrmsharelogo.jpg', // 分享图标
               success: function () {
                 // 用户确认分享后执行的回调函数
               },
