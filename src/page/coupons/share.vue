@@ -1,5 +1,5 @@
 <template>
-  <div class="page coupons-share">
+  <div class="page coupons-share overflow-y-auto">
     <div class="pat" ref="pat">
       <div class="ava">
         <img :src="info.avator||'./null'" :data-gender="info.gender||'M'" @error="__avaError($event)" alt="">
@@ -12,7 +12,7 @@
       <img src="../../../static/img/coupons/back2@2x.png" alt="">
       <div class="info absolute">
         <div class="title center">
-          送您 <span>180元</span>健康礼券<br>
+          送您 <span>{{info.activityCouponMoney/100}}元</span>健康礼券<br>
           邀请您体验浙二好医生
         </div>
         <div class="step center">
@@ -53,8 +53,10 @@
     computed: {},
     components: {},
     mixins: [isBindMixin, avaErrorMixin],
-    created() {
+    async created() {
       this.initData();
+      await this.getDetail();
+      await this.getCode();
     },
     mounted() {
       this.init();
@@ -81,11 +83,7 @@
         })
       },
       download() {
-        if (window.brower == 'weixin') {
-          this.inWeixin = true;
-        } else {
-          location.href = DOWNLOAD;
-        }
+        location.href = DOWNLOAD;
       },
       initData() {
         let {query: info} = this.$route;
@@ -105,24 +103,15 @@
         let ret = await api('smarthos.coupon.activity.status', {userScene: 'INVITE_REGISTER'})
         loading.hide();
       },
-
-
       async getCode() {
         let loading = weuijs.loading("加载中...");
-        let query = url("?"), token = '';
-        if (query && query.comefrom && (query.comefrom == 'ios' || query.comefrom == 'android')) {
-          token = this.token;
-        } else {
-          token = "OPENID_" + this.token;
-        }
-        let ret = await api('smarthos.coupon.pat.code.get', {token});
+        let ret = await api('smarthos.coupon.pat.code.get', {})
         loading.hide();
         if (ret.code == 0) {
-          this.info = ret.obj;
+          this.$set(this.info, 'activityCouponMoney', ret.obj.activityCouponMoney);
         } else {
           weuijs.alert(ret.msg);
         }
-        return
       }
     }
   };

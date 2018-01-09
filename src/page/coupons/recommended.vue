@@ -15,7 +15,8 @@
           {{info.inviteCode}}
         </div>
         <div class="link center">
-          <a href="">活动说明</a> <img src="../../../static/img/arrow.png" alt="">
+          <router-link to="/coupons/explain">活动说明</router-link>
+          <img src="../../../static/img/arrow.png" alt="">
         </div>
         <div class="desc center">
           每邀请<span>1人</span>,您可获得<span>{{info.activityCouponMoney/100}}元</span>礼券
@@ -84,6 +85,7 @@
       this.token = openidCache.get();
       this.userInfo = await this._isBind();
       await this.getCode();
+      await this.getDetail();
       await this.setShare();
     },
     mounted() {
@@ -97,6 +99,15 @@
         if (window.brower == 'weixin') {
           this.isShowMask = true;
         }
+      },
+      getLogo() {
+        let options = getParamsFromUrl(location.href),
+          env = getENV();
+        options.path += 'static/img/logo.web.png';
+        options.query = null;
+        options.hash = "";
+        return makeUrl(options);
+
       },
       getShareLink() {
         let options = getParamsFromUrl(location.href),
@@ -124,17 +135,16 @@
         if (isOk) {
           let doc = this.userInfo,
             conf = {
-              title: doc.patName + ` 送您180元健康礼券邀请您体验浙二好医生`,
+              title: doc.patName + ` 送您${this.info.activityCouponMoney / 100}元健康礼券邀请您体验浙二好医生`,
               link: this.getShareLink(),
-              imgUrl: doc.patAvatar, // 分享图标
+              imgUrl: this.getLogo(), // 分享图标
               success: function () {
                 // 用户确认分享后执行的回调函数
               },
               cancel: function () {
                 // 用户取消分享后执行的回调函数
               },
-
-              desc: doc.patName + ` 送您180元健康礼券邀请您体验浙二好医生`, // 分享描述
+              desc: doc.patName + ` 送您${this.info.activityCouponMoney / 100}元健康礼券邀请您体验浙二好医生`, // 分享描述
               type: 'link', // 分享类型,music、video或link，不填默认为link
               dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
             };
@@ -152,13 +162,11 @@
         })
         loading.hide();
       },
-
       async getStatus() {
         let loading = weuijs.loading("加载中...");
         let ret = await api('smarthos.coupon.activity.status', {userScene: 'INVITE_REGISTER'})
         loading.hide();
       },
-
       async getCode() {
         let loading = weuijs.loading("加载中...");
         let ret = await api('smarthos.coupon.pat.code.get', {})

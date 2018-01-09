@@ -43,6 +43,7 @@
   import mask from '../../base/mask'
   import verify from '../../base/verify'
   import weuijs from 'weui.js'
+  import {getENV} from "../../lib/util";
   import {openidCache} from '../../lib/cache'
   import {isLoginMixin} from "../../lib/mixin"
   import {between, minLength, required} from 'vuelidate/lib/validators'
@@ -115,7 +116,11 @@
         if (ret.code == 0) {
           this.regStatus = ret.regStatus
           this.cid = ret.obj.cid
-          this.codeValue = ret.obj.value
+          this.codeValue = ret.obj.value;
+
+          let env = getENV();
+          (env.plat !== 'pro') && (this.codeValue) && (this.code = this.codeValue);
+
           this.a = setInterval(() => {
             this.countdown--
           }, 1000)
