@@ -70,7 +70,7 @@ export const searchCache = {
 }
 
 
-const COUPONS_KEY = CACHE_PREFIX + "search_";
+const COUPONS_KEY = CACHE_PREFIX + "coupons_";
 export const couponsCache = {
   get() {
     return storage.session.get(COUPONS_KEY, null);

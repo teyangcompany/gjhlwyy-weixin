@@ -53,7 +53,6 @@
               let index = this.pics.findIndex((res) => {
                 return res.file == pic.file;
               });
-              debug(index);
               gallery.hide(() => {
                 this.pics.splice(index, 1);
               });

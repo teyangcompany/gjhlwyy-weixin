@@ -57,14 +57,14 @@
         let replyEl = this.$refs.reply;
         switch (type) {
           case 'focus':
-            replyEl && replyEl.scrollIntoViewIfNeed();
+            replyEl && replyEl.scrollIntoViewIfNeeded();
             if (this.timer) {
               clearTimeout(this.timer);
               this.timer = null;
             }
             this.timer = setTimeout((res) => {
               this.intoView(type);
-            }, 200)
+            }, 300)
             break;
           case 'blur':
             clearTimeout(this.timer);
