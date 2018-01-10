@@ -5,13 +5,14 @@
     </app-header>
     <div class="main overflow-y-auto" ref="main">
       <div class="list">
-        <coupons-item next="select" :key="index.id" v-for="index in list" :data="index"></coupons-item>
+        <coupons-item v-if="index.couponStatus=='UNUSED'" next="select" :key="index.id" v-for="index in list"
+                      :data="index" :showbtn="false"></coupons-item>
       </div>
       <div class="nodata center" v-if="nodata">
         您还没有礼券
       </div>
     </div>
-    <div class="foot" ref="footer">
+    <div class="foot flex" ref="footer">
       <a @click="handler" class="center">不使用礼券</a>
     </div>
   </div>
@@ -51,9 +52,12 @@
         this.$router.go(-1);
       },
       async getList() {
+        let {query} = this.$route,
+          {currentService, payMoney} = query;
+        payMoney = parseFloat(payMoney) * 100;
         let loading = weuijs.loading("加载中...");
         let ret = await api('smarthos.coupon.mycoupon.list', {
-          pageSize: 1000
+          pageSize: 1000, currentService, payMoney
         })
         if (ret.code == 0) {
           if (!ret.list || ret.list.length == 0) {
@@ -120,9 +124,10 @@
   }
 
   .foot {
+    flex-direction: column-reverse;
     height: 60px;
-    padding: 0 20px;
     a {
+      width: 100%;
       @extend %a;
     }
   }

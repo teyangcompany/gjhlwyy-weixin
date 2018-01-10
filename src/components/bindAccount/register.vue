@@ -39,6 +39,7 @@
   import verify from '../../base/verify'
   import api from '../../lib/api'
   import weuijs from 'weui.js'
+  import {scrollIntoViewMixin} from "../../lib/mixin";
 
   export default {
     data() {
@@ -110,6 +111,7 @@
         }
       },
     },
+    mixins: [scrollIntoViewMixin],
     components: {
       "VHeader": header,
       verify, Msg

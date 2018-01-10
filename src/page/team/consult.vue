@@ -53,7 +53,6 @@
   import Compat from "../../plugins/user/compat"
   import api from "../../lib/api"
   import PiclistUpload from "../../plugins/piclist-upload"
-  import validate from "../../lib/validate"
   import Msg from "../../plugins/msg"
 
   export default {
@@ -95,9 +94,7 @@
       },
 
       async sub() {
-        const Validate = new validate();
         let {compatName: consulterName, compatIdcard: consulterIdcard, compatMobile: consulterMobile} = this.compat;
-
         let form = {
           consulterName, consulterIdcard, consulterMobile,
           teamId: this.id,
@@ -112,13 +109,16 @@
           form.attaList = form.attaIdList;
         }
 
-
         let loading = weuijs.loading("加载中...");
         let ret = await api('nethos.consult.info.teampic.issue', form)
         if (ret.code != 0) {
           this.$refs.msg.show(ret.msg || `错误代码${ret.code}`);
         } else {
-          weuijs.toast('提交成功');
+          if (parseFloat(this.info.consultPrice) > 0) {
+            this.$router.push({path: `/videoPay`, query: {consultId: ret.obj.consultId}});
+            return
+          }
+
           this.$router.push({path: `/team/consult/${ret.obj.consultId}`})
         }
         loading.hide();

@@ -1,6 +1,6 @@
 <template>
   <div class="consult-bottom">
-    <div class="wait center"
+    <div class="wait center" @click="handler(status)"
          v-if="(status=='GOING'||status=='CANCEL'||status=='NEEDPAY') && consult.consultStatusDescription">
       {{consult.consultStatusDescription}}
     </div>
@@ -43,6 +43,13 @@
           case 'focus':
           case 'blur':
             this.intoView(type);
+            break;
+          case 'NEEDPAY':
+            this.$router.push({
+              path: '/videoPay', query: {
+                consultId: this.consult.consultId
+              }
+            })
             break;
         }
       },

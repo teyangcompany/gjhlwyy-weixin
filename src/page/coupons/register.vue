@@ -9,7 +9,7 @@
           <img src="../../../static/img/my/coupons-ok.png" alt="">
         </div>
         <div class="text center" v-if="list.length>0">
-          <p>恭喜您获得了总价值<span>￥180</span>礼券</p>
+          <p>恭喜您获得了总价值<span>￥{{info.activityCouponMoney/100}}</span>礼券</p>
           <p>已存入您的账户,您可以前往“我的-我的礼券”查看</p>
         </div>
         <div class="text center" v-else>
@@ -36,6 +36,7 @@
   export default {
     data() {
       return {
+        info: {},
         list: [],
         nodata: false
       };
@@ -45,6 +46,7 @@
     components: {AppHeader, CouponsItem},
     created() {
       this.getList();
+      this.getCode();
     },
     mounted() {
 
@@ -53,6 +55,16 @@
 
     },
     methods: {
+      async getCode() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api('smarthos.coupon.pat.code.get', {})
+        loading.hide();
+        if (ret.code == 0) {
+          this.info = ret.obj;
+        } else {
+          //weuijs.alert(ret.msg);
+        }
+      },
       async getList() {
         let loading = weuijs.loading("加载中...");
         let ret = await api('smarthos.coupon.mycoupon.list', {

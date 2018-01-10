@@ -1,5 +1,5 @@
 <template>
-  <div class="coupons-item relative" :class="['status'+status]">
+  <div @click="handler(data.applyService,data)" class="coupons-item relative" :class="['status'+status]">
     <div class="container flex">
       <div class="info flex1">
         <div class="name">{{data.couponName}}</div>
@@ -8,14 +8,14 @@
       </div>
       <div class="price flex0">
         <div class="num" v-if="data.couponType=='DISCOUNT_COUPON'">
-          <span>{{desc}}</span>
+          <span>{{desc}}</span><i>折</i>
         </div>
         <div class="num" v-else>
-          <i>￥</i><span>{{data.reductionMoney}}</span>
+          <i>￥</i><span>{{data.reductionMoney/100}}</span>
         </div>
 
-        <div class="btn" v-if="status==0">
-          <a @click="handler(data.applyService,data)">去使用</a>
+        <div class="btn right" v-if="status==0 && showbtn">
+          <a>去使用</a>
         </div>
       </div>
     </div>
@@ -34,7 +34,18 @@
   import {couponsCache} from "../../lib/cache";
 
   export default {
-    props: ['data', 'next'],
+    props: {
+      data: {
+        type: Object
+      },
+      next: {
+        type: String
+      },
+      showbtn: {
+        type: Boolean,
+        default: true
+      }
+    },
     data() {
       return {};
     },
@@ -50,12 +61,13 @@
       desc() {
         let type = this.data.couponType,
           ret = '',
-          reduction = this.data.reductionMoney,
-          full = this.data.fullMoney;
+          reduction = this.data.reductionMoney / 100,
+          full = this.data.fullMoney / 100;
         switch (type) {
           case 'DISCOUNT_COUPON':
+            reduction = reduction * 100;
             reduction = Math.round(reduction / 10) == reduction / 10 ? reduction / 10 : reduction;
-            ret = `${reduction}折`;
+            ret = `${reduction}`;
             break;
           case 'FULL_REDUCTION_COUPON':
             ret = `满${full}减${reduction}元`
@@ -162,7 +174,7 @@
           background-color: #F4888C;
           width: px2rem(100px, 750);
           @include h_lh(px2rem(42px, 750));
-          display: block;
+          display: inline-block;
           text-align: center;
           color: white;
           font-size: px2rem(22px, 750);

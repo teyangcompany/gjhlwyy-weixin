@@ -52,6 +52,7 @@
   import {openidCache} from '../../lib/cache'
   import verify from '../../base/verify'
   import weuijs from 'weui.js'
+  import {scrollIntoViewMixin} from "../../lib/mixin";
   import api from '../../lib/api'
 
   export default {
@@ -129,6 +130,7 @@
         }
       },
     },
+    mixins: [scrollIntoViewMixin],
     components: {
       "VHeader": header,
       verify, Msg
@@ -148,11 +150,12 @@
       align-items: center;
       justify-content: center;
       .doctorFunc {
+        padding-top: 50px;
+        padding-bottom: 13px;
         width: 100%;
         background-color: white;
         .doctorImg {
           width: 100%;
-          height: 100px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -164,7 +167,6 @@
         }
         .doctorIntro {
           width: 100%;
-          height: 70px;
           margin-top: 10px;
           text-align: center;
           h4 {
@@ -244,7 +246,7 @@
         margin-top: 10px;
         .form {
           width: 100%;
-          height: 40px;
+          height: 2.4rem;
           line-height: 40px;
           display: flex;
           margin-top: 1px;

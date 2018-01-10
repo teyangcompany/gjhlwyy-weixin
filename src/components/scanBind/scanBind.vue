@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page overflow-y-auto">
     <div class="bindPhone">
       <div class="bindPhoneCenter">
         <div class="bigMiddle">
@@ -22,10 +22,11 @@
           <div class="nav"></div>
         </div>
         <div class="aboutNumber">
-          <div class="formContent">
+          <div class="formContent" ref="form">
             <div class="form phone border-1px">
               <label for="" class="phoneLabel"> <img src="../../../static/img/手机号.png" alt=""> </label>
-              <input type="text" placeholder="请输入手机号" class="numberInput" v-model="phone">
+              <input type="text" @focus="focus" @blur="blur" placeholder="请输入手机号"
+                     class="numberInput" v-model="phone">
             </div>
             <div class="form verifyCode border-1px">
               <label for="" class="codeLabel"> <img src="../../../static/img/验证码.png" alt=""> </label>
@@ -52,11 +53,13 @@
   import verify from '../../base/verify'
   import api from '../../lib/api.js'
   import weuijs from 'weui.js'
+  import {scrollIntoViewMixin} from "../../lib/mixin";
   import {openidCache} from '../../lib/cache'
 
   export default {
     data() {
       return {
+        timer: "",
         title: "广济互联网医院",
         rightTitle: "",
         phone: "",
@@ -75,35 +78,19 @@
       this.getDocInfo();
     },
     methods: {
-      getDocInfo() {
-        api("nethos.doc.card", {
-          docId: this.docId
-        }).then((data) => {
-          this.docInfo = data.obj.sysDoc
-        });
+      focus() {
+
       },
-      async getCode() {
-        if (this.phone == '') {
-          this.verifyTips = "手机号不能为空";
-          this.$refs.msg.show(this.verifyTips);
-        } else {
-          let loading = weuijs.loading("加载中...");
-          let data = await api("nethos.system.captcha.pat.wechat.bind", {
-            mobile: this.phone,
-          });
-          if (data.code == 0) {
-            this.regStatus = data.regStatus
-            this.cid = data.obj.cid
-            this.codeValue = data.obj.value
-            this.a = setInterval(() => {
-              this.countdown--
-            }, 1000)
-          } else {
-            this.verifyTips = data.msg
-            this.$refs.msg.show(this.verifyTips);
-          }
-          loading.hide();
-        }
+      blur() {
+
+      },
+      async getDocInfo() {
+        let loading = weuijs.loading("加载中...");
+        let data = await api("nethos.doc.card", {
+          docId: this.docId
+        });
+        loading.hide();
+        this.docInfo = data.obj.sysDoc
       },
       verifyCode() {
         if (this.phone == '') {
@@ -137,7 +124,31 @@
           }
         }
       },
+      async getCode() {
+        if (this.phone == '') {
+          this.verifyTips = "手机号不能为空";
+          this.$refs.msg.show(this.verifyTips);
+        } else {
+          let loading = weuijs.loading("加载中...");
+          let data = await api("nethos.system.captcha.pat.wechat.bind", {
+            mobile: this.phone,
+          });
+          if (data.code == 0) {
+            this.regStatus = data.regStatus
+            this.cid = data.obj.cid
+            this.codeValue = data.obj.value
+            this.a = setInterval(() => {
+              this.countdown--
+            }, 1000)
+          } else {
+            this.verifyTips = data.msg
+            this.$refs.msg.show(this.verifyTips);
+          }
+          loading.hide();
+        }
+      }
     },
+    mixins: [scrollIntoViewMixin],
     components: {
       "VHeader": header,
       verify, Msg
@@ -155,12 +166,12 @@
 <style scoped lang="scss">
   @import '../../common/public.scss';
 
+  .page {
+    flex-direction: column;
+  }
+
   .bindPhone {
-    position: fixed;
-    top: 50px;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    padding-top: 50px;
     .verifyCenter {
       display: flex;
       align-items: center;
@@ -232,6 +243,7 @@
         }
       }
       .tips {
+        margin-top: 13px;
         width: 690rem/$rem;
         text-align: center;
         border: 1px solid #00ced1;

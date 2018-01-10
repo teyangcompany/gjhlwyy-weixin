@@ -4,7 +4,7 @@
       <i slot="back"></i>
     </app-header>
     <div class="main relative" ref="main">
-      <coupons-item v-for="index in list" :data="index" :key="index"></coupons-item>
+      <coupons-item v-for="index in list" :data="index" :key="index.id"></coupons-item>
       <div class="nodata center absolute" v-if="nodata">
         您暂时没有历史礼券
       </div>

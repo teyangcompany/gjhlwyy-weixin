@@ -12,14 +12,14 @@
       <img src="../../../static/img/coupons/back2@2x.png" alt="">
       <div class="info absolute">
         <div class="title center">
-          送您 <span>{{info.activityCouponMoney/100}}元</span>健康礼券<br>
+          送您 <span v-if="info.activityCouponMoney">{{info.activityCouponMoney/100}}元</span>健康礼券<br>
           邀请您体验浙二好医生
         </div>
-        <div class="step center">
+        <div class="step">
           <p>1、点击下方按钮，下载APP</p>
           <p>2、复制邀请码，在注册时输入</p>
-          <h3 class="code">{{info.code}}</h3>
-          <div class="copy" :data-clipboard-text="info.code" @click="copy">点击复制</div>
+          <h3 class="code center">{{info.code}}</h3>
+          <div class="copy center" :data-clipboard-text="info.code" @click="copy">点击复制</div>
         </div>
       </div>
     </div>
@@ -34,6 +34,9 @@
     <div class="open-in-brower center fixed" v-if="inWeixin" @click="inWeixin=false">
       <img src="../../../static/img/open-in-brower.png" alt="">
     </div>
+    <div class="end fixed center" v-show="!activityStatus">
+      很抱歉，该活动已经停止
+    </div>
   </div>
 </template>
 
@@ -47,10 +50,19 @@
     data() {
       return {
         info: {},
+        activity: {},
         inWeixin: false
       };
     },
-    computed: {},
+    computed: {
+      activityStatus() {
+        if (this.activity && this.activity.activityStatus === false) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    },
     components: {},
     mixins: [isBindMixin, avaErrorMixin],
     async created() {
@@ -94,7 +106,10 @@
         let loading = weuijs.loading("加载中...");
         let ret = await api('smarthos.coupon.activity.details', {
           userScene: 'INVITE_REGISTER'
-        })
+        });
+        if (ret.code == 0) {
+          this.activity = ret.obj;
+        }
         loading.hide();
       },
 
@@ -110,7 +125,7 @@
         if (ret.code == 0) {
           this.$set(this.info, 'activityCouponMoney', ret.obj.activityCouponMoney);
         } else {
-          weuijs.alert(ret.msg);
+          //weuijs.alert(ret.msg);
         }
       }
     }
@@ -121,6 +136,11 @@
   @import "../../common/public";
 
   .coupons-share {
+    .end {
+      padding-top: 50%;
+      @include t_r_b_l();
+      background-color: #F8F8F8;
+    }
     * {
       line-height: 1;
     }
@@ -174,6 +194,8 @@
             font-size: px2rem(28px, 750);
           }
           p {
+            width: 12rem;
+            margin: 0 auto;
             padding-bottom: px2rem(60px, 750);
           }
           .code {

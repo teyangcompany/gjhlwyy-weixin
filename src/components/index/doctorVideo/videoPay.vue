@@ -3,8 +3,8 @@
     <v-header :title="title" :rightTitle="rightTitle"></v-header>
     <div class="payInfo">
       <div class="paySum border-1px">
-        <span>订单金额</span>
-        <span>￥{{ aboutConsultFee }}</span>
+        <span class="name">支付金额</span>
+        <span><i>￥</i>{{ showFee }}</span>
       </div>
       <div class="payBy border-1px">
         <div @click="chooseCoupons" class="payByCenter">
@@ -66,6 +66,27 @@
         coupons: {}
       }
     },
+    computed: {
+      showFee() {
+        let fee = parseFloat(this.aboutConsultFee) || 0;
+        fee = fee * 100;
+        if (Object.keys(this.coupons).length > 0) {
+          let reductionMoney = this.coupons.reductionMoney;
+          switch (this.coupons.couponType) {
+            case 'FULL_REDUCTION_COUPON':
+            case 'DIRECT_REDUCTION_COUPON':
+              fee = fee - reductionMoney;
+              break;
+            case 'DISCOUNT_COUPON':
+              fee = fee * reductionMoney / 100;
+              break;
+          }
+        }
+        fee = fee / 100;
+        fee = Math.max(0, fee);
+        return fee.toFixed(2);
+      }
+    },
     created() {
       let coupons = couponsCache.get();
       coupons && (this.coupons = coupons);
@@ -74,8 +95,10 @@
     },
     methods: {
       chooseCoupons() {
+        let {consultType: currentService, consultFee: payMoney} = this.aboutConsult;
         this.count > 0 && (this.$router.push({
-          path: '/coupons/select'
+          path: '/coupons/select',
+          query: {currentService, payMoney}
         }));
       },
 
@@ -190,21 +213,25 @@
   .payInfo {
     .paySum {
       width: 100%;
-      height: 100px;
+      height: px2rem(230px, 750);
       display: flex;
       background-color: white;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       span:first-child {
-        font-size: 28rem/$rem;
-        color: #999999;
+        font-size: px2rem(32px, 750);
+        color: #f4888c;
       }
       span:last-child {
-        font-size: 36rem/$rem;
-        color: #333333;
-        font-weight: bold;
+        i {
+          font-style: normal;
+          font-size: px2rem(36px, 750);
+        }
+        font-size: px2rem(72px, 750);
+        color: #f4888c;
       }
+
     }
     .payMethod {
       height: 80rem/$rem;

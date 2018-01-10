@@ -1,6 +1,6 @@
 import {openidCache} from "./cache"
 import api from "./api"
-import {debug, getENV} from "./util";
+import {getENV} from "./util";
 
 export const isLoginMixin = {
   data() {
@@ -136,4 +136,24 @@ export const jssdkMixin = {
       return false;
     }
   }
+}
+
+export const scrollIntoViewMixin = {
+  created() {
+    this.scrollIntoView_timer = null;
+    if (window.device === 'android') {
+      this.scrollIntoView_timer = setInterval((res) => {
+        let tag = document.activeElement.tagName.toLowerCase();
+        if (tag === 'input') {
+          document.activeElement.scrollIntoViewIfNeeded();
+        }
+      }, 300);
+    }
+  },
+  beforeDestroy() {
+    clearInterval(this.scrollIntoView_timer);
+    this.scrollIntoView_timer = null;
+  }
+
+
 }
