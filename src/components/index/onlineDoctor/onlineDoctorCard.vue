@@ -6,17 +6,26 @@
     <img @click="showSharePic=false" v-show="showSharePic" class="share-pic" v-if="device=='iphone'"
          src="../../../../static/img/share.ios.png"
          alt="">
-    <div class="topWrap">
+    <!--<div class="topWrap">
       <img @click="back()" class="previous" src="../../../../static/img/返回.png" alt="">
       <span @click="follow" class="follow" v-if="isFollow"><img src="../../../../static/img/爱心2.png"
                                                                 alt="">取消</span>
       <span @click="follow" class="follow" v-else><img src="../../../../static/img/爱心1.png" alt="">关注</span>
       <span @click="showShare" class="share"><img src="../../../../static/img/share.icon.png" alt="">分享</span>
-    </div>
+    </div>-->
+    <header class="flex">
+      <div class="back center">
+        <img @click="back()" class="previous" src="../../../../static/img/返回.png" alt="">
+      </div>
+      <div class="right flex">
+        <div class="follow" @click="follow">{{isFollow?'已关注':'+关注'}}</div>
+        <div class="share iconfont center" @click="showShare">&#xe601;</div>
+      </div>
+    </header>
     <!--<v-header ref="topHeader" :title="title" :rightTitle="rightTitle" ></v-header>-->
     <div class="doctorCard" ref="doctorCard">
       <div>
-        <div class="doctorFunc">
+        <!--<div class="doctorFunc">
           <div class="doctorImg">
             <img :src="aboutDoctor.docAvatar?aboutDoctor.docAvatar:'./static/img/doctor.m.png'" alt="">
           </div>
@@ -37,9 +46,14 @@
               <span>{{ aboutDoctor.docScoure.toFixed(1) }}分 </span><span>查看评价</span>
             </router-link>
           </div>
-        </div>
+        </div>-->
+        <doc-info :info="aboutDoctor"></doc-info>
+        <div class="space-line"></div>
+
+        <h4 class="title mp">医生服务</h4>
         <doc-nav @click="handleClick" :teamInfo="teamInfo" :docInfo="aboutDoctor"></doc-nav>
-        <div class="border-1px"></div>
+        <div class="space-line"></div>
+
         <div class="institutionDes border-1px" v-if="teamInfo&&teamInfo.id">
           <div class="desCenter team" @click="goTeam(teamInfo.id)">
             <h4>我的团队</h4>
@@ -57,8 +71,8 @@
             </div>
           </div>
         </div>
+        <div class="space-line" v-if="teamInfo&&teamInfo.id"></div>
 
-        <div class="border-1px"></div>
         <div class="institutionDes border-1px" v-if="doctorIntro">
           <div class="desCenter team">
             <h4>医生公告</h4>
@@ -77,8 +91,8 @@
             </div>
           </div>
         </div>
+        <div class="space-line" v-if="doctorIntro"></div>
 
-        <div class="border-1px"></div>
         <div class="institutionDes border-1px">
           <div class="desCenter team">
             <h4>医生擅长</h4>
@@ -97,7 +111,8 @@
             </div>
           </div>
         </div>
-        <div class="border-1px"></div>
+        <div class="space-line"></div>
+
         <div class="institutionDes border-1px">
           <div class="desCenter team">
             <h4>医生介绍</h4>
@@ -116,7 +131,8 @@
             </div>
           </div>
         </div>
-        <div class="border-1px"></div>
+        <div class="space-line"></div>
+
         <div class="institutionDes border-1px">
           <div class="desCenter team">
             <h4 class="article">医生文章 <span @click="goArticleList()" v-if="doctorArticle.length !=0">更多<img
@@ -129,7 +145,8 @@
             </router-link>
           </div>
         </div>
-        <div class="border-1px"></div>
+        <div class="space-line"></div>
+
         <div class="institutionDes border-1px">
           <ul class="flex ercode">
             <li class="flex0 center" @click="openShare(aboutDoctor.cardPicUrl)">
@@ -165,6 +182,7 @@
   import {formatDate} from '../../../utils/formatTimeStamp'
   import DocShare from "../../../plugins/doc/share.vue"
   import {debug, getParamsFromUrl, getShareLink} from "../../../lib/util"
+  import DocInfo from '../../../plugins/doc/info'
 
   export default {
     mixins: [isLoginMixin, isBindMixin, jssdkMixin],
@@ -423,7 +441,8 @@
       "VDialog": Dialog,
       Star,
       DocShare,
-      DocNav
+      DocNav,
+      DocInfo
     },
     watch: {
 //      excelAll(){
@@ -454,6 +473,54 @@
   @import '../../../common/public.scss';
   @import '../../../common/var.scss';
   @import '../../../common/mixin.scss';
+
+  header {
+    justify-content: space-between;
+    height: px2rem(45px);
+    align-items: center;
+    .back {
+      width: 45px;
+      img {
+        width: px2rem(12px);
+        height: px2rem(21px);
+      }
+    }
+    .right {
+      padding-right: $commonSpace;
+      > div {
+        @include h_lh(px2rem(26px));
+        border-radius: 13px;
+        color: white;
+        background-color: #999999;
+      }
+      .follow {
+        padding: 0 px2rem(10px);
+      }
+      .share {
+        width: px2rem(26px);
+        margin-left: $commonSpace;
+      }
+    }
+  }
+
+  .title {
+    width: px2rem(690px, 750);
+    margin: 0 auto;
+    font-weight: bold;
+    font-size: px2rem(17px);
+    color: #333333;
+  }
+
+  .mp {
+    margin-top: px2rem(15px);
+  }
+
+  .space-line {
+    width: px2rem(690px, 750);
+    margin: 0 auto;
+    height: 1px;
+    background-color: #f1f1f1;
+  }
 
   .teaminfo {
     padding-top: px2rem(15px);
@@ -558,7 +625,7 @@
     /*bottom: 0px;*/
     /*top: 10px;*/
     /*overflow: auto;*/
-    margin-top: 80rem/$rem;
+    padding-top: $commonSpace;
     .doctorFunc {
       width: 100%;
       height: 210px;
@@ -679,6 +746,7 @@
           top: 15px;
           width: 3px;
           height: 20px;
+          display: none;
           background-color: $assistColorBrown;
         }
         .forArrowLeft {

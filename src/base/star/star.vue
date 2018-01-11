@@ -95,10 +95,10 @@
   }
     .star-24{
       .star-item{
-        width: 10px;
-        height: 10px;
+        width: 17px;
+        height: 17px;
         margin-right: 3px;
-        background-size: 10px 10px;
+        background-size: 17px 17px;
       }
       .star-item:last-child{
         margin-right: 0

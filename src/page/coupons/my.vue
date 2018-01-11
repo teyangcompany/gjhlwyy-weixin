@@ -4,7 +4,7 @@
       <i class="back" slot="back"></i>
     </app-header>
     <div class="main overflow-y-auto" ref="main">
-      <router-link tag="div" to="/coupons/recommended" class="recommended weui-cell weui-cell_access">
+      <router-link v-if="activityStatus" tag="div" to="/coupons/recommended" class="recommended weui-cell weui-cell_access">
         <div class="weui-cell__hd"><img src="../../../static/img/my/recommended.png" alt=""
                                         style="width:22px;margin-right:7px;display:block"></div>
         <div class="weui-cell__bd flex">
@@ -41,6 +41,7 @@
     name: 'coupons-my',
     data() {
       return {
+        activityStatus: true,
         list: [],
         nodata: false
       };
@@ -58,6 +59,18 @@
 
     },
     methods: {
+      async getDetail() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api('smarthos.coupon.activity.details', {
+          userScene: 'INVITE_REGISTER'
+        });
+        if (ret.code == 0) {
+          this.activityStatus = ret.obj.activityStatus
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+        }
+        loading.hide();
+      },
       async getList() {
         let loading = weuijs.loading("加载中...");
         let ret = await api('smarthos.coupon.mycoupon.list', {

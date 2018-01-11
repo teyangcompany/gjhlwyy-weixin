@@ -2,6 +2,19 @@
 @import "base";
 @import "./mixin.scss";
 
+@font-face {
+  font-family: 'iconfont';  /* project id 324914 */
+  src: url('//at.alicdn.com/t/font_324914_kc0skozjo3bu766r.eot');
+  src: url('//at.alicdn.com/t/font_324914_kc0skozjo3bu766r.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_324914_kc0skozjo3bu766r.woff') format('woff'),
+  url('//at.alicdn.com/t/font_324914_kc0skozjo3bu766r.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_324914_kc0skozjo3bu766r.svg#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family: 'iconfont';
+}
+
 html {
   margin: 0;
   padding: 0;
@@ -24,7 +37,7 @@ li {
   color: #999899;
 }
 
-%a{
+%a {
   margin: 0 auto;
   display: block;
   width: px2rem(630px, 750);

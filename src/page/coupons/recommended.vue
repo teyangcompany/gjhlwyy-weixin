@@ -49,6 +49,9 @@
     <img class="absolute" v-if="device=='android'" v-show="isShowMask" @click="isShowMask=false"
          src="../../../static/img/share.android.png"
          alt="">
+    <div class="end fixed center" v-show="!activityStatus">
+      很抱歉，该活动已经停止
+    </div>
   </div>
 </template>
 
@@ -64,6 +67,7 @@
   export default {
     data() {
       return {
+        activityStatus: true,
         device: '',
         isShowMask: false,
         token: '',
@@ -84,9 +88,11 @@
       this.device = window.device;
       this.token = openidCache.get();
       this.userInfo = await this._isBind();
-      await this.getCode();
-      await this.getDetail();
       await this.setShare();
+      await this.getDetail();
+      if (this.activityStatus) {
+        await this.getCode();
+      }
     },
     mounted() {
 
@@ -117,8 +123,6 @@
           params[k] && (str += `&${k}=${encodeURIComponent(params[k])}`);
         }
         options.hash += str.substr(1);
-
-
         return getShareLink(makeUrl(options));
       },
       async setShare() {
@@ -150,8 +154,14 @@
         let loading = weuijs.loading("加载中...");
         let ret = await api('smarthos.coupon.activity.details', {
           userScene: 'INVITE_REGISTER'
-        })
+        });
+        if (ret.code == 0) {
+          this.activityStatus = ret.obj.activityStatus
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+        }
         loading.hide();
+        return
       },
       async getStatus() {
         let loading = weuijs.loading("加载中...");
@@ -183,6 +193,12 @@
       @include t_r_b_l();
       width: 100%;
       height: 100%;
+    }
+    .end {
+      @include t_r_b_l();
+      top: 45px;
+      padding-top: 50%;
+      background-color: #F8F8F8;
     }
   }
 

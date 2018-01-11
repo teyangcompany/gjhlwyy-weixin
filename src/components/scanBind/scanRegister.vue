@@ -76,14 +76,21 @@
       this.cid = this.$route.query.cid
       this.codeValue = this.$route.query.codeValue
       this.docId = this.$route.query.docId
-      api("nethos.doc.card", {
-        docId: this.docId
-      }).then((data) => {
-        this.docInfo = data.obj.sysDoc
-        console.log(data)
-      })
+      this.getDocInfo();
     },
     methods: {
+      async getDocInfo() {
+        let loading = weuijs.loading("加载中...");
+        let data = await api("nethos.doc.card", {
+          docId: this.docId
+        });
+        loading.hide();
+        if (data.code == 0) {
+          this.docInfo = data.obj.sysDoc
+        } else {
+          //this.$refs.msg.show(data.msg||"接口错误"+data.code);
+        }
+      },
       async confirmRegister() {
         if (this.realName == '') {
           this.verifyTips = "姓名不能为空"
