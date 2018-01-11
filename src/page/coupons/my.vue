@@ -4,7 +4,8 @@
       <i class="back" slot="back"></i>
     </app-header>
     <div class="main overflow-y-auto" ref="main">
-      <router-link v-if="activityStatus" tag="div" to="/coupons/recommended" class="recommended weui-cell weui-cell_access">
+      <router-link v-if="activityStatus" tag="div" to="/coupons/recommended"
+                   class="recommended weui-cell weui-cell_access">
         <div class="weui-cell__hd"><img src="../../../static/img/my/recommended.png" alt=""
                                         style="width:22px;margin-right:7px;display:block"></div>
         <div class="weui-cell__bd flex">
@@ -50,6 +51,7 @@
     mixins: [mainHeightMixin],
     components: {AppHeader, CouponsItem},
     created() {
+      this.getDetail();
       this.getList();
     },
     mounted() {
