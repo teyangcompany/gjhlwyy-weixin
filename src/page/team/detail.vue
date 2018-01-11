@@ -9,9 +9,9 @@
       </div>
       <div class="info">
         <h3 class="center">{{info.teamName}}</h3>
-        <div class="flex score" v-if="info.consultPrice">
-          <star class="flex0" :size="36" :score="7.5"></star>
-          <div class="flex0 text">7.5分</div>
+        <div class="flex score" v-if="info.teamScoure">
+          <star class="flex0" :size="36" :score="info.teamScoure"></star>
+          <div class="flex0 text">{{info.teamScoure}}分</div>
           <div class="flex0 text">查看</div>
         </div>
         <div class="center score-no" v-else>

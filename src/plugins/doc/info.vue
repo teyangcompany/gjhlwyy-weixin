@@ -17,7 +17,7 @@
         <b>{{info.docScoure}}</b>
         <star :score="info.docScoure" :size="24"></star>
       </div>
-      <div class="rate">
+      <div class="rate" v-if="info.commentCount">
         {{info.commentCount}}个评价 <router-link :to="{path:'/commentDetail',query:{docId:info.docId}}">查看></router-link>
       </div>
 
