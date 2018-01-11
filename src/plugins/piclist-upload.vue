@@ -8,10 +8,10 @@
           {{pic.progress}}%
         </div>
       </li>
-      <li class="float-left">
+      <li class="float-left" v-if="pics.length<=9">
         <img @click="selectFile" src="../../static/img/添加图片.png" alt="">
       </li>
-      <li class="float-left">
+      <li class="float-left" v-if="pics.length==0">
         <span>添加图片</span>
         <span>请上传患处图片,让医生更了解您的病情</span>
       </li>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  import {arrayFind, debug} from "../lib/util";
+  import {arrayFind} from "../lib/util";
   import readFile from "../utils/readfile"
   import uploadApi from "../lib/uploadApi"
   import weuijs from 'weui.js'
@@ -57,7 +57,6 @@
                 this.pics.splice(index, 1);
               });
             })
-
           }
         });
       },
@@ -88,7 +87,8 @@
             ret = await uploadApi(file, (progress) => {
               let {loaded, total} = progress;
               let pro = parseFloat(loaded / total);
-              pro = pro.toFixed(2) * 100;
+              pro = Math.round(parseFloat(pro.toFixed(2)) * 100);
+              console.log('--p1--', pro);
               pic.progress = pro;
               this.pics.splice(index, 1, pic);
             });
