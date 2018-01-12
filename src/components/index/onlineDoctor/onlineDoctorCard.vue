@@ -54,7 +54,7 @@
         <doc-nav @click="handleClick" :teamInfo="teamInfo" :docInfo="aboutDoctor"></doc-nav>
         <div class="space-line"></div>
 
-        <div class="institutionDes border-1px" v-if="teamInfo&&teamInfo.id">
+        <div class="institutionDes" v-if="teamInfo&&teamInfo.id">
           <div class="desCenter team" @click="goTeam(teamInfo.id)">
             <h4>我的团队</h4>
             <div class="line"></div>
@@ -73,7 +73,7 @@
         </div>
         <div class="space-line" v-if="teamInfo&&teamInfo.id"></div>
 
-        <div class="institutionDes border-1px" v-if="doctorIntro">
+        <div class="institutionDes" v-if="doctorIntro">
           <div class="desCenter team">
             <h4>医生公告</h4>
             <div class="line"></div>
@@ -93,7 +93,7 @@
         </div>
         <div class="space-line" v-if="doctorIntro"></div>
 
-        <div class="institutionDes border-1px">
+        <div class="institutionDes">
           <div class="desCenter team">
             <h4>医生擅长</h4>
             <div class="line"></div>
@@ -113,7 +113,7 @@
         </div>
         <div class="space-line"></div>
 
-        <div class="institutionDes border-1px">
+        <div class="institutionDes">
           <div class="desCenter team">
             <h4>医生介绍</h4>
             <div class="line"></div>
@@ -133,29 +133,31 @@
         </div>
         <div class="space-line"></div>
 
-        <div class="institutionDes border-1px">
+        <div class="institutionDes">
           <div class="desCenter team">
             <h4 class="article">医生文章 <span @click="goArticleList()" v-if="doctorArticle.length !=0">更多<img
               src="../../../../static/img/left-arrow.png" alt=""></span></h4>
-            <div class="line"></div>
-            <router-link tag="p" :to="{path:'/articleDetail',query:{articleId:item.articleId}}"
-                         class="article"
-                         v-for="(item,index) in doctorArticle" :key="item.id">
-              <span> {{ item.title }}</span><span> {{ item.readTimes }}次阅读</span><span> {{ articleTime[index] }}</span>
-            </router-link>
+            <template v-for="(item,index) in doctorArticle">
+              <router-link tag="div" class="article-item"
+                           :to="{path:'/articleDetail',query:{articleId:item.articleId}}">
+                <p>{{ item.title }}</p>
+                <p>阅读量 {{ item.readTimes }}</p>
+              </router-link>
+              <div class="space-line"></div>
+            </template>
+
           </div>
         </div>
-        <div class="space-line"></div>
 
-        <div class="institutionDes border-1px">
+        <div class="institutionDes">
           <ul class="flex ercode">
             <li class="flex0 center" @click="openShare(aboutDoctor.cardPicUrl)">
-              <img src="../../../../static/img/logo.web.png" alt="">
-              <div><span class="app">APP</span>关注我,功能更丰富</div>
+              <p><img src="../../../../static/img/logo.web.png" alt=""></p>
+              <div><span class="app">APP</span>关注我<br>功能更丰富</div>
             </li>
             <li class="flex0 center" @click="openShare(aboutDoctor.cardPicWechatUrl)">
-              <img src="../../../../static/img/logo.weixin.png" alt="">
-              <div><span class="weixin">微信</span>关注我,咨询更方便</div>
+              <p><img src="../../../../static/img/logo.weixin.png" alt=""></p>
+              <div><span class="weixin">微信</span>关注我<br>咨询更方便</div>
             </li>
           </ul>
         </div>
@@ -267,6 +269,11 @@
           this.goConsult();
         } else if (name == 'book') {
           this.goBookNum();
+        } else if (name == 'team') {
+          console.log(this.teamInfo);
+          if (this.teamInfo && this.teamInfo.id) {
+            this.goTeam(this.teamInfo.id);
+          }
         } else {
           this.makeDisplay();
         }
@@ -396,18 +403,12 @@
           this.openShare(this.aboutDoctor.cardPicWechatUrl);
           return
         }
-        api("nethos.pat.info.get", {
-          token: tokenCache.get()
-        }).then((data) => {
-          console.log(data.obj)
+        api("nethos.pat.info.get", {}).then((data) => {
           if (data.code == 0) {
-            console.log(data, 66666)
             if (this.isFollow == false) {
               api("nethos.follow.dp.add", {
-                token: tokenCache.get(),
                 docId: this.doctorId
               }).then((data) => {
-                console.log(data)
                 if (data.code == 0) {
                   this.isFollow = true
                 } else {
@@ -415,17 +416,21 @@
                 }
               })
             } else {
-              api("nethos.follow.cancel", {
-                token: tokenCache.get(),
-                docId: this.doctorId
-              }).then((data) => {
-                console.log(data)
-                if (data.code == 0) {
-                  this.isFollow = false
-                } else {
-                  weui.alert(data.msg)
-                }
-              })
+              weui.confirm('是否取消关注？', () => {
+                api("nethos.follow.cancel", {
+                  docId: this.doctorId
+                }).then((data) => {
+                  if (data.code == 0) {
+                    this.isFollow = false
+                  } else {
+                    weui.alert(data.msg)
+                  }
+                })
+              }, () => {
+
+              }, {
+                title: '提示'
+              });
             }
           } else {
             this.$router.push({
@@ -515,6 +520,21 @@
     margin-top: px2rem(15px);
   }
 
+  .article-item {
+    padding-top: px2rem(10px);
+    padding-bottom: px2rem(10px);
+    p:first-child {
+      line-height: px2rem(22px);
+      font-size: px2rem(18px);
+      color: #6A7379;
+    }
+    p:nth-child(2) {
+      margin-top: px2rem(10px);
+      font-size: px2rem(15px);
+      color: #ABA9A9;
+    }
+  }
+
   .space-line {
     width: px2rem(690px, 750);
     margin: 0 auto;
@@ -599,10 +619,11 @@
       padding-top: 15px;
       width: 50%;
       div {
+        width: px2rem(104px);
         display: inline-block;
-        padding: 5px 5px;
-        border: 1px solid #cccccc;
-        border-radius: 5px;
+        padding: 5px 0px;
+        border: 1px solid #979797;
+        border-radius: 10px;
         margin-top: 5px;
       }
       span {
@@ -767,8 +788,8 @@
           font-weight: normal;
         }
         h4 {
+          font-size: px2rem(17px);
           width: 690rem/$rem;
-          font-size: 32rem/$rem;
           font-weight: bold;
           color: #333333;
           display: flex;
@@ -816,31 +837,7 @@
             width: 450rem/$rem;
           }
         }
-        p {
-          margin: 0;
-          padding: 0;
-          font-weight: normal;
-          font-size: 32rem/$rem;
-          color: #666666;
-        }
-        p.article {
-          line-height: 1.6;
-          display: flex;
-          justify-content: space-between;
-          span:nth-child(1) {
-            display: -webkit-box;
-            /*<!--height:40rem/$rem;-->*/
-            width: 200rem/$rem;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 1;
-            overflow: hidden;
-          }
-          span:nth-child(2) {
-            display: inline-block;
-            flex-basis: 200rem/$rem;
-            text-align: center;
-          }
-        }
+
       }
       .team {
       }

@@ -8,25 +8,25 @@
       </div>
       <div class="payBy border-1px">
         <div @click="chooseCoupons" class="payByCenter">
-          <div>
+          <div class="flex1">
             <img class="icon" src="../../../../static/img/coupons/coupons-pay.png" alt="">
             <span>礼券</span>
           </div>
-          <div class="icon_sp_area">
-            <span v-if="coupons&&coupons.desc">{{coupons.couponDescribe}}&nbsp;&nbsp;</span>
-            <span v-else>{{count}}张可用优惠券&nbsp;&nbsp;</span>
-            <img src="../../../../static/img/arrow.png" alt="">
+          <div class="icon_sp_area flex0">
+            <span class="flex0" v-if="coupons&&coupons.desc">{{this.showCoupon}}&nbsp;&nbsp;</span>
+            <span class="flex0" v-else>{{count}}张可用优惠券&nbsp;&nbsp;</span>
+            <img class="flex1" src="../../../../static/img/arrow.png" alt="">
           </div>
         </div>
       </div>
       <div class="payBy border-1px">
         <div class="payByCenter">
-          <div>
+          <div class="flex1">
             <img class="icon" src="../../../../static/img/weixin1.jpg" alt="">
             <span>微信</span>
           </div>
-          <div class="icon_sp_area">
-            <i class="weui-icon-success"></i>
+          <div class="icon_sp_area flex0">
+            <i @click="confirmPay=!confirmPay" :class="[confirmPay?'weui-icon-success':'weui-icon-circle']"></i>
           </div>
         </div>
       </div>
@@ -50,6 +50,7 @@
     data() {
       return {
         title: "支付",
+        confirmPay: true,
         rightTitle: "",
         consultId: "",
         aboutConsult: {},
@@ -85,6 +86,23 @@
         fee = fee / 100;
         fee = Math.max(0, fee);
         return fee.toFixed(2);
+      },
+      showCoupon() {
+        if (!this.coupons || Object.keys(this.coupons) == 0) {
+          return '';
+        }
+        let fee = this.coupons.reductionMoney;
+        switch (this.coupons.couponType) {
+          case 'FULL_REDUCTION_COUPON':
+          case 'DIRECT_REDUCTION_COUPON':
+            fee = "￥" + fee / 100;
+            break;
+          case 'DISCOUNT_COUPON':
+            fee = Math.round(fee / 10) == fee / 10 ? fee / 10 : fee;
+            fee = fee + '折';
+            break;
+        }
+        return fee;
       }
     },
     created() {
@@ -131,6 +149,11 @@
         await this.getCouponsCount();
       },
       async goSuccess() {
+        if (!this.confirmPay) {
+          weuijs.alert('请选择支付方式');
+          return
+        }
+
         if (typeof WeixinJSBridge === 'undefined') {
           weuijs.alert('请在微信当中打开');
           return
@@ -140,7 +163,6 @@
 //        location.href=`http://weixin.diandianys.com/wxpay/pay.html?back=${encodeURIComponent("https://nethosweb.diandianys.com/wechat/#/blankPage/"+this.consultId)}&amount=${(this.aboutConsultFee)*100}&obj=${this.consultId}`
         let that = this
         this.showToast = true
-
         let opts = {
           consultId: this.consultId,
           payChannel: "WECHAT"
@@ -263,6 +285,9 @@
         justify-content: space-between;
         align-items: center;
         .icon_sp_area {
+          span, img {
+            display: block;
+          }
           span {
             color: #999;
           }

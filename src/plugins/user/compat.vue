@@ -1,9 +1,9 @@
 <template>
   <div class="compat flex">
     <div class="label flex1">选择常用就诊人</div>
-    <div class="text flex0 right flex" @click="change">
-      <span>{{currentCompat.compatName}} {{currentCompat.compatGender|getGender}} {{currentCompat.compatAge}}</span>
-      <img height="15" src="../../../static/img/arrow.png" alt="">
+    <div class="text flex0 flex" @click="change">
+      <span class="flex0">{{currentCompat.compatName}} {{currentCompat.compatGender|getGender}} {{currentCompat.compatAge}}</span>
+      <img class="flex1" height="15" src="../../../static/img/arrow.png" alt="">
     </div>
   </div>
 </template>
@@ -72,7 +72,9 @@
   .compat {
     .text {
       align-items: center;
-      justify-content: right;
+      span, img {
+        display: block;
+      }
       span {
         color: #777777;
         margin-right: 5px;

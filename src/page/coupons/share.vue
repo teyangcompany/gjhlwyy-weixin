@@ -68,7 +68,7 @@
     async created() {
       this.initData();
       await this.getDetail();
-      await this.getCode();
+      //await this.getCode();
     },
     mounted() {
       this.init();
@@ -109,6 +109,7 @@
         });
         if (ret.code == 0) {
           this.activity = ret.obj;
+          this.$set(this.info, 'activityCouponMoney', ret.obj.activityCouponMoney);
         }
         loading.hide();
       },

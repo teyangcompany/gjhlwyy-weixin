@@ -48,6 +48,7 @@
   import AppHeader from "../../plugins/app-header.vue"
   import {scrollHeightMixin, isBindMixin} from "../../lib/mixin"
   import api from "../../lib/api"
+  import weuijs from 'weui.js'
   import {debug} from "../../lib/util"
   import docAva from "../../utils/docAva"
 
@@ -147,7 +148,6 @@
                         color: #999999;
                     }
                     p {
-
                         span {
                             &:nth-child(1) {
                                 margin-right: 10px;

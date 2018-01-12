@@ -65,7 +65,6 @@
       },
       refresh() {
         setTimeout(() => {
-          debug("refresh", this.scroll);
           this.scroll && this.scroll.refresh();
         }, 200)
 

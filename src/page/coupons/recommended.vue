@@ -3,7 +3,7 @@
     <app-header title="推荐有礼" ref="header">
       <i slot="back"></i>
     </app-header>
-    <div class="main overflow-y-auto" ref="main">
+    <div v-if="!loading" class="main overflow-y-auto" ref="main">
       <div class="banner overflow-hidden">
         <img src="../../../static/img/my/coupon-banner.png" alt="">
       </div>
@@ -49,7 +49,7 @@
     <img class="absolute" v-if="device=='android'" v-show="isShowMask" @click="isShowMask=false"
          src="../../../static/img/share.android.png"
          alt="">
-    <div class="end fixed center" v-show="!activityStatus">
+    <div class="end fixed center" v-show="!activityStatus&&!loading">
       很抱歉，该活动已经停止
     </div>
   </div>
@@ -62,12 +62,12 @@
   import weuijs from 'weui.js'
   import {debug, getENV, getParamsFromUrl, getShareLink, makeUrl} from "../../lib/util";
   import {formatCardAndMobile} from "../../lib/filter";
-  import {openidCache} from "../../lib/cache";
 
   export default {
     data() {
       return {
-        activityStatus: true,
+        loading: true,
+        activityStatus: false,
         device: '',
         isShowMask: false,
         token: '',
@@ -86,13 +86,14 @@
     components: {AppHeader},
     async created() {
       this.device = window.device;
-      this.token = openidCache.get();
       this.userInfo = await this._isBind();
-      await this.setShare();
       await this.getDetail();
+      this.loading = false;
       if (this.activityStatus) {
         await this.getCode();
+        await this.setShare();
       }
+      this._calcMainHeight();
     },
     mounted() {
 
