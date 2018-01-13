@@ -85,4 +85,8 @@ export const couponStatus = {
   NOT_AVAILABLE: {text: '不可用', value: 1}
 }
 
+export const CONSULT_TYPE = {
+  PIC: '全科咨询', DOCPIC: '图文咨询', VIDEO: '名医视频', DOCVIDEO: '视频问诊', TEAMPIC: '团队咨询'
+}
+
 export const DOWNLOAD = 'http://api.gjwlyy.com/api/download/pat/index.html';

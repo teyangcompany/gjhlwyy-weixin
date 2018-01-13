@@ -176,7 +176,7 @@ const formatCardAndMobile = function (str, startLength, endLeng, hiddenLeng) {
   for (let i = 0; i < hiddenLeng; i++) {
     hiddenStr += "*"
   }
-  return str.substr(0, startLength) + hiddenStr + str.substr(0 - endLeng);
+  return str.substr(0, startLength) + hiddenStr + (endLeng ? str.substr(0 - endLeng) : '');
 }
 /**
  * 价格格式化
@@ -193,7 +193,6 @@ const formatPrice = function (str) {
 const formatTime = function (str, format) {
   return timeF(parseInt(str), format);
 }
-
 
 
 export {

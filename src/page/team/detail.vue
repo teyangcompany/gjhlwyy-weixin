@@ -7,17 +7,8 @@
       <div class="banner">
         <img :src="info.teamAvatar" alt="">
       </div>
-      <div class="info">
-        <h3 class="center">{{info.teamName}}</h3>
-        <div class="flex score" v-if="info.teamScoure">
-          <star class="flex0" :size="36" :score="info.teamScoure"></star>
-          <div class="flex0 text">{{info.teamScoure}}分</div>
-          <div class="flex0 text">查看</div>
-        </div>
-        <div class="center score-no" v-else>
-          暂无评分
-        </div>
-      </div>
+
+      <team-info :info="info"></team-info>
 
       <div class="wrap">
         <div class="title">团队擅长</div>
@@ -45,7 +36,7 @@
             <div class="ava center">
               <img :src="member|docAva" alt="">
             </div>
-            <div class="name center">
+            <div class="name center ellipsis">
               {{member.docName}}
             </div>
           </router-link>
@@ -63,9 +54,9 @@
   import {mainHeightMixin} from "../../lib/mixin";
   import http from "../../lib/api"
   import weuijs from 'weui.js'
-  import Star from "../../base/star/star"
   import {formatPrice} from "../../lib/filter";
   import docAva from '../../utils/docAva'
+  import TeamInfo from '../../plugins/team/info'
 
   const SHOW_MAX = 4;
 
@@ -92,7 +83,7 @@
     filters: {formatPrice, docAva},
     mixins: [mainHeightMixin],
     components: {
-      AppHeader, Star
+      AppHeader,TeamInfo
     },
     created() {
       let {id} = this.$route.params;
@@ -150,27 +141,7 @@
           height: px2rem(150px);
         }
       }
-      .info {
-        background-color: white;
-        padding-bottom: px2rem(15px);
-        h3 {
-          font-size: px2rem(18px);
-          padding: px2rem(15px);
-        }
-        .score-no {
-          font-size: px2rem(15px);
-          color: #777777;
-        }
-        .score {
-          justify-content: center;
-          .text {
-            margin-left: px2rem(10px);
-            font-size: px2rem(15px);
-            color: $mainColor;
-          }
-        }
 
-      }
       .wrap + .wrap {
         margin-top: px2rem(10px);
       }
