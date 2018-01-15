@@ -9,7 +9,7 @@
         {{data.value}}
       </router-link>
     </ul>
-    <router-view class="flex0"></router-view>
+    <router-view class="flex1"></router-view>
   </div>
 </template>
 
@@ -47,21 +47,7 @@
 
     },
     methods: {
-      onload() {
-        //debug("imgload");
-        this.$refs.scroll.refresh();
-      },
-      async getList() {
-        let loading = weuijs.loading("加载中...");
-        let data = await api("nethos.follow.docpat.list", {})
-        loading.hide();
-        if (data.code == 0) {
-          this.list = data.list;
-          if (!this.list || this.list.length == 0) {
-            this.nodata = true;
-          }
-        }
-      }
+
     },
     watch: {}
   };
