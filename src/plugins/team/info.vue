@@ -4,7 +4,7 @@
         <div class="flex score" v-if="info.teamScoure">
             <star class="flex0" :size="36" :score="info.teamScoure"></star>
             <div class="flex0 text">{{info.teamScoure}}分</div>
-            <div class="flex0 text">查看</div>
+            <router-link :to="{path:'/team/'+info.id+'/rate'}" tag="div" class="flex0 text">查看</router-link>
         </div>
         <div class="center score-no" v-else>
             暂无评分

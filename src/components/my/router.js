@@ -60,10 +60,13 @@ import expenseHistory from './healthBasic/expenseHistory.vue'
 
 import detailDescription from './account/detailDescription.vue'
 import myDoc from "../../page/my/doc.vue"
+import myDocFollow from '../../page/my/doc/follow'
+import myDocMsg from '../../page/my/doc/msg'
 import myData from "../../page/my/data.vue"
 
 import myAuth from "../../page/my/auth.vue"
 import myEdit from "../../page/my/edit.vue"
+
 
 export default [
   {
@@ -347,7 +350,11 @@ export default [
   },
   {
     path: "/my/doc",
-    component: myDoc
+    component: myDoc,
+    children: [
+      {path: 'msg', component: myDocMsg},
+      {path: 'follow', component: myDocFollow}
+    ]
   },
   {
     path: "/my/data",

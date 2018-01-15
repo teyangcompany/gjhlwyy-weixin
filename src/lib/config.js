@@ -55,7 +55,7 @@ export const editForm = {
 
 
 export const docNav = [
-  {name: "book", value: "预约挂号", open: false},
+  {name: "book", value: "预约挂号", open: false, show: false},
   {name: "pic", value: "图文问诊", open: true, price: ''},
   {name: "video", value: "视频问诊", open: true, price: ''},
   {name: "famous", value: "名医咨询", open: true, price: ''},
@@ -90,3 +90,8 @@ export const CONSULT_TYPE = {
 }
 
 export const DOWNLOAD = 'http://api.gjwlyy.com/api/download/pat/index.html';
+
+export const MY_DOC_NAV = [
+  {name: 'msg', value: '最近会话'},
+  {name: 'follow', value: '关注医生'}
+]

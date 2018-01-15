@@ -243,33 +243,18 @@
             this.consultId = data.obj.consultId
 
             if (this.price == 0) {
-              api("nethos.consult.info.pay", {
-                consultId: this.consultId,
-                payChannel: "WECHAT"
-              }).then((data) => {
-                console.log(data)
-                if (data.code == 0) {
-                  this.$router.push({
-                    path: "/allConsultSuccess",
-                    query: {consultId: this.consultId}
-                  })
-                } else if (data.code == -2) {
-                  weui.alert("当前订单已支付")
-                } else {
-                  weui.alert(data.msg)
-                }
+              this.$router.push({
+                path: "/allConsultSuccess",
+                query: {consultId: this.consultId}
               })
             } else {
               this.$router.push({
-//                  path:"/videoPay",
                 path: "/videoPay",
                 query: {
                   consultId: this.consultId
                 }
               })
             }
-            console.log("成功")
-            console.log(data)
           } else {
             weui.alert(data.msg)
           }

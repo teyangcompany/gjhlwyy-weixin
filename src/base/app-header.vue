@@ -2,7 +2,7 @@
   <header id="header">
         <div class="left" @click="back">
           <slot name="left">
-            <font><span>&#xe600;</span></font>
+            <font><span>&#xe61d;</span></font>
           </slot>
          </div>
         <slot class="bf"> </slot>

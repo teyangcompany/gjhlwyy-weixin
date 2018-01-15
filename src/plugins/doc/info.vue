@@ -13,13 +13,22 @@
       <div class="hos">
         {{info.docHosName}}
       </div>
-      <div class="score">
-        <b>{{info.docScoure}}</b>
-        <star :score="info.docScoure" :size="24"></star>
-      </div>
-      <div class="rate" v-if="info.commentCount">
-        {{info.commentCount}}个评价 <router-link :to="{path:'/commentDetail',query:{docId:info.docId}}">查看></router-link>
-      </div>
+      <template v-if="info.docScoure">
+        <div class="score">
+          <b>{{info.docScoure}}</b>
+          <star :score="info.docScoure" :size="24"></star>
+        </div>
+        <div class="rate">
+          {{info.commentCount}}个评价
+          <router-link :to="{path:'/commentDetail',query:{docId:info.docId}}">查看></router-link>
+        </div>
+      </template>
+      <template v-else>
+        <div class="rate">
+          暂无评分
+        </div>
+      </template>
+
 
     </div>
   </div>
@@ -78,7 +87,7 @@
           color: #FABE00;
         }
       }
-      .dept, .hos,.rate {
+      .dept, .hos, .rate {
         color: #999999;
         font-size: px2rem(15px);
         margin-top: px2rem(9px);
@@ -94,8 +103,8 @@
           display: inline-block;
         }
       }
-      .rate{
-        a{
+      .rate {
+        a {
           color: #2AB6B3;
           margin-left: px2rem(5px);
         }

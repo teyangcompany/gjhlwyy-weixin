@@ -270,7 +270,6 @@
         } else if (name == 'book') {
           this.goBookNum();
         } else if (name == 'team') {
-          console.log(this.teamInfo);
           if (this.teamInfo && this.teamInfo.id) {
             this.goTeam(this.teamInfo.id);
           }

@@ -57,7 +57,7 @@
           </div>
           <div class="weui-cell__ft"></div>
         </router-link>
-        <router-link to="/coupons/recommended" class="weui-cell weui-cell_access">
+        <router-link v-if="activityStatus" to="/coupons/recommended" class="weui-cell weui-cell_access">
           <div class="weui-cell__hd"><img src="../../static/img/my/recommended.png" alt=""
                                           style="width:22px;margin-right:7px;display:block"></div>
           <div class="weui-cell__bd">
@@ -119,21 +119,23 @@
         indexRightTitle: "",
         patientInfo: "",
         previewImg: null,
-        tellPath: ""
+        tellPath: "",
+        activityStatus: false
       }
     },
     created() {
       this.tellPath = this.$route.path
       let loading = weuijs.loading("加载中...");
       this._isBind().then((res) => {
+        loading.hide();
         if (res !== false) {
           this.patientInfo = res;
-          loading.hide();
+          this.getCoupons();
           localStorage.setItem('patMobile', res.patMobile)
         } else {
           this.$router.replace({
             path: "/bindRelativePhone",
-            query: {backPath: this.path}
+            query: {backPath: this.tellPath}
           });
         }
       })
@@ -207,6 +209,18 @@
             })
           })
         }
+      },
+      async getCoupons() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api('smarthos.coupon.activity.details', {
+          userScene: 'INVITE_REGISTER'
+        });
+        if (ret.code == 0) {
+          this.activityStatus = ret.obj.activityStatus
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+        }
+        loading.hide();
       },
     },
     components: {

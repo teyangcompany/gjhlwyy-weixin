@@ -140,7 +140,7 @@
     <section class="nav" @click="goMyConsult()" v-else-if="path == '/videoIndex'">
       <span class="rightWord">{{rightTitle}}</span>
     </section>
-    <section class="nav" @click="goMyConsult()" v-else-if="path == '/internetRoom'">
+    <section class="nav" @click="goMyConsult()" v-else-if="path.toLowerCase() == '/internetroom'">
       <span class="rightWord">{{rightTitle}}</span>
     </section>
     <section class="nav" @click="goMyVideoPay()" v-else-if="path == '/videoSubmit'">

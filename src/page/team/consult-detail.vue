@@ -2,6 +2,10 @@
   <div class="page team-consult-detail flex">
     <app-header ref="header" class="flex0" title="团队咨询">
       <i slot="back"></i>
+      <div slot="right" @click="handleConsult('end')" class="right absolute"
+           v-if="consult.consultStatus=='GOING'&&!consult.consultStatusDescription">
+        结束问诊
+      </div>
     </app-header>
     <scroll :height="scrollHeight" ref="scroll" class="flex1">
       <div class="main">
@@ -54,7 +58,7 @@
         </div>
       </div>
     </scroll>
-    <bottom class="flex0" @sendok="sendok" :status="consult.consultStatus" :message="messageList"
+    <bottom class="flex0" @cancel="getDetail" @sendok="sendok" :status="consult.consultStatus" :message="messageList"
             :consult="consult"></bottom>
   </div>
 </template>
@@ -68,7 +72,6 @@
   import Bottom from '../../plugins/consult/bottom'
   import {formatTime, getGender} from "../../lib/filter";
   import MessageItem from "../../plugins/consult/message-item"
-  import {debug} from "../../lib/util";
 
   const MAX = 4;
   export default {
@@ -125,6 +128,33 @@
         }, 200)
 
       },
+
+      handleConsult(type) {
+        switch (type) {
+          case 'end':
+            weuijs.confirm('是否确认结束问诊？', () => {
+              //console.log(res);
+              this.endConsult();
+            })
+            break;
+        }
+      },
+
+      async endConsult() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api('nethos.consult.info.complete', {consultId: this.id});
+        loading.hide();
+        if (ret.code == 0) {
+          weuijs.toast('操作成功', {
+            callback: () => {
+              this.getDetail();
+            }
+          });
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+        }
+      },
+
       async getDetail() {
         let loading = weuijs.loading("加载中...");
         let ret = await api('nethos.consult.info.detail', {consultId: this.id});

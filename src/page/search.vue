@@ -1,5 +1,5 @@
 <template>
-  <div class="page flex">
+  <div class="page flex search">
     <div class="header relative center flex0">
       <div class="back absolute" @click.stop="$router.go(-1)">
         <i></i>
@@ -131,6 +131,16 @@
     height: 45px; /*no*/
   }
 
+  .search {
+    .header {
+      width: 100%;
+      .right {
+        width: 45px;
+        background-color: white;
+      }
+    }
+  }
+
   .header {
     font-size: 18px; /*no*/
     background-color: white;
@@ -166,7 +176,6 @@
       position: absolute;
       @extend %a;
       font-size: 16px; /*no*/
-      color: $mainColor;
     }
   }
 

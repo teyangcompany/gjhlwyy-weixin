@@ -71,24 +71,7 @@
         this.loadingStatus = true
         this.preventRepeatRequest = true;
         this.listPage += 1;
-        let that = this
-        api("nethos.doc.comment.list", {
-          docId: this.docId,
-          pageNo: that.listPage,
-          pageSize: 10
-        }).then((data) => {
-          if (data.code == 0) {
-            for (var i = 0; i < data.list.length; i++) {
-              this.allInfo.push(data.list[i])
-              //this.createTime.push(formatDate(new Date(this.allInfo[i].sysComment.createTime)))
-            }
-            this.loadingStatus = false
-            that.dataLength = data.list.length
-            if (data.list.length >= 10) {
-              this.preventRepeatRequest = false;
-            }
-          }
-        })
+        this.getList();
       },
       async getList() {
         let data = await api("nethos.doc.comment.list", {
@@ -96,8 +79,8 @@
           pageNo: this.listPage,
           pageSize: 10
         });
+        this.loadingStatus = false
         if (data.code == 0) {
-          this.loadingStatus = false
           for (var i = 0; i < data.list.length; i++) {
             this.allInfo.push(data.list[i])
           }

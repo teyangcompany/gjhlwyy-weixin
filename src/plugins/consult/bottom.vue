@@ -1,9 +1,30 @@
 <template>
   <div class="consult-bottom">
     <div class="wait center" @click="handler(status)"
-         v-if="(status=='GOING'||status=='CANCEL'||status=='NEEDPAY') && consult.consultStatusDescription">
+         v-if="(status=='GOING'||status=='CANCEL') && consult.consultStatusDescription">
       {{consult.consultStatusDescription}}
     </div>
+
+    <div class="rate" v-else-if="status=='NEEDPAY'">
+      <ul class="flex">
+        <li class="flex0 center" @click="handler('cancel')">取消申请</li>
+        <li class="flex0 center" @click="handler(status)">支付{{consult.canRefundFee}}元
+        </li>
+      </ul>
+    </div>
+
+    <div class="rate" v-else-if="status=='NEEDCOMMENT'">
+      <ul class="flex">
+        <router-link tag="li" :to="{path:'/team/'+consult.teamId+'/detail'}" class="flex0 center">再次咨询</router-link>
+        <router-link tag="li" :to="{path:'/comment',query:{consultId:consult.consultId}}" class="flex0 center">评价
+        </router-link>
+      </ul>
+    </div>
+
+    <div class="finish" v-else-if="status=='FINSH'">
+      <router-link tag="div" :to="{path:'/team/'+consult.teamId+'/detail'}" class="flex0 center">再次咨询</router-link>
+    </div>
+
     <div ref="replay" class="replay flex" v-else>
       <div class="input flex1">
         <input @focus="handler('focus')" @blur="handler('blur')" type="text" v-model="replyContent">
@@ -51,6 +72,11 @@
               }
             })
             break;
+          case 'cancel':
+            weuijs.confirm('是否确认取消申请？', () => {
+              this.cancel();
+            })
+            break;
         }
       },
       intoView(type) {
@@ -85,6 +111,21 @@
 
         }
         loading.hide();
+      },
+      async cancel() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await http('nethos.consult.info.cancel', {
+          consultId: this.consult.consultId
+        });
+        if (ret.code == 0) {
+          weuijs.toast('取消成功', {
+            callback: () => {
+              this.$emit('cancel');
+            }
+          })
+        }
+
+        loading.hide();
       }
     }
   };
@@ -101,6 +142,24 @@
       background-color: #f8f8f8;
       font-size: 12px;
       color: #333;
+    }
+    .rate {
+      li {
+        @include h_lh($h);
+        width: 50%;
+        font-size: 16px;
+      }
+      li:nth-child(2) {
+        color: white;
+        background-color: $mainColor;
+      }
+    }
+    .finish {
+      div {
+        @include h_lh($h);
+        width: 100%;
+        font-size: 16px;
+      }
     }
     .replay {
       height: $h;

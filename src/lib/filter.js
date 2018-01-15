@@ -183,7 +183,10 @@ const formatCardAndMobile = function (str, startLength, endLeng, hiddenLeng) {
  * @param str
  * @returns {string}
  */
-const formatPrice = function (str) {
+const formatPrice = function (str, options) {
+  if (options && options.show === false) {
+    return "";
+  }
   if (!str) {
     str = "0.0";
   }

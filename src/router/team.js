@@ -1,12 +1,8 @@
-import Index from "../page/team/index.vue"
 import Consult from '../page/team/consult'
 import Detail from '../page/team/detail'
 import ConsultDetail from '../page/team/consult-detail'
+import Rate from '../page/team/rate'
 export default [
-  {
-    path: "/team/:id",
-    component: Index
-  },
   {
     path: "/team/:id/consult",
     component: Consult
@@ -16,7 +12,11 @@ export default [
     component: Detail
   },
   {
-    path:"/team/consult/:id",
-    component:ConsultDetail
+    path: "/team/:id/rate",
+    component: Rate
+  },
+  {
+    path: "/team/consult/:id",
+    component: ConsultDetail
   }
 ]

@@ -2,7 +2,7 @@
   <div class="swiper" ref="swiper">
     <ul class="flex">
       <li @click="handle(nav.name)" :class="[nav.name,'flex0',nav.open?'yes':'no']" v-for="nav in navs">
-        {{nav.price|formatPrice}}
+        {{nav.price|formatPrice(nav)}}
       </li>
     </ul>
   </div>
@@ -10,7 +10,7 @@
 
 <script>
   import {docNav} from "../../lib/config";
-  import {debug, upper} from "../../lib/util";
+  import {upper} from "../../lib/util";
   import BScroll from "better-scroll"
   import {formatPrice} from "../../lib/filter";
 

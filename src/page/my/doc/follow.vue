@@ -1,7 +1,7 @@
 <template>
-    <div class="">
-
-    </div>
+  <div class="">
+    医生列表
+  </div>
 </template>
 
 <script>
