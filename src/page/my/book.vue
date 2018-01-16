@@ -60,18 +60,31 @@
 
     },
     methods: {
-      handleOrder(type) {
+      handleOrder(type, book) {
         switch (type) {
           case "cancel":
             weuijs.confirm('是否取消预约', () => {
-              this.cancelOrder()
+              this.cancelOrder(book)
             });
             break;
         }
       },
 
-      async cancelOrder() {
-
+      async cancelOrder(book) {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api('nethos.book.order.cancel', {
+          orderId: book.orderId
+        })
+        loading.hide();
+        if (ret.code == 0) {
+          weuijs.toast('取消成功', {
+            callback: () => {
+              this.getList();
+            }
+          })
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+        }
       },
 
       async getList() {
