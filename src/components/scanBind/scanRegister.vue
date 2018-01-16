@@ -4,7 +4,7 @@
       <div class="bigMiddle">
         <div class="doctorFunc">
           <div class="doctorImg">
-            <img :src="docInfo.docAvatar" alt="">
+            <img :src="docInfo|docAva" alt="">
           </div>
           <div class="doctorIntro">
             <h4><span class="mainTitle">{{ docInfo.docName }}</span><span class="chief"
@@ -33,7 +33,7 @@
             <label for="" class="codeLabel"> <img src="../../../static/img/密码.png" alt=""> </label>
             <input type="password" placeholder="8-20位大小写字母+数字" class="codeInput" v-model="passWord">
           </div>
-          <div class="form verifyCode border-1px">
+          <div class="form verifyCode border-1px" v-if="activityStatus">
             <label for="" class="codeLabel"> <img src="../../../static/img/密码.png" alt=""> </label>
             <input type="text" placeholder="邀请码" class="codeInput" v-model="inviteCode">
           </div>
@@ -54,10 +54,12 @@
   import weuijs from 'weui.js'
   import {scrollIntoViewMixin} from "../../lib/mixin";
   import api from '../../lib/api'
+  import docAva from '../../utils/docAva'
 
   export default {
     data() {
       return {
+        activityStatus: false,
         title: "广济互联网医院",
         rightTitle: "",
         backPath: "",
@@ -71,14 +73,28 @@
         docInfo: ""
       }
     },
-    created() {
+    async created() {
       this.backPath = this.$route.query.backPath
       this.cid = this.$route.query.cid
       this.codeValue = this.$route.query.codeValue
       this.docId = this.$route.query.docId
-      this.getDocInfo();
+      await this.getDocInfo();
+      await this.getCoupon();
     },
     methods: {
+      async getCoupon() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api('smarthos.coupon.activity.details', {
+          userScene: 'INVITE_REGISTER'
+        });
+        if (ret.code == 0) {
+          this.activityStatus = ret.obj.activityStatus
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+        }
+        loading.hide();
+        return
+      },
       async getDocInfo() {
         let loading = weuijs.loading("加载中...");
         let data = await api("nethos.doc.card", {
@@ -137,6 +153,7 @@
         }
       },
     },
+    filters: {docAva},
     mixins: [scrollIntoViewMixin],
     components: {
       "VHeader": header,

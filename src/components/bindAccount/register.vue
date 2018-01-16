@@ -20,9 +20,9 @@
           <label for="" class="codeLabel"> <img src="../../../static/img/密码.png" alt=""> </label>
           <input type="password" placeholder="8-20位大小写字母+数字" class="codeInput" v-model="passWord">
         </div>
-        <div class="form verifyCode border-1px">
+        <div class="form verifyCode border-1px" v-if="activityStatus">
           <label for="" class="codeLabel"> <img src="../../../static/img/密码.png" alt=""> </label>
-          <input type="text" placeholder="邀请码" class="codeInput" v-model="inviteCode">
+          <input type="text" placeholder="请输入邀请码" class="codeInput" v-model="inviteCode">
         </div>
         <div class="buttonWrap">
           <button class="bottom" @touchend="confirmRegister()">确认</button>
@@ -44,6 +44,7 @@
   export default {
     data() {
       return {
+        activityStatus: false,
         title: "广济互联网医院",
         rightTitle: "",
         cid: "",
@@ -61,10 +62,22 @@
       this.backPath = this.$route.query.backPath
       this.cid = this.$route.query.cid
       this.codeValue = this.$route.query.codeValue
-      console.log(this.cid)
-      console.log(this.codeValue)
+      this.getCoupon();
     },
     methods: {
+      async getCoupon() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api('smarthos.coupon.activity.details', {
+          userScene: 'INVITE_REGISTER'
+        });
+        if (ret.code == 0) {
+          this.activityStatus = ret.obj.activityStatus
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+        }
+        loading.hide();
+        return
+      },
       async confirmRegister() {
         if (this.realName == '') {
           this.verifyTips = "姓名不能为空"

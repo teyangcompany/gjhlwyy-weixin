@@ -67,7 +67,6 @@
         setTimeout(() => {
           this.scroll && this.scroll.refresh();
         }, 200)
-
       },
       initNav() {
         let bookNav = this.navs[0];

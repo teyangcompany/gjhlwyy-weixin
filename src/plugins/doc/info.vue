@@ -1,7 +1,7 @@
 <template>
   <div class="flex doc-info">
     <div class="ava flex0">
-      <img :src="info.docAvatar" alt="">
+      <img :src="info|docAva" alt="">
     </div>
     <div class="info">
       <h3>
@@ -36,6 +36,7 @@
 
 <script>
   import Star from '../../base/star/star'
+  import docAva from '../../utils/docAva'
 
   export default {
     props: {
@@ -47,6 +48,7 @@
       return {};
     },
     computed: {},
+    filters: {docAva},
     components: {
       Star
     },

@@ -1,3 +1,4 @@
+import {ORDER_STATUS} from "./config";
 import timeF from "lmw-time-format"
 //time为时间戳格式，如"1487555260448"
 const Todate = (time) => {
@@ -192,11 +193,26 @@ const formatPrice = function (str, options) {
   }
   return "￥" + str;
 }
-
+/**
+ * 时间
+ * @param str
+ * @param format
+ */
 const formatTime = function (str, format) {
   return timeF(parseInt(str), format);
 }
+/**
+ * 订单状态
+ * @param str
+ * @returns {string}
+ */
+const getOrderStatus = function (str) {
+  return ORDER_STATUS[str] ? ORDER_STATUS[str] : '';
+}
 
+const getOrderAmpm = function (str) {
+  return str.toLowerCase() == "am" ? "上午" : "下午";
+}
 
 export {
   Todate,
@@ -211,6 +227,8 @@ export {
   isAuth,
   formatCardAndMobile,
   formatPrice,
-  formatTime
+  formatTime,
+  getOrderStatus,
+  getOrderAmpm
 }
 

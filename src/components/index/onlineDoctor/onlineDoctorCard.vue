@@ -1,5 +1,5 @@
 <template>
-  <div class="doctor">
+  <div class="doctor doc-detail overflow-hidden">
     <img @click="showSharePic=false" v-show="showSharePic" class="share-pic" v-if="device=='android'"
          src="../../../../static/img/share.android.png"
          alt="">
@@ -13,7 +13,7 @@
       <span @click="follow" class="follow" v-else><img src="../../../../static/img/爱心1.png" alt="">关注</span>
       <span @click="showShare" class="share"><img src="../../../../static/img/share.icon.png" alt="">分享</span>
     </div>-->
-    <header class="flex">
+    <header class="flex" ref="header">
       <div class="back center">
         <img @click="back()" class="previous" src="../../../../static/img/返回.png" alt="">
       </div>
@@ -23,38 +23,14 @@
       </div>
     </header>
     <!--<v-header ref="topHeader" :title="title" :rightTitle="rightTitle" ></v-header>-->
-    <div class="doctorCard" ref="doctorCard">
+    <div class="doctorCard overflow-y-auto overflow-x-hidden" ref="main" :style="style">
       <div>
-        <!--<div class="doctorFunc">
-          <div class="doctorImg">
-            <img :src="aboutDoctor.docAvatar?aboutDoctor.docAvatar:'./static/img/doctor.m.png'" alt="">
-          </div>
-          <div class="doctorIntro">
-            <h4><span class="mainTitle">{{aboutDoctor.docName}}</span>
-              <span class="chief" v-if="aboutDoctor.docFamousConsultStatus">名医</span>
-              <span v-else>&nbsp;</span>
-            </h4>
-            <h6>{{aboutDoctor.docDeptName}}&nbsp; {{aboutDoctor.docTitle}}</h6>
-            <h6>{{aboutDoctor.docHosName}}</h6>
-
-            <div v-if="!aboutDoctor.docScoure" class="checkRating">
-              <span>暂无评价</span>
-            </div>
-            <router-link v-if="aboutDoctor.docScoure" tag="div"
-                         :to="{path:'/commentDetail',query:{docId:aboutDoctor.docId}}" class="checkRating">
-              <star :size="24" :score="aboutDoctor.docScoure"></star>
-              <span>{{ aboutDoctor.docScoure.toFixed(1) }}分 </span><span>查看评价</span>
-            </router-link>
-          </div>
-        </div>-->
         <doc-info :info="aboutDoctor"></doc-info>
         <div class="space-line"></div>
-
         <h4 class="title mp">医生服务</h4>
         <doc-nav @click="handleClick" :teamInfo="teamInfo" :docInfo="aboutDoctor"></doc-nav>
         <div class="space-line"></div>
-
-        <div class="institutionDes" v-if="teamInfo&&teamInfo.id">
+        <div class="institutionDes" v-if="teamInfo&&teamInfo.id&&1==0">
           <div class="desCenter team" @click="goTeam(teamInfo.id)">
             <h4>我的团队</h4>
             <div class="line"></div>
@@ -145,7 +121,6 @@
               </router-link>
               <div class="space-line"></div>
             </template>
-
           </div>
         </div>
 
@@ -179,7 +154,7 @@
   import api from '../../../lib/api'
   import Star from '../../../base/star/star'
   import weui from 'weui.js'
-  import {isBindMixin, isLoginMixin, jssdkMixin} from "../../../lib/mixin"
+  import {isBindMixin, isLoginMixin, jssdkMixin, mainHeightMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   import {formatDate} from '../../../utils/formatTimeStamp'
   import DocShare from "../../../plugins/doc/share.vue"
@@ -187,9 +162,10 @@
   import DocInfo from '../../../plugins/doc/info'
 
   export default {
-    mixins: [isLoginMixin, isBindMixin, jssdkMixin],
+    mixins: [isLoginMixin, isBindMixin, jssdkMixin, mainHeightMixin],
     data() {
       return {
+        style: {},
         showSharePic: false,
         device: window.device,
         title: "",
@@ -212,8 +188,7 @@
         teamInfo: ""
       }
     },
-    mounted() {
-    },
+
     created() {
       this.doctorId = this.$route.query.docId
       this.getDocInfo();
@@ -234,6 +209,11 @@
         })
       }
     },
+
+    mounted() {
+      this.init();
+    },
+
     methods: {
       async jssdkShare() {
         let isOk = await this.jssdkMixin_getJssdkConfig();
@@ -261,6 +241,9 @@
           })
         }
       },
+      init() {
+        this.style.width = `${window.innerWidth}px`;
+      },
       goTeam(id) {
         this.$router.push(`/team/${id}/detail`);
       },
@@ -269,11 +252,11 @@
           this.goConsult();
         } else if (name == 'book') {
           this.goBookNum();
-        } else if (name == 'team') {
+        } /*else if (name == 'team') {
           if (this.teamInfo && this.teamInfo.id) {
             this.goTeam(this.teamInfo.id);
           }
-        } else {
+        } */ else {
           this.makeDisplay();
         }
       },
@@ -814,13 +797,10 @@
             }
           }
         }
-        h6.good, h6.intro {
+        h6.good, h6.intro, p.good, p.intro {
           text-align: left;
-          width: 650rem/$rem;
-          word-break: break-all;
-        }
-        p.good, p.intro {
-          text-align: left;
+          font-size: 32rem/$rem;
+          color: #666666;
           width: 650rem/$rem;
           word-break: break-all;
         }
@@ -829,8 +809,6 @@
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 2;
           overflow: hidden;
-          font-size: 32rem/$rem;
-          color: #666666;
           text-align: center;
           img {
             width: 450rem/$rem;

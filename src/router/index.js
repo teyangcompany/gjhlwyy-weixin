@@ -17,10 +17,15 @@ import hospital from "./hos"
 import team from './team'
 import coupons from './coupons'
 
+
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '/demo',
+      component: () => import('../components/demo')
+    },
     {
       path: "/search",
       component: Search

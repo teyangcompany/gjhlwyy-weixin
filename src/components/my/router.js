@@ -31,6 +31,7 @@ import consultDetail from './myConsult/consultDetail'
 import arrangeInfo from './myConsult/arrangeInfo'
 import waitArrange from './myConsult/waitArrange'
 import myBookNumber from './myBookNumber'
+import MyBook from '../../page/my/book'
 import usualPatient from './usualPatient'
 import addUsualPatient from './addUsualPatient'
 import detailUsual from './detailUsual'
@@ -274,6 +275,10 @@ export default [
   {
     path: "/myBookNumber",
     component: myBookNumber
+  },
+  {
+    path: "/my/book",
+    component: MyBook
   },
   {
     path: "/usualPatient",

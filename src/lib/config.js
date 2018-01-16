@@ -67,7 +67,7 @@ export const baseParams = {
   format: "JSON",
   oper: "127.0.0.1",
   spid: "1001",
-  version: '2.1.1'
+  version: '2.2.0'
 }
 
 export const password = "aAr9MVS9j1";
@@ -95,3 +95,10 @@ export const MY_DOC_NAV = [
   {name: 'msg', value: '最近会话'},
   {name: 'follow', value: '关注医生'}
 ]
+
+export const DOWNLOAD_CONTENT = '微信暂不支持该功能，请前往应用商店下载app来'
+
+export const ORDER_STATUS = ['待支付', '已挂号', '已就诊', '停诊', '未就诊', '已取消'];
+
+export const ORDER_BUTTON_TEXT = ['支付', '取消', '', '', '', ''];
+

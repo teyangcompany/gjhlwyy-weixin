@@ -5,7 +5,7 @@
         <div class="bigMiddle">
           <div class="doctorFunc">
             <div class="doctorImg">
-              <img :src="docInfo.docAvatar" alt="">
+              <img :src="docInfo|docAva" alt="">
             </div>
             <div class="doctorIntro">
               <h4><span class="mainTitle">{{ docInfo.docName }}</span><span class="chief"
@@ -48,6 +48,7 @@
   </div>
 </template>
 <script>
+  import docAva from '../../utils/docAva'
   import Msg from '../../plugins/msg'
   import header from '../../base/header'
   import verify from '../../base/verify'
@@ -148,6 +149,7 @@
         }
       }
     },
+    filters: {docAva},
     mixins: [scrollIntoViewMixin],
     components: {
       "VHeader": header,

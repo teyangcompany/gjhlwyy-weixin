@@ -44,7 +44,7 @@
         </ul>
       </div>
 
-      <div class="wrap">
+      <div class="wrap" v-if="1==0">
         <ol class="flex ercode">
           <li class="flex0 center">
             <p><img src="../../../static/img/logo.web.png" alt=""></p>
@@ -57,7 +57,7 @@
         </ol>
       </div>
     </div>
-    <router-link :to="{path:`/team/${id}/consult`}" tag="div" class="bottom" ref="bottom">
+    <router-link v-if="1==0" :to="{path:`/team/${id}/consult`}" tag="div" class="bottom" ref="bottom">
       咨询团队{{info.consultPrice|formatPrice}}
     </router-link>
   </div>
