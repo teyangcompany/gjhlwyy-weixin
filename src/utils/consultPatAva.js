@@ -8,6 +8,9 @@ export default (consult) => {
   else if (consult.patGender) {
     return `./static/img/pat.${consult.patGender}.jpg`
   }
+  else if (consult.replierAvatar) {
+    return consult.replierAvatar
+  }
   else {
     return `./static/img/pat.m.jpg`
   }

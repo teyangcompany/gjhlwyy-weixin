@@ -32,7 +32,7 @@
           </div>
           <div class="pat flex">
             <div class="ava flex0">
-              <img :src="consult.patAvatar" alt="">
+              <img :src="consult|patAva" alt="">
             </div>
             <div class="name flex0">{{consult.patName}}</div>
             <div class="time flex1">{{consult.createTime|formatTime('%Y-%m-%d %H:%M:%S')}}</div>
@@ -46,9 +46,9 @@
           <ul class="overflow-hidden">
             <li v-for="(member,index) in members" v-if="index<showMember" class="float-left">
               <div class="ava">
-                <img :src="member.docAvatar" alt="">
+                <img :src="member|docAva" alt="">
               </div>
-              <div class="name">{{member.docName}}</div>
+              <div class="name ellipsis">{{member.docName}}</div>
             </li>
           </ul>
         </div>
@@ -64,6 +64,7 @@
 </template>
 
 <script>
+  import patAva from '../../utils/consultPatAva'
   import Scroll from "../../plugins/scroll"
   import weuijs from "weui.js"
   import AppHeader from "../../plugins/app-header"
@@ -72,6 +73,7 @@
   import Bottom from '../../plugins/consult/bottom'
   import {formatTime, getGender} from "../../lib/filter";
   import MessageItem from "../../plugins/consult/message-item"
+  import docAva from '../../utils/docAva'
 
   const MAX = 4;
   export default {
@@ -98,7 +100,7 @@
         return this.showType == 'part' ? MAX : this.members.length;
       }
     },
-    filters: {getGender, formatTime},
+    filters: {getGender, formatTime, patAva, docAva},
     mixins: [scrollHeightMixin],
     components: {
       AppHeader, Scroll, Bottom, MessageItem

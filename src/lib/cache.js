@@ -82,3 +82,30 @@ export const couponsCache = {
     storage.session.remove(COUPONS_KEY);
   }
 }
+
+
+const ORDER_KEY = CACHE_PREFIX + "order_";
+export const orderCache = {
+  get() {
+    return storage.session.get(ORDER_KEY, null);
+  },
+  set(value) {
+    storage.session.set(ORDER_KEY, value);
+  },
+  remove() {
+    storage.session.remove(ORDER_KEY);
+  }
+}
+
+const CHART_KEY = CACHE_PREFIX + "chart_";
+export const chartCache = {
+  get() {
+    return storage.session.get(CHART_KEY, null);
+  },
+  set(value) {
+    storage.session.set(CHART_KEY, value);
+  },
+  remove() {
+    storage.session.remove(CHART_KEY);
+  }
+}

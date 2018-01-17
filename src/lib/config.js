@@ -100,5 +100,11 @@ export const DOWNLOAD_CONTENT = '微信暂不支持该功能，请前往应用�
 
 export const ORDER_STATUS = ['待支付', '已挂号', '已就诊', '停诊', '未就诊', '已取消'];
 
-export const ORDER_BUTTON_TEXT = ['支付', '取消', '', '', '', ''];
+export const OPEN_TEAMPIC = true;
+
+export const OPEN_NEW_MYBOOK_VERSION = true;
+
+export const OPEN_NEW_MYDOC_VERSION = true;
+
+export const OPEN_MYPAY_VERSION = true;
 

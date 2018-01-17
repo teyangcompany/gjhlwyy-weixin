@@ -30,7 +30,7 @@
         <h4 class="title mp">医生服务</h4>
         <doc-nav @click="handleClick" :teamInfo="teamInfo" :docInfo="aboutDoctor"></doc-nav>
         <div class="space-line"></div>
-        <div class="institutionDes" v-if="teamInfo&&teamInfo.id&&1==0">
+        <div class="institutionDes" v-if="teamInfo&&teamInfo.id&&openTeampic">
           <div class="desCenter team" @click="goTeam(teamInfo.id)">
             <h4>我的团队</h4>
             <div class="line"></div>
@@ -47,6 +47,7 @@
             </div>
           </div>
         </div>
+
         <div class="space-line" v-if="teamInfo&&teamInfo.id"></div>
 
         <div class="institutionDes" v-if="doctorIntro">
@@ -160,11 +161,13 @@
   import DocShare from "../../../plugins/doc/share.vue"
   import {debug, getParamsFromUrl, getShareLink} from "../../../lib/util"
   import DocInfo from '../../../plugins/doc/info'
+  import {OPEN_TEAMPIC} from "../../../lib/config";
 
   export default {
     mixins: [isLoginMixin, isBindMixin, jssdkMixin, mainHeightMixin],
     data() {
       return {
+        openTeampic: OPEN_TEAMPIC,
         style: {},
         showSharePic: false,
         device: window.device,
@@ -252,11 +255,11 @@
           this.goConsult();
         } else if (name == 'book') {
           this.goBookNum();
-        } /*else if (name == 'team') {
+        } else if (name == 'team') {
           if (this.teamInfo && this.teamInfo.id) {
             this.goTeam(this.teamInfo.id);
           }
-        } */ else {
+        } else {
           this.makeDisplay();
         }
       },

@@ -32,6 +32,7 @@ import arrangeInfo from './myConsult/arrangeInfo'
 import waitArrange from './myConsult/waitArrange'
 import myBookNumber from './myBookNumber'
 import MyBook from '../../page/my/book'
+import MyBookDetail from '../../page/my/book/detail'
 import usualPatient from './usualPatient'
 import addUsualPatient from './addUsualPatient'
 import detailUsual from './detailUsual'
@@ -67,7 +68,6 @@ import myData from "../../page/my/data.vue"
 
 import myAuth from "../../page/my/auth.vue"
 import myEdit from "../../page/my/edit.vue"
-
 
 export default [
   {
@@ -278,7 +278,10 @@ export default [
   },
   {
     path: "/my/book",
-    component: MyBook
+    component: MyBook,
+    children: [
+      {path: ':id', component: MyBookDetail}
+    ]
   },
   {
     path: "/usualPatient",
@@ -361,6 +364,8 @@ export default [
       {path: 'follow', component: myDocFollow}
     ]
   },
+  {path: '/chart/:id', component: () => import('../../page/my/doc/chart')},
+  {path: '/my/pay', component: () => import('../../page/my/pay')},
   {
     path: "/my/data",
     component: myData

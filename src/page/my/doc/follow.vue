@@ -82,10 +82,8 @@
       padding-top: 100px;
     }
 
-    li + li {
-      @include border(top);
-    }
     li {
+      @include border();
       background-image: url("../../../../static/img/arrow.png");
       @include backgroundImageSet(px2rem(17px, 600), px2rem(30px, 600), px2rem(1000px, 1080));
       padding: $commonSpace;

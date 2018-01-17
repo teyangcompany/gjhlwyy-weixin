@@ -4,7 +4,7 @@
       <li class="center pt100" v-if="list.length==0">
         暂未收到消息
       </li>
-      <li @click="handler" v-for="(item,index) in list" :key="index" class="flex">
+      <li @click="handler(item)" v-for="(item,index) in list" :key="index" class="flex">
         <div class="ava flex0">
           <img :src="item.sysDoc|docAva" alt="">
         </div>
@@ -29,7 +29,8 @@
   import Scroll from '../../../plugins/scroll'
   import MyDocMixin from '../../../lib/mixins/my-doc'
   import http from '../../../lib/api'
-  import {DOWNLOAD, DOWNLOAD_CONTENT} from "../../../lib/config";
+  import {chartCache} from "../../../lib/cache";
+  import {DOWNLOAD, DOWNLOAD_CONTENT, OPEN_NEW_MYDOC_VERSION} from "../../../lib/config";
 
   export default {
     data() {
@@ -52,7 +53,12 @@
 
     },
     methods: {
-      handler() {
+      handler(data) {
+        if (OPEN_NEW_MYDOC_VERSION) {
+          chartCache.set(data);
+          this.$router.push(`/chart/${data.followMessage ? data.followMessage.followId : '0'}`)
+          return
+        }
         weuijs.confirm(`${DOWNLOAD_CONTENT}进行医患沟通`, {
           title: '提示',
           buttons: [
@@ -93,10 +99,8 @@
     .pt100 {
       padding-top: 100px;
     }
-    li + li {
-      @include border(top);
-    }
     li {
+      @include border();
       padding: $commonSpace;
       .ava {
         margin-right: $commonSpace;

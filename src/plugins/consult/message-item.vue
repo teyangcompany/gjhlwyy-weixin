@@ -3,7 +3,7 @@
     <div class="time center">{{message.replyTime|formatTime('%Y-%m-%d %H:%M:%S')}}</div>
     <div class="container flex">
       <div class="ava flex0">
-        <img :src="message.replierAvatar" alt="">
+        <img :src="message|patAva" alt="">
       </div>
       <div class="content flex1">
         <div class="name">{{message.replierName}}</div>
@@ -12,7 +12,9 @@
           <div class="msg">
             {{message.replyContent}}
             <ul v-if="message.hasAtta">
-              <li></li>
+              <li v-for="atta in message.attaList">
+                <img :src="atta.url">
+              </li>
             </ul>
           </div>
         </div>
@@ -23,6 +25,7 @@
 
 <script>
   import {formatTime} from "../../lib/filter";
+  import patAva from '../../utils/consultPatAva'
 
   export default {
     props: ['message'],
@@ -30,7 +33,7 @@
       return {};
     },
     computed: {},
-    filters: {formatTime},
+    filters: {formatTime, patAva},
     components: {},
     mounted() {
 
@@ -75,6 +78,9 @@
         max-width: 13rem;
         padding: 10px;
         border-radius: 5px;
+        img{
+          width: 100px;
+        }
       }
     }
     &.pat {
