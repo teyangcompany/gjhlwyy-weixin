@@ -5,6 +5,12 @@
         </app-header>
         <scroll class="scroll overflow-hidden" :height="scrollHeight" :data="list">
             <div class="container">
+                <div v-if="list.length==0" class="nodata fs45 pt500 center">
+                    暂无消费记录
+                    <br>
+                    <router-link to="/internetRoom">问医生</router-link>
+                </div>
+
                 <div class="item" v-for="(item,key,index) in obj" :key="index">
                     <div class="time color_999">{{key}}</div>
                     <div class="content flex" v-for="(record,i) in item" :key="i">
@@ -92,6 +98,10 @@
 
     .mt30 {
         margin-top: px2rem(30px, 1080);
+    }
+
+    .pt500 {
+        margin-top: px2rem(500px, 1080);
     }
 
     .scroll {
