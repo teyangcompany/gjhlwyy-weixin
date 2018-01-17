@@ -11,8 +11,13 @@
             <div class="ava flex0">
               <img :src="record|docAva" alt="">
             </div>
-            <div class="info lh1">
-              <h3>{{record.paySubject}}</h3>
+            <div class="info lh1 flex1">
+              <h3 class="fs45 color_333">{{record.paySubject}}</h3>
+              <p class="color_999">{{record.createTime}}</p>
+            </div>
+            <div class="price flex0 lh1">
+              <h2 class="fs45 color_666">￥{{record.payFee/100}}</h2>
+              <p class="color_999">{{record.payType=="PAY"?'交易成功':'退款成功'}}</p>
             </div>
           </div>
         </div>
