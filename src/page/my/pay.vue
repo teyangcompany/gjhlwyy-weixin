@@ -1,29 +1,29 @@
 <template>
-  <div class="">
-    <app-header title="消费记录">
-      <i slot="back" class="back"></i>
-    </app-header>
-    <scroll class="scroll" :height="scrollHeight" :data="list">
-      <div class="container">
-        <div class="item" v-for="(item,key,index) in obj" :key="index">
-          <div class="time center color_999">{{key}}</div>
-          <div class="content flex" v-for="(record,i) in item" :key="i">
-            <div class="ava flex0">
-              <img :src="record|docAva" alt="">
+    <div class="">
+        <app-header title="消费记录">
+            <i slot="back" class="back"></i>
+        </app-header>
+        <scroll class="scroll overflow-hidden" :height="scrollHeight" :data="list">
+            <div class="container">
+                <div class="item" v-for="(item,key,index) in obj" :key="index">
+                    <div class="time color_999">{{key}}</div>
+                    <div class="content flex" v-for="(record,i) in item" :key="i">
+                        <div class="ava flex0">
+                            <img :src="record|docAva" alt="">
+                        </div>
+                        <div class="info lh1 flex1">
+                            <h3 class="fs45 color_333">{{record.paySubject}}</h3>
+                            <p class="color_999 fs32 mt37">{{record.createTime|formatTime("%Y-%m-%d %H:%M")}}</p>
+                        </div>
+                        <div class="price flex0 lh1">
+                            <h2 class="fs45 color_666">￥{{record.payFee/100}}</h2>
+                            <p class="color_999 fs32 mt30">{{record.payType=="PAY"?'交易成功':'退款成功'}}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="info lh1 flex1">
-              <h3 class="fs45 color_333">{{record.paySubject}}</h3>
-              <p class="color_999">{{record.createTime}}</p>
-            </div>
-            <div class="price flex0 lh1">
-              <h2 class="fs45 color_666">￥{{record.payFee/100}}</h2>
-              <p class="color_999">{{record.payType=="PAY"?'交易成功':'退款成功'}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </scroll>
-  </div>
+        </scroll>
+    </div>
 </template>
 
 <script>
@@ -45,7 +45,7 @@
     },
     computed: {},
     mixins: [scrollHeightMixin],
-    filters: {docAva},
+    filters: {docAva, formatTime},
     components: {AppHeader, Scroll},
     created() {
       this.getList();
@@ -62,16 +62,11 @@
         let ret = await api('nethos.pay.order.list', {});
         loading.hide();
         if (ret.code == 0) {
-          let list = ret.list.map((item) => {
-            item.showTime = formatTime(item.createTime, "%Y-%m-%d");
-            return item;
-          });
-          this.list = list;
-          this.obj = R.groupBy((res) => {
-            return res.showTime;
-          })(list);
-
-
+          this.list = ret.list;
+          this.obj = R.compose(
+            R.groupBy(item => item.showTime),
+            R.map(item => Object.assign(item, {showTime: formatTime(item.createTime, "%Y-%m-%d")}))
+          )(this.list);
         } else {
           //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
         }
@@ -81,40 +76,50 @@
 </script>
 
 <style scoped lang="scss">
-  @import "../../common/public";
+    @import "../../common/public";
 
-  .fs32 {
-    font-size: px2rem(32px, 1080);
-  }
-
-  .fs45 {
-    font-size: px2rem(45px, 1080);
-  }
-
-  .scroll {
-    background-color: #F8F8F8;
-  }
-
-  .time {
-    @include h_lh(px2rem(115px, 1080));
-  }
-
-  .item {
-    .content + .content {
-      @include border(top);
+    .fs32 {
+        font-size: px2rem(32px, 1080);
     }
-  }
 
-  .content {
-    padding: $commonSpace;
-    background-color: white;
-  }
-
-  .ava {
-    $w: px2rem(130px, 1080);
-    img {
-      @include w_h($w, $w);
-      border-radius: 50%;
+    .fs45 {
+        font-size: px2rem(45px, 1080);
     }
-  }
+
+    .mt37 {
+        margin-top: px2rem(37px, 1080);
+    }
+
+    .mt30 {
+        margin-top: px2rem(30px, 1080);
+    }
+
+    .scroll {
+        background-color: #F8F8F8;
+    }
+
+    .time {
+        padding-left: $commonSpace;
+        @include h_lh(px2rem(115px, 1080));
+    }
+
+    .item {
+        .content + .content {
+            @include border(top);
+        }
+    }
+
+    .content {
+        padding: $commonSpace;
+        background-color: white;
+    }
+
+    .ava {
+        margin-right: $commonSpace;
+        $w: px2rem(130px, 1080);
+        img {
+            @include w_h($w, $w);
+            border-radius: 50%;
+        }
+    }
 </style>
