@@ -12,14 +12,14 @@
       <img src="../../../static/img/coupons/back2@2x.png" alt="">
       <div class="info absolute">
         <div class="title center">
-          送您 <span v-if="info.activityCouponMoney">{{info.activityCouponMoney/100}}元</span>健康礼券<br>
+          送您 <span v-if="info.price">{{info.price/100}}元</span>健康礼券<br>
           邀请您体验浙二好医生
         </div>
         <div class="step">
           <p>1、点击下方按钮，下载APP</p>
           <p>2、复制邀请码，在注册时输入</p>
-          <h3 class="code center">{{info.code}}</h3>
-          <div class="copy center" :data-clipboard-text="info.code" @click="copy">点击复制</div>
+          <h3 class="code center" :data-clipboard-text="info.code" @click="copy('code')">{{info.code}}</h3>
+          <div class="copy center" :data-clipboard-text="info.code" @click="copy('copy')">点击复制</div>
         </div>
       </div>
     </div>
@@ -88,8 +88,8 @@
           height && (mainEl.style.height = `${window.innerHeight - height}px`);
         }
       },
-      copy() {
-        let copy = new Clipboard('.copy');
+      copy(type) {
+        let copy = new Clipboard(`.${type}`);
         copy.on("success", (res) => {
           weuijs.toast("复制成功！");
         })
@@ -109,7 +109,10 @@
         });
         if (ret.code == 0) {
           this.activity = ret.obj;
-          this.$set(this.info, 'activityCouponMoney', ret.obj.activityCouponMoney);
+          if (this.info && !this.info.price) {
+            this.$set(this.info, 'price', ret.obj.activityCouponMoney);
+          }
+          //
         }
         loading.hide();
       },
@@ -200,11 +203,11 @@
             padding-bottom: px2rem(60px, 750);
           }
           .code {
-            padding-bottom: px2rem(50px, 750);
             font-size: px2rem(80px, 750);
           }
           .copy {
-
+            padding-top: px2rem(50px, 750);
+            padding-bottom: px2rem(50px, 750);
           }
         }
       }

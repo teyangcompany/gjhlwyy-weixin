@@ -17,13 +17,13 @@
       <div class="back center">
         <img @click="back()" class="previous" src="../../../../static/img/返回.png" alt="">
       </div>
+      <div class="name font-size-h3" :style="nameStyle">{{aboutDoctor.docName}}</div>
       <div class="right flex">
         <div class="follow" @click="follow">{{isFollow?'已关注':'+关注'}}</div>
         <div class="share iconfont center" @click="showShare">&#xe601;</div>
       </div>
     </header>
-    <!--<v-header ref="topHeader" :title="title" :rightTitle="rightTitle" ></v-header>-->
-    <div class="doctorCard overflow-y-auto overflow-x-hidden" ref="main" :style="style">
+    <div class="doctorCard overflow-y-auto overflow-x-hidden overflow-touch" @scroll="scroll" ref="main" :style="style">
       <div>
         <doc-info :info="aboutDoctor"></doc-info>
         <div class="space-line"></div>
@@ -167,6 +167,9 @@
     mixins: [isLoginMixin, isBindMixin, jssdkMixin, mainHeightMixin],
     data() {
       return {
+        nameStyle: {
+          opacity: 0
+        },
         openTeampic: OPEN_TEAMPIC,
         style: {},
         showSharePic: false,
@@ -246,6 +249,12 @@
       },
       init() {
         this.style.width = `${window.innerWidth}px`;
+      },
+      scroll() {
+        let dom = this.$refs.main,
+          top = (dom.scrollTop),
+          t = Math.min(top, 45);
+        this.$set(this.nameStyle, 'opacity', (t / 45));
       },
       goTeam(id) {
         this.$router.push(`/team/${id}/detail`);

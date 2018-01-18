@@ -93,11 +93,11 @@
     }
 
     .mt37 {
-        margin-top: px2rem(37px, 1080);
+        margin-top: px2rem(35px, 1080);
     }
 
     .mt30 {
-        margin-top: px2rem(30px, 1080);
+        margin-top: px2rem(25px, 1080);
     }
 
     .pt500 {

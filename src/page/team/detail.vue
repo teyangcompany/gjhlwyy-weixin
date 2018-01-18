@@ -3,7 +3,7 @@
     <app-header title="团队名片" ref="header">
       <i class="back" slot="back"></i>
     </app-header>
-    <div class="main infobox" ref="main">
+    <div class="main infobox overflow-touch" ref="main">
       <div class="banner">
         <img :src="info.teamAvatar" alt="">
       </div>

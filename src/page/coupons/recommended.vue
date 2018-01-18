@@ -110,14 +110,14 @@
       getShareLink() {
         let options = getParamsFromUrl(location.href),
           env = getENV();
-        debug('options', options);
         options.hash = "/coupons/share?";
         options.path = '/gjhlwyy';
         options.hostname = env.jssdk;
         let params = {
           name: this.userInfo.patName,
           avator: this.userInfo.patAvatar,
-          code: this.info.inviteCode
+          code: this.info.inviteCode,
+          price:this.info.activityCouponMoney
         }, str = '';
 
         for (let k in params) {

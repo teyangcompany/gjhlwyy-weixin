@@ -57,3 +57,11 @@ li {
   color: white;
   background-color: $mainColor;
 }
+
+.overflow-touch {
+  -webkit-overflow-scrolling: touch;
+}
+
+.font-size-h3 {
+  font-size: px2rem(17px);
+}
