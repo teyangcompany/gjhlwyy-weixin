@@ -25,7 +25,7 @@
             <a class="weui-cell weui-cell_access" href="javascript:;" @click="goMyConsult()">
               <div class="weui-cell__hd"><img src="../../../static/img/my/ic_interrogation@2x.png" alt="" style="width:20px;margin-right:7px;display:block"></div>
               <div class="weui-cell__bd">
-                <p>我的问诊</p>
+                <p>我的咨询</p>
               </div>
               <div class="weui-cell__ft"></div>
             </a>

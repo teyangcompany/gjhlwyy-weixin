@@ -319,7 +319,7 @@
     data() {
       return {
         title: "网络诊间",
-        rightTitle: "我的问诊",
+        rightTitle: "我的咨询",
         sortBy: '',
         sortPick: "",
         firstPick: "",

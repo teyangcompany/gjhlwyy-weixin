@@ -19,7 +19,7 @@
   export default{
       data(){
           return{
-              title:"我的问诊",
+              title:"我的咨询",
               rightTitle:"",
               path:"",
               onlineNames:[

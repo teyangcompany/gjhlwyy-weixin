@@ -11,7 +11,7 @@
           </div>
           <div class="weui-msg__opr-area">
             <p class="weui-btn-area">
-              <a href="javascript:;" class="weui-btn weui-btn_default" @click="goDoctorList()">查看我的问诊</a>
+              <a href="javascript:;" class="weui-btn weui-btn_default" @click="goDoctorList()">查看我的咨询</a>
             </p>
           </div>
         </div>
