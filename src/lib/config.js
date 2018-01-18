@@ -86,7 +86,7 @@ export const couponStatus = {
 }
 
 export const CONSULT_TYPE = {
-  PIC: '全科咨询', DOCPIC: '图文咨询', VIDEO: '名医视频', DOCVIDEO: '视频问诊', TEAMPIC: '团队咨询'
+  PIC: '全科咨询', DOCPIC: '图文咨询', VIDEO: '名医视频', DOCVIDEO: '视频咨询', TEAMPIC: '团队咨询'
 }
 
 export const DOWNLOAD = 'http://api.gjwlyy.com/api/download/pat/index.html';
@@ -107,4 +107,14 @@ export const OPEN_NEW_MYBOOK_VERSION = true;
 export const OPEN_NEW_MYDOC_VERSION = true;
 
 export const OPEN_MYPAY_VERSION = true;
+
+export const OPEN_MYCONSULT_VERSION = true;
+
+export const CONSULT_STATUS = [
+  {value: -1, name: 'CANCEL', title: '已取消'},
+  {value: 0, name: 'NEEDPAY', title: '待付款'},
+  {value: 2, name: 'GOING', title: '进行中'},
+  {value: 4, name: 'NEEDCOMMENT', title: '待评价'},
+  {value: 6, name: 'FINSH', title: '已评价'}
+]
 

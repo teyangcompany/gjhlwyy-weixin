@@ -377,5 +377,9 @@ export default [
   {
     path: "/my/edit",
     component: myEdit
+  },
+  {
+    path: "/my/consult",
+    component: () => import('../../page/my/consult')
   }
 ]
