@@ -8,6 +8,8 @@
           <p class="time"> {{ time }} 阅读：{{ article.readTimes }}次</p>
         </div>
         <div class="contentWrap">
+<!--          <span style="padding: 0px 15px 30px 15px;font-size: 16px;line-height: 1.5"></span>
+          <img src="" alt="" style="margin-bottom: 30px;margin: 0 15px 30px 15px;width: 100%;height: auto">-->
           <div v-html="article.content">
           </div>
         </div>
@@ -74,7 +76,7 @@
     .contentWrap {
       width: 690rem/$rem;
       margin: 0 auto;
-      img{
+      img {
         width: 100%;
       }
     }
