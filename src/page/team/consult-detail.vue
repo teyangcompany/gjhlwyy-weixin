@@ -1,6 +1,6 @@
 <template>
   <div class="page team-consult-detail flex">
-    <app-header ref="header" class="flex0" title="团队咨询">
+    <app-header ref="header" class="flex0" :title="consult.consultTypeName">
       <i slot="back"></i>
       <div slot="right" @click="handleConsult('end')" class="right absolute"
            v-if="consult.consultStatus=='GOING'&&!consult.consultStatusDescription">
@@ -38,7 +38,7 @@
             <div class="time flex1">{{consult.createTime|formatTime('%Y-%m-%d %H:%M:%S')}}</div>
           </div>
         </div>
-        <div class="team">
+        <div v-if="consult.consultType=='TEAMPIC'" class="team">
           <h3 class="overflow-hidden" @click="showType=showType=='part'?'all':'part'">
             专家团队成员
             <div class="icon float-right" :class="[showType]"></div>
@@ -79,8 +79,11 @@
   export default {
     data() {
       return {
-        bottomHeight: 50, showType: 'part',
-        id: "", info: {}, teamInfo: {}
+        bottomHeight: 50,
+        showType: 'part',
+        id: "",
+        info: {},
+        teamInfo: {}
       };
     },
     computed: {
@@ -162,9 +165,11 @@
         let ret = await api('nethos.consult.info.detail', {consultId: this.id});
         if (ret.code == 0) {
           this.info = ret.obj;
-          let ret2 = await api("smarthos.team.info.card", {id: this.info.consult.teamId});
-          if (ret2.code == 0) {
-            this.teamInfo = ret2.obj;
+          if (this.info.consult.consultType == "TEAMPIC") {
+            let ret2 = await api("smarthos.team.info.card", {id: this.info.consult.teamId});
+            if (ret2.code == 0) {
+              this.teamInfo = ret2.obj;
+            }
           }
         }
         loading.hide();

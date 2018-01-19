@@ -37,6 +37,7 @@
   import {isBindMixin, isLoginMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   import {formatDate} from '../../../utils/formatTimeStamp'
+  import {OPEN_MYCONSULT_VERSION} from "../../../lib/config";
 
   export default {
     mixins: [isLoginMixin, isBindMixin],
@@ -55,16 +56,20 @@
 
     },
     created() {
-      this._isBind().then((res) => {
-        if (res === false) {
-          this.$router.replace({
-            path: "/bindRelativePhone",
-            query: {backPath: this.path}
-          });
-        } else {
-          this.getList();
-        }
-      })
+      if (OPEN_MYCONSULT_VERSION) {
+        this.$router.replace('/my/consult');
+      } else {
+        this._isBind().then((res) => {
+          if (res === false) {
+            this.$router.replace({
+              path: "/bindRelativePhone",
+              query: {backPath: this.path}
+            });
+          } else {
+            this.getList();
+          }
+        })
+      }
     },
     methods: {
       getList() {

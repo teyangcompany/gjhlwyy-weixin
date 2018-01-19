@@ -143,6 +143,7 @@
   import weui from 'weui.js'
   import consultPatAva from "../../../utils/consultPatAva"
   import {tokenCache} from '../../../lib/cache'
+  import {DOWNLOAD, DOWNLOAD_CONTENT, OPEN_MYCONSULT_VERSION, OPEN_TEAMPIC} from "../../../lib/config";
 
   export default {
     data() {
@@ -203,53 +204,81 @@
       this.displayPicked = this.$route.query.picked
       this.consultId = this.$route.query.consultId
       this.showToast = true
-      this.$nextTick(() => {
-        api("nethos.consult.info.detail", {
-          token: tokenCache.get(),
-          consultId: this.consultId
+      if (OPEN_MYCONSULT_VERSION) {
+        this.$router.replace({
+          path: `/team/consult/${this.consultId}`
+        })
+      } else {
+        this.$nextTick(() => {
+          api("nethos.consult.info.detail", {
+            token: tokenCache.get(),
+            consultId: this.consultId
+          }).then((data) => {
+            console.log(data)
+            this.messageLength = data.obj.messageList.length
+            this.showToast = false
+            if (data.code == 0) {
+              this.$nextTick(() => {
+                this.aboutConsult = data.obj.consult
+                this.aboutReplyMessage = data.obj.messageList
+                this.attachImg = data.obj.attaList
+                this.title = this.aboutConsult.docName
+                this.waitImg = this.aboutConsult.docAvatar ? this.aboutConsult.docAvatar : './static/img/doctor.m.png'
+                let o = document.getElementsByClassName("chat")[0];
+                let h = o.offsetHeight;  //高度
+                let content = h
+
+                if (this.aboutConsult.consultType == "TEAMPIC") {
+                  if (OPEN_TEAMPIC) {
+                    this.$router.replace({
+                      path: `/team/consult/${this.consultId}`
+                    })
+                  } else {
+                    weui.confirm(`${DOWNLOAD_CONTENT}进行视频咨询`, {
+                      title: '提示',
+                      buttons: [
+                        {
+                          label: '取消',
+                          type: 'default',
+                          onClick: () => {
+                            history.go(-1);
+                          }
+                        },
+                        {
+                          label: '下载APP',
+                          type: 'primary',
+                          onClick: () => {
+                            location.href = DOWNLOAD
+                          }
+                        }
+                      ]
+                    })
+                  }
+                }
+
+                setTimeout(() => {
+                  if (this.$refs.slideList.offsetHeight > content - 10) {
+                    this.$refs.conversation.scrollTo(0, content - this.$refs.slideList.offsetHeight - 140)
+                  }
+                }, 300)
+
+
+              })
+            } else if (!(data.msg)) {
+              weui.alert("网络错误，请稍后重试")
+            } else {
+              weui.alert(data.msg)
+            }
+//          console.log(this.attachImg)
+          })
+        })
+        api("nethos.pat.info.get", {
+          token: tokenCache.get()
         }).then((data) => {
           console.log(data)
-          this.messageLength = data.obj.messageList.length
-          this.showToast = false
-          if (data.code == 0) {
-            this.$nextTick(() => {
-              this.aboutConsult = data.obj.consult
-              this.aboutReplyMessage = data.obj.messageList
-              this.attachImg = data.obj.attaList
-              this.title = this.aboutConsult.docName
-              this.waitImg = this.aboutConsult.docAvatar ? this.aboutConsult.docAvatar : './static/img/doctor.m.png'
-              let o = document.getElementsByClassName("chat")[0];
-              let h = o.offsetHeight;  //高度
-              let content = h
-
-              if (this.aboutConsult.consultType == "TEAMPIC") {
-                this.$router.replace({
-                  path: `/team/consult/${this.consultId}`
-                })
-              }
-
-
-              setTimeout(() => {
-                if (this.$refs.slideList.offsetHeight > content - 10) {
-                  this.$refs.conversation.scrollTo(0, content - this.$refs.slideList.offsetHeight - 140)
-                }
-              }, 300)
-
-
-            })
-          } else if (!(data.msg)) {
-            weui.alert("网络错误，请稍后重试")
-          } else {
-            weui.alert(data.msg)
-          }
-//          console.log(this.attachImg)
         })
-      })
-      api("nethos.pat.info.get", {
-        token: tokenCache.get()
-      }).then((data) => {
-        console.log(data)
-      })
+      }
+
     },
     mounted() {
 //      const socket = io("nethoswebsocket.diandianys.com");

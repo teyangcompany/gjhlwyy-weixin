@@ -380,6 +380,9 @@ export default [
   },
   {
     path: "/my/consult",
-    component: () => import('../../page/my/consult')
+    component: () => import('../../page/my/consult'),
+    children: [
+      {path: ':status', component: () => import('../../page/my/consult/list')}
+    ]
   }
 ]

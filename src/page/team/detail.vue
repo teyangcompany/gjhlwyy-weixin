@@ -46,11 +46,11 @@
 
       <div class="wrap">
         <ol class="flex ercode">
-          <li class="flex0 center">
+          <li class="flex0 center" @click="showQrcode('appQrcodeUrl')">
             <p><img src="../../../static/img/logo.web.png" alt=""></p>
             <div><span class="app">APP</span>关注我<br>功能更丰富</div>
           </li>
-          <li class="flex0 center">
+          <li class="flex0 center" @click="showQrcode('wechatQrcodeUrl')">
             <p><img src="../../../static/img/logo.weixin.png" alt=""></p>
             <div><span class="weixin">微信</span>关注我<br>咨询更方便</div>
           </li>
@@ -60,6 +60,13 @@
     <router-link :to="{path:`/team/${id}/consult`}" tag="div" class="bottom" ref="bottom">
       咨询团队{{info.consultPrice|formatPrice}}
     </router-link>
+
+    <div class="qrcode" @click="isShowQrcode=false" v-if="isShowQrcode">
+      <div class="mask fixed"></div>
+      <div class="pic fixed">
+        <img :src="qrcodeUrl" alt="">
+      </div>
+    </div>
   </div>
 </template>
 
@@ -78,6 +85,8 @@
   export default {
     data() {
       return {
+        qrcodeUrl: "",
+        isShowQrcode: false,
         openTeampic: OPEN_TEAMPIC,
         id: "",
         showType: "all",
@@ -112,6 +121,14 @@
 
     },
     methods: {
+      showQrcode(field) {
+        if (this.info[field]) {
+          this.isShowQrcode = true
+          this.qrcodeUrl = this.info[field];
+        }
+
+
+      },
       subStr(str, index) {
         if (!str) {
           return ''
@@ -249,6 +266,23 @@
       text-align: center;
       color: white;
       background-color: $mainColor;
+    }
+
+  }
+
+  .qrcode {
+    .mask {
+      @include t_r_b_l();
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    .pic {
+      left: 5%;
+      top: 10%;
+      right: 5%;
+      bottom: 10%;
+      img {
+        width: 100%
+      }
     }
   }
 </style>

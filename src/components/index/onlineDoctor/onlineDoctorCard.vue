@@ -264,7 +264,7 @@
           this.goConsult();
         } else if (name == 'book') {
           this.goBookNum();
-        } else if (name == 'team') {
+        } else if (name == 'team' && OPEN_TEAMPIC) {
           if (this.teamInfo && this.teamInfo.id) {
             this.goTeam(this.teamInfo.id);
           }

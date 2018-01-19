@@ -27,7 +27,7 @@ li {
 
 .nodata {
   @include t_r_b_l();
-  top: 50%;
+  padding-top: px2rem(500px, 1080);
   a {
     color: $mainColor;
   }
