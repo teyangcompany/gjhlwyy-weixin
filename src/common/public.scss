@@ -27,7 +27,7 @@ li {
 
 .nodata {
   @include t_r_b_l();
-  top: 50%;
+  padding-top: px2rem(500px, 1080);
   a {
     color: $mainColor;
   }
@@ -56,4 +56,12 @@ li {
   @include h_lh(px2rem(80px, 750));
   color: white;
   background-color: $mainColor;
+}
+
+.overflow-touch {
+  -webkit-overflow-scrolling: touch;
+}
+
+.font-size-h3 {
+  font-size: px2rem(17px);
 }

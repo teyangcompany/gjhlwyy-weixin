@@ -46,7 +46,7 @@
       data(){
           return{
               title:"名医视频",
-              rightTitle:"我的问诊",
+              rightTitle:"我的咨询",
               famousList:""
           }
       },

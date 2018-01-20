@@ -1,6 +1,6 @@
 <template>
   <div class="page team-consult-detail flex">
-    <app-header ref="header" class="flex0" title="团队咨询">
+    <app-header ref="header" class="flex0" :title="consult.consultTypeName">
       <i slot="back"></i>
       <div slot="right" @click="handleConsult('end')" class="right absolute"
            v-if="consult.consultStatus=='GOING'&&!consult.consultStatusDescription">
@@ -38,7 +38,7 @@
             <div class="time flex1">{{consult.createTime|formatTime('%Y-%m-%d %H:%M:%S')}}</div>
           </div>
         </div>
-        <div class="team">
+        <div v-if="consult.consultType=='TEAMPIC'" class="team">
           <h3 class="overflow-hidden" @click="showType=showType=='part'?'all':'part'">
             专家团队成员
             <div class="icon float-right" :class="[showType]"></div>
@@ -53,6 +53,16 @@
           </ul>
         </div>
         <div class="meaasge">
+          <template v-if="showNotice">
+            <div class="notice-msg">
+              该咨询将在 <span>1月10号（后天）15:02</span> 自动结束
+            </div>
+            <div class="notice-msg">
+              医生工作繁忙，请您保持耐心，<span>并尽量将您的问题、希望获得的帮助一次性完整提出</span>
+            </div>
+          </template>
+
+
           <message-item ref="msg" v-for="message in messageList" :key="message.messageId"
                         :message="message"></message-item>
         </div>
@@ -79,11 +89,28 @@
   export default {
     data() {
       return {
-        bottomHeight: 50, showType: 'part',
-        id: "", info: {}, teamInfo: {}
+        bottomHeight: 50,
+        showType: 'part',
+        id: "",
+        info: {},
+        teamInfo: {}
       };
     },
     computed: {
+      showNotice() {
+        let {consult} = this.info;
+        if (consult) {
+          if (consult.consultStatus == "GOING" && !consult.consultStatusDescription) {
+            return true;
+          } else if (['NEEDCOMMENT', 'FINSH'].indexOf(consult.consultStatus) >= 0) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return false
+        }
+      },
       consult() {
         return this.info.consult ? this.info.consult : {};
       },
@@ -162,9 +189,11 @@
         let ret = await api('nethos.consult.info.detail', {consultId: this.id});
         if (ret.code == 0) {
           this.info = ret.obj;
-          let ret2 = await api("smarthos.team.info.card", {id: this.info.consult.teamId});
-          if (ret2.code == 0) {
-            this.teamInfo = ret2.obj;
+          if (this.info.consult.consultType == "TEAMPIC") {
+            let ret2 = await api("smarthos.team.info.card", {id: this.info.consult.teamId});
+            if (ret2.code == 0) {
+              this.teamInfo = ret2.obj;
+            }
           }
         }
         loading.hide();
@@ -175,6 +204,20 @@
 
 <style scoped lang="scss">
   @import "../../common/public";
+
+  .notice-msg {
+    margin: 0 auto;
+    margin-bottom: px2rem(10px);
+    border-radius: 5px;
+    padding: 2px 4px;
+    width: px2rem(345px - 35px*2 - 10px*2);
+    font-size: 12px;
+    color: white;
+    background-color: rgb(204, 204, 204);
+    span {
+      color: #3399FF;
+    }
+  }
 
   .team-consult-detail {
     flex-direction: column;
