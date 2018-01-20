@@ -1,76 +1,77 @@
 <template>
-  <div class="page team-consult-detail flex">
-    <app-header ref="header" class="flex0" :title="consult.consultTypeName">
-      <i slot="back"></i>
-      <div slot="right" @click="handleConsult('end')" class="right absolute"
-           v-if="consult.consultStatus=='GOING'&&!consult.consultStatusDescription">
-        结束问诊
-      </div>
-    </app-header>
-    <scroll :height="scrollHeight" ref="scroll" class="flex1">
-      <div class="main">
-        <div class="info">
-          <div class="item flex">
-            <div class="label flex0">患者资料：</div>
-            <div class="text flex1">{{consult.consulterName}} {{consult.consulterGender|getGender}}
-              {{consult.consulterAge}}岁
+    <div class="page team-consult-detail flex">
+        <app-header ref="header" class="flex0" :title="consult.consultTypeName">
+            <i slot="back"></i>
+            <div slot="right" @click="handleConsult('end')" class="right absolute"
+                 v-if="consult.consultStatus=='GOING'&&!consult.consultStatusDescription">
+                结束问诊
             </div>
-          </div>
-          <div class="item flex">
-            <div class="label flex0">疾病名称：</div>
-            <div class="text flex1">{{consult.illnessName}}</div>
-          </div>
-          <div class="container">
-            <div class="content">
-              {{consult.consultContent}}
-            </div>
-            <ul v-if="attaList" class="pics overflow-hidden">
-              <li v-for="pic in attaList" class="float-left">
-                <img :src="pic.url" alt="">
-              </li>
-            </ul>
-          </div>
-          <div class="pat flex">
-            <div class="ava flex0">
-              <img :src="consult|patAva" alt="">
-            </div>
-            <div class="name flex0">{{consult.patName}}</div>
-            <div class="time flex1">{{consult.createTime|formatTime('%Y-%m-%d %H:%M:%S')}}</div>
-          </div>
-        </div>
-        <div v-if="consult.consultType=='TEAMPIC'" class="team">
-          <h3 class="overflow-hidden" @click="showType=showType=='part'?'all':'part'">
-            专家团队成员
-            <div class="icon float-right" :class="[showType]"></div>
-          </h3>
-          <ul class="overflow-hidden">
-            <li v-for="(member,index) in members" v-if="index<showMember" class="float-left">
-              <div class="ava">
-                <img :src="member|docAva" alt="">
-              </div>
-              <div class="name ellipsis">{{member.docName}}</div>
-            </li>
-          </ul>
-        </div>
-        <div class="meaasge">
-          <template v-if="showNotice">
-            <div class="notice-msg">
-              该咨询将在 <span>1月10号（后天）15:02</span> 自动结束
-            </div>
-            <div class="notice-msg">
-              医生工作繁忙，请您保持耐心，<span>并尽量将您的问题、希望获得的帮助一次性完整提出</span>
-            </div>
-          </template>
+        </app-header>
+        <scroll :height="scrollHeight" ref="scroll" class="flex1">
+            <div class="main">
+                <div class="info">
+                    <div class="item flex">
+                        <div class="label flex0">患者资料：</div>
+                        <div class="text flex1">{{consult.consulterName}} {{consult.consulterGender|getGender}}
+                            {{consult.consulterAge}}岁
+                        </div>
+                    </div>
+                    <div class="item flex">
+                        <div class="label flex0">疾病名称：</div>
+                        <div class="text flex1">{{consult.illnessName}}</div>
+                    </div>
+                    <div class="container">
+                        <div class="content">
+                            {{consult.consultContent}}
+                        </div>
+                        <ul v-if="attaList" class="pics overflow-hidden">
+                            <li v-for="pic in attaList" class="float-left">
+                                <img :src="pic.url" alt="">
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pat flex">
+                        <div class="ava flex0">
+                            <img :src="consult|patAva" alt="">
+                        </div>
+                        <div class="name flex0">{{consult.patName}}</div>
+                        <div class="time flex1">{{consult.createTime|formatTime('%Y-%m-%d %H:%M:%S')}}</div>
+                    </div>
+                </div>
+                <div v-if="consult.consultType=='TEAMPIC'" class="team">
+                    <h3 class="overflow-hidden" @click="showType=showType=='part'?'all':'part'">
+                        专家团队成员
+                        <div class="icon float-right" :class="[showType]"></div>
+                    </h3>
+                    <ul class="overflow-hidden">
+                        <li v-for="(member,index) in members" v-if="index<showMember" class="float-left">
+                            <div class="ava">
+                                <img :src="member|docAva" alt="">
+                            </div>
+                            <div class="name ellipsis">{{member.docName}}</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="meaasge">
+                    <template v-if="showNotice">
+                        <div class="notice-msg">
+                            该咨询将在 <span>{{showNoticeTime}}</span> 自动结束
+                        </div>
+                        <div class="notice-msg">
+                            医生工作繁忙，请您保持耐心，<span>并尽量将您的问题、希望获得的帮助一次性完整提出</span>
+                        </div>
+                    </template>
 
 
-          <message-item ref="msg" v-for="message in messageList" :key="message.messageId"
-                        :message="message"></message-item>
-        </div>
-      </div>
-    </scroll>
-    <bottom class="flex0" @cancel="getDetail" @sendok="sendok" :status="consult.consultStatus" :message="messageList"
-            :consult="consult"></bottom>
-  </div>
+                    <message-item ref="msg" v-for="message in messageList" :key="message.messageId"
+                                  :message="message"></message-item>
+                </div>
+            </div>
+        </scroll>
+        <bottom class="flex0" @cancel="getDetail" @sendok="sendok" :status="consult.consultStatus"
+                :message="messageList"
+                :consult="consult"></bottom>
+    </div>
 </template>
 
 <script>
@@ -97,6 +98,32 @@
       };
     },
     computed: {
+      showNoticeTime() {
+        let {consult} = this.info,
+          ret = "",
+          showNoticeStr = '',
+          endDay = "",
+          todayTime = new Date().getTime(),
+          today = formatTime(todayTime, '%Y/%m/%d');
+        if (consult) {
+          let endTime = consult.modifyTime || consult.payTime || consult.createTime;
+          endTime += 48 * 3600 * 1000;
+          showNoticeStr = formatTime(endTime, '%m月%d日()%H:%S');
+          endDay = formatTime(endTime, '%Y/%m/%d');
+          let cha = new Date(endDay).getTime() - new Date(today).getTime();
+          cha = cha / 24 / 3600 / 1000;
+          if (todayTime > endTime) {
+            ret = "";
+          } else {
+            ret = cha == 0 ? '(今天)' :
+              cha == 1 ? '(明天)' : '(后天)';
+          }
+        } else {
+          ret = "";
+        }
+        return showNoticeStr.replace('()', ret);
+      },
+
       showNotice() {
         let {consult} = this.info;
         if (consult) {
@@ -203,118 +230,118 @@
 </script>
 
 <style scoped lang="scss">
-  @import "../../common/public";
+    @import "../../common/public";
 
-  .notice-msg {
-    margin: 0 auto;
-    margin-bottom: px2rem(10px);
-    border-radius: 5px;
-    padding: 2px 4px;
-    width: px2rem(345px - 35px*2 - 10px*2);
-    font-size: 12px;
-    color: white;
-    background-color: rgb(204, 204, 204);
-    span {
-      color: #3399FF;
+    .notice-msg {
+        margin: 0 auto;
+        margin-bottom: px2rem(10px);
+        border-radius: 5px;
+        padding: 2px 4px;
+        width: px2rem(345px - 35px*2 - 10px*2);
+        font-size: 12px;
+        color: white;
+        background-color: rgb(204, 204, 204);
+        span {
+            color: #3399FF;
+        }
     }
-  }
 
-  .team-consult-detail {
-    flex-direction: column;
-    .scrollwrapper {
-      background-color: #F8F8F8;
-      overflow: hidden;
-    }
-    .main {
-      .info {
-        background-color: white;
-        .item + .item, .container {
-          @include border(top);
+    .team-consult-detail {
+        flex-direction: column;
+        .scrollwrapper {
+            background-color: #F8F8F8;
+            overflow: hidden;
         }
-        .item {
-          padding-left: px2rem(15px);
-          @include h_lh(45px);
-          .label {
-            font-size: 14px;
-          }
-        }
-        .container {
-          padding: px2rem(5px) px2rem(15px);
-          .content {
-            font-size: 12px;
-          }
-          .pics {
-            padding-top: 10px;
-            li {
-              padding-bottom: 10px;
-              width: (100%/3);
-              img {
-                @include w_h(5rem, 5rem);
-              }
+        .main {
+            .info {
+                background-color: white;
+                .item + .item, .container {
+                    @include border(top);
+                }
+                .item {
+                    padding-left: px2rem(15px);
+                    @include h_lh(45px);
+                    .label {
+                        font-size: 14px;
+                    }
+                }
+                .container {
+                    padding: px2rem(5px) px2rem(15px);
+                    .content {
+                        font-size: 12px;
+                    }
+                    .pics {
+                        padding-top: 10px;
+                        li {
+                            padding-bottom: 10px;
+                            width: (100%/3);
+                            img {
+                                @include w_h(5rem, 5rem);
+                            }
+                        }
+                    }
+                }
+                .pat {
+                    padding: 0 px2rem(15px);
+                    align-items: center;
+                    height: 45px;
+                    .ava {
+                        img {
+                            border-radius: 15px;
+                            @include w_h(30px, 30px);
+                        }
+                    }
+                    .name {
+                        padding-left: 15px;
+                        color: #777777;
+                    }
+                    .time {
+                        color: #777777;
+                        text-align: right;
+                    }
+                }
             }
-          }
-        }
-        .pat {
-          padding: 0 px2rem(15px);
-          align-items: center;
-          height: 45px;
-          .ava {
-            img {
-              border-radius: 15px;
-              @include w_h(30px, 30px);
-            }
-          }
-          .name {
-            padding-left: 15px;
-            color: #777777;
-          }
-          .time {
-            color: #777777;
-            text-align: right;
-          }
-        }
-      }
-      .team {
-        margin-top: px2rem(15px);
-        background-color: white;
-        h3 {
-          @include h_lh(35px);
-          padding: 0 px2rem(15px);
-          .icon {
-            @include w_h(35px/2, 20px/2);
-            margin-top: 13px;
-            @include backgroundImageSet();
-            &.part {
-              background-image: url(../../../static/img/下.png);
-            }
-            &.all {
-              background-image: url(../../../static/img/上.png);
-            }
+            .team {
+                margin-top: px2rem(15px);
+                background-color: white;
+                h3 {
+                    @include h_lh(35px);
+                    padding: 0 px2rem(15px);
+                    .icon {
+                        @include w_h(35px/2, 20px/2);
+                        margin-top: 13px;
+                        @include backgroundImageSet();
+                        &.part {
+                            background-image: url(../../../static/img/下.png);
+                        }
+                        &.all {
+                            background-image: url(../../../static/img/上.png);
+                        }
 
-          }
-        }
-        ul {
-          padding: 0 px2rem(15px);
-          padding-top: 5px;
-          li {
-            width: 25%;
-            text-align: center;
-            padding-bottom: 5px;
-            img {
-              border-radius: 50%;
-              @include w_h(3rem, 3rem);
+                    }
+                }
+                ul {
+                    padding: 0 px2rem(15px);
+                    padding-top: 5px;
+                    li {
+                        width: 25%;
+                        text-align: center;
+                        padding-bottom: 5px;
+                        img {
+                            border-radius: 50%;
+                            @include w_h(3rem, 3rem);
+                        }
+                        .name {
+                            font-size: 14px;
+                            color: $mainColor;
+                        }
+                    }
+                }
             }
-            .name {
-              font-size: 14px;
-              color: $mainColor;
+            .meaasge {
+                padding: 20px 0;
             }
-          }
         }
-      }
-      .meaasge {
-        padding: 20px 0;
-      }
     }
-  }
 
 </style>
