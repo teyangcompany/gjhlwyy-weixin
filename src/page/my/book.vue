@@ -116,10 +116,6 @@
 <style scoped lang="scss">
   @import "../../common/public";
 
-  .pt500 {
-    margin-top: px2rem(512px, 1080);
-  }
-
   .fs46 {
     font-size: px2rem(46px, 1080);
   }
