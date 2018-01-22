@@ -1,42 +1,42 @@
 <template>
-    <div class="consult-bottom">
-        <div class="wait center" @click="handler(status)"
-             v-if="(status=='GOING'||status=='CANCEL') && consult.consultStatusDescription">
-            {{consult.consultStatusDescription}}
-        </div>
-
-        <div class="rate" v-else-if="status=='NEEDPAY'">
-            <ul class="flex">
-                <li class="flex0 center" @click="handler('cancel')">取消申请</li>
-                <li class="flex0 center" @click="handler(status)">支付{{consult.canRefundFee}}元
-                </li>
-            </ul>
-        </div>
-
-        <div class="rate" v-else-if="status=='NEEDCOMMENT'">
-            <ul class="flex">
-                <li @click="repeat" class="flex0 center">再次咨询</li>
-                <router-link tag="li" :to="{path:'/comment',query:{consultId:consult.consultId}}" class="flex0 center">
-                    评价
-                </router-link>
-            </ul>
-        </div>
-
-        <div class="finish" v-else-if="status=='FINSH'">
-            <div @click="repeat" class="flex0 center">再次咨询</div>
-        </div>
-
-        <div ref="replay" class="replay flex" v-else>
-            <div class="input flex1">
-                <input @focus="handler('focus')" @blur="handler('blur')" type="text" v-model="replyContent">
-            </div>
-            <div class="btn flex0">
-                <a v-if="!replyContent" @click="$refs.uploader.click()" class="upload center">+</a>
-                <a @click="send" class="sendmsg" v-else>发送</a>
-            </div>
-        </div>
-        <uploader ref="uploader" @uploaded="uploaded"></uploader>
+  <div class="consult-bottom">
+    <div class="wait center" @click="handler(status)"
+         v-if="(status=='GOING'||status=='CANCEL') && consult.consultStatusDescription.indexOf('咨询中')<0">
+      {{consult.consultStatusDescription}}
     </div>
+
+    <div class="rate" v-else-if="status=='NEEDPAY'">
+      <ul class="flex">
+        <li class="flex0 center" @click="handler('cancel')">取消申请</li>
+        <li class="flex0 center" @click="handler(status)">支付{{consult.canRefundFee}}元
+        </li>
+      </ul>
+    </div>
+
+    <div class="rate" v-else-if="status=='NEEDCOMMENT'">
+      <ul class="flex">
+        <li @click="repeat" class="flex0 center">再次咨询</li>
+        <router-link tag="li" :to="{path:'/comment',query:{consultId:consult.consultId}}" class="flex0 center">
+          评价
+        </router-link>
+      </ul>
+    </div>
+
+    <div class="finish" v-else-if="status=='FINSH'">
+      <div @click="repeat" class="flex0 center">再次咨询</div>
+    </div>
+
+    <div ref="replay" class="replay flex" v-else>
+      <div class="input flex1">
+        <input @focus="handler('focus')" @blur="handler('blur')" type="text" v-model="replyContent">
+      </div>
+      <div class="btn flex0">
+        <a v-if="!replyContent" @click="$refs.uploader.click()" class="upload center">+</a>
+        <a @click="send" class="sendmsg" v-else>发送</a>
+      </div>
+    </div>
+    <uploader ref="uploader" @uploaded="uploaded"></uploader>
+  </div>
 </template>
 <script>
   import http from "../../lib/api"
@@ -157,66 +157,66 @@
 </script>
 
 <style scoped lang="scss">
-    @import "../../common/public";
+  @import "../../common/public";
 
-    $h: 50px;
-    .consult-bottom {
-        height: $h;
-        .wait {
-            line-height: $h;
-            background-color: #f8f8f8;
-            font-size: 12px;
-            color: #333;
-        }
-        .rate {
-            li {
-                @include h_lh($h);
-                width: 50%;
-                font-size: 16px;
-            }
-            li:nth-child(2) {
-                color: white;
-                background-color: $mainColor;
-            }
-        }
-        .finish {
-            div {
-                @include h_lh($h);
-                width: 100%;
-                font-size: 16px;
-            }
-        }
-        .replay {
-            height: $h;
-            align-items: center;
-            .btn {
-                padding-right: 10px;
-                .upload {
-                    display: block;
-                    @include w_h(30px, 30px);
-                    line-height: 30px;
-                    border: 1px solid #333;
-                    border-radius: 15px;
-                    color: #333;
-                    font-size: 16px;
-                }
-                .sendmsg {
-                    color: white;
-                    background-color: $mainColor;
-                    display: block;
-                    @include h_lh(30px);
-                    padding: 0 10px;
-                }
-            }
-            .input {
-                padding: 10px;
-                input {
-                    width: 100%;
-                    height: 30px;
-                    background-color: #f8f8f8;
-                    border-radius: 5px;
-                }
-            }
-        }
+  $h: 50px;
+  .consult-bottom {
+    height: $h;
+    .wait {
+      line-height: $h;
+      background-color: #f8f8f8;
+      font-size: 12px;
+      color: #333;
     }
+    .rate {
+      li {
+        @include h_lh($h);
+        width: 50%;
+        font-size: 16px;
+      }
+      li:nth-child(2) {
+        color: white;
+        background-color: $mainColor;
+      }
+    }
+    .finish {
+      div {
+        @include h_lh($h);
+        width: 100%;
+        font-size: 16px;
+      }
+    }
+    .replay {
+      height: $h;
+      align-items: center;
+      .btn {
+        padding-right: 10px;
+        .upload {
+          display: block;
+          @include w_h(30px, 30px);
+          line-height: 30px;
+          border: 1px solid #333;
+          border-radius: 15px;
+          color: #333;
+          font-size: 16px;
+        }
+        .sendmsg {
+          color: white;
+          background-color: $mainColor;
+          display: block;
+          @include h_lh(30px);
+          padding: 0 10px;
+        }
+      }
+      .input {
+        padding: 10px;
+        input {
+          width: 100%;
+          height: 30px;
+          background-color: #f8f8f8;
+          border-radius: 5px;
+        }
+      }
+    }
+  }
 </style>

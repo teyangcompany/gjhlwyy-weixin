@@ -13,7 +13,11 @@
             {{message.replyContent}}
             <ul v-if="message.hasAtta">
               <li v-for="atta in message.attaList">
-                <img :src="atta.url">
+                <playing-icon :src="atta.url" ref="playingIcon" class="iconfont fs45 audio block audio"
+                              @click="play(atta.url)"
+                              v-if="message.msgType=='AUDIO'">
+                </playing-icon>
+                <img :src="atta.url" v-if="message.msgType=='IMAGE'">
               </li>
             </ul>
           </div>
@@ -24,6 +28,7 @@
 </template>
 
 <script>
+  import PlayingIcon from '../../plugins/playing'
   import {formatTime} from "../../lib/filter";
   import patAva from '../../utils/consultPatAva'
 
@@ -34,19 +39,31 @@
     },
     computed: {},
     filters: {formatTime, patAva},
-    components: {},
+    components: {PlayingIcon},
     mounted() {
 
     },
     beforeDestroy() {
 
     },
-    methods: {}
+    methods: {
+      play(url) {
+        this.$emit('play', url);
+      }
+    }
   };
 </script>
 
 <style scoped lang="scss">
   @import "../../common/public";
+
+  .fs45 {
+    font-size: px2rem(45px, 1080);
+  }
+
+  .audio {
+    width: px2rem(200px);
+  }
 
   .message-item {
     padding: 0 px2rem(15px);
@@ -78,7 +95,7 @@
         max-width: 13rem;
         padding: 10px;
         border-radius: 5px;
-        img{
+        img {
           width: 100px;
         }
       }

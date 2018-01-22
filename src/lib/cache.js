@@ -109,3 +109,16 @@ export const chartCache = {
     storage.session.remove(CHART_KEY);
   }
 }
+
+const audio_play_status_KEY = CACHE_PREFIX + "audio_play_status_";
+export const audioPlayStatusCache = {
+  get() {
+    return storage.session.get(audio_play_status_KEY, null);
+  },
+  set(value) {
+    storage.session.set(audio_play_status_KEY, value);
+  },
+  remove() {
+    storage.session.remove(audio_play_status_KEY);
+  }
+}

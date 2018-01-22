@@ -46,11 +46,11 @@
 
       <div class="wrap">
         <ol class="flex ercode">
-          <li class="flex0 center" @click="showQrcode('appQrcodeUrl')">
+          <li class="flex0 center" @click="showQrcode('teamQrcodeUrl')">
             <p><img src="../../../static/img/logo.web.png" alt=""></p>
             <div><span class="app">APP</span>关注我<br>功能更丰富</div>
           </li>
-          <li class="flex0 center" @click="showQrcode('wechatQrcodeUrl')">
+          <li class="flex0 center" @click="showQrcode('teamQrcodeWechatUrl')">
             <p><img src="../../../static/img/logo.weixin.png" alt=""></p>
             <div><span class="weixin">微信</span>关注我<br>咨询更方便</div>
           </li>
@@ -121,6 +121,8 @@
 
     },
     methods: {
+
+
       showQrcode(field) {
         if (this.info[field]) {
           this.isShowQrcode = true
@@ -133,7 +135,6 @@
         if (!str) {
           return ''
         }
-        ;
         let isOpen = this.showText[index];
         if (isOpen) {
           return str;
@@ -149,6 +150,19 @@
       changeType() {
         this.showType = this.showType == 'part' ? 'all' : 'part';
       },
+
+      async follow() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await http('nethos.follow.teampa.add', {teamId: this.id});
+        loading.hide();
+      },
+
+      async unfollow() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await http('nethos.follow.teampa.cancel', {teamId: this.id})
+        loading.hide();
+      },
+
       async getDetail() {
         let loading = weuijs.loading("加载中...");
         let ret = await http('smarthos.team.info.card', {id: this.id});
