@@ -100,10 +100,6 @@
         margin-top: px2rem(25px, 1080);
     }
 
-    .pt500 {
-        margin-top: px2rem(500px, 1080);
-    }
-
     .scroll {
         background-color: #F8F8F8;
     }
