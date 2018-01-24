@@ -1,6 +1,6 @@
 <template>
   <div class="page team-consult">
-    <app-header ref="header" title="团队咨询">
+    <app-header ref="header" :title="title">
       <i slot="back"></i>
       <div @click="sub" slot="right" class="right">
         提交
@@ -8,14 +8,13 @@
     </app-header>
     <div class="main" ref="main">
       <div class="notice">
-        请务必保证填写资料的真实、详细;<br>
-        该团队的医生会根据您的情况安排合适的医生回答。
+        请务必保证填写资料的真实、详细;<br>{{type=='team'?'若该团队医生48小时未回答将为您自动退款':'医生会在48小时内回复您，否则将为您退款。'}}
       </div>
       <div class="info wrap">
         <div class="h3">咨询信息</div>
         <div class="flex">
           <div class="label flex1">咨询对象</div>
-          <div class="text flex0">{{info.teamName}}</div>
+          <div class="text flex0" v-if="Object.keys(info).length>0">{{info.teamName||info.sysDoc.docName}}</div>
         </div>
         <compat @compat="getCompat"></compat>
         <div class="flex">
@@ -62,7 +61,9 @@
         info: {},
         pics: [],
         compat: {},
-        form: {}
+        form: {},
+        type: "",
+        title: ""
       };
     },
     computed: {
@@ -98,6 +99,7 @@
         let form = {
           consulterName, consulterIdcard, consulterMobile,
           teamId: this.id,
+          docId: this.id,
           ...this.form
         }, attaIdList = [];
 
@@ -110,11 +112,12 @@
         }
 
         let loading = weuijs.loading("加载中...");
-        let ret = await api('nethos.consult.info.teampic.issue', form)
+        let ret = await api(this.type == 'team' ? 'nethos.consult.info.teampic.issue' : 'nethos.consult.info.docpic.issue', form)
         if (ret.code != 0) {
           this.$refs.msg.show(ret.msg || `错误代码${ret.code}`);
         } else {
-          if (parseFloat(this.info.consultPrice) > 0) {
+          let price = this.type == 'team' ? this.info.consultPrice : this.info.sysDoc.docPicConsultPrice;
+          if (parseFloat(price) > 0) {
             this.$router.push({path: `/videoPay`, query: {consultId: ret.obj.consultId}});
             return
           }
@@ -125,8 +128,19 @@
       },
 
       async getDetail() {
+        let {query} = this.$route;
+        if (query && query.type) {
+          this.type = query.type;
+          this.title = "图文咨询";
+        } else {
+          this.type = 'team';
+          this.title = "团队咨询"
+        }
         let loading = weuijs.loading("加载中...");
-        let ret = await api('smarthos.team.info.card', {id: this.id});
+        let ret = await api(this.type == "team" ? 'smarthos.team.info.card' : 'nethos.doc.card', {
+          id: this.id,
+          docId: this.id
+        });
         if (ret.code == 0) {
           this.info = ret.obj;
         }

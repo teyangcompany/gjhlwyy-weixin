@@ -214,6 +214,10 @@ const getOrderAmpm = function (str) {
   return str.toLowerCase() == "am" ? "上午" : "下午";
 }
 
+const filterHTML = function (str) {
+  return str.replace(/style="([^"]+?)"/g, '')
+}
+
 export {
   Todate,
   getWeek,
@@ -229,6 +233,6 @@ export {
   formatPrice,
   formatTime,
   getOrderStatus,
-  getOrderAmpm
+  getOrderAmpm,filterHTML
 }
 

@@ -93,7 +93,8 @@ export const DOWNLOAD = 'http://api.gjwlyy.com/api/download/pat/index.html';
 
 export const MY_DOC_NAV = [
   {name: 'msg', value: '最近会话'},
-  {name: 'follow', value: '关注医生'}
+  {name: 'follow', value: '关注医生'},
+  {name: 'team', value: '关注团队'}
 ]
 
 export const DOWNLOAD_CONTENT = '微信暂不支持该功能，请前往应用商店下载app来'
@@ -107,6 +108,10 @@ export const OPEN_NEW_MYBOOK_VERSION = true;
 export const OPEN_NEW_MYDOC_VERSION = true;
 
 export const OPEN_MYPAY_VERSION = true;
+
+export const OPEN_ARTICLE_DETAIL_VERSION = true;
+
+export const NEW_PIC_CONSULT_SUBMIT = true;
 
 export const OPEN_MYCONSULT_VERSION = true;
 

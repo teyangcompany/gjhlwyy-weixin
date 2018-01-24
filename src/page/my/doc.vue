@@ -9,7 +9,7 @@
         {{data.value}}
       </router-link>
     </ul>
-    <router-view class="flex1"></router-view>
+    <router-view class="flex1 main"></router-view>
   </div>
 </template>
 
@@ -46,9 +46,7 @@
     beforeDestroy() {
 
     },
-    methods: {
-
-    },
+    methods: {},
     watch: {}
   };
 </script>
@@ -58,9 +56,12 @@
 
   .page {
     flex-direction: column;
+    .main {
+      background-color: #F8F8F8;
+    }
     .nav {
       li {
-        width: 50%;
+        width: (100%/3);
         @include h_lh(px2rem(105px, 1080));
         @include border();
         &.active {

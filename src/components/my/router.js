@@ -361,7 +361,8 @@ export default [
     component: myDoc,
     children: [
       {path: 'msg', component: myDocMsg},
-      {path: 'follow', component: myDocFollow}
+      {path: 'follow', component: myDocFollow},
+      {path: 'team', component: () => import('../../page/my/doc/team')}
     ]
   },
   {path: '/chart/:id', component: () => import('../../page/my/doc/chart')},

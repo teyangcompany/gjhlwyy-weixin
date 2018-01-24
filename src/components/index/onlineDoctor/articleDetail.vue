@@ -8,8 +8,8 @@
           <p class="time"> {{ time }} 阅读：{{ article.readTimes }}次</p>
         </div>
         <div class="contentWrap">
-<!--          <span style="padding: 0px 15px 30px 15px;font-size: 16px;line-height: 1.5"></span>
-          <img src="" alt="" style="margin-bottom: 30px;margin: 0 15px 30px 15px;width: 100%;height: auto">-->
+          <!--          <span style="padding: 0px 15px 30px 15px;font-size: 16px;line-height: 1.5"></span>
+                    <img src="" alt="" style="margin-bottom: 30px;margin: 0 15px 30px 15px;width: 100%;height: auto">-->
           <div v-html="article.content">
           </div>
         </div>
@@ -21,6 +21,7 @@
   import header from '../../../base/header'
   import api from '../../../lib/api'
   import {formatDate} from '../../../utils/formatTimeStamp'
+  import {OPEN_ARTICLE_DETAIL_VERSION} from "../../../lib/config";
 
   export default {
     data() {
@@ -38,13 +39,17 @@
         height: `${window.innerHeight - 50}px`
       }
       this.articleId = this.$route.query.articleId
-      api("nethos.doc.article.detail", {
-        articleId: this.articleId
-      }).then((data) => {
-        this.article = data.obj.docArticle
-        this.time = formatDate(new Date(this.article.createTime))
-        console.log(data)
-      })
+      if (OPEN_ARTICLE_DETAIL_VERSION) {
+        this.$router.replace({path: '/doc/article/' + this.articleId});
+      } else {
+        api("nethos.doc.article.detail", {
+          articleId: this.articleId
+        }).then((data) => {
+          this.article = data.obj.docArticle
+          this.time = formatDate(new Date(this.article.createTime))
+        })
+      }
+
     },
     components: {
       "VHeader": header

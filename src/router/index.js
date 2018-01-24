@@ -16,7 +16,7 @@ import Search from "../page/search.vue"
 import hospital from "./hos"
 import team from './team'
 import coupons from './coupons'
-
+import doc from './doc'
 
 Vue.use(Router)
 
@@ -62,6 +62,7 @@ export default new Router({
     ...scanBind,
     ...hospital,
     ...team,
-    ...coupons
+    ...coupons,
+    ...doc
   ]
 })

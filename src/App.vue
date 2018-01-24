@@ -5,9 +5,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import api from './lib/api'
-  import {tokenCache} from './lib/cache'
-  import {openidCache} from "./lib/cache"
 
   export default {
     name: 'app',
@@ -23,8 +20,19 @@
 </script>
 
 <style lang="scss">
-  @import "common/var";
-  @import "common/base";
+  @import "./common/public";
+
+  #article_detail {
+    padding-top: px2rem(15px);
+    > span {
+      font-size: px2rem(16px);
+      padding-bottom: px2rem(15px);
+      line-height: 1.5;
+    }
+    > img {
+      width: 100%;
+    }
+  }
 
   #app, .page {
     /*display: flex;*/

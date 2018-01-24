@@ -99,8 +99,12 @@
     .pt100 {
       padding-top: 100px;
     }
+    ul{
+      padding-top: $commonSpace;
+    }
     li {
       @include border();
+      background-color: white;
       padding: $commonSpace;
       .ava {
         margin-right: $commonSpace;

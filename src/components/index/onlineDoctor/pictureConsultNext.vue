@@ -81,6 +81,7 @@
   import {debug, getApiUrl} from "../../../lib/util"
   import {isLoginMixin} from "../../../lib/mixin"
   import {delpicCache, tokenCache} from '../../../lib/cache'
+  import {NEW_PIC_CONSULT_SUBMIT} from "../../../lib/config";
 
   export default {
     mixins: [isLoginMixin],
@@ -126,34 +127,37 @@
     created() {
       this.doctorId = this.$route.query.docId
       this.price = this.$route.query.price
-      console.log(this.price)
-      api("nethos.pat.info.get", {
-        token: tokenCache.get()
-      }).then((data) => {
-        if (data.code == 0) {
-          this.patientInfo = data.obj
-          this.patId = data.obj.patId
-          console.log(this.patientInfo)
-          api("nethos.pat.compat.list", {
-            token: tokenCache.get(),
-            patId: this.patId
-          }).then((data) => {
-            if (data.code == 0) {
-              this.patientAll = data.list
-              console.log(this.patientAll)
-            } else if (!(data.msg)) {
-              weui.alert("网络错误，请稍后重试")
-            } else {
-              weui.alert(data.msg)
-            }
-          })
-        } else {
-          this.$router.push({
-            path: "/bindRelativePhone",
-            query: {backPath: this.path}
-          });
-        }
-      })
+      if (NEW_PIC_CONSULT_SUBMIT) {
+        this.$router.replace({path: `/team/${this.doctorId}/consult`, query: {type: 'pic'}});
+      } else {
+        api("nethos.pat.info.get", {
+          token: tokenCache.get()
+        }).then((data) => {
+          if (data.code == 0) {
+            this.patientInfo = data.obj
+            this.patId = data.obj.patId
+            console.log(this.patientInfo)
+            api("nethos.pat.compat.list", {
+              token: tokenCache.get(),
+              patId: this.patId
+            }).then((data) => {
+              if (data.code == 0) {
+                this.patientAll = data.list
+                console.log(this.patientAll)
+              } else if (!(data.msg)) {
+                weui.alert("网络错误，请稍后重试")
+              } else {
+                weui.alert(data.msg)
+              }
+            })
+          } else {
+            this.$router.push({
+              path: "/bindRelativePhone",
+              query: {backPath: this.path}
+            });
+          }
+        })
+      }
 
 
 //      api("nethos.pat.info.get",{
