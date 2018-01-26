@@ -185,7 +185,7 @@ const formatCardAndMobile = function (str, startLength, endLeng, hiddenLeng) {
  * @returns {string}
  */
 const formatPrice = function (str, options) {
-  if (options && options.show === false) {
+  if (options && options.open === false) {
     return "";
   }
   if (!str) {
@@ -218,6 +218,13 @@ const filterHTML = function (str) {
   return str.replace(/style="([^"]+?)"/g, '')
 }
 
+const formatScore = (str) => {
+  if (Math.round(str) == str) {
+    return `${str}.0`
+  }
+  return str;
+}
+
 export {
   Todate,
   getWeek,
@@ -233,6 +240,6 @@ export {
   formatPrice,
   formatTime,
   getOrderStatus,
-  getOrderAmpm,filterHTML
+  getOrderAmpm, filterHTML,formatScore
 }
 

@@ -4,7 +4,7 @@
       <i slot="back"></i>
       <div slot="right" @click="handleConsult('end')" class="right absolute"
            v-if="consult.consultStatus=='GOING'&&!consult.consultStatusDescription">
-        结束问诊
+        结束咨询
       </div>
     </app-header>
     <scroll :height="scrollHeight" ref="scroll" class="flex1">
@@ -18,7 +18,7 @@
           </div>
           <div class="item flex">
             <div class="label flex0">疾病名称：</div>
-            <div class="text flex1">{{consult.illnessName}}</div>
+            <div class="text flex1">{{consult.illnessName||'暂无'}}</div>
           </div>
           <div class="container">
             <div class="content">
@@ -26,7 +26,7 @@
             </div>
             <ul v-if="attaList" class="pics overflow-hidden">
               <li v-for="pic in attaList" class="float-left">
-                <img :src="pic.url" alt="">
+                <img @click="scan(pic.url,attaList)" :src="pic.url" alt="">
               </li>
             </ul>
           </div>
@@ -53,14 +53,6 @@
           </ul>
         </div>
         <div class="meaasge">
-          <template v-if="showNotice">
-            <div class="notice-msg">
-              该咨询将在 <span>{{showNoticeTime}}</span> 自动结束
-            </div>
-            <div class="notice-msg">
-              医生工作繁忙，请您保持耐心，<span>并尽量将您的问题、希望获得的帮助一次性完整提出</span>
-            </div>
-          </template>
           <message-item ref="msg" v-for="message in messageList" :key="message.messageId"
                         :message="message" @play="play"></message-item>
         </div>
@@ -80,7 +72,7 @@
   import weuijs from "weui.js"
   import AppHeader from "../../plugins/app-header"
   import api from "../../lib/api"
-  import {scrollHeightMixin} from "../../lib/mixin";
+  import {jssdkMixin, scrollHeightMixin} from "../../lib/mixin";
   import Bottom from '../../plugins/consult/bottom'
   import {formatTime, getGender} from "../../lib/filter";
   import MessageItem from "../../plugins/consult/message-item"
@@ -157,11 +149,12 @@
       }
     },
     filters: {getGender, formatTime, patAva, docAva},
-    mixins: [scrollHeightMixin],
+    mixins: [scrollHeightMixin, jssdkMixin],
     components: {
       AppHeader, Scroll, Bottom, MessageItem, AppAudio
     },
     created() {
+      this.jssdk();
       let {id} = this.$route.params;
       id && (this.id = id) && (this.getDetail());
     },
@@ -204,9 +197,18 @@
         this.$refs.audio && (this.$refs.audio.play());
       },
 
+      scan(url, list) {
+        let urls = list.map(pic => pic.url);
+        wx.previewImage({
+          current: url, // 当前显示图片的http链接
+          urls: urls // 需要预览的图片http链接列表
+        });
+      },
+
       async endConsult() {
         let loading = weuijs.loading("加载中...");
-        let ret = await api('nethos.consult.info.complete', {consultId: this.id});
+        let ret = await
+          api('nethos.consult.info.complete', {consultId: this.id});
         loading.hide();
         if (ret.code == 0) {
           weuijs.toast('操作成功', {
@@ -232,6 +234,10 @@
           }
         }
         loading.hide();
+      },
+
+      async jssdk() {
+        await this.jssdkMixin_getJssdkConfig();
       }
     }
   };

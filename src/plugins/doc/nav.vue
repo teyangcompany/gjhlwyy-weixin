@@ -55,7 +55,8 @@
               this.scroll = new BScroll(dom, {
                 scrollY: false,
                 scrollX: true,
-                click: true
+                click: true,
+                HWCompositing: false
               })
             }, 20)
           } else {

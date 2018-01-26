@@ -1,7 +1,12 @@
 <template>
   <div class="page">
-    <v-header :title="title" :rightTitle="rightTitle"></v-header>
-    <div class="payInfo">
+    <app-header title="支付" ref="header">
+      <i class="back" slot="back" @click.stop="back"></i>
+    </app-header>
+    <div class="payInfo" ref="main">
+      <div class="notice center">
+        请在{{shengyuTime}}内完成支付，超时订单自动取消
+      </div>
       <div class="paySum border-1px">
         <span class="name">支付金额</span>
         <span><i>￥</i>{{ showFee }}</span>
@@ -44,11 +49,15 @@
   import api from '../../../lib/api'
   import Toast from '../../../base/test'
   import weuijs from 'weui.js'
+  import {formatTime} from "../../../lib/filter";
   import {couponsCache, tokenCache} from '../../../lib/cache'
+  import {mainHeightMixin} from "../../../lib/mixin";
+  import AppHeader from '../../../plugins/app-header'
 
   export default {
     data() {
       return {
+        payWaitSeconds: 0,
         title: "支付",
         confirmPay: true,
         rightTitle: "",
@@ -64,7 +73,8 @@
         signType: "",
         paySign: "",
         showToast: false,
-        coupons: {}
+        coupons: {},
+        shengyuTime: ""
       }
     },
     computed: {
@@ -110,17 +120,82 @@
       coupons && (this.coupons = coupons);
       this.consultId = this.$route.query.consultId
       this.getDetail();
+      this.needDjs();
     },
     beforeDestroy() {
       couponsCache.set({})
     },
     methods: {
+      needDjs() {
+        let delta = this.payWaitSeconds;
+        if (!delta) {
+          setTimeout(this.needDjs, 1000);
+        } else {
+          if (delta > 0) {
+            this.djs(delta * 1000);
+          }
+        }
+      },
+
+      djs(t) {
+        if (t < 0) {
+          this.$router.replace(`/team/consult/` + this.consultId);
+          //this.cancel();
+        } else {
+          this.shengyuTime = formatTime(t, '%M:%S');
+          setTimeout(() => {
+            this.djs(t - 1000)
+          }, 1000);
+        }
+      },
+
+      back() {
+        weuijs.confirm("您的订单已经生成，15分钟不支付会自动取消。", {
+          title: "确定不支付吗？",
+          buttons: [
+            {
+              label: "暂不支付", type: 'default', onClick: () => {
+                let {query} = this.$route;
+                if (query && query.back && query.back == 'list') {
+                  this.$router.go(-1);
+                } else if (this.aboutConsult.consultType == "DOCPIC") {
+                  this.$router.go(-3);
+                } else {
+                  this.$router.go(-2);
+                }
+              }
+            },
+            {
+              label: "继续支付", type: 'primary', onClick: () => {
+              }
+            }
+          ]
+        })
+      },
+
+
       chooseCoupons() {
         let {consultType: currentService, consultFee: payMoney} = this.aboutConsult;
         this.count > 0 && (this.$router.push({
           path: '/coupons/select',
           query: {currentService, payMoney}
         }));
+      },
+
+      async cancel() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api('nethos.consult.info.cancel', {
+          consultId: this.consultId
+        });
+        if (ret.code == 0) {
+          weuijs.toast('超出支付时间，订单自动取消', {
+            callback: () => {
+              //this.$emit('cancel');
+              this.$router.replace(`/team/consult/` + this.consultId);
+            }
+          })
+        }
+        loading.hide();
       },
 
       async getCouponsCount() {
@@ -132,7 +207,6 @@
         loading.hide();
       },
 
-
       async getDetail() {
         let loading = weuijs.loading("加载中...");
         let data = await api("nethos.consult.info.detail", {
@@ -140,6 +214,7 @@
           consultId: this.consultId
         });
         if (data.code == 0) {
+          this.payWaitSeconds = data.obj.payWaitSeconds;
           this.aboutConsult = data.obj.consult;
           this.aboutConsultFee = data.obj.consult.consultFee
         } else {
@@ -148,6 +223,7 @@
         loading.hide();
         await this.getCouponsCount();
       },
+
       async goSuccess() {
         if (!this.confirmPay) {
           weuijs.alert('请选择支付方式');
@@ -222,8 +298,10 @@
     },
     components: {
       "VHeader": header,
-      Toast
-    }
+      Toast,
+      AppHeader
+    },
+    mixins: [mainHeightMixin]
   }
 </script>
 <style scoped lang="scss">
@@ -231,6 +309,10 @@
 
   .weui-icon-success {
     color: $mainColor;
+  }
+
+  .notice {
+    @include h_lh(50px);
   }
 
   .page {

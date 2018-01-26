@@ -1,13 +1,13 @@
 {
     "name": "zeyk",
-    "version": "1.0.199",
+    "version": "1.0.204",
     "description": "A Vue.js project",
     "author": "TY-089\\Administrator <lmw6412036@sina.com>",
     "private": true,
     "scripts": {
         "dev": "node build/dev-server.js",
         "start": "node build/dev-server.js",
-        "build": "cross-env NODE_ENV=production node build/build.js",
+        "build": "cross-env NODE_ENV=production PUBLIC_PATH=1234 node build/build.js",
         "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
         "e2e": "node test/e2e/runner.js",
         "test": "npm run unit && npm run e2e"

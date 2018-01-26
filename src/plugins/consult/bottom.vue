@@ -1,9 +1,15 @@
 <template>
   <div class="consult-bottom">
     <div class="wait center" @click="handler(status)"
-         v-if="(status=='GOING'||status=='CANCEL') && consult.consultStatusDescription.indexOf('咨询中')<0">
+         v-if="status=='CANCEL'">
       {{consult.consultStatusDescription}}
     </div>
+
+    <div class="wait center" @click="handler(status)"
+         v-if="status=='GOING' && !consult.modifierType">
+      {{consult.consultStatusDescription}}
+    </div>
+
 
     <div class="rate" v-else-if="status=='NEEDPAY'">
       <ul class="flex">
@@ -39,6 +45,7 @@
   </div>
 </template>
 <script>
+  import {handlerHTML} from "../../lib/util";
   import http from "../../lib/api"
   import weuijs from "weui.js";
   import Uploader from '../../plugins/upload'
@@ -62,6 +69,7 @@
 
     },
     methods: {
+      handlerHTML,
       repeat() {
         if (this.consult.consultType == 'TEAMPIC') {
           this.$router.push({path: '/team/' + this.consult.teamId + '/detail'})
@@ -78,7 +86,8 @@
           case 'NEEDPAY':
             this.$router.push({
               path: '/videoPay', query: {
-                consultId: this.consult.consultId
+                consultId: this.consult.consultId,
+                back: "list"
               }
             })
             break;
@@ -149,7 +158,6 @@
             }
           })
         }
-
         loading.hide();
       }
     }

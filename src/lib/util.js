@@ -161,6 +161,7 @@ export function getParamsFromUrl(from) {
   let hash = url("hash", from);
   return {protocol, hostname, port, path, query, hash}
 }
+
 /**
  * 获得sharelink
  * @param link
@@ -179,4 +180,16 @@ export function getShareLink(link) {
 /*首字母大写*/
 export function upper(str) {
   return str.substr(0, 1).toUpperCase() + str.substr(1);
+}
+
+/**
+ * 处理系统消息
+ * @param str
+ * @returns {string | void | *}
+ */
+export function handlerHTML(str) {
+  str = (str.replace(/\[(.+)?\]/g, (...args) => {
+    return '<span>' + args[1] + '</span>'
+  }))
+  return str
 }

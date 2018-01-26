@@ -31,7 +31,7 @@ export default (cb) => {
   }
   /*非微信打开*/
   else {
-    openidCache.set("omrmBv61sj9FDFuma9qdi2pOrJPw");//omrmBv61sj9FDFuma9qdi2pOrJPw
+    openidCache.set("omrmBv1p9porIc2z0IZkPm4q7dS4");//omrmBv61sj9FDFuma9qdi2pOrJPw//omrmBv1p9porIc2z0IZkPm4q7dS4
     // console.log("openid:" + openid);
     cb();
   }

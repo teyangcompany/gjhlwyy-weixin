@@ -1,29 +1,34 @@
 <template>
-  <div class="message-item" :class="[message.replierType.toLowerCase()]">
-    <div class="time center">{{message.replyTime|formatTime('%Y-%m-%d %H:%M:%S')}}</div>
-    <div class="container flex">
-      <div class="ava flex0">
-        <img :src="message|patAva" alt="">
-      </div>
-      <div class="content flex1">
-        <div class="name">{{message.replierName}}</div>
-        <div class="msgbox flex">
-          <div class="arrow"></div>
-          <div class="msg">
-            {{message.replyContent}}
-            <ul v-if="message.hasAtta">
-              <li v-for="atta in message.attaList">
-                <playing-icon :src="atta.url" ref="playingIcon" class="iconfont fs45 audio block audio"
-                              @click="play(atta.url)"
-                              v-if="message.msgType=='AUDIO'">
-                </playing-icon>
-                <img :src="atta.url" v-if="message.msgType=='IMAGE'">
-              </li>
-            </ul>
+  <div class="message-item" :class="[message.replierType?message.replierType.toLowerCase():'']">
+    <template v-if="message.msgLevel=='SYS'">
+      <div class="notice-msg" v-html="handlerHTML(message.replyContent)"></div>
+    </template>
+    <template v-else>
+      <div class="time center">{{message.replyTime|formatTime('%Y-%m-%d %H:%M:%S')}}</div>
+      <div class="container flex">
+        <div class="ava flex0">
+          <img :src="message|patAva" alt="">
+        </div>
+        <div class="content flex1">
+          <div class="name">{{message.replierName}}</div>
+          <div class="msgbox flex">
+            <div class="arrow"></div>
+            <div class="msg">
+              {{message.replyContent}}
+              <ul v-if="message.hasAtta">
+                <li v-for="atta in message.attaList">
+                  <playing-icon :src="atta.url" ref="playingIcon" class="iconfont fs45 audio block audio"
+                                @click="play(atta.url)"
+                                v-if="atta.fileType&&atta.fileType=='AUDIO'">
+                  </playing-icon>
+                  <img :src="atta.url" v-else>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -31,6 +36,7 @@
   import PlayingIcon from '../../plugins/playing'
   import {formatTime} from "../../lib/filter";
   import patAva from '../../utils/consultPatAva'
+  import {handlerHTML} from "../../lib/util";
 
   export default {
     props: ['message'],
@@ -38,7 +44,9 @@
       return {};
     },
     computed: {},
-    filters: {formatTime, patAva},
+    filters: {
+      formatTime, patAva
+    },
     components: {PlayingIcon},
     mounted() {
 
@@ -47,6 +55,7 @@
 
     },
     methods: {
+      handlerHTML,
       play(url) {
         this.$emit('play', url);
       }
@@ -70,6 +79,7 @@
     .time {
       @include h_lh(35px);
     }
+
     .container {
       .ava {
         padding-top: 15px;

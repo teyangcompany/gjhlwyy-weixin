@@ -44,6 +44,20 @@
     padding-bottom: constant(safe-area-inset-bottom);
   }
 
+  .notice-msg {
+    margin: 0 auto;
+    margin-bottom: px2rem(10px);
+    border-radius: 5px;
+    padding: 2px 4px;
+    width: px2rem(345px - 35px*2 - 10px*2);
+    font-size: 12px;
+    color: white;
+    background-color: rgb(204, 204, 204);
+    span {
+      color: #3399FF;
+    }
+  }
+
   .bullet-active {
     background-color: $mainColor;
     opacity: 1;

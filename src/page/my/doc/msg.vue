@@ -1,9 +1,9 @@
 <template>
   <scroll class="scroll overflow-hidden" :height="height" :data="list">
     <ul>
-      <li class="center pt100" v-if="list.length==0">
+      <div class="center pt100" v-if="list.length==0">
         暂未收到消息
-      </li>
+      </div>
       <li @click="handler(item)" v-for="(item,index) in list" :key="index" class="flex">
         <div class="ava flex0">
           <img :src="item.sysDoc|docAva" alt="">

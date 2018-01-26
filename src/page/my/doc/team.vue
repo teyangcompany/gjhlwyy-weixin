@@ -5,6 +5,7 @@
         暂未关注团队 <br>
         <router-link class="color_main" to="/team/list">找团队</router-link>
       </div>
+      <list-item :data="item.teamInfo" v-for="item in list" :key="item.id"></list-item>
     </ul>
   </scroll>
 </template>
@@ -15,6 +16,8 @@
   import Scroll from '../../../plugins/scroll'
   import weuijs from 'weui.js'
   import docAva from '../../../utils/docAva'
+  import api from '../../../lib/api'
+  import ListItem from '../../../plugins/team/list-item'
 
   export default {
     data() {
@@ -25,7 +28,10 @@
     computed: {},
     filters: {docAva, formatTime},
     mixins: [MyDocMixin],
-    components: {Scroll},
+    components: {
+      ListItem,
+      Scroll
+    },
     created() {
       this.getList()
 
@@ -39,11 +45,11 @@
     methods: {
       async getList() {
         let loading = weuijs.loading("加载中...");
-        //let data = await api("nethos.follow.docpat.list", {})
+        let data = await api("smarthos.follow.teampat.list", {})
         loading.hide();
-        /*if (data.code == 0) {
+        if (data.code == 0) {
           this.list = data.list;
-        }*/
+        }
       }
     }
   };
@@ -61,6 +67,10 @@
     }
     .pt100 {
       padding-top: 100px;
+    }
+
+    ul{
+      padding-top: $commonSpace;
     }
 
     li {

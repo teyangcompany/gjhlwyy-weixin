@@ -24,7 +24,7 @@
       <div class="tab-item" :class="{choose_type:sortBy == 'displayType'}">
         <div class="tab_item_container">
           <div class="tab_item_border">
-            <span @click="chooseType('displayType')" v-if="typePick == ''">全部问诊形式
+            <span @click="chooseType('displayType')" v-if="typePick == ''">全部咨询形式
               <svg width="10" height="10" xmlns="http://www.w3.org/2000/svg" version="1.1" class="sort_icon">
                 <polygon points="0,3 10,3 5,8"/>
               </svg>
@@ -104,19 +104,19 @@
           <div class="weui-cells weui-cells_radio weuiMargin">
             <label class="weui-cell weui-check__label" for="x31">
               <div class="weui-cell__bd">
-                <p>全部问诊形式</p>
+                <p>全部咨询形式</p>
               </div>
               <div class="weui-cell__ft">
-                <input type="radio" class="weui-check" name="radio3" id="x31" value="全部问诊形式" v-model="typePick"/>
+                <input type="radio" class="weui-check" name="radio3" id="x31" value="全部咨询形式" v-model="typePick"/>
                 <span class="weui-icon-checked"></span>
               </div>
             </label>
             <label class="weui-cell weui-check__label" for="x32">
               <div class="weui-cell__bd">
-                <p>视频问诊</p>
+                <p>视频咨询</p>
               </div>
               <div class="weui-cell__ft">
-                <input type="radio" name="radio3" class="weui-check" id="x32" value="视频问诊" v-model="typePick"/>
+                <input type="radio" name="radio3" class="weui-check" id="x32" value="视频咨询" v-model="typePick"/>
                 <span class="weui-icon-checked"></span>
               </div>
             </label>

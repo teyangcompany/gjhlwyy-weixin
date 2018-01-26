@@ -1,10 +1,17 @@
 <template>
   <div class="page team-detail">
-    <app-header title="团队名片" ref="header">
-      <i class="back" slot="back"></i>
-    </app-header>
+    <header class="flex" ref="header">
+      <div class="back center">
+        <img class="previous" src="../../../static/img/返回.png" alt="">
+      </div>
+      <div class="name font-size-h3"></div>
+      <div class="right flex">
+        <div class="follow" @click="doFollow">{{isFollow?'已关注':'+关注'}}</div>
+        <div class="share iconfont center" @click="showSharePic">&#xe601;</div>
+      </div>
+    </header>
     <div class="main infobox overflow-touch" ref="main">
-      <div class="banner">
+      <div class="banner overflow-hidden">
         <img :src="info.teamAvatar" alt="">
       </div>
 
@@ -32,14 +39,17 @@
         </div>
         <ul class="overflow-hidden">
           <router-link :to="{path:'/onlineDoctorCard?docId='+member.docId}" :key="index" tag="li"
-                       class="float-left"
+                       class="float-left lh1 relative"
                        v-if="index<showNumbers" v-for="(member,index) in info.members">
+            <img src="../../../static/img/shouxi.png" class="absolute icon" alt="" v-if="member.showIndex==1">
             <div class="ava center">
               <img :src="member|docAva" alt="">
             </div>
             <div class="name center ellipsis">
-              {{member.docName}}
+              <b>{{member.docName}}</b> <span v-if="member.showIndex==1">首席</span>
             </div>
+            <div class="dept center">{{member.deptName}}</div>
+            <div class="zc center">{{member.docTitle}}</div>
           </router-link>
         </ul>
       </div>
@@ -67,24 +77,28 @@
         <img :src="qrcodeUrl" alt="">
       </div>
     </div>
+    <share-pic ref="sharePic"></share-pic>
   </div>
 </template>
 
 <script>
   import AppHeader from "../../plugins/app-header"
-  import {mainHeightMixin} from "../../lib/mixin";
+  import {jssdkMixin, mainHeightMixin} from "../../lib/mixin";
   import http from "../../lib/api"
   import weuijs from 'weui.js'
+  import {debug, getShareLink} from "../../lib/util";
   import {formatPrice} from "../../lib/filter";
   import docAva from '../../utils/docAva'
   import TeamInfo from '../../plugins/team/info'
   import {OPEN_TEAMPIC} from "../../lib/config";
+  import SharePic from '../../plugins/share-pic'
 
-  const SHOW_MAX = 4;
+  const SHOW_MAX = 3;
 
   export default {
     data() {
       return {
+        isFollow: false,
         qrcodeUrl: "",
         isShowQrcode: false,
         openTeampic: OPEN_TEAMPIC,
@@ -106,9 +120,9 @@
       }
     },
     filters: {formatPrice, docAva},
-    mixins: [mainHeightMixin],
+    mixins: [mainHeightMixin, jssdkMixin],
     components: {
-      AppHeader, TeamInfo
+      AppHeader, TeamInfo, SharePic
     },
     created() {
       let {id} = this.$route.params;
@@ -121,15 +135,11 @@
 
     },
     methods: {
-
-
       showQrcode(field) {
         if (this.info[field]) {
           this.isShowQrcode = true
           this.qrcodeUrl = this.info[field];
         }
-
-
       },
       subStr(str, index) {
         if (!str) {
@@ -151,16 +161,66 @@
         this.showType = this.showType == 'part' ? 'all' : 'part';
       },
 
+      doFollow() {
+        if (this.isFollow) {
+          this.unfollow();
+        } else {
+          this.follow();
+        }
+      },
+
+      showSharePic() {
+        this.$refs.sharePic.show();
+      },
+
       async follow() {
         let loading = weuijs.loading("加载中...");
-        let ret = await http('nethos.follow.teampa.add', {teamId: this.id});
+        let ret = await http('smarthos.follow.teampat.add', {teamId: this.id});
         loading.hide();
+        if (ret.code == 0) {
+          this.isFollow = true
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+        }
       },
 
       async unfollow() {
         let loading = weuijs.loading("加载中...");
-        let ret = await http('nethos.follow.teampa.cancel', {teamId: this.id})
+        let ret = await http('smarthos.follow.teampat.cancel', {teamId: this.id})
         loading.hide();
+
+        if (ret.code == 0) {
+          this.isFollow = false
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+        }
+      },
+
+      async jssdkShare() {
+        let isOk = await this.jssdkMixin_getJssdkConfig();
+        if (isOk) {
+          let doc = this.info,
+            conf = {
+              title: doc.teamName,
+              link: getShareLink(location.href),
+              imgUrl: doc.teamAvatar, // 分享图标
+              success: function () {
+                // 用户确认分享后执行的回调函数
+              },
+              cancel: function () {
+                // 用户取消分享后执行的回调函数
+              },
+
+              desc: doc.teamResume, // 分享描述
+              type: 'link', // 分享类型,music、video或link，不填默认为link
+              dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            };
+          debug('share', conf);
+          wx.ready(() => {
+            wx.onMenuShareTimeline(conf);
+            wx.onMenuShareAppMessage(conf);
+          })
+        }
       },
 
       async getDetail() {
@@ -168,8 +228,12 @@
         let ret = await http('smarthos.team.info.card', {id: this.id});
         if (ret.code == 0) {
           this.info = ret.obj;
+          if (this.info.teampat && Object.keys(this.info.teampat).length > 0) {
+            this.isFollow = true;
+          }
         }
         loading.hide();
+        await this.jssdkShare();
       }
     }
   };
@@ -177,6 +241,36 @@
 
 <style scoped lang="scss">
   @import "../../common/public";
+
+  header {
+    justify-content: space-between;
+    height: px2rem(45px);
+    align-items: center;
+    background-color: white;
+    .back {
+      width: 45px;
+      img {
+        width: px2rem(12px);
+        height: px2rem(21px);
+      }
+    }
+    .right {
+      padding-right: $commonSpace;
+      > div {
+        @include h_lh(px2rem(26px));
+        border-radius: 13px;
+        color: white;
+        background-color: #999999;
+      }
+      .follow {
+        padding: 0 px2rem(10px);
+      }
+      .share {
+        width: px2rem(26px);
+        margin-left: $commonSpace;
+      }
+    }
+  }
 
   .ercode {
     li {
@@ -209,9 +303,9 @@
     .infobox {
       overflow-y: scroll;
       .banner {
+        @include w_h(px2rem(375px), px2rem(235px));
         img {
-          width: 100%;
-          height: px2rem(150px);
+          @include w_h(px2rem(375px), px2rem(235px));
         }
       }
 
@@ -225,7 +319,6 @@
         .title {
           @include h_lh(20px);
           padding: 0 px2rem(15px);
-          border-left: 3px solid #FABE00;
           font-size: px2rem(17px);
           a {
             font-size: px2rem(15px);
@@ -234,19 +327,43 @@
         }
         ul {
           padding-bottom: px2rem(10px);
+          padding-top: px2rem(10px);
+          li + li + li + li {
+            margin-top: px2rem(10px);
+          }
           li {
-            padding-top: px2rem(15px);
-            width: 25%;
+            border: 1px solid rgba(74, 144, 226, 0.20);
+            border-radius: px2rem(3px);
+            width: px2rem(112px);
+            margin-left: px2rem(10px);
+            padding-bottom: px2rem(18px);
+            padding-top: px2rem(18px);
+            > img {
+              left: px2rem(112px - 26px -17px);
+              top: px2rem(18px + 60px - 15px);
+              width: px2rem(17px);
+
+            }
             .ava {
               overflow: hidden;
               img {
+                border-radius: 50%;
                 width: px2rem(60px);
                 height: px2rem(60px);
               }
             }
             .name {
-              color: $mainColor;
-              font-size: px2rem(14px);
+              margin-top: px2rem(10px);
+              color: #777777;
+              font-size: px2rem(15px);
+              span {
+                font-size: px2rem(10px);
+              }
+            }
+            .zc, .dept {
+              margin-top: px2rem(5px);
+              color: #999999;
+              font-size: px2rem(12px);
             }
           }
         }
