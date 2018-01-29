@@ -105,7 +105,7 @@ export const OPEN_TEAMPIC = true;
 
 export const OPEN_NEW_MYBOOK_VERSION = true;
 
-export const OPEN_NEW_MYDOC_VERSION = true;
+export const OPEN_NEW_MYDOC_VERSION = false;
 
 export const OPEN_MYPAY_VERSION = true;
 

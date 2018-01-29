@@ -185,7 +185,7 @@ const formatCardAndMobile = function (str, startLength, endLeng, hiddenLeng) {
  * @returns {string}
  */
 const formatPrice = function (str, options) {
-  if (options && options.open === false) {
+  if ((options && options.open === false) || (options && options.name == 'book')) {
     return "";
   }
   if (!str) {
@@ -240,6 +240,6 @@ export {
   formatPrice,
   formatTime,
   getOrderStatus,
-  getOrderAmpm, filterHTML,formatScore
+  getOrderAmpm, filterHTML, formatScore
 }
 

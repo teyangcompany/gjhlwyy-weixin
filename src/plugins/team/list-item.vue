@@ -1,7 +1,7 @@
 <template>
   <router-link tag="div" :to="{path:'/team/'+data.id+'/detail'}" class="list-item flex">
     <div class="thumb flex0">
-      <img :src="data.teamAvatar||'http://img.yiren.hk/group1/M00/00/67/oYYBAFnGJb-AZWRzAACW81v1Hac78.jpeg'" alt="">
+      <img :src="data.teamAvatar||'./static/img/team.default.png'" alt="">
     </div>
     <div class="info flex1 lh1">
       <h3>{{data.teamName}}</h3>

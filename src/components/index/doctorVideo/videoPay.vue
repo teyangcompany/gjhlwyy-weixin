@@ -155,14 +155,15 @@
           buttons: [
             {
               label: "暂不支付", type: 'default', onClick: () => {
-                let {query} = this.$route;
+                this.$router.go(-1);
+                /*let {query} = this.$route;
                 if (query && query.back && query.back == 'list') {
                   this.$router.go(-1);
                 } else if (this.aboutConsult.consultType == "DOCPIC") {
                   this.$router.go(-3);
                 } else {
                   this.$router.go(-2);
-                }
+                }*/
               }
             },
             {

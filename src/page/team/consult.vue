@@ -23,14 +23,14 @@
                                          placeholder="未确诊请不要填写"/></div>
         </div>
 
-        <div class="flex">
+        <!--<div class="flex">
           <div class="label flex1">填写病情资料</div>
           <div class="text flex0">{{total}}/500</div>
-        </div>
+        </div>-->
       </div>
 
       <div class="wrap">
-        <div class="h3">病情资料</div>
+        <div class="h3 overflow-hidden">填写病情资料<span class="float-right color_777">{{total}}/500</span></div>
         <div class="flex textarea">
           <textarea v-model="form.consultContent" class="flex1"
                     placeholder="请详细描述患者的主要症状、持续时间、已经确诊的疾病和接诊医生的意见。(如有症状照片、病历、检查单，可在下方上传)"
@@ -118,11 +118,11 @@
         } else {
           let price = this.type == 'team' ? this.info.consultPrice : this.info.sysDoc.docPicConsultPrice;
           if (parseFloat(price) > 0) {
-            this.$router.push({path: `/videoPay`, query: {consultId: ret.obj.consultId}});
+            this.$router.replace({path: `/videoPay`, query: {consultId: ret.obj.consultId}});
             return
           }
 
-          this.$router.push({path: `/team/consult/${ret.obj.consultId}`})
+          this.$router.replace({path: `/team/consult/${ret.obj.consultId}`})
         }
         loading.hide();
       },
@@ -170,6 +170,7 @@
     .wrap {
       background-color: white;
       .h3 {
+        padding-right: px2rem(15px);
         padding-left: px2rem(15px);
         @include h_lh(50px);
         @include border(left, #f1b659, after, solid, 5px);

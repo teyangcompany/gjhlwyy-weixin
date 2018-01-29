@@ -117,10 +117,9 @@
                 api("nethos.pat.info.get", {
                     token: tokenCache.get()
                 }).then((data) => {
-                    console.log(data.obj)
                     if (data.code == 0) {
                         if (this.picked === true) {
-                            this.$router.push({
+                            this.$router.replace({
                                 path: '/pictureConsultNext',
                                 query: {docId: this.doctorId, price: this.price}
                             })

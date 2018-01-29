@@ -2,17 +2,17 @@
   <div class="page team-detail">
     <header class="flex" ref="header">
       <div class="back center">
-        <img class="previous" src="../../../static/img/返回.png" alt="">
+        <img @click="$router.go(-1)" class="previous" src="../../../static/img/返回.png" alt="">
       </div>
-      <div class="name font-size-h3"></div>
+      <div class="name font-size-h3" :style="nameStyle">{{info.teamName}}</div>
       <div class="right flex">
         <div class="follow" @click="doFollow">{{isFollow?'已关注':'+关注'}}</div>
         <div class="share iconfont center" @click="showSharePic">&#xe601;</div>
       </div>
     </header>
-    <div class="main infobox overflow-touch" ref="main">
+    <div class="main infobox overflow-touch" ref="main" @scroll="scroll">
       <div class="banner overflow-hidden">
-        <img :src="info.teamAvatar" alt="">
+        <img :src="info.teamAvatar||'./static/img/team.default.png'" alt="">
       </div>
 
       <team-info :info="info"></team-info>
@@ -105,7 +105,10 @@
         id: "",
         showType: "all",
         info: {},
-        showText: [0, 0]
+        showText: [0, 0],
+        nameStyle: {
+          opacity: 0
+        }
       };
     },
     computed: {
@@ -135,6 +138,12 @@
 
     },
     methods: {
+      scroll() {
+        let el = this.$refs.main,
+          top = el.scrollTop;
+        this.$set(this.nameStyle, 'opacity', `${Math.min(top, 45) / 45}`);
+      },
+
       showQrcode(field) {
         if (this.info[field]) {
           this.isShowQrcode = true
@@ -163,7 +172,9 @@
 
       doFollow() {
         if (this.isFollow) {
-          this.unfollow();
+          weuijs.confirm('是否取消关注？', () => {
+            this.unfollow();
+          });
         } else {
           this.follow();
         }
