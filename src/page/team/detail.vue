@@ -172,8 +172,23 @@
 
       doFollow() {
         if (this.isFollow) {
-          weuijs.confirm('是否取消关注？', () => {
-            this.unfollow();
+          weuijs.confirm('取消关注后你无法再收到医生的停诊通知、关怀随访、精选文章...', {
+            title: "取消关注?",
+            buttons: [
+              {
+                label: '确定取消',
+                type: 'primary',
+                onClick: () => {
+                  this.unfollow();
+                }
+              },
+              {
+                label: '我再想想',
+                type: 'default',
+                onClick: () => {
+                }
+              }
+            ]
           });
         } else {
           this.follow();
@@ -343,7 +358,7 @@
             margin-top: px2rem(10px);
           }
           li {
-            border: 1px solid rgba(74, 144, 226, 0.20);
+            border: 0.5px solid rgba(74, 144, 226, 0.20);
             border-radius: px2rem(3px);
             width: px2rem(112px);
             margin-left: px2rem(10px);

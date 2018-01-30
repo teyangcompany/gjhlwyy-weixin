@@ -1,5 +1,5 @@
 <template>
-  <div class="" v-if="showTag">
+  <div v-if="showTag">
     <img @click="hide" v-if="device=='iphone'" class="fixed" src="../../static/img/share.ios.png" alt="">
     <img @click="hide" v-if="device=='android'" class="fixed" src="../../static/img/share.android.png" alt="">
   </div>

@@ -1,18 +1,5 @@
 <template>
-  <div class="doctor doc-detail overflow-hidden">
-    <img @click="showSharePic=false" v-show="showSharePic" class="share-pic" v-if="device=='android'"
-         src="../../../../static/img/share.android.png"
-         alt="">
-    <img @click="showSharePic=false" v-show="showSharePic" class="share-pic" v-if="device=='iphone'"
-         src="../../../../static/img/share.ios.png"
-         alt="">
-    <!--<div class="topWrap">
-      <img @click="back()" class="previous" src="../../../../static/img/返回.png" alt="">
-      <span @click="follow" class="follow" v-if="isFollow"><img src="../../../../static/img/爱心2.png"
-                                                                alt="">取消</span>
-      <span @click="follow" class="follow" v-else><img src="../../../../static/img/爱心1.png" alt="">关注</span>
-      <span @click="showShare" class="share"><img src="../../../../static/img/share.icon.png" alt="">分享</span>
-    </div>-->
+  <div class="page doctor doc-detail overflow-hidden">
     <header class="flex" ref="header">
       <div class="back center">
         <img @click="back()" class="previous" src="../../../../static/img/返回.png" alt="">
@@ -110,15 +97,20 @@
         </div>
         <div class="space-line"></div>
 
-        <div class="institutionDes">
+        <div class="institutionDes" v-if="doctorArticle.length>0">
           <div class="desCenter team">
             <h4 class="article">医生文章 <span @click="goArticleList()" v-if="doctorArticle.length !=0">更多<img
               src="../../../../static/img/left-arrow.png" alt=""></span></h4>
             <template v-for="(item,index) in doctorArticle">
               <router-link tag="div" class="article-item"
                            :to="{path:'/articleDetail',query:{articleId:item.articleId}}">
-                <p>{{ item.title }}</p>
-                <p>阅读量 {{ item.readTimes }}</p>
+                <div class="flex">
+                  <div class="name flex1 ellipsis">{{ item.title }}</div>
+                  <div class="tag flex0" v-if="item.isGrade">推荐</div>
+                </div>
+                <p class="flex">
+                  <span class="flex1">{{item.createTime|formatTime('%Y/%m/%d')}}</span>
+                  <span class="flex0">{{ item.readTimes }}阅读</span></p>
               </router-link>
               <div class="space-line"></div>
             </template>
@@ -146,6 +138,7 @@
               :dialogRightFoot="dialogRightFoot"
     ></v-dialog>
     <doc-share ref="docShare" :src="shareSrc" :info="aboutDoctor"></doc-share>
+    <share-pic ref="sharePic"></share-pic>
   </div>
 </template>
 <script>
@@ -158,10 +151,12 @@
   import {isBindMixin, isLoginMixin, jssdkMixin, mainHeightMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   import {formatDate} from '../../../utils/formatTimeStamp'
+  import {formatTime} from "../../../lib/filter";
   import DocShare from "../../../plugins/doc/share.vue"
   import {debug, getParamsFromUrl, getShareLink} from "../../../lib/util"
   import DocInfo from '../../../plugins/doc/info'
   import {OPEN_TEAMPIC} from "../../../lib/config";
+  import SharePic from '../../../plugins/share-pic'
 
   export default {
     mixins: [isLoginMixin, isBindMixin, jssdkMixin, mainHeightMixin],
@@ -273,9 +268,7 @@
         }
       },
       showShare() {
-        this.showSharePic = true
-      },
-      _initDoctorScroll() {
+        this.$refs.sharePic.show();
       },
       isShare() {
         let {query} = getParamsFromUrl(location.href);
@@ -288,30 +281,32 @@
       setShareSrc(src) {
         this.shareSrc = src;
       },
-      getDocInfo() {
+      async getDocInfo() {
         let options = {
           docId: this.doctorId
         };
         if (this.isShare()) {
           options.needToken = false
         }
-        api("nethos.doc.card", options).then((data) => {
-          if (data.code == 0) {
-            this.aboutDoctor = data.obj.sysDoc
-            this.teamInfo = data.obj.teamInfo || {};
-            this.shareSrc = this.aboutDoctor.cardPicUrl;
-            this.doctorIntro = data.obj.sysDocNotice
-            this.doctorArticle = data.obj.docArticleList
-            for (var i = 0; i < this.doctorArticle.length; i++) {
-              this.articleTime.push(formatDate(new Date(this.doctorArticle[i].createTime)))
-            }
-            this.jssdkShare();
-          } else if (!(data.msg)) {
-            weui.alert("网络错误，请稍后重试")
-          } else {
-            weui.alert(data.msg)
+
+        let loading = weui.loading("加载中...");
+        let data = await api("nethos.doc.card", options);
+        loading.hide();
+        if (data.code == 0) {
+          this.aboutDoctor = data.obj.sysDoc
+          this.teamInfo = data.obj.teamInfo || {};
+          this.shareSrc = this.aboutDoctor.cardPicUrl;
+          this.doctorIntro = data.obj.sysDocNotice
+          this.doctorArticle = data.obj.docArticleList
+          for (var i = 0; i < this.doctorArticle.length; i++) {
+            this.articleTime.push(formatDate(new Date(this.doctorArticle[i].createTime)))
           }
-        })
+          this.jssdkShare();
+        } else if (!(data.msg)) {
+          weui.alert("网络错误，请稍后重试")
+        } else {
+          weui.alert(data.msg)
+        }
       },
       getFollow() {
         api("nethos.follow.get", {
@@ -410,21 +405,33 @@
                 }
               })
             } else {
-              weui.confirm('是否取消关注？', () => {
-                api("nethos.follow.cancel", {
-                  docId: this.doctorId
-                }).then((data) => {
-                  if (data.code == 0) {
-                    this.isFollow = false
-                  } else {
-                    weui.alert(data.msg)
-                  }
-                })
-              }, () => {
-
-              }, {
-                title: '提示'
-              });
+              weui.confirm('取消关注后你无法再收到医生的停诊通知、关怀随访、精选文章...', {
+                  title: "取消关注？",
+                  buttons: [
+                    {
+                      label: "确定取消",
+                      type: "primary",
+                      onClick: () => {
+                        api("nethos.follow.cancel", {
+                          docId: this.doctorId
+                        }).then((data) => {
+                          if (data.code == 0) {
+                            this.isFollow = false
+                          } else {
+                            weui.alert(data.msg)
+                          }
+                        })
+                      }
+                    },
+                    {
+                      label: '我再想想',
+                      type: 'default',
+                      onClick: () => {
+                      }
+                    }
+                  ]
+                }
+              );
             }
           } else {
             this.$router.push({
@@ -435,37 +442,19 @@
         })
       }
     },
+    filters: {formatTime},
     components: {
-      "VHeader": header,
-      "VDialog": Dialog,
+      "VHeader":
+      header,
+      "VDialog":
+      Dialog,
       Star,
       DocShare,
       DocNav,
-      DocInfo
+      DocInfo,
+      SharePic
     },
-    watch: {
-//      excelAll(){
-//        this.$nextTick(()=>{
-//          setTimeout(()=>{
-//            this._initDoctorScroll()
-//          },20)
-//        })
-//      },
-//      introAll(){
-//        this.$nextTick(()=>{
-//          setTimeout(()=>{
-//            this._initDoctorScroll()
-//          },20)
-//        })
-//      },
-//      aboutDoctor(){
-//        this.$nextTick(()=>{
-//          setTimeout(()=>{
-//            this._initDoctorScroll()
-//          },200)
-//        })
-//      }
-    }
+    watch: {}
   }
 </script>
 <style scoped lang="scss">
@@ -517,10 +506,17 @@
   .article-item {
     padding-top: px2rem(10px);
     padding-bottom: px2rem(10px);
-    p:first-child {
+    div {
       line-height: px2rem(22px);
       font-size: px2rem(18px);
-      color: #6A7379;
+      color: #666666;
+      .tag {
+        border-radius: 10px;
+        padding: 0px 5px;
+        color: orange;
+        border: 0.5px orange solid;
+        font-size: px2rem(12px);
+      }
     }
     p:nth-child(2) {
       margin-top: px2rem(10px);
@@ -556,20 +552,6 @@
   }
 
   .doctor {
-    position: absolute;
-    @include t_r_b_l();
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    .share-pic {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      z-index: 20000;
-    }
-
     .topWrap {
       position: fixed;
       top: 0;
@@ -634,13 +616,6 @@
   }
 
   .doctorCard {
-    /*position: fixed;*/
-    /*left:0;*/
-    /*right:0;*/
-    /*bottom: 0px;*/
-    /*top: 10px;*/
-    /*overflow: auto;*/
-    padding-top: $commonSpace;
     .doctorFunc {
       width: 100%;
       height: 210px;

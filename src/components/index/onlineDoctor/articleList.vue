@@ -30,7 +30,14 @@
       },
        created(){
          this.doctorId = this.$route.query.docId
-         api("nethos.doc.card",{
+         this.$router.replace({
+           path:'/doc/article/list',
+           query:{
+             docId:this.doctorId
+           }
+         });
+
+         /*api("nethos.doc.card",{
            docId:this.doctorId
          }).then((data)=>{
            console.log(data)
@@ -38,7 +45,7 @@
            for(var i=0;i<this.doctorArticle.length;i++){
              this.articleTime.push(formatDate( new Date(this.doctorArticle[i].createTime)))
            }
-         })
+         })*/
        },
       components:{
           "VHeader":header,

@@ -15,7 +15,7 @@
       </div>
       <template v-if="info.docScoure">
         <div class="score">
-          <b>{{info.docScoure}}</b>
+          <b>{{info.docScoure|formatScore}}</b>
           <star :score="info.docScoure" :size="24"></star>
         </div>
         <div class="rate">
@@ -37,6 +37,7 @@
 <script>
   import Star from '../../base/star/star'
   import docAva from '../../utils/docAva'
+  import {formatScore} from "../../lib/filter";
 
   export default {
     props: {
@@ -48,7 +49,7 @@
       return {};
     },
     computed: {},
-    filters: {docAva},
+    filters: {docAva,formatScore},
     components: {
       Star
     },

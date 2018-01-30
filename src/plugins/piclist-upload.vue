@@ -8,7 +8,7 @@
           {{pic.progress}}%
         </div>
       </li>
-      <li class="float-left" v-if="pics.length<=9">
+      <li class="float-left" v-if="pics.length<9">
         <img @click="selectFile" src="../../static/img/添加图片.png" alt="">
       </li>
       <li class="float-left" v-if="pics.length==0">
