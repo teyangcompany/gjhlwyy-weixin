@@ -4,9 +4,7 @@
       <i slot="back"></i>
     </app-header>
     <div class="main relative" ref="main">
-      <div class="contain absolute">
-        {{content}}
-      </div>
+      <div class="contain absolute" v-html="content"></div>
     </div>
   </div>
 </template>

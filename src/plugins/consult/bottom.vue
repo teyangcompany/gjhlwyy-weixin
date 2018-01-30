@@ -74,7 +74,7 @@
         if (this.consult.consultType == 'TEAMPIC') {
           this.$router.push({path: '/team/' + this.consult.teamId + '/detail'})
         } else {
-          this.$router.push({path: '/pictureConsultApply', query: {docId: this.consult.docId}})
+          this.$router.push({path: '/onlineDoctorCard', query: {docId: this.consult.docId}})
         }
       },
       handler(type) {

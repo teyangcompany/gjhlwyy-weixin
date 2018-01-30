@@ -37,6 +37,7 @@
     <div class="end fixed center" v-show="!activityStatus">
       很抱歉，该活动已经停止
     </div>
+    <msg ref="msg"></msg>
   </div>
 </template>
 
@@ -45,6 +46,7 @@
   import api from '../../lib/api'
   import {avaErrorMixin, isBindMixin} from "../../lib/mixin";
   import {DOWNLOAD} from "../../lib/config";
+  import commonPluginsMixins from '../../lib/mixins/common-plugins'
 
   export default {
     data() {
@@ -64,7 +66,7 @@
       }
     },
     components: {},
-    mixins: [isBindMixin, avaErrorMixin],
+    mixins: [isBindMixin, avaErrorMixin, commonPluginsMixins],
     async created() {
       this.initData();
       await this.getDetail();
@@ -112,7 +114,8 @@
           if (this.info && !this.info.price) {
             this.$set(this.info, 'price', ret.obj.activityCouponMoney);
           }
-          //
+        } else {
+          this.$refs.msg.show(ret.msg || "接口错误" + ret.code);
         }
         loading.hide();
       },

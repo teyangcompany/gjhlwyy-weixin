@@ -28,15 +28,16 @@
         <router-link to="/coupons/explain">礼券说明</router-link>
       </div>
     </div>
+    <msg ref="msg"></msg>
   </div>
 </template>
 
 <script>
   import weuijs from 'weui.js'
   import api from '../../lib/api'
-  import AppHeader from "../../plugins/app-header"
   import {mainHeightMixin} from "../../lib/mixin";
   import CouponsItem from "../../plugins/user/coupons-item"
+  import commonPluginsMixins from '../../lib/mixins/common-plugins'
 
   export default {
     name: 'coupons-my',
@@ -48,8 +49,8 @@
       };
     },
     computed: {},
-    mixins: [mainHeightMixin],
-    components: {AppHeader, CouponsItem},
+    mixins: [mainHeightMixin, commonPluginsMixins],
+    components: {CouponsItem},
     created() {
       this.getDetail();
       this.getList();
@@ -69,7 +70,7 @@
         if (ret.code == 0) {
           this.activityStatus = ret.obj.activityStatus
         } else {
-          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+          this.$refs.msg.show(ret.msg || "接口错误" + ret.code);
         }
         loading.hide();
       },

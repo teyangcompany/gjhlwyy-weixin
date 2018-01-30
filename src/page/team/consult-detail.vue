@@ -88,50 +88,11 @@
         id: "",
         info: {},
         url: '',
-        teamInfo: {}
+        teamInfo: {},
+        messageLength: 0
       };
     },
     computed: {
-      showNoticeTime() {
-        let {consult} = this.info,
-          ret = "",
-          showNoticeStr = '',
-          endDay = "",
-          todayTime = new Date().getTime(),
-          today = formatTime(todayTime, '%Y/%m/%d');
-        if (consult) {
-          let endTime = consult.modifyTime || consult.payTime || consult.createTime;
-          endTime += 48 * 3600 * 1000;
-          showNoticeStr = formatTime(endTime, '%m月%d日()%H:%S');
-          endDay = formatTime(endTime, '%Y/%m/%d');
-          let cha = new Date(endDay).getTime() - new Date(today).getTime();
-          cha = cha / 24 / 3600 / 1000;
-          if (todayTime > endTime) {
-            ret = "";
-          } else {
-            ret = cha == 0 ? '(今天)' :
-              cha == 1 ? '(明天)' : '(后天)';
-          }
-        } else {
-          ret = "";
-        }
-        return showNoticeStr.replace('()', ret);
-      },
-
-      showNotice() {
-        let {consult} = this.info;
-        if (consult) {
-          if (consult.consultStatus == "GOING" && !consult.consultStatusDescription) {
-            return true;
-          } else if (['NEEDCOMMENT', 'FINSH'].indexOf(consult.consultStatus) >= 0) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return false
-        }
-      },
       consult() {
         return this.info.consult ? this.info.consult : {};
       },
@@ -154,6 +115,7 @@
       AppHeader, Scroll, Bottom, MessageItem, AppAudio
     },
     created() {
+      this.timer = null;
       this.jssdk();
       let {id} = this.$route.params;
       id && (this.id = id) && (this.getDetail());
@@ -162,7 +124,10 @@
       window.addEventListener('resize', this.resize);
     },
     beforeDestroy() {
-
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
     },
     methods: {
       resize() {
@@ -173,11 +138,13 @@
         }, 200);
       },
       sendok() {
-        this.getDetail();
+
+      },
+
+      toBottom() {
         setTimeout((res) => {
           this.$refs.scroll.scrollToElement(this.$refs.msg[this.$refs.msg.length - 1].$el.querySelector('.msg'), 300);
         }, 200)
-
       },
 
       handleConsult(type) {
@@ -205,6 +172,17 @@
         });
       },
 
+      checkMsgLength() {
+        if (this.info.messageList) {
+          if (this.messageLength == 0) {
+            this.messageLength = this.info.messageList.length;
+          } else if (this.info.messageList.length != this.messageLength) {
+            this.messageLength = this.info.messageList.length;
+            this.toBottom();
+          }
+        }
+      },
+
       async endConsult() {
         let loading = weuijs.loading("加载中...");
         let ret = await
@@ -221,19 +199,42 @@
         }
       },
 
-      async getDetail() {
-        let loading = weuijs.loading("加载中...");
+      async getDetail(type) {
+        let loading;
+        if (!type) {
+          loading = weuijs.loading("加载中...");
+        }
+
         let ret = await api('nethos.consult.info.detail', {consultId: this.id});
         if (ret.code == 0) {
           this.info = ret.obj;
+          this.checkMsgLength();
           if (this.info.consult.consultType == "TEAMPIC") {
-            let ret2 = await api("smarthos.team.info.card", {id: this.info.consult.teamId});
-            if (ret2.code == 0) {
-              this.teamInfo = ret2.obj;
-            }
+            await this.getTeamInfo();
           }
         }
-        loading.hide();
+
+        if (!type) {
+          loading.hide();
+        }
+
+        if (this.timer) {
+          clearTimeout(this.timer);
+          this.timer = null;
+        }
+        /*if(this.info.consult.consultStatus=="GOING"){
+
+        }*/
+        this.timer = setTimeout(() => {
+          this.getDetail('lunxun');
+        }, 5000);
+      },
+
+      async getTeamInfo() {
+        let ret = await api("smarthos.team.info.card", {id: this.info.consult.teamId});
+        if (ret.code == 0) {
+          this.teamInfo = ret.obj;
+        }
       },
 
       async jssdk() {

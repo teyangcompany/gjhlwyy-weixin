@@ -21,7 +21,6 @@ export default {
         if (!navHeight) {
           setTimeout(this.init, 20);
         } else {
-          debug(window.innerHeight, navHeight);
           this.height = window.innerHeight - 45 - navHeight;
         }
       }
