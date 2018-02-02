@@ -1,21 +1,22 @@
 <template>
   <div class="page team-consult-detail flex">
-    <app-header ref="header" class="flex0" :title="consult.consultTypeName">
+    <app-header ref="header" class="flex0" :img="img" :title="title">
       <i slot="back"></i>
       <div slot="right" @click="handleConsult('end')" class="right absolute"
-           v-if="consult.consultStatus=='GOING'&&!consult.consultStatusDescription">
+           v-if="consult.consultStatus=='GOING'&&consult.replyCount">
         结束咨询
       </div>
     </app-header>
-    <scroll :height="scrollHeight" ref="scroll" class="flex1">
+    <div class="patinfo flex">
+      <div class="label flex0">患者资料：</div>
+      <div class="text flex1">{{consult.consulterName}} {{consult.consulterGender|getGender}}
+        {{consult.consulterAge}}岁
+      </div>
+      <div v-if="showInfo" class="flex0 color_666" @click="toTop">查看</div>
+    </div>
+    <scroll :height="scrollHeight" ref="scroll" :listenScroll="true" :probeType="2" @scroll="onScroll" class="flex1">
       <div class="main">
         <div class="info">
-          <div class="item flex">
-            <div class="label flex0">患者资料：</div>
-            <div class="text flex1">{{consult.consulterName}} {{consult.consulterGender|getGender}}
-              {{consult.consulterAge}}岁
-            </div>
-          </div>
           <div class="item flex">
             <div class="label flex0">疾病名称：</div>
             <div class="text flex1">{{consult.illnessName||'暂无'}}</div>
@@ -44,12 +45,13 @@
             <div class="icon float-right" :class="[showType]"></div>
           </h3>
           <ul class="overflow-hidden">
-            <li v-for="(member,index) in members" v-if="index<showMember" class="float-left">
+            <router-link tag="li" :key="index" :to="{path:'/onlineDoctorCard',query:{docId:member.docId}}"
+                         v-for="(member,index) in members" v-if="index<showMember" class="float-left">
               <div class="ava">
                 <img :src="member|docAva" alt="">
               </div>
               <div class="name ellipsis">{{member.docName}}</div>
-            </li>
+            </router-link>
           </ul>
         </div>
         <div class="meaasge">
@@ -62,6 +64,13 @@
             :message="messageList"
             :consult="consult"></bottom>
     <app-audio :url="url" ref="audio"></app-audio>
+    <div v-if="consult.consultStatus=='NEEDPAY'" class="djs-notice fixed center">
+      <div class="content center">
+        请在 <span>{{djs|formatTime('%M:%S')}}</span> 内完成支付 <br>
+        超时订单自动取消
+      </div>
+      <div class="icon"></div>
+    </div>
   </div>
 </template>
 
@@ -83,24 +92,38 @@
   export default {
     data() {
       return {
-        bottomHeight: 50,
+        showInfo: false,
+        bottomHeight: 50 + 45,
         showType: 'part',
         id: "",
         info: {},
         url: '',
+        djs: 0,
+        messageList: [],
         teamInfo: {},
         messageLength: 0
       };
     },
     computed: {
+      title() {
+        if (this.info && this.info.consult && this.info.consult.consultType == 'DOCPIC') {
+          return this.info.consult.docName;
+        } else if (this.info && this.info.consult && this.info.consult.consultType == 'TEAMPIC') {
+          return this.teamInfo.teamName;
+        }
+      },
+      img() {
+        if (this.info && this.info.consult && this.info.consult.consultType == 'DOCPIC') {
+          return this.info.consult;
+        } else {
+          return {};
+        }
+      },
       consult() {
         return this.info.consult ? this.info.consult : {};
       },
       attaList() {
         return this.info.attaList ? this.info.attaList : []
-      },
-      messageList() {
-        return this.info.messageList ? this.info.messageList : []
       },
       members() {
         return this.teamInfo ? this.teamInfo.members : []
@@ -116,6 +139,8 @@
     },
     created() {
       this.timer = null;
+      this.djsTimer = null;
+      this.doDjs();
       this.jssdk();
       let {id} = this.$route.params;
       id && (this.id = id) && (this.getDetail());
@@ -130,6 +155,18 @@
       }
     },
     methods: {
+      doDjs() {
+        if (this.djs) {
+          this.djs += (0 - 1000);
+        } else {
+
+        }
+        if (this.djsTimer) {
+          clearTimeout(this.djsTimer);
+          this.djsTimer = null;
+        }
+        this.djsTimer = setTimeout(this.doDjs, 1000);
+      },
       resize() {
         let scrollC = (this.$refs.scroll);
         setTimeout(() => {
@@ -138,22 +175,52 @@
         }, 200);
       },
       sendok() {
-
+        //this.getMsgList();
       },
 
+      onScroll() {
+        let scroll = this.$refs.scroll.scroll;
+        if (scroll && scroll.y < 0) {
+          this.showInfo = true;
+        } else {
+          this.showInfo = false;
+        }
+      },
+
+      toTop() {
+        setTimeout((res) => {
+          let scroll = this.$refs.scroll.scroll;
+          if (scroll) {
+            this.showInfo = false;
+            this.$refs.scroll.scrollTo(0, 0, 300);
+          }
+          //this.$refs.scroll.scrollToElement(this.$refs.msg[this.$refs.msg.length - 1].$el.querySelector('.msg'), 300);
+        }, 300)
+      },
       toBottom() {
         setTimeout((res) => {
-          this.$refs.scroll.scrollToElement(this.$refs.msg[this.$refs.msg.length - 1].$el.querySelector('.msg'), 300);
-        }, 200)
+          let scroll = this.$refs.scroll.scroll;
+          if (scroll && scroll.maxScrollY < 0 && this.consult.consultStatus == "GOING") {
+            this.showInfo = true;
+            this.$refs.scroll.scrollTo(0, scroll.maxScrollY, 300);
+          }
+          //this.$refs.scroll.scrollToElement(this.$refs.msg[this.$refs.msg.length - 1].$el.querySelector('.msg'), 300);
+        }, 300)
       },
 
       handleConsult(type) {
         switch (type) {
           case 'end':
-            weuijs.confirm('是否确认结束问诊？', () => {
-              //console.log(res);
-              this.endConsult();
-            })
+            weuijs.confirm('若您的问题已经解决，可以结束咨询', () => {
+                //console.log(res);
+                this.endConsult();
+              },
+              () => {
+                console.log(res);
+              },
+              {
+                title: '结束咨询'
+              })
             break;
         }
       },
@@ -174,11 +241,9 @@
 
       checkMsgLength() {
         if (this.info.messageList) {
-          if (this.messageLength == 0) {
+          if (this.messageLength != this.info.messageList.length) {
             this.messageLength = this.info.messageList.length;
-          } else if (this.info.messageList.length != this.messageLength) {
-            this.messageLength = this.info.messageList.length;
-            this.toBottom();
+            this.messageLength && (this.toBottom());
           }
         }
       },
@@ -192,7 +257,28 @@
           weuijs.toast('操作成功', {
             callback: () => {
               this.getDetail();
+              /*if (this.consult.consultType == 'TEAMPIC') {
+                this.$router.push({path: `/team/${this.consult.teamId}/detail`})
+              } else if (this.consult.consultType == 'DOCPIC') {
+                this.$router.push({path: '/onlineDoctorCard', query: {docId: this.consult.docId}});
+              }*/
             }
+          });
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+        }
+      },
+
+      async getMsgList() {
+        let ret = await api('nethos.consult.message.list.v2', {consultId: this.id, pageSize: 10000, msgLevel: "SYS"});
+        if (ret.code == 0) {
+          let t = 0;
+          this.messageList = ret.list.map((item, index) => {
+            if (t && item.replyTime - t > 20 * 60 * 1000) {
+              item.showTime = formatTime(item.replyTime, '%Y-%m-%d %H:%M:%S');
+            }
+            t = item.replyTime;
+            return item;
           });
         } else {
           //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
@@ -209,6 +295,7 @@
         if (ret.code == 0) {
           this.info = ret.obj;
           this.checkMsgLength();
+          await this.getMsgList();
           if (this.info.consult.consultType == "TEAMPIC") {
             await this.getTeamInfo();
           }
@@ -240,6 +327,13 @@
       async jssdk() {
         await this.jssdkMixin_getJssdkConfig();
       }
+    },
+    watch: {
+      info(newV) {
+        if (newV.payWaitSeconds) {
+          (!this.djs) && (this.djs = newV.payWaitSeconds * 1000);
+        }
+      }
     }
   };
 </script>
@@ -247,17 +341,24 @@
 <style scoped lang="scss">
   @import "../../common/public";
 
-  .notice-msg {
-    margin: 0 auto;
-    margin-bottom: px2rem(10px);
-    border-radius: 5px;
-    padding: 2px 4px;
-    width: px2rem(345px - 35px*2 - 10px*2);
-    font-size: 12px;
-    color: white;
-    background-color: rgb(204, 204, 204);
-    span {
-      color: #3399FF;
+  .djs-notice {
+    left: 55%;
+    bottom: 50px;
+    width: 40%;
+    .content, .icon {
+      color: white;
+      font-size: 12px;
+      background-color: $mainColor;
+    }
+    .content {
+      border-radius: 10px;
+      padding: 5px 0;
+      transform: translateY(11px);
+    }
+    .icon {
+      display: inline-block;
+      transform: rotate(45deg);
+      @include w_h(10px, 10px);
     }
   }
 
@@ -267,6 +368,17 @@
       background-color: #F8F8F8;
       overflow: hidden;
     }
+
+    .patinfo {
+      @include border();
+      padding-left: px2rem(15px);
+      padding-right: px2rem(15px);
+      @include h_lh(45px);
+      .label {
+        font-size: 14px;
+      }
+    }
+
     .main {
       .info {
         background-color: white;
@@ -274,11 +386,7 @@
           @include border(top);
         }
         .item {
-          padding-left: px2rem(15px);
-          @include h_lh(45px);
-          .label {
-            font-size: 14px;
-          }
+          @extend .patinfo;
         }
         .container {
           padding: px2rem(5px) px2rem(15px);
@@ -355,6 +463,11 @@
       }
       .meaasge {
         padding: 20px 0;
+        > div {
+          &:last-child {
+            margin-top: px2rem(10px);
+          }
+        }
       }
     }
   }

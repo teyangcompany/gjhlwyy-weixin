@@ -19,7 +19,7 @@
           </div>
           <div class="icon_sp_area flex0">
             <span class="flex0" v-if="coupons&&coupons.desc">{{this.showCoupon}}&nbsp;&nbsp;</span>
-            <span class="flex0" v-else>{{count}}张可用优惠券&nbsp;&nbsp;</span>
+            <span class="flex0" v-else>{{count==0?'暂无可用优惠券':count+'张可用优惠券'}}&nbsp;&nbsp;</span>
             <img class="flex1" src="../../../../static/img/arrow.png" alt="">
           </div>
         </div>
@@ -253,7 +253,7 @@
         this.showToast = false
         if (data.code == 0 && data.obj) {
           if (data.obj.toUpperCase() == 'SUCCESS') {
-            that.$router.push({
+            that.$router.replace({
               path: '/allConsultSuccess',
               query: {consultId: that.consultId}
             });
@@ -275,7 +275,7 @@
             conf,
             function (res) {
               if (res.err_msg == "get_brand_wcpay_request:ok") {
-                that.$router.push({
+                that.$router.replace({
                   path: '/allConsultSuccess',
                   query: {consultId: that.consultId}
                 })
@@ -290,7 +290,7 @@
         } else if (data.code == -2 && data.msg == '当前订单已支付') {
           weui.alert('当前订单已支付')
         } else if (data.code == 0 && !(data.obj)) {
-          this.$router.push({
+          this.$router.replace({
             path: '/allConsultSuccess',
             query: {consultId: that.consultId}
           })

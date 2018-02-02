@@ -2,7 +2,7 @@
   <div class="page doctor doc-detail overflow-hidden">
     <header class="flex" ref="header">
       <div class="back center">
-        <img @click="back()" class="previous" src="../../../../static/img/返回.png" alt="">
+        <img @click="doBackMixin_doBack" class="previous" src="../../../../static/img/返回.png" alt="">
       </div>
       <div class="name font-size-h3" :style="nameStyle">{{aboutDoctor.docName}}</div>
       <div class="right flex">
@@ -118,6 +118,7 @@
         </div>
 
         <div class="institutionDes">
+          <h4 class="title">医生二维码</h4>
           <ul class="flex ercode">
             <li class="flex0 center" @click="openShare(aboutDoctor.cardPicUrl)">
               <p><img src="../../../../static/img/logo.web.png" alt=""></p>
@@ -148,20 +149,21 @@
   import api from '../../../lib/api'
   import Star from '../../../base/star/star'
   import weui from 'weui.js'
-  import {isBindMixin, isLoginMixin, jssdkMixin, mainHeightMixin} from "../../../lib/mixin"
+  import {doBackMixin, isBindMixin, isLoginMixin, jssdkMixin, mainHeightMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   import {formatDate} from '../../../utils/formatTimeStamp'
   import {formatTime} from "../../../lib/filter";
   import DocShare from "../../../plugins/doc/share.vue"
-  import {debug, getParamsFromUrl, getShareLink} from "../../../lib/util"
+  import {debug, getENV, getParamsFromUrl, getShareLink, makeUrl} from "../../../lib/util"
   import DocInfo from '../../../plugins/doc/info'
   import {OPEN_TEAMPIC} from "../../../lib/config";
   import SharePic from '../../../plugins/share-pic'
 
   export default {
-    mixins: [isLoginMixin, isBindMixin, jssdkMixin, mainHeightMixin],
+    mixins: [isLoginMixin, isBindMixin, jssdkMixin, mainHeightMixin, doBackMixin],
     data() {
       return {
+        confirmDom: null,
         nameStyle: {
           opacity: 0
         },
@@ -192,27 +194,42 @@
 
     created() {
       this.doctorId = this.$route.query.docId
-      this.getDocInfo();
-      let isshare = this.isShare();
-      if (isshare) {
+      if (window.device == 'iphone' || window.device == 'android') {
+        this.getDocInfo();
+        let isshare = this.isShare();
+        if (isshare) {
+        } else {
+          this._isBind().then((res) => {
+            if (res === false) {
+              this.$router.push({
+                path: "/scanBind",
+                query: {
+                  docId: this.doctorId
+                }
+              })
+            } else {
+              this.getFollow();
+            }
+          })
+        }
       } else {
-        this._isBind().then((res) => {
-          if (res === false) {
-            this.$router.push({
-              path: "/scanBind",
-              query: {
-                docId: this.doctorId
-              }
-            })
-          } else {
-            this.getFollow();
-          }
-        })
+        let env = getENV(),
+          options = getParamsFromUrl(location.href);
+        options.hostname = env.web;
+        options.path = '/html/doc';
+        options.query = {
+          docId: this.doctorId
+        };
+        location.replace(makeUrl(options));
       }
     },
 
     mounted() {
       this.init();
+    },
+
+    beforeDestroy() {
+      this.confirmDom && this.confirmDom.hide();
     },
 
     methods: {
@@ -231,13 +248,13 @@
                 // 用户取消分享后执行的回调函数
               },
 
-              desc: doc.docResume, // 分享描述
+              desc: `您好，我是${doc.docHosName || ''}${doc.docDeptName || ''}${doc.docTitle || ''}`, // 分享描述
               type: 'link', // 分享类型,music、video或link，不填默认为link
               dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
             };
           debug('share', conf);
           wx.ready(() => {
-            wx.onMenuShareTimeline(conf);
+            wx.onMenuShareTimeline(Object.assign({}, conf, {title: conf.desc}));
             wx.onMenuShareAppMessage(conf);
           })
         }
@@ -405,12 +422,12 @@
                 }
               })
             } else {
-              weui.confirm('取消关注后你无法再收到医生的停诊通知、关怀随访、精选文章...', {
+              this.confirmDom = weui.confirm('取消关注后你无法再收到医生的停诊通知、关怀随访、精选文章...', {
                   title: "取消关注？",
                   buttons: [
                     {
                       label: "确定取消",
-                      type: "primary",
+                      type: "default",
                       onClick: () => {
                         api("nethos.follow.cancel", {
                           docId: this.doctorId
@@ -425,7 +442,7 @@
                     },
                     {
                       label: '我再想想',
-                      type: 'default',
+                      type: 'primary',
                       onClick: () => {
                       }
                     }

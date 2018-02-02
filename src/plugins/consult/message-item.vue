@@ -1,12 +1,12 @@
 <template>
   <div class="message-item" :class="[message.replierType?message.replierType.toLowerCase():'']">
     <template v-if="message.msgLevel=='SYS'">
-      <div class="notice-msg" v-html="handlerHTML(message.replyContent)"></div>
+      <div class="notice-msg center" v-html="handlerHTML(message.replyContent)"></div>
     </template>
     <template v-else>
-      <div class="time center">{{message.replyTime|formatTime('%Y-%m-%d %H:%M:%S')}}</div>
+      <div class="time center" v-if="message.showTime">{{message.showTime}}</div>
       <div class="container flex">
-        <div class="ava flex0">
+        <div class="ava flex0" @click="handler(message)">
           <img :src="message|patAva" alt="">
         </div>
         <div class="content flex1">
@@ -14,10 +14,10 @@
           <div class="msgbox flex">
             <div class="arrow"></div>
             <div class="msg">
-              {{message.replyContent}}
+              <span v-html="replyContent"></span>
               <ul v-if="message.hasAtta">
                 <li v-for="atta in message.attaList">
-                  <playing-icon :src="atta.url" ref="playingIcon" class="iconfont fs45 audio block audio"
+                  <playing-icon :src="atta.url" ref="playingIcon" class="iconfont fs45 audio block"
                                 @click="play(atta.url)"
                                 v-if="atta.fileType&&atta.fileType=='AUDIO'">
                   </playing-icon>
@@ -43,7 +43,22 @@
     data() {
       return {};
     },
-    computed: {},
+    computed: {
+      replyContent() {
+        if (this.message.replyContent) {
+          let reply = this.message.replyContent;
+          if (reply.indexOf('articleId') >= 0) {
+            reply = JSON.parse(reply);
+            return "医生文章：<a href='#" + '/doc/article/' + reply.articleId + "'>" + reply.title + "</a>"
+          } else {
+            return reply;
+          }
+        } else {
+          return ""
+        }
+
+      }
+    },
     filters: {
       formatTime, patAva
     },
@@ -56,6 +71,16 @@
     },
     methods: {
       handlerHTML,
+      handler(data) {
+        if (data.replierType == "DOC") {
+          this.$router.push({
+            path: '/onlineDoctorCard',
+            query: {
+              docId: data.replierId
+            }
+          })
+        }
+      },
       play(url) {
         this.$emit('play', url);
       }
@@ -71,7 +96,7 @@
   }
 
   .audio {
-    width: px2rem(200px);
+    width: px2rem(150px);
   }
 
   .message-item {
@@ -135,6 +160,7 @@
     }
     &.doc {
       .container {
+        padding-top: px2rem(10px);
         .content {
           margin-left: px2rem(10px);
           .msgbox {

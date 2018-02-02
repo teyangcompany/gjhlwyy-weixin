@@ -1,16 +1,28 @@
 <template>
   <div class="header relative center">
-    <div class="back absolute" @click.stop="$router.go(-1)">
+    <div class="back absolute" @click.stop="doBackMixin_doBack">
       <slot name="back"></slot>
     </div>
     <slot name="right"></slot>
-    <span>{{title}}</span>
+    <span class="overflow-hidden">
+      <img :src="img|docAva" v-if="Object.keys(img).length>0" alt="" class="float-left">
+      {{title}}
+    </span>
   </div>
 </template>
 
 <script>
+  import docAva from '../utils/docAva'
+  import {doBackMixin, jssdkMixin} from "../lib/mixin";
+
   export default {
     props: {
+      img: {
+        type: Object,
+        default: () => {
+          return {}
+        }
+      },
       title: {
         type: String,
         default: ""
@@ -20,7 +32,9 @@
       return {};
     },
     computed: {},
+    filters: {docAva},
     components: {},
+    mixins: [jssdkMixin, doBackMixin],
     mounted() {
 
     },
@@ -38,6 +52,17 @@
   %a {
     line-height: 45px; /*no*/
     height: 45px; /*no*/
+  }
+
+  img {
+    margin-top: 8px;
+    @include w_h(30px, 30px);
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+
+  span {
+    display: inline-block;
   }
 
   .header {

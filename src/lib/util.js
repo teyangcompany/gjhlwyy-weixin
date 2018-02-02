@@ -188,8 +188,12 @@ export function upper(str) {
  * @returns {string | void | *}
  */
 export function handlerHTML(str) {
-  str = (str.replace(/\[(.+)?\]/g, (...args) => {
+  str = str.replace(/\[(.+)?\]/g, (...args) => {
     return '<span>' + args[1] + '</span>'
-  }))
-  return str
+  });
+  if (str.indexOf('咨询已结束') >= 0) {
+    str = str.replace('咨询已结束', '咨询已结束<br/>')
+  }
+
+  return str.replace("/n", '')
 }

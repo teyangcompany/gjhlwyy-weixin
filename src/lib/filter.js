@@ -218,6 +218,10 @@ const filterHTML = function (str) {
   return str.replace(/style="([^"]+?)"/g, '')
 }
 
+const delHtmlTag = (str) => {
+  return str.replace(/<[^>]+>/g, "");//去掉所有的html标记
+}
+
 const formatScore = (str) => {
   if (Math.round(str) == str) {
     return `${str}.0`
@@ -240,6 +244,6 @@ export {
   formatPrice,
   formatTime,
   getOrderStatus,
-  getOrderAmpm, filterHTML, formatScore
+  getOrderAmpm, filterHTML, formatScore, delHtmlTag
 }
 

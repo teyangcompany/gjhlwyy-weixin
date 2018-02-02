@@ -1,10 +1,14 @@
 <template>
   <div class="team-info lh1">
+    <div class="banner overflow-hidden">
+      <img :src="info.teamAvatar||'./static/img/team.default.png'" alt="">
+    </div>
     <h3 class="center">{{info.teamName}}</h3>
     <div class="flex score" v-if="info.teamScoure">
       <div class="flex0 name">{{info.teamScoure|formatScore}}</div>
       <star class="flex0" :size="36" :score="info.teamScoure"></star>
-      <router-link :to="{path:'/team/'+info.id+'/rate'}" tag="div" class="flex0 text">查看</router-link>
+      <router-link v-if="showRateList" :to="{path:'/team/'+info.id+'/rate'}" tag="div" class="flex0 text">查看
+      </router-link>
     </div>
     <div class="center score-no" v-else>
       暂无评分
@@ -17,13 +21,17 @@
   import Star from '../../base/star/star'
 
   export default {
-    props: ['info'],
+    props: ['info','showRateList'],
     data() {
-      return {};
+      return {
+      };
     },
     computed: {},
     filters: {formatScore},
     components: {Star},
+    created() {
+
+    },
     mounted() {
 
     },
@@ -40,6 +48,12 @@
   .team-info {
     background-color: white;
     padding-bottom: px2rem(15px);
+    .banner {
+      @include w_h(px2rem(375px), px2rem(235px));
+      img {
+        @include w_h(px2rem(375px), px2rem(235px));
+      }
+    }
     h3 {
       color: #333333;
       font-size: px2rem(17px);

@@ -18,7 +18,7 @@
           {{item.consultContent}}
         </div>
         <div class="doc flex fs40">
-          <div class="name flex1 color_999">{{item.docName||item.teamName}}</div>
+          <div class="name flex1 color_999">{{item.teamName||item.docName||'医助团队'}}</div>
           <div class="time flex0 color_666">{{item.createTime|consultTime}}</div>
         </div>
       </li>
@@ -48,7 +48,7 @@
     filters: {
       consultTime: (time) => {
         let cha = new Date().getTime() - time;
-        if (cha < 1000) {
+        if (cha < 60 * 1000) {
           return "刚刚";
         } else if (cha < 3600 * 1000) {
           return `${Math.round(cha / 1000 / 60)}分钟前`;
@@ -84,7 +84,7 @@
         if (['DOCPIC', 'TEAMPIC'].indexOf(item.consultType) >= 0) {
           this.$router.push({path: '/waitArrange', query: {consultId: item.consultId}})
         } else {
-          weuijs.confirm(`${DOWNLOAD_CONTENT}进行视频咨询`, {
+          weuijs.confirm(`${DOWNLOAD_CONTENT}进行${item.consultTypeName}`, {
             title: '提示',
             buttons: [
               {

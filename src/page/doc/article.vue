@@ -6,7 +6,7 @@
         分享
       </div>
     </app-header>
-    <div class="main lh1" ref="main">
+    <div class="main lh1 overflow-y-auto" ref="main">
       <h3>{{info.title}}</h3>
       <ul class="flex">
         <li class="tag flex0" v-if="info.isGrade">
@@ -33,7 +33,7 @@
   import {jssdkMixin, mainHeightMixin} from "../../lib/mixin";
   import api from '../../lib/api'
   import weuijs from 'weui.js'
-  import {filterHTML, formatTime} from "../../lib/filter";
+  import {delHtmlTag, filterHTML, formatTime} from "../../lib/filter";
   import {debug, getENV, getParamsFromUrl, getShareLink, makeUrl} from "../../lib/util";
 
   export default {
@@ -42,6 +42,7 @@
         id: '',
         content: '',
         info: {},
+        docInfo: {},
         showShare: false,
         device: window.device
       };
@@ -54,6 +55,7 @@
       let {params} = this.$route;
       params && (params.id) && (this.id = params.id);
       await this.getDetail();
+      await this.getDoc();
       await this.setShare();
     },
     mounted() {
@@ -78,14 +80,14 @@
             conf = {
               title: doc.title,
               link: this.getShareLink(),
-              imgUrl: 'http://static.hztywl.cn/project/gjyy/img/unrmsharelogo.jpg', // 分享图标
+              imgUrl: this.docInfo.docAvatar || 'http://static.hztywl.cn/project/gjyy/img/unrmsharelogo.jpg', // 分享图标
               success: function () {
                 // 用户确认分享后执行的回调函数
               },
               cancel: function () {
                 // 用户取消分享后执行的回调函数
               },
-              desc: doc.title, // 分享描述
+              desc: delHtmlTag(this.content), // 分享描述
               type: 'link', // 分享类型,music、video或link，不填默认为link
               dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
             };
@@ -94,6 +96,17 @@
             wx.onMenuShareTimeline(conf);
             wx.onMenuShareAppMessage(conf);
           })
+        }
+      },
+
+      async getDoc() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api('nethos.doc.card', {docId: this.info.docId});
+        loading.hide();
+        if (ret.code == 0) {
+          this.docInfo = ret.obj.sysDoc;
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
         }
       },
 

@@ -48,7 +48,7 @@
 <script>
   import weuijs from "weui.js"
   import AppHeader from "../../plugins/app-header"
-  import {mainHeightMixin} from "../../lib/mixin";
+  import {mainHeightMixin,scrollIntoViewMixin} from "../../lib/mixin";
   import Compat from "../../plugins/user/compat"
   import api from "../../lib/api"
   import PiclistUpload from "../../plugins/piclist-upload"
@@ -71,7 +71,7 @@
         return this.form.consultContent ? this.form.consultContent.length : 0
       }
     },
-    mixins: [mainHeightMixin],
+    mixins: [mainHeightMixin,scrollIntoViewMixin],
     components: {
       AppHeader, Compat, PiclistUpload, Msg
     },

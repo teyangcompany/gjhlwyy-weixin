@@ -1,12 +1,12 @@
 <template>
   <div class="consult-bottom">
-    <div class="wait center" @click="handler(status)"
+    <div class="wait center flex" @click="handler(status)"
          v-if="status=='CANCEL'">
-      {{consult.consultStatusDescription}}
+      咨询已取消<br/>如有退款将在7~10个工作日返回您的支付账户
     </div>
 
     <div class="wait center" @click="handler(status)"
-         v-if="status=='GOING' && !consult.modifierType">
+         v-if="status=='GOING' && !consult.replyCount">
       {{consult.consultStatusDescription}}
     </div>
 
@@ -14,7 +14,8 @@
     <div class="rate" v-else-if="status=='NEEDPAY'">
       <ul class="flex">
         <li class="flex0 center" @click="handler('cancel')">取消申请</li>
-        <li class="flex0 center" @click="handler(status)">支付{{consult.canRefundFee}}元
+        <li class="flex0 center" @click="handler(status)">
+          支付{{consult.canRefundFee}}元
         </li>
       </ul>
     </div>
@@ -168,13 +169,23 @@
   @import "../../common/public";
 
   $h: 50px;
+
+  .notice {
+    left: 0;
+    bottom: $h;
+    z-index: 2001;
+  }
+
   .consult-bottom {
     height: $h;
     .wait {
-      line-height: $h;
       background-color: #f8f8f8;
       font-size: 12px;
       color: #333;
+      height: $h;
+      justify-content: center;
+      align-items: center;
+      line-height: 1.2;
     }
     .rate {
       li {

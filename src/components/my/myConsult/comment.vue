@@ -100,7 +100,7 @@
               this.verifyTips = "评价成功"
               setTimeout(() => {
                 this.showVerify = false
-                this.$router.push({
+                this.$router.replace({
                   path: '/myConsult/commented',
 //                 query:{consultId:this.consultId}
                 })

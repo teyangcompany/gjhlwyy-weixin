@@ -44,14 +44,10 @@
         </div>
       </div>
     </div>
-    <img class="absolute" v-if="device=='iphone'" v-show="isShowMask" @click="isShowMask=false"
-         src="../../../static/img/share.ios.png" alt="">
-    <img class="absolute" v-if="device=='android'" v-show="isShowMask" @click="isShowMask=false"
-         src="../../../static/img/share.android.png"
-         alt="">
     <div class="end fixed center" v-show="!activityStatus&&!loading">
       很抱歉，该活动已经停止
     </div>
+    <share-pic ref="sharePic"></share-pic>
   </div>
 </template>
 
@@ -62,6 +58,7 @@
   import weuijs from 'weui.js'
   import {debug, getENV, getParamsFromUrl, getShareLink, makeUrl} from "../../lib/util";
   import {formatCardAndMobile} from "../../lib/filter";
+  import SharePic from '../../plugins/share-pic'
 
   export default {
     data() {
@@ -83,7 +80,7 @@
     },
     filters: {formatCardAndMobile},
     mixins: [mainHeightMixin, jssdkMixin, isBindMixin],
-    components: {AppHeader},
+    components: {AppHeader, SharePic},
     async created() {
       this.device = window.device;
       this.userInfo = await this._isBind();
@@ -103,9 +100,7 @@
     },
     methods: {
       share() {
-        if (window.brower == 'weixin') {
-          this.isShowMask = true;
-        }
+        this.$refs.sharePic.show();
       },
       getShareLink() {
         let options = getParamsFromUrl(location.href),
@@ -117,7 +112,7 @@
           name: this.userInfo.patName,
           avator: this.userInfo.patAvatar,
           code: this.info.inviteCode,
-          price:this.info.activityCouponMoney
+          price: this.info.activityCouponMoney
         }, str = '';
 
         for (let k in params) {

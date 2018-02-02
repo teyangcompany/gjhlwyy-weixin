@@ -23,13 +23,16 @@
   @import "./common/public";
 
   #article_detail {
+    line-height: 1.5;
     padding-top: px2rem(15px);
-    > span {
+    span {
       font-size: px2rem(16px);
       padding-bottom: px2rem(15px);
+      display: inline-block;
       line-height: 1.5;
     }
-    > img {
+    img {
+      margin-bottom: px2rem(15px);
       width: 100%;
     }
   }
@@ -54,7 +57,7 @@
     color: white;
     background-color: rgb(204, 204, 204);
     span {
-      color: #3399FF;
+      color: $mainColor;
     }
   }
 

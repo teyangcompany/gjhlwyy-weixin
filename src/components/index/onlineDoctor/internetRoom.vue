@@ -283,7 +283,7 @@
                                                   v-if="item.docPicConsultStatus == true"> {{ item.docPicConsultStatus == true ? "图文咨询" : ""
                     }}</span>
                     <span> <img src="../../../../static/img/shipin.png" alt=""
-                                v-if="item.docVideoConsultStatus == true"> {{ item.docVideoConsultStatus == true ? "视频问诊" : ""
+                                v-if="item.docVideoConsultStatus == true"> {{ item.docVideoConsultStatus == true ? "视频咨询" : ""
                       }}</span>
                   </p>
                 </div>

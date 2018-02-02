@@ -1,6 +1,7 @@
 export const CACHE_PREFIX = "gjhlwyy_" + window.version + "_";
 export const API_URL = {
   "localhost": {
+    web: 'nethosweb.diandianys.com',
     api: "//nethos.diandianys.com/api/app",
     jssdk: "test-zheer-wx.hztywl.cn",
     socket: "//nethoswebsocket.diandianys.com",
@@ -8,6 +9,7 @@ export const API_URL = {
     plat: "dev"
   },
   "nethosweb.diandianys.com": {
+    web: 'nethosweb.diandianys.com',
     api: "//nethos.diandianys.com/api/app",
     jssdk: "test-zheer-wx.hztywl.cn",
     socekt: "//nethoswebsocket.diandianys.com",
@@ -15,6 +17,7 @@ export const API_URL = {
     plat: "dev"
   },
   "test-zheer-wx.hztywl.cn": {
+    web: 'nethosweb.diandianys.com',
     api: "//nethos.diandianys.com/api/app",
     jssdk: "test-zheer-wx.hztywl.cn",
     socekt: "//nethoswebsocket.diandianys.com",
@@ -22,6 +25,7 @@ export const API_URL = {
     plat: "dev"
   },
   "pat-test.gjwlyy.com": {
+    web: 'pat-test.gjwlyy.com',
     api: "//api-test.gjwlyy.com/api/app",
     jssdk: "test-zheer-wx.hztywl.cn",
     socket: "doc-test.gjwlyy.com",
@@ -29,6 +33,7 @@ export const API_URL = {
     plat: "pro"
   },
   "www.gjwlyy.com": {
+    web: 'www.gjwlyy.com',
     api: "//api.gjwlyy.com/api/app",
     jssdk: "www.gjwlyy.com",
     socket: "socket.gjwlyy.com",

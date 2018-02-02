@@ -3,9 +3,10 @@
     <app-header ref="header" :title="info.docName+'的文章'">
       <i slot="back" class="back"></i>
     </app-header>
-    <scroll :height="scrollHeight" :data="list" class="main">
+    <scroll :height="scrollHeight" :data="list" class="main overflow-hidden">
       <ul>
-        <router-link tag="li" :to="{path:'/articleDetail',query:{articleId:item.articleId}}" v-for="item in list" class="lh1">
+        <router-link tag="li" :key="item.articleId" :to="{path:'/articleDetail',query:{articleId:item.articleId}}"
+                     v-for="item in list" class="lh1">
           <h3 class="flex">
             <div class="name color_333 flex1">{{item.title}}</div>
             <div class="tag flex0" v-if="item.isGrade">推荐</div>
@@ -56,6 +57,7 @@
       let {params, query} = this.$route;
       query && (query.docId) && (this.id = query.docId);
       await this.getDetail();
+      await this.getList();
     },
     mounted() {
 
@@ -64,6 +66,19 @@
 
     },
     methods: {
+      async getList() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api('nethos.doc.article.list', {docId: this.id, pageSize: 1000});
+        loading.hide();
+        if (ret.code == 0) {
+          this.list = ret.list.map((res) => {
+            return res.docArticle;
+          });
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+        }
+
+      },
       async getDetail() {
         let loading = weuijs.loading("加载中...");
         let ret = await api('nethos.doc.card', {docId: this.id})

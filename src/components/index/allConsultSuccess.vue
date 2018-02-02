@@ -31,7 +31,7 @@
      },
     methods:{
       goDoctorList(){
-        this.$router.push({
+        this.$router.replace({
           path:'/waitArrange',
           query:{consultId:this.consultId}
         })

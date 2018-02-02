@@ -114,13 +114,13 @@ export const avaErrorMixin = {
 export const jssdkMixin = {
   data() {
     return {
-      jssdkConfig: null
+      jssdkMixin_jssdkConfig: null
     }
   },
   methods: {
     async jssdkMixin_getJssdkConfig() {
-      if (this.jssdkConfig) {
-        wx.config(this.jssdkConfig);
+      if (this.jssdkMixin_jssdkConfig) {
+        wx.config(this.jssdkMixin_jssdkConfig);
         return true;
       }
       let appid = getENV().appid,
@@ -129,22 +129,22 @@ export const jssdkMixin = {
           appid
         });
       if (ret.code == 0) {
-        this.jssdkConfig = ret.obj;
-        wx.config(this.jssdkConfig);
+        this.jssdkMixin_jssdkConfig = ret.obj;
+        wx.config(this.jssdkMixin_jssdkConfig);
         return true;
       }
       return false;
     }
   }
 }
-
+/*android 输入框自动滚动至可视区域*/
 export const scrollIntoViewMixin = {
   created() {
     this.scrollIntoView_timer = null;
     if (window.device === 'android') {
       this.scrollIntoView_timer = setInterval((res) => {
         let tag = document.activeElement.tagName.toLowerCase();
-        if (tag === 'input') {
+        if (tag === 'input' || tag == 'textarea') {
           document.activeElement.scrollIntoViewIfNeeded();
         }
       }, 300);
@@ -156,4 +156,25 @@ export const scrollIntoViewMixin = {
   }
 
 
+}
+
+export const doBackMixin = {
+  created() {
+    if (!this.jssdkMixin_jssdkConfig) {
+      this.doBackMixin_getJssdkConfig()
+    }
+  },
+  methods: {
+    doBackMixin_doBack() {
+      if (history.length <= 1) {
+        wx && wx.closeWindow();
+      } else {
+        this.$router.go(-1);
+      }
+    },
+    async doBackMixin_getJssdkConfig() {
+      let ret = await this.jssdkMixin_getJssdkConfig();
+      console.log(ret);
+    }
+  }
 }

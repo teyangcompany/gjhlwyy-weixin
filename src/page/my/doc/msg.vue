@@ -10,7 +10,8 @@
         </div>
         <div class="info flex1 overflow-hidden">
           <h3 class="flex">
-            <b class="block flex1">{{item.sysDoc.docName}}</b>
+            <b class="block flex0">{{item.sysDoc.docName}}</b>
+            <span class="block flex1 title">{{item.sysDoc.docDeptName}}</span>
             <span class="block flex0">{{item.followDocpat.createTime|formatTime('%Y-%m-%d')}}</span>
           </h3>
           <div class="content" v-if="item.followMessage">
@@ -99,7 +100,7 @@
     .pt100 {
       padding-top: 100px;
     }
-    ul{
+    ul {
       padding-top: $commonSpace;
     }
     li {
@@ -118,6 +119,7 @@
       .info {
         line-height: 1;
         h3 {
+          align-items: center;
           b {
             font-size: px2rem(45px, 1080);
             color: #333333;
@@ -125,6 +127,9 @@
           span {
             font-size: px2rem(35px, 1080);
             color: #656565;
+          }
+          .title {
+            margin-left: px2rem(10px);
           }
         }
         div {

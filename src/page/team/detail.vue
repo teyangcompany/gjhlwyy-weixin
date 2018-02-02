@@ -1,8 +1,8 @@
 <template>
-  <div class="page team-detail">
-    <header class="flex" ref="header">
+  <div class="page team-detail flex">
+    <header class="flex flex0" ref="header">
       <div class="back center">
-        <img @click="$router.go(-1)" class="previous" src="../../../static/img/返回.png" alt="">
+        <img @click="doBackMixin_doBack" class="previous" src="../../../static/img/返回.png" alt="">
       </div>
       <div class="name font-size-h3" :style="nameStyle">{{info.teamName}}</div>
       <div class="right flex">
@@ -10,12 +10,10 @@
         <div class="share iconfont center" @click="showSharePic">&#xe601;</div>
       </div>
     </header>
-    <div class="main infobox overflow-touch" ref="main" @scroll="scroll">
-      <div class="banner overflow-hidden">
-        <img :src="info.teamAvatar||'./static/img/team.default.png'" alt="">
-      </div>
+    <div class="main infobox flex1 overflow-touch" ref="main" @scroll="scroll">
 
-      <team-info :info="info"></team-info>
+
+      <team-info :info="info" :showRateList="true"></team-info>
 
       <div class="wrap">
         <div class="title">团队擅长</div>
@@ -55,6 +53,7 @@
       </div>
 
       <div class="wrap">
+        <div class="title">团队二维码</div>
         <ol class="flex ercode">
           <li class="flex0 center" @click="showQrcode('teamQrcodeUrl')">
             <p><img src="../../../static/img/logo.web.png" alt=""></p>
@@ -67,7 +66,7 @@
         </ol>
       </div>
     </div>
-    <router-link :to="{path:`/team/${id}/consult`}" tag="div" class="bottom" ref="bottom">
+    <router-link :to="{path:`/team/${id}/consult`}" tag="div" class="bottom flex0" ref="bottom">
       咨询团队{{info.consultPrice|formatPrice}}
     </router-link>
 
@@ -83,7 +82,7 @@
 
 <script>
   import AppHeader from "../../plugins/app-header"
-  import {jssdkMixin, mainHeightMixin} from "../../lib/mixin";
+  import {doBackMixin, jssdkMixin, mainHeightMixin} from "../../lib/mixin";
   import http from "../../lib/api"
   import weuijs from 'weui.js'
   import {debug, getShareLink} from "../../lib/util";
@@ -98,6 +97,7 @@
   export default {
     data() {
       return {
+        confirmDom: null,
         isFollow: false,
         qrcodeUrl: "",
         isShowQrcode: false,
@@ -123,7 +123,7 @@
       }
     },
     filters: {formatPrice, docAva},
-    mixins: [mainHeightMixin, jssdkMixin],
+    mixins: [mainHeightMixin, jssdkMixin, doBackMixin],
     components: {
       AppHeader, TeamInfo, SharePic
     },
@@ -135,7 +135,7 @@
 
     },
     beforeDestroy() {
-
+      this.confirmDom && this.confirmDom.hide();
     },
     methods: {
       scroll() {
@@ -172,19 +172,19 @@
 
       doFollow() {
         if (this.isFollow) {
-          weuijs.confirm('取消关注后你无法再收到医生的停诊通知、关怀随访、精选文章...', {
+          this.confirmDom = weuijs.confirm('取消关注后你无法再收到医生的停诊通知、关怀随访、精选文章...', {
             title: "取消关注?",
             buttons: [
               {
                 label: '确定取消',
-                type: 'primary',
+                type: 'default',
                 onClick: () => {
                   this.unfollow();
                 }
               },
               {
                 label: '我再想想',
-                type: 'default',
+                type: 'primary',
                 onClick: () => {
                 }
               }
@@ -237,13 +237,13 @@
                 // 用户取消分享后执行的回调函数
               },
 
-              desc: doc.teamResume, // 分享描述
+              desc: `您好，我是${doc.teamName}团队，${doc.members.length}个专家组团来为您服务`,//doc.teamResume, // 分享描述
               type: 'link', // 分享类型,music、video或link，不填默认为link
               dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
             };
           debug('share', conf);
           wx.ready(() => {
-            wx.onMenuShareTimeline(conf);
+            wx.onMenuShareTimeline(Object.assign({},conf, {title: conf.desc}));
             wx.onMenuShareAppMessage(conf);
           })
         }
@@ -267,6 +267,10 @@
 
 <style scoped lang="scss">
   @import "../../common/public";
+
+  .page {
+    flex-direction: column;
+  }
 
   header {
     justify-content: space-between;
@@ -328,20 +332,19 @@
     background-color: #F8F8F8;
     .infobox {
       overflow-y: scroll;
-      .banner {
-        @include w_h(px2rem(375px), px2rem(235px));
-        img {
-          @include w_h(px2rem(375px), px2rem(235px));
-        }
-      }
+
 
       .wrap + .wrap {
-        margin-top: px2rem(10px);
+
       }
       .wrap {
+        @include border(top);
         padding-top: px2rem(10px);
-        margin-top: 1px;
         background-color: white;
+        &:after {
+          left: px2rem(15px);
+          width: px2rem(375px - 30px);
+        }
         .title {
           @include h_lh(20px);
           padding: 0 px2rem(15px);
@@ -380,6 +383,7 @@
             }
             .name {
               margin-top: px2rem(10px);
+              line-height: 1.2;
               color: #777777;
               font-size: px2rem(15px);
               span {
