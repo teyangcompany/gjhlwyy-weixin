@@ -15,9 +15,11 @@
           送您 <span v-if="info.price">{{info.price/100}}元</span>健康礼券<br>
           邀请您体验浙二好医生
         </div>
-        <div class="step">
-          <p>1、点击下方按钮，下载APP</p>
-          <p>2、复制邀请码，在注册时输入</p>
+        <div class="step center">
+          <p class="inline-block">
+            <span>1、点击下方按钮，下载APP</span>
+            <span>2、复制邀请码，在注册时输入</span>
+          </p>
           <h3 class="code center" :data-clipboard-text="info.code" @click="copy('code')">{{info.code}}</h3>
           <div class="copy center" :data-clipboard-text="info.code" @click="copy('copy')">点击复制</div>
         </div>
@@ -201,9 +203,14 @@
             font-size: px2rem(28px, 750);
           }
           p {
-            width: 12rem;
-            margin: 0 auto;
             padding-bottom: px2rem(60px, 750);
+            span {
+              text-align: left;
+              display: block;
+            }
+            span:first-child {
+              margin-bottom: px2rem(60px,750);
+            }
           }
           .code {
             font-size: px2rem(80px, 750);

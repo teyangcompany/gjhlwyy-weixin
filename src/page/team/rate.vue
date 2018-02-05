@@ -4,7 +4,7 @@
       <i slot="back" class="back"></i>
     </app-header>
     <div class="main" ref="main">
-      <team-info class="info" :info="info" :showRateList="false"></team-info>
+      <team-info class="info" :thumb="'radius'" :info="info" :showRateList="false"></team-info>
       <div class="list">
         <rate-item v-for="(data,index) in list" :key="index" :data="data"></rate-item>
         <div class="nodata center" v-if="list.length==0">

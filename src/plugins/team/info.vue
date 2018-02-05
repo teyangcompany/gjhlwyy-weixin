@@ -1,6 +1,6 @@
 <template>
   <div class="team-info lh1">
-    <div class="banner overflow-hidden">
+    <div :class="[thumb=='radius'?'radius':'']" class="banner overflow-hidden">
       <img :src="info.teamAvatar||'./static/img/team.default.png'" alt="">
     </div>
     <h3 class="center">{{info.teamName}}</h3>
@@ -21,10 +21,9 @@
   import Star from '../../base/star/star'
 
   export default {
-    props: ['info','showRateList'],
+    props: ['info', 'showRateList', 'thumb'],
     data() {
-      return {
-      };
+      return {};
     },
     computed: {},
     filters: {formatScore},
@@ -52,6 +51,15 @@
       @include w_h(px2rem(375px), px2rem(235px));
       img {
         @include w_h(px2rem(375px), px2rem(235px));
+      }
+      &.radius {
+        padding: px2rem(15px) 0;
+        height: px2rem(80px+30px);
+        text-align: center;
+        img {
+          @include w_h(px2rem(80px), px2rem(80px));
+          border-radius: 50%;
+        }
       }
     }
     h3 {
