@@ -38,6 +38,8 @@
   import patAva from '../../utils/consultPatAva'
   import {handlerHTML} from "../../lib/util";
 
+  import msgItemHandle from '../../utils/msgItem'
+
   export default {
     props: ['message'],
     data() {
@@ -46,13 +48,7 @@
     computed: {
       replyContent() {
         if (this.message.replyContent) {
-          let reply = this.message.replyContent;
-          if (reply.indexOf('articleId') >= 0) {
-            reply = JSON.parse(reply);
-            return "医生文章：<a href='#" + '/doc/article/' + reply.articleId + "'>" + reply.title + "</a>"
-          } else {
-            return reply;
-          }
+          return msgItemHandle(this.message);
         } else {
           return ""
         }

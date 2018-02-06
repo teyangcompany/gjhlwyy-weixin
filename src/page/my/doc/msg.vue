@@ -14,9 +14,7 @@
             <span class="block flex1 title">{{item.sysDoc.docDeptName}}</span>
             <span class="block flex0">{{item.followDocpat.createTime|formatTime('%Y-%m-%d')}}</span>
           </h3>
-          <div class="content" v-if="item.followMessage">
-            {{item.followMessage.msgText}}
-          </div>
+          <div class="content" v-if="item.followMessage" v-html="msgItem(item.followMessage)"></div>
         </div>
       </li>
     </ul>
@@ -31,6 +29,7 @@
   import MyDocMixin from '../../../lib/mixins/my-doc'
   import http from '../../../lib/api'
   import {chartCache} from "../../../lib/cache";
+  import msgItemHandle from '../../../utils/msgItem'
   import {DOWNLOAD, DOWNLOAD_CONTENT, OPEN_NEW_MYDOC_VERSION} from "../../../lib/config";
 
   export default {
@@ -54,6 +53,20 @@
 
     },
     methods: {
+      msgItem(item) {
+        if (item.msgType && item.msgType == "AUDIO") {
+          return "[语音]";
+        }
+        if (item.msgType && item.msgType == "IMAGE") {
+          return "[图片]";
+        }
+        if (item.msgType && item.msgType == "ARTICLE") {
+          return msgItemHandle(item);
+        }
+        if (item.msgType && item.msgType == "TEXT") {
+          return msgItemHandle(item);
+        }
+      },
       handler(data) {
         if (OPEN_NEW_MYDOC_VERSION) {
           chartCache.set(data);
