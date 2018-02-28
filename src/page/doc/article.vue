@@ -6,7 +6,30 @@
         分享
       </div>
     </app-header>
-    <div class="main lh1 overflow-y-auto" ref="main">
+    <div class="main lh1 overflow-y-auto overflow-touch" ref="main">
+      <div class="docinfo flex">
+        <div class="ava flex0">
+          <img :src="docInfo.docAvatar" alt="">
+        </div>
+        <div class="doc flex1">
+          <h3>
+            <span class="name">{{docInfo.docName}}</span>
+            <span class="title color_999">{{docInfo.docTitle}}</span>
+          </h3>
+          <div class="mt38">
+            <span class="hos color_999">{{docInfo.docHosName}}</span>
+            <span class="dept color_999">{{docInfo.docDeptName}}</span>
+          </div>
+        </div>
+        <div class="follow flex0">
+          <template v-if="docInfo.follow">
+            <div class="yes" @click.stop="doFollow('cancel')">已关注</div>
+          </template>
+          <template v-else>
+            <div class="no" @click.stop="doFollow('follow')">+关注</div>
+          </template>
+        </div>
+      </div>
       <h3>{{info.title}}</h3>
       <ul class="flex">
         <li class="tag flex0" v-if="info.isGrade">
@@ -30,7 +53,7 @@
 
 <script>
   import AppHeader from '../../plugins/app-header'
-  import {jssdkMixin, mainHeightMixin} from "../../lib/mixin";
+  import {isBindMixin, jssdkMixin, mainHeightMixin} from "../../lib/mixin";
   import api from '../../lib/api'
   import weuijs from 'weui.js'
   import {delHtmlTag, filterHTML, formatTime} from "../../lib/filter";
@@ -49,7 +72,7 @@
     },
     computed: {},
     filters: {formatTime},
-    mixins: [mainHeightMixin, jssdkMixin],
+    mixins: [mainHeightMixin, jssdkMixin, isBindMixin],
     components: {AppHeader},
     async created() {
       let {params} = this.$route;
@@ -73,6 +96,62 @@
         options.hostname = env.jssdk;
         return getShareLink(makeUrl(options));
       },
+      async doFollow(type) {
+        let ret = await this._isBind();
+        if (ret) {
+          if (type == 'follow') {
+            await this.follow();
+          }
+          if (type == 'cancel') {
+            this.confirmDom = weuijs.confirm('取消关注后你无法再收到医生的停诊通知、关怀随访、精选文章...', {
+                title: "取消关注？",
+                buttons: [
+                  {
+                    label: "确定取消",
+                    type: "default",
+                    onClick: () => {
+                      this.cancel();
+                    }
+                  },
+                  {
+                    label: '我再想想',
+                    type: 'primary',
+                    onClick: () => {
+                    }
+                  }
+                ]
+              }
+            );
+          }
+        } else {
+          this.$router.replace({path: '/onlineDoctorCard', query: {docId: this.info.docId}})
+        }
+      },
+
+      async follow() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api("nethos.follow.dp.add", {docId: this.info.docId});
+        loading.hide();
+        if (ret.code == 0) {
+          await this.getDoc();
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+        }
+      },
+
+      async cancel() {
+        let loading = weuijs.loading("加载中...");
+        let ret = await api("nethos.follow.cancel", {
+          docId: this.info.docId
+        });
+        loading.hide();
+        if (ret.code == 0) {
+          await this.getDoc();
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+        }
+      },
+
       async setShare() {
         let isOk = await this.jssdkMixin_getJssdkConfig();
         if (isOk) {
@@ -139,12 +218,54 @@
     }
   }
 
+  .mt38 {
+    margin-top: px2rem(38px, 1080);
+  }
+
   .main {
     padding-top: px2rem(17px);
     padding-left: px2rem(15px);
     padding-right: px2rem(15px);
 
-    h3 {
+    .docinfo {
+      margin: 0 px2rem(0-15px);
+      padding-left: px2rem(15px);
+      padding-right: px2rem(15px);
+      padding-bottom: $commonSpace;
+      @include border();
+      align-items: center;
+      margin-bottom: $commonSpace;
+      .ava {
+        @include thumb(px2rem(105px, 1080), px2rem(105px, 1080));
+        margin-right: px2rem(45px, 1080);
+      }
+      .name {
+        color: #2e2e2e;
+        font-size: px2rem(45px, 1080);
+      }
+      .title {
+        font-size: px2rem(38px, 1080);
+      }
+      .hos, .dept {
+        font-size: px2rem(34px, 1080);
+      }
+      .follow {
+        div {
+          padding: 3px 5px;
+          border-radius: 5px;
+        }
+        .yes {
+          color: $mainColor;
+          border: 1px solid $mainColor;
+        }
+        .no {
+          color: #666666;
+          border: 1px solid #666666;
+        }
+      }
+    }
+
+    > h3 {
       color: #333333;
       font-size: px2rem(24px);
       line-height: 1.2;
