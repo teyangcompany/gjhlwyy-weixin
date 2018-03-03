@@ -367,6 +367,7 @@ export default [
   },
   {path: '/chart/:id', component: () => import('../../page/my/doc/chart')},
   {path: '/my/pay', component: () => import('../../page/my/pay')},
+  {path: '/my/patient', component: () => import('../../page/my/patient')},
   {
     path: "/my/data",
     component: myData

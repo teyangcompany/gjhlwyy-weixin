@@ -53,6 +53,10 @@ li {
   color: #333;
 }
 
+.bg {
+  background-color: $bgColor;
+}
+
 %a {
   margin: 0 auto;
   display: block;
