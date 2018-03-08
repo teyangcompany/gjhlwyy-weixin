@@ -128,7 +128,6 @@
     li {
         background-color: white;
         padding: px2rem(60px, 1080) px2rem(40px, 1080);
-
         align-items: center;
         .my-label {
             margin-right: px2rem(30px, 1080);
