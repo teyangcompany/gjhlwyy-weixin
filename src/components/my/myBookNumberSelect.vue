@@ -40,7 +40,8 @@
       }
     },
     created(){
-      api("nethos.book.order.list",{
+      this.$router.replace('/my/book');
+      /*api("nethos.book.order.list",{
         token:localStorage.getItem('token')
       }).then((data)=>{
          if(data.code == 0){
@@ -53,7 +54,7 @@
              weui.alert(data.msg)
          }
         console.log(data)
-      })
+      })*/
     },
     methods:{
       goMyProfile(){

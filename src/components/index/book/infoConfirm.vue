@@ -268,14 +268,15 @@
       },
       goToggle() {
         this.$router.push({
-          path: '/bookTogglePatient',
+          path: '/my/patient',
           query: {
             bookDeptId: this.bookDeptId,
             bookNumId: this.bookNumId,
             numTime: this.numTime,
             allInfo: this.allInfo,
             listIndex: this.listIndex,
-            bookSort: this.bookSort
+            bookSort: this.bookSort,
+            redirect: 'infoConfirm'
           }
         })
       },
@@ -284,8 +285,8 @@
           let compat = this.compatInfo[this.index], compatMedicalRecord = compat.compatMedicalRecord || "",
             bookHosId = this.allInfoArray.bookHosId, compatId = compat.compatId;
           debug("compatMedicalRecord", compatMedicalRecord);
+          let loading = weui.loading("提交中...");
           if (!compatMedicalRecord) {
-            let loading = weui.loading("提交中...");
             api("nethos.book.compat.bind.check", {compatId, bookHosId}).then((res) => {
               loading.hide();
               if (res.code == 0) {
@@ -311,11 +312,9 @@
                 }
               }
             });
-
             return
           }
-
-
+          loading = weui.loading("提交中...");
           api("nethos.book.order.register", {
             token: tokenCache.get(),
             bookNumId: this.bookNumId,
@@ -323,6 +322,7 @@
             compatId: this.compatInfo[this.index].compatId,
             captcha: "1234"
           }).then((data) => {
+            loading.hide();
             if (data.code == 0) {
               this.orderInfo = JSON.stringify(data.obj)
               this.$router.push({

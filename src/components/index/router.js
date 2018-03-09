@@ -11,7 +11,6 @@ import bookType from './book/bookType'
 import expert from './book/expert'
 import date from './book/date'
 import expertDetail from './book/expertDetail'
-import famousPage from './book/famousPage'
 import infoConfirm from './book/infoConfirm'
 import bookSuccess from './book/bookSuccess'
 import videoIndex from './doctorVideo/videoIndex'
@@ -41,7 +40,6 @@ import pictureConsultDetail from '../my/myConsult/pictureConsultDetail/pictureCo
 import famousConsultNext from './doctorVideo/famousConsultNext'
 import videoConsultNext from './doctorVideo/videoConsultNext'
 import togglePatient from './togglePatient/togglePatient'
-import bookTogglePatient from './togglePatient/bookTogglePatient'
 import waitTogglePatient from './togglePatient/waitTogglePatient'
 import checkTogglePatient from './togglePatient/checkTogglePatient'
 import nowBook from './book/nowBook'
@@ -102,7 +100,7 @@ export default [
   },
   {
     path: "/famousPage",
-    component: famousPage
+    component: () => import('./book/famousPage')
   },
   {
     path: "/infoConfirm",
@@ -228,7 +226,7 @@ export default [
   },
   {
     path: "/bookTogglePatient",
-    component: bookTogglePatient
+    component: () => import('./togglePatient/bookTogglePatient')
   },
   {
     path: "/waitTogglePatient",
@@ -257,5 +255,9 @@ export default [
   {
     path: "/bookTerms",
     component: bookTerms
+  },
+  {
+    path: "/book/doc/:id",
+    component: () => import('../../page/book/doc')
   }
 ]

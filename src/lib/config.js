@@ -128,3 +128,6 @@ export const CONSULT_STATUS = [
   {value: 6, name: 'FINSH', title: '已评价'}
 ]
 
+export const SCHEME_STATUS = ["无", "停诊", "已满", "即将(未放号或号子被锁定)", "预约"]
+
+

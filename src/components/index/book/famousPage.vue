@@ -120,9 +120,6 @@
         this.showPat = false;
       },
       book(index, item) {
-        console.log("123")
-        console.log(index)
-        console.log(item)
         this.listIndex = item
         this.patOption = (index.schemeDate).substr(0, 10) + (index.schemeAmpm == 'am' ? '上午' : '下午')
         console.log(this.patOption)
@@ -163,8 +160,11 @@
     created() {
       this.bookDocId = this.$route.query.bookDocId
       this.bookSort = this.$route.query.bookSort
-      console.log(this.bookSort)
-      api("nethos.book.doc.scheme.list", {
+      this.$router.replace({
+        path: '/book/doc/' + this.bookDocId,
+        query: this.$route.query
+      });
+      /*api("nethos.book.doc.scheme.list", {
         bookDocId: this.bookDocId
       }).then((data) => {
         if (data.code == 0) {
@@ -209,7 +209,7 @@
           weui.alert(data.msg)
         }
 
-      })
+      })*/
     },
     components: {
       "VHeader": header,

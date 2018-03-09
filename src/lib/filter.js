@@ -1,4 +1,4 @@
-import {ORDER_STATUS} from "./config";
+import {ORDER_STATUS, SCHEME_STATUS} from "./config";
 import timeF from "lmw-time-format"
 //time为时间戳格式，如"1487555260448"
 const Todate = (time) => {
@@ -229,6 +229,10 @@ const formatScore = (str) => {
   return str;
 }
 
+const schemeStatus = (res) => {
+  return SCHEME_STATUS[res] || '';
+}
+
 export {
   Todate,
   getWeek,
@@ -244,6 +248,6 @@ export {
   formatPrice,
   formatTime,
   getOrderStatus,
-  getOrderAmpm, filterHTML, formatScore, delHtmlTag
+  getOrderAmpm, filterHTML, formatScore, delHtmlTag, schemeStatus
 }
 

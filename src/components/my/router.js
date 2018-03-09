@@ -46,7 +46,6 @@ import bookNumberDetail from './bookNumberDetail'
 import cancelApply from './myConsult/cancelApply'
 import comment from './myConsult/comment'
 import toggleAddUsual from './toggleAddUsual'
-import myBookNumberSelect from './myBookNumberSelect'
 import bookToggleAddUsual from './bookToggleAddUsual'
 import waitToggleAddUsual from './waitToggleAddUsual'
 import checkToggleAddUsual from './checkToggleAddUsual'
@@ -337,7 +336,7 @@ export default [
   },
   {
     path: "/myBookNumberSelect",
-    component: myBookNumberSelect
+    component: () => import('./myBookNumberSelect')
   },
   {
     path: "/bookToggleAddUsual",
