@@ -33,7 +33,6 @@ import waitArrange from './myConsult/waitArrange'
 import myBookNumber from './myBookNumber'
 import MyBook from '../../page/my/book'
 import MyBookDetail from '../../page/my/book/detail'
-import usualPatient from './usualPatient'
 import addUsualPatient from './addUsualPatient'
 import detailUsual from './detailUsual'
 import costLog from './costLog'
@@ -284,7 +283,7 @@ export default [
   },
   {
     path: "/usualPatient",
-    component: usualPatient
+    component: () => import('./usualPatient')
   },
   {
     path: "/addUsualPatient",
