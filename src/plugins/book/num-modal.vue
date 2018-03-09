@@ -50,7 +50,7 @@
     methods: {
       check(data) {
         let scheme = this.info;
-        this.$router.push({
+        this.$router.replace({
           path: '/infoConfirm',
           query: {
             bookDeptId: scheme.bookDeptId,

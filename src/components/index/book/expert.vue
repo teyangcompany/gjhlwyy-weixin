@@ -154,7 +154,6 @@
                 })
             },
             goFamousPage(index) {
-                console.log(index)
                 this.$router.push({
                     path: "/famousPage",
                     query: {bookDocId: this.doctorList[index].bookDocId, bookSort: this.bookSort}
