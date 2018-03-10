@@ -31,8 +31,6 @@ import consultDetail from './myConsult/consultDetail'
 import arrangeInfo from './myConsult/arrangeInfo'
 import waitArrange from './myConsult/waitArrange'
 import myBookNumber from './myBookNumber'
-import MyBook from '../../page/my/book'
-import MyBookDetail from '../../page/my/book/detail'
 import addUsualPatient from './addUsualPatient'
 import detailUsual from './detailUsual'
 import costLog from './costLog'
@@ -276,9 +274,9 @@ export default [
   },
   {
     path: "/my/book",
-    component: MyBook,
+    component: () => import('../../page/my/book'),
     children: [
-      {path: ':id', component: MyBookDetail}
+      {path: ':id', component: () => import('../../page/my/book/detail')}
     ]
   },
   {
