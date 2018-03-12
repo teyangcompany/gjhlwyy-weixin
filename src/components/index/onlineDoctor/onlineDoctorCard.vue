@@ -213,14 +213,14 @@
           })
         }
       } else {
-        let env = getENV(),
+        /*let env = getENV(),
           options = getParamsFromUrl(location.href);
         options.hostname = env.web;
         options.path = '/html/doc';
         options.query = {
           docId: this.doctorId
         };
-        location.replace(makeUrl(options));
+        location.replace(makeUrl(options));*/
       }
     },
 
