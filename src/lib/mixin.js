@@ -95,7 +95,7 @@ export const isBindMixin = {
   }
 }
 /**
- * 头像错误路径处理
+ * 患者，医生头像错误路径处理
  * @type {{methods: {__avaError(*): void}}}
  */
 export const avaErrorMixin = {
@@ -103,6 +103,10 @@ export const avaErrorMixin = {
     __avaError(e) {
       let dom = e.target, dataset = dom.dataset, src = "./static/img/pat.m.jpg";
       dataset && dataset.gender && (src = `./static/img/pat.${dataset.gender.toLowerCase()}.jpg`);
+      dom.src = src;
+    },
+    __docError(e) {
+      let dom = e.target, dataset = dom.dataset, src = "./static/img/doctor.m.png";
       dom.src = src;
     }
   }

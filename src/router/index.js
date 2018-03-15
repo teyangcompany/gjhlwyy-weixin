@@ -23,7 +23,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/demo',
+      path: '/pay-demo',
       component: () => import('../components/demo')
     },
     {

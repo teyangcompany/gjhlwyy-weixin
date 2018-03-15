@@ -6,7 +6,7 @@
     <div class="main bg overflow-y-auto overflow-touch" ref="main">
       <div class="doc flex bg_white">
         <div class="ava flex0">
-          <img class="radius50" :src="info.docAvatar" alt="">
+          <img class="radius50" :src="info.docAvatar" @error="__docError" alt="">
         </div>
         <div class="flex1 info lh1">
           <h3 class="color_333 fs16">
@@ -16,12 +16,12 @@
           <p class="color_666">{{dept.length>0?dept[0].deptName:""}}</p>
         </div>
       </div>
-      <div class="hos" v-if="hos.length>1">
+      <div class="hos overflow-x-auto"  v-if="hos.length>1">
         <ul class="flex bg_white">
           <router-link tag="li" :to="{path:'/book/doc/'+item.bookDocId}" replace v-for="(item,index) in hos"
                        :class="[id==item.bookDocId?'cover':'']" :key="index"
-                       class="flex0 fs14 color_666">
-            {{item.bookHosName}}
+                       class="flex0 fs14 color_666 bg_white">
+            {{item.bookHosName|hosName}}
           </router-link>
         </ul>
       </div>
@@ -56,7 +56,7 @@
 
 <script>
   import AppHeader from "../../plugins/app-header";
-  import {isBindMixin, mainHeightMixin} from "../../lib/mixin";
+  import {isBindMixin, mainHeightMixin,avaErrorMixin} from "../../lib/mixin";
   import weuijs from 'weui.js'
   import api from '../../lib/api'
   import {getOrderAmpm, schemeStatus, week} from "../../lib/filter";
@@ -80,9 +80,17 @@
         return []
       }
     },
-    filters: {week, getOrderAmpm, schemeStatus},
+    filters: {
+      week, getOrderAmpm, schemeStatus,
+      hosName(str) {
+        if (!str) {
+          return ""
+        }
+        return str.replace("浙江大学医学院附属第二", "浙二");
+      }
+    },
     components: {AppHeader, NumModal},
-    mixins: [mainHeightMixin, isBindMixin],
+    mixins: [mainHeightMixin, isBindMixin,avaErrorMixin],
     async created() {
       let {params} = this.$route;
       this.id = params.id;

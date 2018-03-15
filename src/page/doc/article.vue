@@ -42,7 +42,16 @@
           {{info.readTimes}} 阅读
         </li>
       </ul>
-      <div id="article_detail" class="container" v-html="content"></div>
+      <div id="article_detail" class="container"></div>
+      <div class="content-arr">
+        <div class="content-item" :class="[item.contentType.toLowerCase()]" v-for="(item,index) in contentArr"
+             :key="index">
+          <span v-if="item.contentType=='TEXT'">{{item.content}}</span>
+          <img :src="item.content" v-if="item.contentType=='IMAGE'" alt="">
+
+
+        </div>
+      </div>
     </div>
     <img v-if="device=='android'&&showShare" @click="showShare=false" class="absolute"
          src="../../../static/img/share.android.png" alt="">
@@ -56,6 +65,7 @@
   import {isBindMixin, jssdkMixin, mainHeightMixin} from "../../lib/mixin";
   import api from '../../lib/api'
   import weuijs from 'weui.js'
+  import "video.js/dist/video-js.css"
   import {delHtmlTag, filterHTML, formatTime} from "../../lib/filter";
   import {debug, getENV, getParamsFromUrl, getShareLink, makeUrl} from "../../lib/util";
 
@@ -63,6 +73,7 @@
     data() {
       return {
         id: '',
+        contentArr: [],
         content: '',
         info: {},
         docInfo: {},
@@ -198,6 +209,9 @@
           this.content = ret.obj.articleContent ? filterHTML(ret.obj.articleContent) : '';
           if (this.info.articleType == "URL") {
             location.replace(this.content);
+          } else {
+            this.contentArr = (ret.obj.contentApps);
+            this.videoInit();
           }
         } else {
           //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
@@ -209,6 +223,24 @@
 
 <style scoped lang="scss">
   @import "../../common/public";
+
+  .content-item + .content-item {
+    margin-top: 10px;
+  }
+
+  .content-item {
+    img {
+      width: 100%;
+    }
+    video {
+      width: 100%;
+    }
+    &.text {
+      line-height: 1.5;
+      font-size: 16px;
+      color: #333333;
+    }
+  }
 
   .page {
     > img {
