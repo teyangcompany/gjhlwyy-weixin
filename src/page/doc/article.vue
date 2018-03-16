@@ -48,6 +48,11 @@
              :key="index">
           <span v-if="item.contentType=='TEXT'">{{item.content}}</span>
           <img :src="item.content" v-if="item.contentType=='IMAGE'" alt="">
+          <video-player class="video-player-box vjs-big-play-centered"
+                        ref="videoPlayer"
+                        :options="playerOptions[index]" v-if="item.contentType=='VIDEO'">
+          </video-player>
+          <vue-audio :file="item.content" v-if="item.contentType=='AUDIO'"></vue-audio>
 
 
         </div>
@@ -61,10 +66,12 @@
 </template>
 
 <script>
+  import VueAudio from 'vue-audio'
   import AppHeader from '../../plugins/app-header'
   import {isBindMixin, jssdkMixin, mainHeightMixin} from "../../lib/mixin";
   import api from '../../lib/api'
   import weuijs from 'weui.js'
+  import {videoPlayer} from 'vue-video-player'
   import "video.js/dist/video-js.css"
   import {delHtmlTag, filterHTML, formatTime} from "../../lib/filter";
   import {debug, getENV, getParamsFromUrl, getShareLink, makeUrl} from "../../lib/util";
@@ -76,6 +83,7 @@
         contentArr: [],
         content: '',
         info: {},
+        playerOptions: {},
         docInfo: {},
         showShare: false,
         device: window.device
@@ -84,7 +92,7 @@
     computed: {},
     filters: {formatTime},
     mixins: [mainHeightMixin, jssdkMixin, isBindMixin],
-    components: {AppHeader},
+    components: {AppHeader, videoPlayer, VueAudio},
     async created() {
       let {params} = this.$route;
       params && (params.id) && (this.id = params.id);
@@ -99,6 +107,22 @@
 
     },
     methods: {
+      videoInit(arr) {
+        arr.forEach((res, index) => {
+          if (res.contentType == "VIDEO") {
+            this.playerOptions[index] = {
+              // videojs options
+              width: window.px2rem * (20 - 0.8 * 2),
+              muted: true,
+              language: 'en',
+              sources: [{
+                type: "video/mp4",
+                src: res.content
+              }],
+            }
+          }
+        })
+      },
       getShareLink() {
         let options = getParamsFromUrl(location.href),
           env = getENV();
@@ -211,7 +235,7 @@
             location.replace(this.content);
           } else {
             this.contentArr = (ret.obj.contentApps);
-            this.videoInit();
+            this.videoInit(this.contentArr);
           }
         } else {
           //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
@@ -234,6 +258,10 @@
     }
     video {
       width: 100%;
+    }
+    &.audio {
+      margin-top: 20px;
+      margin-bottom: 30px;
     }
     &.text {
       line-height: 1.5;
