@@ -1,13 +1,13 @@
 <template>
   <div class="page">
-    <app-header ref="header">
+    <app-header ref="header" v-if="page!='mobile'">
       <i slot="back" class="back"></i>
       <div slot="right" class="right absolute" @click="showShare=true">
         分享
       </div>
     </app-header>
     <div class="main lh1 overflow-y-auto overflow-touch" ref="main">
-      <div class="docinfo flex">
+      <div v-if="page!='mobile'" class="docinfo flex">
         <div class="ava flex0">
           <img :src="docInfo.docAvatar" alt="">
         </div>
@@ -30,8 +30,8 @@
           </template>
         </div>
       </div>
-      <h3>{{info.title}}</h3>
-      <ul class="flex">
+      <h3 v-if="page!='mobile'" >{{info.title}}</h3>
+      <ul v-if="page!='mobile'"  class="flex">
         <li class="tag flex0" v-if="info.isGrade">
           推荐
         </li>
@@ -82,6 +82,7 @@
         id: '',
         contentArr: [],
         content: '',
+        page: "",
         info: {},
         playerOptions: {},
         docInfo: {},
@@ -94,8 +95,9 @@
     mixins: [mainHeightMixin, jssdkMixin, isBindMixin],
     components: {AppHeader, videoPlayer, VueAudio},
     async created() {
-      let {params} = this.$route;
+      let {params, query} = this.$route;
       params && (params.id) && (this.id = params.id);
+      query && (query.page) && (this.page = query.page);
       await this.getDetail();
       await this.getDoc();
       await this.setShare();

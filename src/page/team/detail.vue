@@ -92,7 +92,7 @@
   import {OPEN_TEAMPIC} from "../../lib/config";
   import SharePic from '../../plugins/share-pic'
 
-  const SHOW_MAX = 3;
+  const SHOW_MAX = 6;
 
   export default {
     data() {
@@ -103,7 +103,7 @@
         isShowQrcode: false,
         openTeampic: OPEN_TEAMPIC,
         id: "",
-        showType: "all",
+        showType: "part",
         info: {},
         showText: [0, 0],
         nameStyle: {

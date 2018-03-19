@@ -1,10 +1,10 @@
 <template>
   <div class="page">
-    <app-header title="医生" ref="header">
+    <app-header title="医生" ref="header" v-if="page=='mobile'">
       <i slot="back" class="back"></i>
     </app-header>
     <div class="main bg overflow-y-auto overflow-touch" ref="main">
-      <div class="doc flex bg_white">
+      <div class="doc flex bg_white" v-if="page=='mobile'">
         <div class="ava flex0">
           <img class="radius50" :src="info.docAvatar" @error="__docError" alt="">
         </div>
@@ -16,7 +16,7 @@
           <p class="color_666">{{dept.length>0?dept[0].deptName:""}}</p>
         </div>
       </div>
-      <div class="hos overflow-x-auto"  v-if="hos.length>1">
+      <div class="hos overflow-x-auto" v-if="hos.length>1">
         <ul class="flex bg_white">
           <router-link tag="li" :to="{path:'/book/doc/'+item.bookDocId}" replace v-for="(item,index) in hos"
                        :class="[id==item.bookDocId?'cover':'']" :key="index"
@@ -56,7 +56,7 @@
 
 <script>
   import AppHeader from "../../plugins/app-header";
-  import {isBindMixin, mainHeightMixin,avaErrorMixin} from "../../lib/mixin";
+  import {avaErrorMixin, isBindMixin, mainHeightMixin} from "../../lib/mixin";
   import weuijs from 'weui.js'
   import api from '../../lib/api'
   import {getOrderAmpm, schemeStatus, week} from "../../lib/filter";
@@ -66,6 +66,7 @@
     data() {
       return {
         id: '',
+        page: "",
         hos: [],
         info: {},
         dept: [],
@@ -90,10 +91,11 @@
       }
     },
     components: {AppHeader, NumModal},
-    mixins: [mainHeightMixin, isBindMixin,avaErrorMixin],
+    mixins: [mainHeightMixin, isBindMixin, avaErrorMixin],
     async created() {
-      let {params} = this.$route;
+      let {params, query} = this.$route;
       this.id = params.id;
+      this.page = query.page || '';
       await this.getData();
       await this.getList();
     },
