@@ -54,10 +54,10 @@
 
       <div class="wrap" v-if="info.docArticleList">
         <div class="title overflow-hidden">团队文章
-          <router-link  :to="{path:'/doc/article/list',query:{teamId:id}}" class="float-right">查看更多</router-link>
+          <router-link :to="{path:'/doc/article/list',query:{teamId:id}}" class="float-right">查看更多</router-link>
         </div>
         <div class="article">
-          <article-item v-for="(item,index) in info.docArticleList" :key="index" :item="item"></article-item>
+          <article-item v-for="(item,index) in list" :key="index" :item="item"></article-item>
         </div>
       </div>
 
@@ -100,7 +100,7 @@
   import TeamInfo from '../../plugins/team/info'
   import {OPEN_TEAMPIC} from "../../lib/config";
   import SharePic from '../../plugins/share-pic'
-  import ArticleItem from "../../plugins/doc/article-item";
+  import ArticleItem from "../../plugins/doc/article-item2";
 
   const SHOW_MAX = 6;
 
@@ -113,6 +113,7 @@
         isShowQrcode: false,
         openTeampic: OPEN_TEAMPIC,
         id: "",
+        list: [],
         showType: "part",
         info: {},
         showText: [0, 0],
@@ -140,7 +141,7 @@
     },
     created() {
       let {id} = this.$route.params;
-      id && (this.id = id) && (this.getDetail());
+      id && (this.id = id) && (this.getDetail()) && (this.getList());
     },
     mounted() {
 
@@ -271,6 +272,15 @@
         }
         loading.hide();
         await this.jssdkShare();
+      },
+
+      async getList() {
+        let ret = await http('nethos.doc.article.team.list', {teamId: this.id, pageSize: 3});
+        if (ret.code == 0) {
+          this.list = ret.list;
+        } else {
+          //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
+        }
       }
     }
   };
@@ -283,6 +293,13 @@
     flex-direction: column;
     .article {
       padding: 0 $commonSpace;
+      li {
+        padding: 10px 0;
+      }
+
+      li + li {
+        @include border(top);
+      }
     }
   }
 

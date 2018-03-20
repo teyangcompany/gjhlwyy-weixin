@@ -6,8 +6,8 @@
         分享
       </div>
     </app-header>
-    <div class="main lh1 overflow-y-auto overflow-touch" ref="main">
-      <div v-if="page!='mobile'" class="docinfo flex">
+    <div class="main lh1 overflow-hidden flex" ref="main">
+      <div v-if="page!='mobile'" class="docinfo flex flex0">
         <div class="ava flex0">
           <img :src="docInfo.docAvatar" alt="">
         </div>
@@ -30,26 +30,28 @@
           </template>
         </div>
       </div>
-      <h3 v-if="page!='mobile'">{{info.title}}</h3>
-      <ul v-if="page!='mobile'" class="flex">
-        <li class="tag flex0" v-if="info.isGrade">
-          推荐
-        </li>
-        <li class="time flex1">
-          {{info.createTime|formatTime('%m-%d')}}
-        </li>
-        <li class="num flex0">
-          {{info.readTimes}} 阅读
-        </li>
-      </ul>
-      <div id="article_detail" class="container" v-html="content"></div>
-      <div class="content-arr">
-        <div class="content-item" :class="[item.contentType.toLowerCase()]" v-for="(item,index) in contentArr"
-             :key="index">
-          <span v-if="item.contentType=='TEXT'">{{item.content}}</span>
-          <img :src="item.content" v-if="item.contentType=='IMAGE'" alt="">
-          <video controls :src="item.content" v-if="item.contentType=='VIDEO'"></video>
-          <vue-audio :file="item.content" v-if="item.contentType=='AUDIO'"></vue-audio>
+      <div class="flex1 overflow-touch overflow-y-auto">
+        <h3 class="" v-if="page!='mobile'">{{info.title}}</h3>
+        <ul v-if="page!='mobile'" class="flex">
+          <li class="tag flex0" v-if="info.isGrade">
+            推荐
+          </li>
+          <li class="time flex1">
+            {{info.createTime|formatTime('%m-%d')}}
+          </li>
+          <li class="num flex0">
+            {{info.readTimes}} 阅读
+          </li>
+        </ul>
+        <div id="article_detail" class="container" v-html="content" v-if="content"></div>
+        <div class="content-arr">
+          <div class="content-item" :class="[item.contentType.toLowerCase()]" v-for="(item,index) in contentArr"
+               :key="index">
+            <span v-if="item.contentType=='TEXT'">{{item.content}}</span>
+            <img :src="item.content" v-if="item.contentType=='IMAGE'" alt="">
+            <video controls :src="item.content" v-if="item.contentType=='VIDEO'"></video>
+            <vue-audio :file="item.content" v-if="item.contentType=='AUDIO'"></vue-audio>
+          </div>
         </div>
       </div>
     </div>
@@ -68,7 +70,7 @@
   import weuijs from 'weui.js'
   import {videoPlayer} from 'vue-video-player'
   import "video.js/dist/video-js.css"
-  import {delHtmlTag, filterHTML, formatTime} from "../../lib/filter";
+  import {delHtmlTag, formatTime} from "../../lib/filter";
   import {debug, getENV, getParamsFromUrl, getShareLink, makeUrl} from "../../lib/util";
 
   export default {
@@ -227,7 +229,7 @@
         loading.hide();
         if (ret.code == 0) {
           this.info = ret.obj.docArticle;
-          this.content = ret.obj.articleContent ? filterHTML(ret.obj.articleContent) : '';
+
           if (this.info.articleType == "URL") {
             location.replace(this.content);
           } else {
@@ -284,9 +286,9 @@
   }
 
   .main {
-    padding-top: px2rem(17px);
     padding-left: px2rem(15px);
     padding-right: px2rem(15px);
+    flex-direction: column;
 
     .docinfo {
       margin: 0 px2rem(0-15px);
@@ -326,7 +328,8 @@
       }
     }
 
-    > h3 {
+    > div > h3 {
+      padding-top: $commonSpace;
       color: #333333;
       font-size: px2rem(24px);
       line-height: 1.2;
