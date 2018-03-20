@@ -52,6 +52,15 @@
         </ul>
       </div>
 
+      <div class="wrap" v-if="info.docArticleList">
+        <div class="title overflow-hidden">团队文章
+          <router-link  :to="{path:'/doc/article/list',query:{teamId:id}}" class="float-right">查看更多</router-link>
+        </div>
+        <div class="article">
+          <article-item v-for="(item,index) in info.docArticleList" :key="index" :item="item"></article-item>
+        </div>
+      </div>
+
       <div class="wrap">
         <div class="title">团队二维码</div>
         <ol class="flex ercode">
@@ -91,6 +100,7 @@
   import TeamInfo from '../../plugins/team/info'
   import {OPEN_TEAMPIC} from "../../lib/config";
   import SharePic from '../../plugins/share-pic'
+  import ArticleItem from "../../plugins/doc/article-item";
 
   const SHOW_MAX = 6;
 
@@ -125,6 +135,7 @@
     filters: {formatPrice, docAva},
     mixins: [mainHeightMixin, jssdkMixin, doBackMixin],
     components: {
+      ArticleItem,
       AppHeader, TeamInfo, SharePic
     },
     created() {
@@ -243,7 +254,7 @@
             };
           debug('share', conf);
           wx.ready(() => {
-            wx.onMenuShareTimeline(Object.assign({},conf, {title: conf.desc}));
+            wx.onMenuShareTimeline(Object.assign({}, conf, {title: conf.desc}));
             wx.onMenuShareAppMessage(conf);
           })
         }
@@ -270,6 +281,9 @@
 
   .page {
     flex-direction: column;
+    .article {
+      padding: 0 $commonSpace;
+    }
   }
 
   header {
@@ -332,7 +346,6 @@
     background-color: #F8F8F8;
     .infobox {
       overflow-y: scroll;
-
 
       .wrap + .wrap {
 

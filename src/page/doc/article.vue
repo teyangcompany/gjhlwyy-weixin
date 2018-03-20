@@ -30,8 +30,8 @@
           </template>
         </div>
       </div>
-      <h3 v-if="page!='mobile'" >{{info.title}}</h3>
-      <ul v-if="page!='mobile'"  class="flex">
+      <h3 v-if="page!='mobile'">{{info.title}}</h3>
+      <ul v-if="page!='mobile'" class="flex">
         <li class="tag flex0" v-if="info.isGrade">
           推荐
         </li>
@@ -42,19 +42,14 @@
           {{info.readTimes}} 阅读
         </li>
       </ul>
-      <div id="article_detail" class="container"></div>
+      <div id="article_detail" class="container" v-html="content"></div>
       <div class="content-arr">
         <div class="content-item" :class="[item.contentType.toLowerCase()]" v-for="(item,index) in contentArr"
              :key="index">
           <span v-if="item.contentType=='TEXT'">{{item.content}}</span>
           <img :src="item.content" v-if="item.contentType=='IMAGE'" alt="">
-          <video-player class="video-player-box vjs-big-play-centered"
-                        ref="videoPlayer"
-                        :options="playerOptions[index]" v-if="item.contentType=='VIDEO'">
-          </video-player>
+          <video controls :src="item.content" v-if="item.contentType=='VIDEO'"></video>
           <vue-audio :file="item.content" v-if="item.contentType=='AUDIO'"></vue-audio>
-
-
         </div>
       </div>
     </div>
@@ -237,7 +232,11 @@
             location.replace(this.content);
           } else {
             this.contentArr = (ret.obj.contentApps);
-            this.videoInit(this.contentArr);
+            if (!ret.obj.contentApps) {
+              this.content = this.info.content;
+            } else {
+              this.videoInit(this.contentArr);
+            }
           }
         } else {
           //this.$refs.msg.show(ret.msg||"接口错误"+ret.code);
