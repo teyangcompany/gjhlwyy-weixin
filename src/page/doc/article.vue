@@ -286,6 +286,7 @@
   }
 
   .main {
+    padding-top: $commonSpace;
     padding-left: px2rem(15px);
     padding-right: px2rem(15px);
     flex-direction: column;
@@ -329,7 +330,6 @@
     }
 
     > div > h3 {
-      padding-top: $commonSpace;
       color: #333333;
       font-size: px2rem(24px);
       line-height: 1.2;
