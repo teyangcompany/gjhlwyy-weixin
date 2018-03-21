@@ -251,6 +251,10 @@
 <style scoped lang="scss">
   @import "../../common/public";
 
+  .content-arr {
+    padding-top: 10px;
+  }
+
   .content-item + .content-item {
     margin-top: 10px;
   }
@@ -298,7 +302,6 @@
       padding-bottom: $commonSpace;
       @include border();
       align-items: center;
-      margin-bottom: $commonSpace;
       .ava {
         @include thumb(px2rem(105px, 1080), px2rem(105px, 1080));
         margin-right: px2rem(45px, 1080);
@@ -327,6 +330,10 @@
           border: 1px solid #666666;
         }
       }
+    }
+
+    .docinfo + div {
+      padding-top: $commonSpace;
     }
 
     > div > h3 {
