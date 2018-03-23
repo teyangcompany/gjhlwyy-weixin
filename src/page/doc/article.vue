@@ -229,9 +229,8 @@
         loading.hide();
         if (ret.code == 0) {
           this.info = ret.obj.docArticle;
-
           if (this.info.articleType == "URL") {
-            location.replace(this.content);
+            location.replace(this.info.content);
           } else {
             this.contentArr = (ret.obj.contentApps);
             if (!ret.obj.contentApps) {

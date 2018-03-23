@@ -31,8 +31,8 @@ export default (cb) => {
   }
   /*非微信打开*/
   else {
-    openidCache.set("omrmBv1p9porIc2z0IZkPm4q7dS4");//omrmBv61sj9FDFuma9qdi2pOrJPw//omrmBv1p9porIc2z0IZkPm4q7dS4
-    // console.log("openid:" + openid);
+    openidCache.set("oyPlf04E_PUwHqBBa5mbIBYoV2O4");//omrmBv61sj9FDFuma9qdi2pOrJPw//omrmBv1p9porIc2z0IZkPm4q7dS4//oyPlf025WmkQzr8e7y5LnFoW4IeM吴大伟
+    // console.log("openid:" + openid);//oyPlf04E_PUwHqBBa5mbIBYoV2O4
     cb();
   }
 }

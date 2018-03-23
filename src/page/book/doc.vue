@@ -1,10 +1,10 @@
 <template>
   <div class="page">
-    <app-header title="医生" ref="header" v-if="page=='mobile'">
+    <app-header title="医生" ref="header">
       <i slot="back" class="back"></i>
     </app-header>
     <div class="main bg overflow-y-auto overflow-touch" ref="main">
-      <div class="doc flex bg_white" v-if="page=='mobile'">
+      <div class="doc flex bg_white">
         <div class="ava flex0">
           <img class="radius50" :src="info.docAvatar" @error="__docError" alt="">
         </div>
@@ -87,7 +87,7 @@
         if (!str) {
           return ""
         }
-        return str.replace("浙江大学医学院附属第二", "浙二");
+        return str.replace("浙江大学医学院附属第二医院", "浙医二院");
       }
     },
     components: {AppHeader, NumModal},
