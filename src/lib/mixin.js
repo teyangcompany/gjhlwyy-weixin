@@ -2,6 +2,7 @@ import {openidCache} from "./cache"
 import api from "./api"
 import {getENV} from "./util";
 
+
 export const isLoginMixin = {
   data() {
     return {
@@ -161,7 +162,10 @@ export const scrollIntoViewMixin = {
 
 
 }
-
+/**
+ * 返回处理
+ * @type {{created(): void, methods: {doBackMixin_doBack(): void, doBackMixin_getJssdkConfig(): Promise<void>}}}
+ */
 export const doBackMixin = {
   created() {
     if (!this.jssdkMixin_jssdkConfig) {

@@ -47,12 +47,10 @@
 
 <script>
   import weuijs from "weui.js"
-  import AppHeader from "../../plugins/app-header"
-  import {mainHeightMixin,scrollIntoViewMixin} from "../../lib/mixin";
+  import {mainHeightMixin, scrollIntoViewMixin} from "../../lib/mixin";
   import Compat from "../../plugins/user/compat"
   import api from "../../lib/api"
   import PiclistUpload from "../../plugins/piclist-upload"
-  import Msg from "../../plugins/msg"
 
   export default {
     data() {
@@ -71,9 +69,9 @@
         return this.form.consultContent ? this.form.consultContent.length : 0
       }
     },
-    mixins: [mainHeightMixin,scrollIntoViewMixin],
+    mixins: [mainHeightMixin, scrollIntoViewMixin],
     components: {
-      AppHeader, Compat, PiclistUpload, Msg
+      Compat, PiclistUpload
     },
     created() {
       let {id} = this.$route.params;
@@ -115,6 +113,10 @@
         let ret = await api(this.type == 'team' ? 'nethos.consult.info.teampic.issue' : 'nethos.consult.info.docpic.issue', form)
         if (ret.code != 0) {
           this.$refs.msg.show(ret.msg || `错误代码${ret.code}`);
+          if (ret.msg == "咨询人证件号 不能为空") this.$router.push({
+            path: '/account/perfect',
+            query: {back: this.$route.fullPath}
+          })
         } else {
           let price = this.type == 'team' ? this.info.consultPrice : this.info.sysDoc.docPicConsultPrice;
           if (parseFloat(price) > 0) {

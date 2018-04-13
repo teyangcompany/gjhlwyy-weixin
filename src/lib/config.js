@@ -72,7 +72,7 @@ export const baseParams = {
   format: "JSON",
   oper: "127.0.0.1",
   spid: "1001",
-  version: '2.2.0'
+  version: '2.5.0'
 }
 
 export const password = "aAr9MVS9j1";

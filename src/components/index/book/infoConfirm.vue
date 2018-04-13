@@ -229,11 +229,23 @@
         let ret = await api("nethos.book.compat.bind.new", {compatId, bookHosId})
         loading.hide();
         if (ret.code != 0) {
-          setTimeout(() => {
-            weui.alert(ret.msg, () => {
-
-            });
-          }, 500)
+          if (ret.msg == "身份证号不能为空") weui.confirm(ret.msg, {
+            buttons: [{
+              label: "取消",
+              type: "default"
+            }, {
+              label: "去完善信息",
+              type: "primary",
+              onClick: () => {
+                this.$router.push({
+                  path: '/account/perfect',
+                  query: {back: this.$route.fullPath}
+                })
+                //this.createCard(compatId, bookHosId);
+              }
+            }]
+          });
+          else weui.alert(ret.msg);
         } else {
           this.getCompatInfo();
         }

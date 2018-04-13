@@ -9,6 +9,8 @@ import {getParamsFromUrl, makeUrl} from "./lib/util"
 import {openidCache, tokenCache} from './lib/cache'
 
 import auth2 from "./lib/auth2";
+import Install from './lib/install'
+
 
 // localStorage.setItem('gjhlwyy_openid_',"59c36e06e4b04bf65c099cfa")
 
@@ -21,7 +23,7 @@ Raven
   .addPlugin(RavenVue, Vue)
   .install();*/
 
-
+Vue.use(Install);
 Vue.use(Vuelidate)
 Vue.config.productionTip = false
 /*Vue.config.errorHandler = (...args) => {

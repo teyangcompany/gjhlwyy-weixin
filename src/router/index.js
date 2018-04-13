@@ -17,6 +17,8 @@ import hospital from "./hos"
 import team from './team'
 import coupons from './coupons'
 import doc from './doc'
+import news from './news'
+import account from './account'
 
 Vue.use(Router)
 
@@ -63,6 +65,8 @@ export default new Router({
     ...hospital,
     ...team,
     ...coupons,
-    ...doc
+    ...doc,
+    ...news,
+    ...account
   ]
 })

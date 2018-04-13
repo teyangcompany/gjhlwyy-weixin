@@ -31,8 +31,15 @@ export default (cb) => {
   }
   /*非微信打开*/
   else {
-    openidCache.set("oyPlf04E_PUwHqBBa5mbIBYoV2O4");//omrmBv61sj9FDFuma9qdi2pOrJPw//omrmBv1p9porIc2z0IZkPm4q7dS4//oyPlf025WmkQzr8e7y5LnFoW4IeM吴大伟
-    // console.log("openid:" + openid);//oyPlf04E_PUwHqBBa5mbIBYoV2O4
+    openidCache.set("omrmBv78TNZhMhUwl3TEWxFU4ZBQ");
+    // omrmBv61sj9FDFuma9qdi2pOrJPw
+    // omrmBv1p9porIc2z0IZkPm4q7dS4
+    // oyPlf025WmkQzr8e7y5LnFoW4IeM吴大伟
+    // oyPlf04E_PUwHqBBa5mbIBYoV2O4
+    // omrmBv98kC28OfJf1dbEo33qTKBU
+    // omrmBv4jxPNW6njcUg-0A4L-PRHc
+    // omrmBv78TNZhMhUwl3TEWxFU4ZBQ
+    // omrmBv4_Tsfwc_r6dJfTIN39rXDE
     cb();
   }
 }
