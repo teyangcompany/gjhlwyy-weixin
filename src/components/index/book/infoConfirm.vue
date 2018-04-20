@@ -161,7 +161,8 @@
       this.allInfo = this.$route.query.allInfo
       this.allInfoArray = JSON.parse(this.allInfo)
       this.listIndex = this.$route.query.listIndex
-      this.bookSort = this.$route.query.bookSort
+      this.bookSort = this.$route.query.bookSort || "预约挂号";
+
       if (this.$route.query.index) {
         this.index = this.$route.query.index
       } else {
@@ -229,7 +230,7 @@
         let ret = await api("nethos.book.compat.bind.new", {compatId, bookHosId})
         loading.hide();
         if (ret.code != 0) {
-          if (ret.msg == "身份证号不能为空") weui.confirm(ret.msg, {
+          if (ret.msg == "证件号不存在") weui.confirm(ret.msg, {
             buttons: [{
               label: "取消",
               type: "default"

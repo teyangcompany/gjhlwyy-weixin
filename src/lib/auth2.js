@@ -31,7 +31,7 @@ export default (cb) => {
   }
   /*非微信打开*/
   else {
-    openidCache.set("omrmBv78TNZhMhUwl3TEWxFU4ZBQ");
+    openidCache.set("omrmBvx_8_iWHCNcrjwuVVA6Nc_A");
     // omrmBv61sj9FDFuma9qdi2pOrJPw
     // omrmBv1p9porIc2z0IZkPm4q7dS4
     // oyPlf025WmkQzr8e7y5LnFoW4IeM吴大伟
@@ -40,6 +40,7 @@ export default (cb) => {
     // omrmBv4jxPNW6njcUg-0A4L-PRHc
     // omrmBv78TNZhMhUwl3TEWxFU4ZBQ
     // omrmBv4_Tsfwc_r6dJfTIN39rXDE
+    // omrmBvx_8_iWHCNcrjwuVVA6Nc_A
     cb();
   }
 }
