@@ -395,7 +395,7 @@
     .confirmPay {
       width: 100%;
       height: 80rem/$rem;
-      margin-top: 200px;
+      margin-top: 50px;
       .confirmCenter {
         width: 690rem/$rem;
         margin: 0 auto;
