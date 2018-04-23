@@ -186,7 +186,8 @@
   }
 
   .p {
-    padding: px2rem(34px, 1080) 0 px2rem(55px, 1080) 0;
+    margin: px2rem(15px) 0;
     line-height: 1.5;
+    @include lines(2);
   }
 </style>

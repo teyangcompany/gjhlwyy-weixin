@@ -2,7 +2,7 @@
   <div class="piclist-upload">
     <input ref="input" type="file" @change="change" multiple>
     <ul class="overflow-hidden">
-      <li v-for="pic in pics" class="float-left">
+      <li v-for="(pic,index) in pics" v-if="index<9" class="float-left">
         <img :src="pic.url" alt="" @click="scan(pic)">
         <div class="mask" v-if="pic.status!='end'">
           {{pic.progress}}%

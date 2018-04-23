@@ -189,10 +189,10 @@
     }
     .textarea {
       @include border(top);
-      padding: 5px px2rem(15px);
       height: px2rem(100px);
       textarea {
-        height: px2rem(110px);
+        padding:10px 15px;
+        height: px2rem(100px);
       }
     }
     .info {

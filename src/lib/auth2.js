@@ -31,8 +31,9 @@ export default (cb) => {
   }
   /*非微信打开*/
   else {
-    openidCache.set("omrmBvx_8_iWHCNcrjwuVVA6Nc_A");
+    openidCache.set("omrmBv61sj9FDFuma9qdi2pOrJPw");
     // omrmBv61sj9FDFuma9qdi2pOrJPw
+    // omrmBvwVz1JncKnh0ee2kGVdNSR8
     // omrmBv1p9porIc2z0IZkPm4q7dS4
     // oyPlf025WmkQzr8e7y5LnFoW4IeM吴大伟
     // oyPlf04E_PUwHqBBa5mbIBYoV2O4
