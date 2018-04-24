@@ -226,7 +226,7 @@
               })
             }
           } else {
-            this.$router.push({
+            this.$router.replace({
               path:"/bindRelativePhone",
               query:{backPath:this.path}
             });

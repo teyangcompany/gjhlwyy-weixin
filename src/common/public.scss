@@ -4,11 +4,11 @@
 
 @font-face {
   font-family: 'iconfont';  /* project id 324914 */
-  src: url('//at.alicdn.com/t/font_324914_9zsly1h4igdgqfr.eot');
-  src: url('//at.alicdn.com/t/font_324914_9zsly1h4igdgqfr.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_324914_9zsly1h4igdgqfr.woff') format('woff'),
-  url('//at.alicdn.com/t/font_324914_9zsly1h4igdgqfr.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_324914_9zsly1h4igdgqfr.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_324914_u47gokp3oqjmj9k9.eot');
+  src: url('//at.alicdn.com/t/font_324914_u47gokp3oqjmj9k9.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_324914_u47gokp3oqjmj9k9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_324914_u47gokp3oqjmj9k9.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_324914_u47gokp3oqjmj9k9.svg#iconfont') format('svg');
 }
 
 .iconfont {
@@ -109,6 +109,7 @@ li {
       display: flex;
       margin-top: 1px;
       label {
+        flex: 0 0 auto;
         width: 50px;
         font-size: 16px;
         padding-left: 1rem;
@@ -139,7 +140,7 @@ li {
         }
       }
       input {
-        flex: 1;
+        flex: 1 1 auto;
         border: none;
         outline: medium;
         font-size: 32rem/$rem;
@@ -162,7 +163,6 @@ li {
     }
     .verifyCode {
       position: relative;
-
     }
     .verifyCode button {
       position: absolute;

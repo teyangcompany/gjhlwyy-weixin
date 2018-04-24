@@ -25,6 +25,8 @@
   import uploadApi from "../lib/uploadApi"
   import weuijs from 'weui.js'
 
+  const MAX_COUNT = 9;
+
   export default {
     data() {
       return {
@@ -76,6 +78,9 @@
 
       async uploadQueue(files) {
         this.$emit("status", 'loading');
+        if (this.pics.length > MAX_COUNT) {
+          return
+        }
         for (let i = 0; i < files.length; i++) {
           let file = files[i],
             pic = arrayFind(this.pics, (res) => {
@@ -105,6 +110,9 @@
       async addQueue(files) {
         for (let i = 0; i < files.length; i++) {
           let res = await readFile(files[i]);
+          if (this.pics.length >= MAX_COUNT) {
+            return
+          }
           this.pics.push({
             file: files[i],
             url: res,

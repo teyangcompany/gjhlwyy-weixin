@@ -188,6 +188,7 @@
   .p {
     margin: px2rem(15px) 0;
     line-height: 1.5;
+    word-break: break-all;
     @include lines(2);
   }
 </style>

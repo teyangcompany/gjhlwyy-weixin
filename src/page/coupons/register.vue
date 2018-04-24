@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="btn">
-        <router-link to="/internetroom" class="center">继续使用</router-link>
+        <router-link to="/internetroom" replace class="center">继续使用</router-link>
       </div>
       <div class="list">
         <coupons-item v-for="index in list" :data="index" :key="index.id"></coupons-item>

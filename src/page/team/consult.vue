@@ -113,7 +113,7 @@
         let ret = await api(this.type == 'team' ? 'nethos.consult.info.teampic.issue' : 'nethos.consult.info.docpic.issue', form)
         if (ret.code != 0) {
           this.$refs.msg.show(ret.msg || `错误代码${ret.code}`);
-          if (ret.msg == "咨询人证件号 不能为空") this.$router.push({
+          if (ret.msg == "咨询人证件号 不能为空") this.$router.replace({
             path: '/account/perfect',
             query: {back: this.$route.fullPath}
           })

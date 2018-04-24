@@ -10,7 +10,7 @@
             <label for="" class="phoneLabel"> <img class="icon-phone" src="../../../static/img/手机号.png" alt=""> </label>
             <input type="number" placeholder="请输入手机号" v-model.trim="user.patMobile" class="numberInput" readonly>
           </div>
-          <div class="form verifyCode border-1px">
+          <div class="form verifyCode border-1px" style="padding-right: 15px">
             <label for="" class="codeLabel"> <img src="../../../static/img/验证码.png" alt=""> </label>
             <input type="number" placeholder="请输入验证码" class="codeInput"
                    v-model="form.captcha">
@@ -69,8 +69,8 @@
         let loading = this.$weuijs.loading("加载中...");
         let ret = await this.$http('nethos.pat.info.perfect.anonym', this.form);
         if (ret.code == 0) {
-          if (query.back) this.$router.push(query.back);
-          else this.$router.push('/Profile');
+          if (query.back) this.$router.replace(query.back);
+          else this.$router.replace('/Profile');
         } else {
           this.error(ret.msg || "接口错误" + ret.code);
         }

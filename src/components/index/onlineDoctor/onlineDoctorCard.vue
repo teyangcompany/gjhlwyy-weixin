@@ -192,7 +192,7 @@
         } else {
           this._isBind().then((res) => {
             if (res === false) {
-              this.$router.push({
+              this.$router.replace({
                 path: "/scanBind",
                 query: {
                   docId: this.doctorId
@@ -442,7 +442,7 @@
               );
             }
           } else {
-            this.$router.push({
+            this.$router.replace({
               path: "/bindRelativePhone",
               query: {backPath: this.path}
             });

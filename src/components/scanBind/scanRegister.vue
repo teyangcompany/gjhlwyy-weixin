@@ -136,10 +136,10 @@
           loading.hide();
           if (data.code == 0) {
             if (options.inviteCode) {
-              this.$router.push('/coupons/register');
+              this.$router.replace('/coupons/register');
               return
             }
-            this.$router.push({
+            this.$router.replace({
               path: '/scanLogin',
               query: {backPath: this.backPath, docId: this.docId}
             })

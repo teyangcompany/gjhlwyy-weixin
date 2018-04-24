@@ -199,7 +199,7 @@
           this.selfInfo = data.obj
           this.getCompatInfo();
         } else {
-          this.$router.push({
+          this.$router.replace({
             path: "/bindRelativePhone",
             query: {backPath: this.path}
           });

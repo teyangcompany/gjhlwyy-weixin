@@ -33,7 +33,7 @@
           </div>
           <div class="pat flex">
             <div class="ava flex0">
-              <img :src="consult|patAva" alt="">
+              <img :src="consult|patAva" alt="" @error="__avaError($event)">
             </div>
             <div class="name flex0">{{consult.patName}}</div>
             <div class="time flex1">{{consult.createTime|formatTime('%Y-%m-%d %H:%M:%S')}}</div>
@@ -81,7 +81,7 @@
   import weuijs from "weui.js"
   import AppHeader from "../../plugins/app-header"
   import api from "../../lib/api"
-  import {jssdkMixin, scrollHeightMixin} from "../../lib/mixin";
+  import {avaErrorMixin, jssdkMixin, scrollHeightMixin} from "../../lib/mixin";
   import Bottom from '../../plugins/consult/bottom'
   import {formatTime, getGender} from "../../lib/filter";
   import MessageItem from "../../plugins/consult/message-item"
@@ -133,7 +133,7 @@
       }
     },
     filters: {getGender, formatTime, patAva, docAva},
-    mixins: [scrollHeightMixin, jssdkMixin],
+    mixins: [scrollHeightMixin, jssdkMixin, avaErrorMixin],
     components: {
       AppHeader, Scroll, Bottom, MessageItem, AppAudio
     },
@@ -212,15 +212,11 @@
         switch (type) {
           case 'end':
             weuijs.confirm('若您的问题已经解决，可以结束咨询', () => {
-                //console.log(res);
                 this.endConsult();
               },
               () => {
-                console.log(res);
               },
-              {
-                title: '结束咨询'
-              })
+              {title: '结束咨询'})
             break;
         }
       },

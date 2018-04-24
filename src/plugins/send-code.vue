@@ -68,8 +68,8 @@
   @import "../common/public";
 
   div {
+    flex: 0 0 auto;
     align-items: center;
-    padding: 0 $commonSpace;
     span {
       line-height: 1.2;
       padding: 3px 5px;

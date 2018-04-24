@@ -38,7 +38,8 @@
         <input @focus="handler('focus')" @blur="handler('blur')" type="text" v-model="replyContent">
       </div>
       <div class="btn flex0">
-        <a v-if="!replyContent" @click="$refs.uploader.click()" class="upload center">+</a>
+        <a v-if="!replyContent" @click="$refs.uploader.click()" class="upload center"><font
+          class="iconfont">&#xe610;</font></a>
         <a @click="send" class="sendmsg" v-else>发送</a>
       </div>
     </div>
@@ -211,13 +212,11 @@
       .btn {
         padding-right: 10px;
         .upload {
+          font-size: 1.8em;
           display: block;
-          @include w_h(30px, 30px);
-          line-height: 30px;
-          border: 1px solid #333;
-          border-radius: 15px;
-          color: #333;
-          font-size: 16px;
+          font {
+            color: #666666;
+          }
         }
         .sendmsg {
           color: white;
