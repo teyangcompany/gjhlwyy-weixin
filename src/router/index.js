@@ -19,6 +19,7 @@ import coupons from './coupons'
 import doc from './doc'
 import news from './news'
 import account from './account'
+import report from './report'
 
 Vue.use(Router)
 
@@ -67,6 +68,7 @@ export default new Router({
     ...coupons,
     ...doc,
     ...news,
-    ...account
+    ...account,
+    ...report
   ]
 })

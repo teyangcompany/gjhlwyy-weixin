@@ -199,7 +199,7 @@ const formatPrice = function (str, options) {
  * @param format
  */
 const formatTime = function (str, format) {
-  return timeF(parseInt(str), format);
+  return timeF(parseInt(str), form_at);
 }
 /**
  * 订单状态
