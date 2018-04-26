@@ -1,37 +1,38 @@
 <template>
-  <div class="page">
-    <app-header :title="reportType.name">
-      <i class="back" slot="back"></i>
-    </app-header>
-    <ul class="nav flex">
-      <li :style="style" class="flex0 center" :class="[index==currentIndex?'cover':'']" @click="currentIndex=index"
-          v-for="(item,index) in date">{{item.name}}
-      </li>
-    </ul>
-    <scroll :height="scrollHeight" :data="list" class="list">
-      <ul>
-        <li @click="handler(o,0)" class="type0" v-for="(o,i) in list" v-if="reportType.name=='检查报告'">
-          <h3 class="color_333">{{o.checkName}}</h3>
-          <div class="flex color_666">
-            <div class="flex1">
-              {{pat.compatName}}
-            </div>
-            <div class="flex0">{{o.checkTime}}</div>
-          </div>
-        </li>
-        <li @click="handler(o,1)" class="type1" v-for="(o,i) in list" v-if="reportType.name=='检验报告'">
-          <h3 class="color_333">{{o.inspectType}}</h3>
-          <div class="flex color_666">
-            <div class="flex1">
-              {{pat.compatName}}
-            </div>
-            <div class="flex0">{{o.inspectDate}}</div>
-          </div>
-        </li>
-      </ul>
-    </scroll>
-    <msg ref="msg"></msg>
-  </div>
+    <div class="page">
+        <app-header :title="reportType.name">
+            <i class="back" slot="back"></i>
+        </app-header>
+        <ul class="nav flex">
+            <li :style="style" class="flex0 center" :class="[index==currentIndex?'cover':'']"
+                @click="currentIndex=index"
+                v-for="(item,index) in date">{{item.name}}
+            </li>
+        </ul>
+        <scroll :height="scrollHeight" :data="list" class="list">
+            <ul>
+                <li @click="handler(o,0)" class="type0" v-for="(o,i) in list" v-if="reportType.name=='检查报告'">
+                    <h3 class="color_333">{{o.checkName}}</h3>
+                    <div class="flex color_666">
+                        <div class="flex1">
+                            {{pat.compatName}}
+                        </div>
+                        <div class="flex0">{{o.checkTime}}</div>
+                    </div>
+                </li>
+                <li @click="handler(o,1)" class="type1" v-for="(o,i) in list" v-if="reportType.name=='检验报告'">
+                    <h3 class="color_333">{{o.inspectType}}</h3>
+                    <div class="flex color_666">
+                        <div class="flex1">
+                            {{pat.compatName}}
+                        </div>
+                        <div class="flex0">{{o.inspectDate}}</div>
+                    </div>
+                </li>
+            </ul>
+        </scroll>
+        <msg ref="msg"></msg>
+    </div>
 </template>
 
 <script>
@@ -119,9 +120,10 @@
 
       async getData(index = 0) {
         let {reportType: {service}, date, $route: {query}} = this,
-          {endDate, startDate} = date[index];
+          {endDate, startDate} = date[index],
+          BAH = query.patCard;
         let loading = this.$weuijs.loading("加载中...");
-        let ret = await this.$http(service, Object.assign({}, query, {endDate, startDate}));
+        let ret = await this.$http(service, Object.assign({}, query, {endDate, startDate, BAH}));
         if (ret.code == 0) {
           this.list = ret.list;
         } else {
@@ -136,35 +138,35 @@
 </script>
 
 <style scoped lang="scss">
-  @import "../../common/public";
+    @import "../../common/public";
 
-  .list {
-    padding-top: 10px;
-    background-color: $bgColor;
-    li + li {
-      margin-top: 10px;
+    .list {
+        padding-top: 10px;
+        background-color: $bgColor;
+        li + li {
+            margin-top: 10px;
+        }
+        li {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: white;
+            > div {
+                margin-top: 10px;
+            }
+            h3 {
+                line-height: 1.2;
+                font-size: 14px;
+            }
+        }
     }
-    li {
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 10px;
-      background-color: white;
-      > div {
-        margin-top: 10px;
-      }
-      h3 {
-        line-height: 1.2;
-        font-size: 14px;
-      }
-    }
-  }
 
-  .nav {
-    li {
-      @include h_lh(40px);
+    .nav {
+        li {
+            @include h_lh(40px);
+        }
+        .cover {
+            @include border(bottom, $mainColor, after, solid, 4px);
+        }
     }
-    .cover {
-      @include border(bottom, $mainColor, after, solid, 4px);
-    }
-  }
 </style>

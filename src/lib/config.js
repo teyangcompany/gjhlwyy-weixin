@@ -145,6 +145,6 @@ export const SCHEME_STATUS = ["无", "停诊", "已满", "即将(未放号或号
 export const REPORT_TYPE = [
   {service: 'nethos.book.inspect.examination', name: '检查报告'},
   {service: 'nethos.book.inspect.list', name: '检验报告'},
-  {service: '', name: '体检报告'},
+  {service: 'zheer.yygh.ApiJyjcService.ExamList', name: '体检报告'},
 ]
 
