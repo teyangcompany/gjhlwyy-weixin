@@ -62,92 +62,119 @@
     </transition>
 </template>
 <script>
-    import header from '../../../base/header'
-    import Alert from '../../../base/alert'
-    import api from '../../../lib/api'
-    import weui from 'weui.js'
-    import {isLoginMixin} from "../../../lib/mixin"
-    import {tokenCache} from '../../../lib/cache'
+  import header from '../../../base/header'
+  import Alert from '../../../base/alert'
+  import api from '../../../lib/api'
+  import weui from 'weui.js'
+  import {isLoginMixin} from "../../../lib/mixin"
+  import {tokenCache} from '../../../lib/cache'
+  import {isBindMixin} from "../../../lib/mixin";
 
-    export default {
-        mixins: [isLoginMixin],
-        data() {
-            return {
-                title: "申请须知",
-                rightTitle: "",
-                firstLine: "您需要先同意《浙二网络医学中心服务协议》",
-                secondLine: "",
-                bottomLine: "确定",
-                showAlert: false,
-                path: "",
-                doctorId: "",
-                doctorInfo: "",
-                picked: true,
-                price: ""
-            }
-        },
-        mounted() {
-            this.path = this.$route.path
-            this.$nextTick(() => {
+  export default {
+    mixins: [isLoginMixin, isBindMixin],
+    data() {
+      return {
+        title: "申请须知",
+        rightTitle: "",
+        firstLine: "您需要先同意《浙二网络医学中心服务协议》",
+        secondLine: "",
+        bottomLine: "确定",
+        showAlert: false,
+        path: "",
+        doctorId: "",
+        doctorInfo: "",
+        picked: true,
+        price: ""
+      }
+    },
+    mounted() {
+      this.path = this.$route.path
+      this.$nextTick(() => {
 //        document.addEventListener('touchmove', function(e){e.preventDefault()}, false);
-            })
-        },
-        created() {
-            this.doctorId = this.$route.query.docId
-            api("nethos.doc.card", {
-                docId: this.doctorId
-            }).then((data) => {
-                if (data.code == 0) {
-                    this.doctorInfo = data.obj.sysDoc
-                    this.price = this.doctorInfo.docPicConsultPrice
-                    console.log(this.doctorInfo)
-                } else {
-                    weui.alert(data.msg)
-                }
-            })
-        },
-        methods: {
-            goPicture() {
-                this.$router.push('apply/picture')
-            },
-            iKnow() {
-                this.showAlert = false
-            },
-            goNextStep() {
-                api("nethos.pat.info.get", {
-                    token: tokenCache.get()
-                }).then((data) => {
-                    if (data.code == 0) {
-                        if (this.picked === true) {
-                            this.$router.replace({
-                                path: '/pictureConsultNext',
-                                query: {docId: this.doctorId, price: this.price}
-                            })
-                        } else {
-                            this.showAlert = true
-                        }
-                    } else {
-                        this.$router.replace({
-                            path: "/bindRelativePhone",
-                            query: {backPath: this.path}
-                        });
-                    }
-                })
-            },
-            back() {
-                this.$router.back(-1)
-            }
-        },
-        components: {
-            "VHeader": header,
-            Alert
-        },
-        watch: {
-            "$route": function () {
-                this.path = this.$route.path
-            }
+      })
+    },
+    created() {
+      this.doctorId = this.$route.query.docId
+      api("nethos.doc.card", {
+        docId: this.doctorId
+      }).then((data) => {
+        if (data.code == 0) {
+          this.doctorInfo = data.obj.sysDoc
+          this.price = this.doctorInfo.docPicConsultPrice
+          console.log(this.doctorInfo)
+        } else {
+          weui.alert(data.msg)
         }
+      })
+    },
+    methods: {
+      goPicture() {
+        this.$router.push('apply/picture')
+      },
+      iKnow() {
+        this.showAlert = false
+      },
+      async goNextStep() {
+        let loading = this.$weuijs.loading("加载中...");
+        let data = await this._isBind();
+        if (data !== false) {
+          if (!data.patIdcard) {
+            this.$weuijs.confirm('证件号不能为空，是否去完善信息？', {
+                title: "温馨提示",
+                buttons: [
+                  {
+                    label: "再等等",
+                    type: "default",
+                    onClick: () => {
+                    }
+                  },
+                  {
+                    label: '立即完善',
+                    type: 'primary',
+                    onClick: () => {
+                      this.$router.replace({
+                        path: '/account/perfect',
+                        query: {back: this.$route.fullPath}
+                      })
+                    }
+                  }
+                ]
+              }
+            );
+            return false;
+          }
+
+
+          if (this.picked === true) {
+            this.$router.replace({
+              path: '/pictureConsultNext',
+              query: {docId: this.doctorId, price: this.price}
+            })
+          } else {
+            this.showAlert = true
+          }
+        } else {
+          this.$router.replace({
+            path: "/bindRelativePhone",
+            query: {backPath: this.path}
+          });
+        }
+        loading.hide();
+      },
+      back() {
+        this.$router.back(-1)
+      }
+    },
+    components: {
+      "VHeader": header,
+      Alert
+    },
+    watch: {
+      "$route": function () {
+        this.path = this.$route.path
+      }
     }
+  }
 </script>
 <style scoped lang="scss">
     @import '../../../common/public.scss';

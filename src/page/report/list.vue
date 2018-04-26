@@ -29,6 +29,7 @@
                         <div class="flex0">{{o.inspectDate}}</div>
                     </div>
                 </li>
+                <div @click="handler(o,2)" class="type2" v-for="(o,i) in list" v-if="reportType.name=='体检报告'"></div>
             </ul>
         </scroll>
         <msg ref="msg"></msg>
@@ -121,9 +122,9 @@
       async getData(index = 0) {
         let {reportType: {service}, date, $route: {query}} = this,
           {endDate, startDate} = date[index],
-          BAH = query.patCard;
+          BAH = query.patCard, STARTDATE = startDate, ENDDATE = endDate;
         let loading = this.$weuijs.loading("加载中...");
-        let ret = await this.$http(service, Object.assign({}, query, {endDate, startDate, BAH}));
+        let ret = await this.$http(service, Object.assign({}, query, {endDate, startDate, BAH, ENDDATE, STARTDATE}));
         if (ret.code == 0) {
           this.list = ret.list;
         } else {

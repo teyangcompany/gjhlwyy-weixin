@@ -31,14 +31,14 @@ export default (cb) => {
   }
   /*非微信打开*/
   else {
-    openidCache.set("omrmBv61sj9FDFuma9qdi2pOrJPw");
+    openidCache.set("omrmBv4jxPNW6njcUg-0A4L-PRHc");
     // omrmBv61sj9FDFuma9qdi2pOrJPw
     // omrmBvwVz1JncKnh0ee2kGVdNSR8
     // omrmBv1p9porIc2z0IZkPm4q7dS4
     // omrmBv4ql8LgJGC_8TVFn_-syk00杜祥芬
     // oyPlf025WmkQzr8e7y5LnFoW4IeM吴大伟
     // oyPlf04E_PUwHqBBa5mbIBYoV2O4
-    // omrmBv98kC28OfJf1dbEo33qTKBU
+    // omrmBv98kC28OfJf1dbEo33qTKBU李明卫
     // omrmBv4jxPNW6njcUg-0A4L-PRHc
     // omrmBv78TNZhMhUwl3TEWxFU4ZBQ
     // omrmBv4_Tsfwc_r6dJfTIN39rXDE

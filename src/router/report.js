@@ -26,6 +26,7 @@ export default [
   },
 
   /**
+   * 检查报告详情
    * @param cache.compatCache
    * @param cache.examinationCache
    */
@@ -34,6 +35,7 @@ export default [
     component: () => import('../page/report/detail/examination')
   },
   /**
+   * 检验报告详情
    * @param cache.compatCache
    * @param cache.inspectCache
    */
@@ -41,6 +43,7 @@ export default [
     path: '/report/detail/inspect',
     component: () => import('../page/report/detail/inspect')
   },
+
 
   {
     path: '/report/detail/test',

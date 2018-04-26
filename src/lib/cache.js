@@ -161,3 +161,16 @@ export const inspectCache = {
     storage.session.remove(inspect_KEY);
   }
 }
+
+const test_KEY = CACHE_PREFIX + "test_";
+export const testCache = {
+  get() {
+    return storage.session.get(test_KEY, null);
+  },
+  set(value) {
+    storage.session.set(test_KEY, value);
+  },
+  remove() {
+    storage.session.remove(test_KEY);
+  }
+}
