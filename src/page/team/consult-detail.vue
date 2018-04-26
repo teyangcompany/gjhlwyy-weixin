@@ -56,7 +56,7 @@
         </div>
         <div class="meaasge">
           <message-item ref="msg" v-for="message in messageList" :key="message.messageId"
-                        :message="message" @play="play"></message-item>
+                        :message="message" @play="play" @scan="scan"></message-item>
         </div>
       </div>
     </scroll>
@@ -228,6 +228,9 @@
       },
 
       scan(url, list) {
+        if (!list) {
+          list = [{url}];
+        }
         let urls = list.map(pic => pic.url);
         wx.previewImage({
           current: url, // 当前显示图片的http链接

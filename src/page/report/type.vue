@@ -5,16 +5,8 @@
     </app-header>
     <div class="main flex1">
       <ul>
-        <li class="flex">
-          <label class="flex1">检查报告单</label>
-          <span class="flex0 iconfont">&#xe72a;</span>
-        </li>
-        <li class="flex">
-          <label class="flex1">检验报告单</label>
-          <span class="flex0 iconfont">&#xe72a;</span>
-        </li>
-        <li class="flex">
-          <label class="flex1">体检报告</label>
+        <li v-for="(item,index) in types" class="flex" @click="handler(index,item)">
+          <label class="flex1">{{item.name}}</label>
           <span class="flex0 iconfont">&#xe72a;</span>
         </li>
       </ul>
@@ -32,12 +24,15 @@
 </template>
 
 <script>
+  import {compatCache} from "../../lib/cache";
+  import {REPORT_TYPE} from "../../lib/config";
 
   export default {
     data() {
       return {
         index: 0,
-        list: []
+        list: [],
+        types: REPORT_TYPE
       };
     },
     computed: {
@@ -50,9 +45,9 @@
     components: {},
     mixins: [],
     created() {
-      let {$query} = this.$route;
-      if ($query && $query.index) {
-        this.index = $query.index
+      let {query} = this.$route;
+      if (query && query.index) {
+        this.index = query.index
       }
       this.getList();
     },
@@ -63,6 +58,17 @@
 
     },
     methods: {
+      handler(index, data) {
+
+        let {service} = data,
+          {pat, pat: {compatMedicalRecord: patCard, compatId}} = this;
+        compatCache.set(pat);
+        this.$router.push({
+          path: '/report/list',
+          query: {index, patCard, compatId}
+        })
+      },
+
       async getList() {
         let loading = this.$weuijs.loading("加载中...");
         let ret = await this.$http('nethos.pat.compat.list', {});

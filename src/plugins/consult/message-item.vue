@@ -21,7 +21,7 @@
                                 @click="play(atta.url)"
                                 v-if="atta.fileType&&atta.fileType=='AUDIO'">
                   </playing-icon>
-                  <img :src="atta.url" v-else>
+                  <img :src="atta.url" @click="scan(atta.url)" v-else>
                 </li>
               </ul>
             </div>
@@ -76,6 +76,9 @@
             }
           })
         }
+      },
+      scan(url) {
+        this.$emit('scan', url);
       },
       play(url) {
         this.$emit('play', url);

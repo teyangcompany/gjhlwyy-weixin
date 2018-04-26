@@ -120,6 +120,10 @@ export const NEW_PIC_CONSULT_SUBMIT = true;
 
 export const OPEN_MYCONSULT_VERSION = true;
 
+/**
+ * 订单状态
+ * @type {*[]}
+ */
 export const CONSULT_STATUS = [
   {value: -1, name: 'CANCEL', title: '已取消'},
   {value: 0, name: 'NEEDPAY', title: '待付款'},
@@ -128,6 +132,19 @@ export const CONSULT_STATUS = [
   {value: 6, name: 'FINSH', title: '已评价'}
 ]
 
+/**
+ * 号源状态
+ * @type {string[]}
+ */
 export const SCHEME_STATUS = ["无", "停诊", "已满", "即将(未放号或号子被锁定)", "预约"]
 
+/**
+ * 报告类型
+ * @type {*[]}
+ */
+export const REPORT_TYPE = [
+  {service: 'nethos.book.inspect.examination', name: '检查报告'},
+  {service: 'nethos.book.inspect.list', name: '检验报告'},
+  {service: '', name: '体检报告'},
+]
 

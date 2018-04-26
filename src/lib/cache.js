@@ -122,3 +122,42 @@ export const audioPlayStatusCache = {
     storage.session.remove(audio_play_status_KEY);
   }
 }
+
+const compat_KEY = CACHE_PREFIX + "compat_";
+export const compatCache = {
+  get() {
+    return storage.session.get(compat_KEY, null);
+  },
+  set(value) {
+    storage.session.set(compat_KEY, value);
+  },
+  remove() {
+    storage.session.remove(compat_KEY);
+  }
+}
+
+const examination_KEY = CACHE_PREFIX + "examination_";
+export const examinationCache = {
+  get() {
+    return storage.session.get(examination_KEY, null);
+  },
+  set(value) {
+    storage.session.set(examination_KEY, value);
+  },
+  remove() {
+    storage.session.remove(examination_KEY);
+  }
+}
+
+const inspect_KEY = CACHE_PREFIX + "inspect_";
+export const inspectCache = {
+  get() {
+    return storage.session.get(inspect_KEY, null);
+  },
+  set(value) {
+    storage.session.set(inspect_KEY, value);
+  },
+  remove() {
+    storage.session.remove(inspect_KEY);
+  }
+}
