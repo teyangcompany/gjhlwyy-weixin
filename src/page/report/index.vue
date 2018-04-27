@@ -20,27 +20,7 @@
         </li>
       </ul>
 
-      <!--<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 300 300" style="width: 300px;height: 300px">
-        <line x1="150" y1="0" x2="150" y2="90"
-              style="stroke:rgb(0,0,0);stroke-width:2"/>
-        <line x1="150" y1="105" x2="150" y2="195"
-              style="stroke:rgb(0,0,0);stroke-width:2"/>
-        <line x1="150" y1="210" x2="150" y2="300"
-              style="stroke:rgb(0,0,0);stroke-width:2"/>
-        <line x1="0" y1="150" x2="45" y2="150"
-              style="stroke:rgb(0,0,0);stroke-width:2"/>
-        <line x1="50" y1="150" x2="95" y2="150"
-              style="stroke:rgb(0,0,0);stroke-width:2"/>
-        <line x1="100" y1="150" x2="145" y2="150"
-              style="stroke:rgb(0,0,0);stroke-width:2"/>
-        <line x1="155" y1="150" x2="200" y2="150"
-              style="stroke:rgb(0,0,0);stroke-width:2"/>
-        <line x1="205" y1="150" x2="250" y2="150"
-              style="stroke:rgb(0,0,0);stroke-width:2"/>
-        <line x1="255" y1="150" x2="300" y2="150"
-              style="stroke:rgb(0,0,0);stroke-width:2"/>
-        <text x="25" y="110" fill="rgb(0,0,0)" style="font-size: 100">65</text>
-      </svg>-->
+      <!---->
 
       <router-link :to="{path:'/my/patient',query:{redirect:'report'}}" replace class="color_main">切换就诊人</router-link>
 
