@@ -82,7 +82,7 @@
         if (this.realName == '') {
           this.verifyTips = "姓名不能为空"
           this.$refs.msg.show(this.verifyTips);
-        }else if (this.passWord == '') {
+        } else if (this.passWord == '') {
           this.verifyTips = "密码不能为空"
           this.$refs.msg.show(this.verifyTips);
         } else if (this.passWord.length < 8) {
@@ -110,7 +110,7 @@
               return
             }
 
-            this.$router.push({
+            this.$router.replace({
               path: '/login',
               query: {backPath: this.backPath}
             })

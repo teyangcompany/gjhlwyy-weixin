@@ -138,7 +138,7 @@
         }
         else {
           if (this.regStatus == 'REGISTER') {
-            this.$router.push({
+            this.$router.replace({
               path: '/register',
               query: {cid: this.cid, codeValue: this.codeValue, backPath: this.backPath}
             })
@@ -149,7 +149,7 @@
               openid: openidCache.get()
             }).then((data) => {
               if (data.code == 0) {
-                this.$router.push({
+                this.$router.replace({
                   path: '/login',
                   query: {backPath: this.backPath}
                 })

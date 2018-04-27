@@ -48,10 +48,11 @@
   import {isBindMixin, isLoginMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
   import {formatCardAndMobile} from "../../../lib/filter";
+  import CompatMixin from "../../../lib/mixins/compat"
 
   export default {
     filters: {formatCardAndMobile},
-    mixins: [isLoginMixin, isBindMixin],
+    mixins: [isLoginMixin, isBindMixin, CompatMixin],
     data() {
       return {
         title: "查报告单",
@@ -82,7 +83,6 @@
       } else {
         this.index = 0
       }
-
       this._isBind().then((res) => {
         //console.log(res);
         if (res === false) {
@@ -101,7 +101,10 @@
           token: tokenCache.get()
         }).then((data) => {
           if (data.code == 0) {
-            this.allPatient = data.list
+            this.allPatient = data.list;
+            let compat = this.allPatient[this.index],
+              {compatIdcard} = compat;
+            this.hasIdCardBind(compatIdcard);
           } else if (!(data.msg)) {
             weui.alert("网络错误，请稍后重试")
           } else {
@@ -153,7 +156,10 @@
       goCheck() {
         let compat = this.allPatient[this.index],
           compatId = compat.compatId,
-          compatMedicalRecord = compat.compatMedicalRecord;
+          compatMedicalRecord = compat.compatMedicalRecord,
+          {compatIdcard} = compat;
+        let res = this.hasIdCardBind(compatIdcard);
+        if (!res) return false;
         if (!compatMedicalRecord) {
           let loading = weui.loading("提交中...");
           let bookHosId = "";

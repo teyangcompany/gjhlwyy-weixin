@@ -101,11 +101,11 @@
   import weui from 'weui.js'
   import {isLoginMixin} from "../../../lib/mixin"
   import {tokenCache} from '../../../lib/cache'
-  import {debug} from "../../../lib/util"
   import {formatCardAndMobile} from "../../../lib/filter";
+  import CompatMixin from '../../../lib/mixins/compat'
 
   export default {
-    mixins: [isLoginMixin],
+    mixins: [isLoginMixin, CompatMixin],
     data() {
       return {
         title: '就诊信息确认',
@@ -213,7 +213,10 @@
           patId: this.selfInfo.patId
         }).then((data) => {
           if (data.code == 0) {
-            this.compatInfo = data.list
+            this.compatInfo = data.list,
+              compat = this.compatInfo[this.index],
+              {compatIdcard} = compat;
+            this.hasIdCardBind(compatIdcard);
           } else {
             weui.alert(data.msg)
           }
@@ -230,23 +233,7 @@
         let ret = await api("nethos.book.compat.bind.new", {compatId, bookHosId})
         loading.hide();
         if (ret.code != 0) {
-          if (ret.msg == "证件号不存在") weui.confirm(ret.msg, {
-            buttons: [{
-              label: "取消",
-              type: "default"
-            }, {
-              label: "去完善信息",
-              type: "primary",
-              onClick: () => {
-                this.$router.push({
-                  path: '/account/perfect',
-                  query: {back: this.$route.fullPath}
-                })
-                //this.createCard(compatId, bookHosId);
-              }
-            }]
-          });
-          else weui.alert(ret.msg);
+          weui.alert(ret.msg);
         } else {
           this.getCompatInfo();
         }
@@ -296,8 +283,34 @@
       goBookService() {
         if (this.bookSort == '预约挂号') {
           let compat = this.compatInfo[this.index], compatMedicalRecord = compat.compatMedicalRecord || "",
-            bookHosId = this.allInfoArray.bookHosId, compatId = compat.compatId;
-          debug("compatMedicalRecord", compatMedicalRecord);
+            bookHosId = this.allInfoArray.bookHosId, compatId = compat.compatId, compatIdcard = compat.compatIdcard;
+
+          if (!compatIdcard) {
+            this.$weuijs.confirm('证件号不能为空，是否去完善信息？', {
+              title: "温馨提示",
+              buttons: [
+                {
+                  label: "再等等",
+                  type: "default",
+                  onClick: () => {
+                  }
+                },
+                {
+                  label: '立即完善',
+                  type: 'primary',
+                  onClick: () => {
+                    this.$router.replace({
+                      path: '/account/perfect',
+                      query: {back: this.$route.fullPath}
+                    })
+                  }
+                }
+              ]
+            });
+            return false;
+          }
+
+
           let loading = weui.loading("提交中...");
           if (!compatMedicalRecord) {
             api("nethos.book.compat.bind.check", {compatId, bookHosId}).then((res) => {

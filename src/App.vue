@@ -22,6 +22,28 @@
 <style lang="scss">
   @import "./common/public";
 
+  #test-detail {
+    .wrap {
+      padding: 10px;
+      background-color: white;
+      h5 {
+        padding: 10px 0;
+        font-size: 14px;
+      }
+      p {
+        padding: 10px;
+        font-size: 12px;
+        background-color: $bgColor;
+        border-radius: 5px;
+        color: #666666;
+      }
+      .red {
+        padding: 0 5px;
+        color: red;
+      }
+    }
+  }
+
   #article_detail {
     line-height: 1.5;
     padding-top: px2rem(15px);

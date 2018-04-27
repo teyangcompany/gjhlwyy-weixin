@@ -117,6 +117,7 @@
       async goNextStep() {
         let loading = this.$weuijs.loading("加载中...");
         let data = await this._isBind();
+        loading.hide();
         if (data !== false) {
           if (!data.patIdcard) {
             this.$weuijs.confirm('证件号不能为空，是否去完善信息？', {
@@ -139,8 +140,7 @@
                     }
                   }
                 ]
-              }
-            );
+              });
             return false;
           }
 
@@ -159,7 +159,6 @@
             query: {backPath: this.path}
           });
         }
-        loading.hide();
       },
       back() {
         this.$router.back(-1)

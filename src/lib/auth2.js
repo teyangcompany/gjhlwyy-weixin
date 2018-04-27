@@ -31,7 +31,7 @@ export default (cb) => {
   }
   /*非微信打开*/
   else {
-    openidCache.set("omrmBv4jxPNW6njcUg-0A4L-PRHc");
+    openidCache.set("omrmBv98kC28OfJf1dbEo33qTKBU");
     // omrmBv61sj9FDFuma9qdi2pOrJPw
     // omrmBvwVz1JncKnh0ee2kGVdNSR8
     // omrmBv1p9porIc2z0IZkPm4q7dS4
@@ -43,6 +43,8 @@ export default (cb) => {
     // omrmBv78TNZhMhUwl3TEWxFU4ZBQ
     // omrmBv4_Tsfwc_r6dJfTIN39rXDE
     // omrmBvx_8_iWHCNcrjwuVVA6Nc_A
+    // omrmBv32MoLEuBm983nj-tkYRZh8
+    // omrmBv9u0MDSuPEaQ0r-XCYcI9I8
     cb();
   }
 }

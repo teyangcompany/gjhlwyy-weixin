@@ -25,7 +25,6 @@
 <script>
   import {openidCache} from "../lib/cache";
   import api from "../lib/api"
-  import {debug} from "../lib/util"
   import weui from "weui.js"
   import {isBindMixin} from "../lib/mixin"
   import {Todate} from "../lib/filter"
@@ -82,8 +81,16 @@
       }
     },
     components: {},
-    created() {
-      this.__init();
+    async created() {
+      let res = await this._isBind();
+      if (res !== false) {
+        this.__init();
+      } else {
+        this.$router.push({
+          path: "/bindRelativePhone",
+          query: {backPath: this.$route.fullPath}
+        });
+      }
       /*this._isBind().then((res) => {
         if (res !== false) {
           this.__init();

@@ -33,7 +33,7 @@
           </li>
         </ol>
         <ol v-else class="flex flex-center flex-center-2 color_666 fs16">
-          暂无排版信息
+          暂无排班信息
         </ol>
       </div>
       <div class="list">

@@ -233,6 +233,11 @@ const schemeStatus = (res) => {
   return SCHEME_STATUS[res] || '';
 }
 
+const splitTime = (res) => {
+  if (!res) return "";
+  return res.substr(0, 4) + "-" + res.substr(4, 2) + "-" + res.substr(6);
+}
+
 export {
   Todate,
   getWeek,
@@ -248,6 +253,7 @@ export {
   formatPrice,
   formatTime,
   getOrderStatus,
+  splitTime,
   getOrderAmpm, filterHTML, formatScore, delHtmlTag, schemeStatus
 }
 

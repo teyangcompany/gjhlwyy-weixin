@@ -16,7 +16,8 @@ export default {
 
     /*添加全局mixin*/
     Vue.mixin({
-      components: {AppHeader, Msg}
+      components: {AppHeader, Msg},
+      methods: {}
     });
   }
 }

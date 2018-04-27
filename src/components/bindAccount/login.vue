@@ -45,25 +45,25 @@
 //              console.log(data)
 //          })
         if (this.backPath == '/infoConfirm') {
-          this.$router.push('/book')
+          this.$router.replace('/book')
         } else if (this.backPath == '/pictureConsultNext') {
-          this.$router.push('/internetRoom')
+          this.$router.replace('/internetRoom')
         } else if (this.backPath == '/pictureConsultApply') {
-          this.$router.push('/internetRoom')
+          this.$router.replace('/internetRoom')
         } else if (this.backPath == '/famousPage') {
-          this.$router.push('/book')
+          this.$router.replace('/book')
         } else if (this.backPath == '/expertDetail') {
-          this.$router.push('/book')
+          this.$router.replace('/book')
         } else if (this.backPath == '/bookType/date') {
-          this.$router.push('/book')
+          this.$router.replace('/book')
         } else if (this.backPath == '/selectType') {
-          this.$router.push('/book')
+          this.$router.replace('/book')
         } else if (this.backPath == '/onlineDoctorCard') {
-          this.$router.push('/internetRoom')
+          this.$router.replace('/internetRoom')
         } else if (!(this.backPath)) {
-          this.$router.push('/Profile')
+          this.$router.replace('/Profile')
         } else {
-          this.$router.push({
+          this.$router.replace({
             path: this.backPath
           })
         }

@@ -53,6 +53,7 @@
 <script>
   import {formatCardAndMobile, getGender} from "../../lib/filter";
   import {isBindMixin} from "../../lib/mixin";
+  import CompatMixin from '../../lib/mixins/compat'
 
   export default {
     data() {
@@ -63,13 +64,18 @@
     },
     computed: {
       pat() {
-        if (this.list.length > 0) return this.list[this.index]
+        if (this.list.length > 0) {
+          let pat = this.list[this.index]
+          let {compatIdcard} = pat;
+          this.hasIdCardBind(compatIdcard);
+          return pat;
+        }
         else return {}
       }
     },
     filters: {getGender, formatCardAndMobile},
     components: {},
-    mixins: [isBindMixin],
+    mixins: [isBindMixin, CompatMixin],
     async created() {
       let res = await this._isBind();
       if (res === false) {
@@ -122,7 +128,33 @@
       },
 
       async sub() {
-        let {compatId, compatMedicalRecord} = this.pat;
+        let {compatId, compatIdcard, compatMedicalRecord} = this.pat;
+
+        if (!compatIdcard) {
+          this.$weuijs.confirm('证件号不能为空，是否去完善信息？', {
+            title: "温馨提示",
+            buttons: [
+              {
+                label: "再等等",
+                type: "default",
+                onClick: () => {
+                }
+              },
+              {
+                label: '立即完善',
+                type: 'primary',
+                onClick: () => {
+                  this.$router.replace({
+                    path: '/account/perfect',
+                    query: {back: this.$route.fullPath}
+                  })
+                }
+              }
+            ]
+          });
+          return false;
+        }
+
         if (!compatMedicalRecord) {
           let loading = this.$weuijs.loading("提交中...");
           let bookHosId = "";
