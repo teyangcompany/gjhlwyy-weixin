@@ -25,7 +25,36 @@
           </router-link>
         </ul>
       </div>
-      <div class="dept bg_white">
+
+      <div class="pblist">
+        <ul>
+          <li v-for="(o,i) in dept">
+            <h3 class="flex color_999 fs14">
+              <span class="flex1">{{o.deptName}}</span>
+              <font class="flex0 iconfont">&#xe72b;</font>
+            </h3>
+            <ol>
+              <li class="flex fs14" v-for="(oo,ii) in o.schemeList">
+                <span class="flex0 mr5 color_333">{{oo.schemeDate.substr(0,10)}}</span>
+                <span class="flex0 mr5 color_333">周{{oo.weekNo|week}}</span>
+                <span class="flex1 color_333">{{oo.schemeAmpm|getOrderAmpm}}</span>
+                <div class="flex0 num" :class="['num'+oo.schemeStats]">
+                  <span v-if="oo.schemeStats==4" @click="num(oo)">预约 {{oo.bookFee}}元</span>
+                  <span class="color_777" v-else>{{oo.schemeStats|schemeStatus}}</span>
+                </div>
+              </li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+
+      <div class="skill bg_white">
+        <h3 class="fs14 color_999">医生擅长</h3>
+        <div class="fs12 color_333">{{info.docDescription}}</div>
+      </div>
+
+
+      <!--<div class="dept bg_white">
         <ol v-if="dept.length>0" class="flex flex-center">
           <li class="flex0 fs14" :class="[index==currentDept?'cover':'']" v-for="(item,index) in dept" :key="index"
               @click="currentDept=index">
@@ -35,8 +64,8 @@
         <ol v-else class="flex flex-center flex-center-2 color_666 fs16">
           暂无排班信息
         </ol>
-      </div>
-      <div class="list">
+      </div>-->
+      <!--<div class="list">
         <ul>
           <li class="flex flex-center bg_white" v-for="(item,index) in list" :key="index">
             <span class="flex0 mr10 color_333">{{item.schemeDate.substr(0,10)}}</span>
@@ -48,7 +77,7 @@
             </div>
           </li>
         </ul>
-      </div>
+      </div>-->
     </div>
     <num-modal ref="num"></num-modal>
   </div>
@@ -153,6 +182,22 @@
 <style scoped lang="scss">
   @import "../../common/public";
 
+  .pblist {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: white;
+    h3 {
+      padding: 5px 0;
+    }
+    ol > li {
+      padding: 10px 0;
+    }
+  }
+
+  .mr5 {
+    margin-right: 5px;
+  }
+
   .mr10 {
     margin-right: 10px;
   }
@@ -203,7 +248,7 @@
     }
   }
 
-  .list {
+  /*.list {
     li {
       padding: 0 $commonSpace;
       height: 45px;
@@ -216,5 +261,28 @@
         }
       }
     }
+  }*/
+
+  .num {
+    span {
+      background-color: $bgColor;
+      color: #666;
+      border-radius: 5px;
+      padding: 3px 10px;
+    }
+  }
+
+  .num.num4 {
+    span {
+      background-color: $mainColor;
+      color: white;
+      border-radius: 5px;
+      padding: 3px 10px;
+    }
+  }
+
+  .skill {
+    padding: 10px;
+    margin-top: 10px;
   }
 </style>

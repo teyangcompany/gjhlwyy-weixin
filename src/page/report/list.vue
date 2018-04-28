@@ -36,7 +36,7 @@
           </h3>
           <div>
             <h4>体检结果</h4>
-            <p v-html="o.zONGJIANXJ"></p>
+            <p v-html="o.htmlXJ"></p>
           </div>
         </div>
       </ul>
@@ -144,7 +144,7 @@
         let ret = await this.$http(service, Object.assign({}, query, {endDate, startDate, BAH, ENDDATE, STARTDATE}));
         if (ret.code == 0) {
           this.list = ret.list.map((res) => {
-            res.zONGJIANXJ && (res.zONGJIANXJ = res.zONGJIANXJ.replace(/\r+?/g, '<br/>'));
+            res.zONGJIANXJ && (res.htmlXJ = res.zONGJIANXJ.replace(/\r+?/g, '<br/>'));
             return res;
           });
         } else {
@@ -177,7 +177,7 @@
       div {
         padding: 10px 0;
         p {
-          @include lines(2);
+          @include lines(3);
           color: #666666;
           line-height: 1.5;
         }

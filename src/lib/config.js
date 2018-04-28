@@ -6,7 +6,8 @@ export const API_URL = {
     jssdk: "test-zheer-wx.hztywl.cn",
     socket: "//nethoswebsocket.diandianys.com",
     appid: "wxa49f90b4ff678ef2",
-    plat: "dev"
+    plat: "dev",
+    team:'5ade811584ae5b958bba6451'
   },
   "nethosweb.diandianys.com": {
     web: 'nethosweb.diandianys.com',
@@ -14,6 +15,7 @@ export const API_URL = {
     jssdk: "test-zheer-wx.hztywl.cn",
     socekt: "//nethoswebsocket.diandianys.com",
     appid: "wxa49f90b4ff678ef2",
+    team:'5ade811584ae5b958bba6451',
     plat: "dev"
   },
   "test-zheer-wx.hztywl.cn": {
@@ -22,7 +24,8 @@ export const API_URL = {
     jssdk: "test-zheer-wx.hztywl.cn",
     socekt: "//nethoswebsocket.diandianys.com",
     appid: "wxa49f90b4ff678ef2",
-    plat: "dev"
+    plat: "dev",
+    team:'5ade811584ae5b958bba6451'
   },
   "pat-test.gjwlyy.com": {
     web: 'pat-test.gjwlyy.com',
@@ -30,7 +33,8 @@ export const API_URL = {
     jssdk: "test-zheer-wx.hztywl.cn",
     socket: "doc-test.gjwlyy.com",
     appid: "wx3d274480f31f6de2",
-    plat: "pro"
+    plat: "pro",
+    team:'5ade811584ae5b958bba6451'
   },
   "www.gjwlyy.com": {
     web: 'www.gjwlyy.com',
@@ -38,7 +42,8 @@ export const API_URL = {
     jssdk: "www.gjwlyy.com",
     socket: "socket.gjwlyy.com",
     appid: "wx3d274480f31f6de2",
-    plat: "pro"
+    plat: "pro",
+    team:'5ade811584ae5b958bba6451'
   }
 }
 export const openRealNameOauth = false

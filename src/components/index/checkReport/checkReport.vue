@@ -78,6 +78,8 @@
     },
     created() {
 
+      this.$router.replace({path: '/report', query: this.$route.query});
+
       if (this.$route.query.index) {
         this.index = this.$route.query.index
       } else {

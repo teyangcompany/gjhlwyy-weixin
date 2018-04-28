@@ -45,9 +45,20 @@ export default [
   },
 
 
+  /**
+   * @param cache.testCache
+   */
   {
     path: '/report/detail/test',
     component: () => import('../page/report/detail/test')
+  },
+  /**
+   * @param params.id
+   * @param cache.testCache
+   */
+  {
+    path: '/report/consult/:id',
+    component: () => import('../page/report/consult')
   }
 
 

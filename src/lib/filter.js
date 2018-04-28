@@ -238,6 +238,14 @@ const splitTime = (res) => {
   return res.substr(0, 4) + "-" + res.substr(4, 2) + "-" + res.substr(6);
 }
 
+const TijianxjToHtml = (res) => {
+  if (!res) return "";
+  res = res.replace(/[\d]+\.[^\d]+?[：:]{1}/g, s => `<h5>${s}</h5><p>`);
+  res = res.replace(/[↑↓]{1}/g, s => `<font class="red">${s}</font>`);
+  return res;
+}
+
+
 export {
   Todate,
   getWeek,
@@ -254,6 +262,7 @@ export {
   formatTime,
   getOrderStatus,
   splitTime,
+  TijianxjToHtml,
   getOrderAmpm, filterHTML, formatScore, delHtmlTag, schemeStatus
 }
 

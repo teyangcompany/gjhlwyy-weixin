@@ -44,6 +44,28 @@
     }
   }
 
+  #test-detail2 {
+    .wrap {
+      padding: 10px;
+      background-color: white;
+      h5 {
+        padding: 5px 0;
+        font-size: 14px;
+      }
+      p {
+        padding: 5px;
+        font-size: 12px;
+        border-radius: 5px;
+        line-height: 1.4;
+        color: #666666;
+      }
+      .red {
+        padding: 0 5px;
+        color: red;
+      }
+    }
+  }
+
   #article_detail {
     line-height: 1.5;
     padding-top: px2rem(15px);

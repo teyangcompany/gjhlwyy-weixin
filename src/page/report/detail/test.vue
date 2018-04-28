@@ -1,83 +1,89 @@
 <template>
-    <div class="page flex">
-        <app-header title="体检报告详情" class="flex0">
-            <i class="back" slot="back"></i>
-        </app-header>
-        <ul class="nav flex flex0">
-            <li class="flex0 center" :class="[index==currentIndex?'cover':'']" @click="currentIndex=index"
-                v-for="(item,index) in navs">{{item.name}}
-            </li>
-        </ul>
-        <div id="test-detail" class="main flex1 overflow-y-auto overflow-touch">
-            <template v-if="currentIndex==0">
-                <div class="wrap" v-html="info.zONGJIANXJ"></div>
-                <dl>
-                    <div>
-                        <dt>总检医生：</dt>
-                        {{info.zONGJIANYS}}
-                    </div>
-                    <div>
-                        <dt>审核医生：</dt>
-                        {{info.sHENHEYS}}
-                    </div>
-                    <div>
-                        <dt>总检日期：</dt>
-                        {{info.zONGJIANRQ}}
-                    </div>
-                    <div>
-                        <dt>审核日期：</dt>
-                        {{info.sHENHERQ}}
-                    </div>
-                    <div>
-                        <dt>体检医院：</dt>
-                        浙江大学医学院附属第二医院
-                    </div>
-                </dl>
-            </template>
-            <template v-if="currentIndex==1">
-                <div v-html="info.zONGJIANJY" class="wrap"></div>
-            </template>
-            <div class="notice" v-if="currentIndex<2">
-                <h3>温馨提示：</h3>
-                <p>1.体检结论仅根据本次所检项目结果所做，可能难以全面
-                    反映您的健康状况。</p>
-                <p>2.您过去所患的疾病，因这次体检范围所限未能发现到的
-                    情况，仍按原诊断及治疗。</p>
-                <p>3.查出的疾病请及时到专科就诊治疗。</p>
+  <div class="page flex">
+    <app-header title="体检报告详情" class="flex0">
+      <i class="back" slot="back"></i>
+    </app-header>
+    <ul class="nav flex flex0">
+      <li class="flex0 center" :class="[index==currentIndex?'cover':'']" @click="currentIndex=index"
+          v-for="(item,index) in navs">{{item.name}}
+      </li>
+    </ul>
+    <div id="test-detail" class="main flex1 overflow-y-auto overflow-touch">
+      <template v-if="currentIndex==0">
+        <div class="wrap" v-html="info.htmlXJ"></div>
+        <dl>
+          <div>
+            <dt>总检医生：</dt>
+            {{info.zONGJIANYS}}
+          </div>
+          <div>
+            <dt>审核医生：</dt>
+            {{info.sHENHEYS}}
+          </div>
+          <div>
+            <dt>总检日期：</dt>
+            {{info.zONGJIANRQ}}
+          </div>
+          <div>
+            <dt>审核日期：</dt>
+            {{info.sHENHERQ}}
+          </div>
+          <div>
+            <dt>体检医院：</dt>
+            浙江大学医学院附属第二医院
+          </div>
+        </dl>
+      </template>
+      <template v-if="currentIndex==1">
+        <div v-html="info.zONGJIANJY" class="wrap"></div>
+      </template>
+      <div class="notice" v-if="currentIndex<2">
+        <h3>温馨提示：</h3>
+        <p>1.体检结论仅根据本次所检项目结果所做，可能难以全面
+          反映您的健康状况。</p>
+        <p>2.您过去所患的疾病，因这次体检范围所限未能发现到的
+          情况，仍按原诊断及治疗。</p>
+        <p>3.查出的疾病请及时到专科就诊治疗。</p>
+      </div>
+      <template v-if="currentIndex==2">
+        <div class="rep">
+          <h3 class="flex">
+            <div class="title flex1 fs16">检验报告</div>
+            <div class="more color_main flex0" @click="show(0)">{{showPart[0]?'收起':'查看'}}<font class="iconfont"
+                                                                                               :class="[showPart[0]?'close':'open']">&#xe72d;</font>
             </div>
-            <template v-if="currentIndex==2">
-                <div class="rep">
-                    <h3 class="flex">
-                        <div class="title flex1 fs16">检验报告</div>
-                        <div class="more color_main flex0">查看<font class="iconfont">&#xe72b;</font></div>
-                    </h3>
-                    <div class="jianyan-box">
-                        <jy-item v-for="(o,i) in examinationDetailsTest" :key="i" :o.sync="o" :i="i"
-                                 @open="openT"></jy-item>
-                    </div>
-                </div>
-                <div class="rep">
-                    <h3 class="flex">
-                        <div class="title flex1 fs16">检查报告</div>
-                        <div class="more color_main flex0">查看<font class="iconfont">&#xe72b;</font></div>
-                    </h3>
-                    <div class="jiancha-box">
-                        <jc-item v-for="(o,i) in examinationDetailsExamination" :key="i" :o="o" :i="i"
-                                 @open="openE"></jc-item>
-                    </div>
-                </div>
-                <p style="height: 10px">&nbsp;</p>
-            </template>
+          </h3>
+          <div class="jianyan-box" v-if="showPart[0]">
+            <jy-item v-for="(o,i) in examinationDetailsTest" :key="i" :o.sync="o" :i="i"
+                     @open="openT"></jy-item>
+          </div>
         </div>
-        <div class="sub center flex0">咨询医生</div>
-        <msg ref="msg"></msg>
+        <div class="rep">
+          <h3 class="flex">
+            <div class="title flex1 fs16">检查报告</div>
+            <div class="more color_main flex0" @click="show(1)">{{showPart[1]?'收起':'查看'}}<font class="iconfont"
+                                                                                               :class="[showPart[1]?'close':'open']">&#xe72d;</font>
+            </div>
+          </h3>
+          <div class="jiancha-box" v-if="showPart[1]">
+            <jc-item v-for="(o,i) in examinationDetailsExamination" :key="i" :o="o" :i="i"
+                     @open="openE"></jc-item>
+          </div>
+        </div>
+        <p style="height: 10px">&nbsp;</p>
+      </template>
     </div>
+    <router-link :to="{path:'/report/consult/'+team}" tag="div" class="sub center flex0">咨询医生</router-link>
+    <msg ref="msg"></msg>
+  </div>
 </template>
 
 <script>
   import {compatCache, testCache} from "../../../lib/cache"
   import JyItem from '../../../plugins/report/jyitem'
   import JcItem from '../../../plugins/report/jcitem'
+  import {getENV} from "../../../lib/util";
+  import {TijianxjToHtml} from "../../../lib/filter";
 
   const NAVS = [
     {name: '体检结果'},
@@ -88,10 +94,12 @@
   export default {
     data() {
       return {
+        team: '',
         currentIndex: 0,
         navs: NAVS,
         pat: {},
         info: {},
+        showPart: [true, true],
         examinationDetailsTest: [],
         examinationDetailsExamination: []
       };
@@ -100,10 +108,10 @@
     components: {JcItem, JyItem},
     mixins: [],
     created() {
+      this.team = getENV().team;
       this.info = testCache.get();
       this.pat = compatCache.get();
-      this.info.zONGJIANXJ = this.info.zONGJIANXJ.replace(/[\d]+\.[^\d]+?[：:]{1}/g, res => `<h5>${res}</h5><p>`);
-      this.info.zONGJIANXJ = this.info.zONGJIANXJ.replace(/[↑↓]{1}/g, res => `<font class="red">${res}</font>`);
+      this.info.htmlXJ =TijianxjToHtml(this.info.htmlXJ);
       this.info.zONGJIANJY = this.info.zONGJIANJY.replace(/\r/g, res => `<br/>`);
       this.info.zONGJIANJY = this.info.zONGJIANJY.replace(/[\d]+\.[^<]+?<br\/>/g, res => `<h5>${res}</h5><p>`);
       this.getData(this.info.tIJIANBM, this.info.bAH);
@@ -114,7 +122,13 @@
     beforeDestroy() {
 
     },
+
     methods: {
+      show(index) {
+        let val = this.showPart[index];
+        this.showPart.splice(index, 1, !val);
+      },
+
       openT(index) {
         this.examinationDetailsTest.map((res, i) => {
           if (i == index) res.open = !res.open;
@@ -155,73 +169,81 @@
 </script>
 
 <style scoped lang="scss">
-    @import "../../../common/public";
+  @import "../../../common/public";
 
-    .page {
-        flex-direction: column;
+  .iconfont {
+    display: inline-block;
+    transition: all 0.5s;
+    &.open {
+      transform: rotate(180deg);
     }
+  }
 
-    .jianyan-box {
-        margin: 0 -10px;
-    }
+  .page {
+    flex-direction: column;
+  }
 
-    .main {
-        background: $bgColor;
-        padding-top: 10px;
-    }
+  .jianyan-box {
+    margin: 0 -10px;
+  }
 
-    .rep {
-        padding: 10px;
-        border-radius: 5px;
-        margin: 0 10px;
-        background-color: white;
-        h3 {
-            .more {
-                font-size: 12px;
-            }
-        }
-    }
+  .main {
+    background: $bgColor;
+    padding-top: 10px;
+  }
 
-    .rep + .rep {
-        margin-top: 10px;
+  .rep {
+    padding: 10px;
+    border-radius: 5px;
+    margin: 0 10px;
+    background-color: white;
+    h3 {
+      .more {
+        font-size: 12px;
+      }
     }
+  }
 
-    .notice {
-        color: #666666;
-        padding: 10px;
-        h3 {
-            font-size: 14px
-        }
-        p {
-            font-size: 12px
-        }
-    }
+  .rep + .rep {
+    margin-top: 10px;
+  }
 
-    dl {
-        background-color: white;
-        margin-top: 10px;
-        padding: 10px;
-        div {
-            display: flex
-        }
-        dt {
-            color: #666666;
-        }
+  .notice {
+    color: #666666;
+    padding: 10px;
+    h3 {
+      font-size: 14px
     }
+    p {
+      font-size: 12px
+    }
+  }
 
-    .nav {
-        li {
-            width: (100%/3);
-            @include h_lh(40px);
-        }
-        .cover {
-            @include border(bottom, $mainColor, after, solid, 4px);
-        }
+  dl {
+    background-color: white;
+    margin-top: 10px;
+    padding: 10px;
+    div {
+      display: flex
     }
+    dt {
+      color: #666666;
+    }
+  }
 
-    .sub {
-        @include h_lh(45px);
-        background-color: $mainColor;
-        color: white;
+  .nav {
+    li {
+      width: (100%/3);
+      @include h_lh(40px);
     }
+    .cover {
+      @include border(bottom, $mainColor, after, solid, 4px);
+    }
+  }
+
+  .sub {
+    @include h_lh(45px);
+    background-color: $mainColor;
+    color: white;
+  }
 </style>
