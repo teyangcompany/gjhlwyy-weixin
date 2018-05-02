@@ -22,9 +22,7 @@
             <div class="text flex1">{{consult.illnessName||'暂无'}}</div>
           </div>
           <div class="container">
-            <div class="content">
-              {{consult.consultContent}}
-            </div>
+            <div class="content" v-html="consult.consultContent"></div>
             <ul v-if="attaList" class="pics overflow-hidden">
               <li v-for="pic in attaList" class="float-left">
                 <img @click="scan(pic.url,attaList)" :src="pic.url" alt="">
@@ -83,7 +81,7 @@
   import api from "../../lib/api"
   import {avaErrorMixin, jssdkMixin, scrollHeightMixin} from "../../lib/mixin";
   import Bottom from '../../plugins/consult/bottom'
-  import {formatTime, getGender} from "../../lib/filter";
+  import {formatTime, getGender, TijianzdToHtml} from "../../lib/filter";
   import MessageItem from "../../plugins/consult/message-item"
   import docAva from '../../utils/docAva'
   import {audioPlayStatusCache} from "../../lib/cache";
@@ -120,7 +118,13 @@
         }
       },
       consult() {
-        return this.info.consult ? this.info.consult : {};
+        let {info} = this;
+        if (info.consult) {
+          info.consult.consultContent = TijianzdToHtml(info.consult.consultContent);
+          info.consult.consultContent = info.consult.consultContent.replace(/[\d]{4}-[\d]{2}-[\d]{2}/g, s => `<font class="color_red">${s}</font>`);
+          return info.consult;
+        }
+        return {}
       },
       attaList() {
         return this.info.attaList ? this.info.attaList : []

@@ -245,6 +245,22 @@ const TijianxjToHtml = (res) => {
   return res;
 }
 
+const TijianzdToHtml = (res) => {
+  if (!res) return "";
+  res = res.replace(/\r/g, s => `<br/>`);
+  return res;
+}
+
+const filter_report_shenheeq = (res) => {
+  console.log('time', res);
+  if (!res) return "";
+  if (res.length < 10) {
+    res = splitTime(res);
+  } else {
+    res = res.substr(0, 10);
+  }
+  return res;
+}
 
 export {
   Todate,
@@ -262,7 +278,7 @@ export {
   formatTime,
   getOrderStatus,
   splitTime,
-  TijianxjToHtml,
+  TijianxjToHtml, TijianzdToHtml, filter_report_shenheeq,
   getOrderAmpm, filterHTML, formatScore, delHtmlTag, schemeStatus
 }
 

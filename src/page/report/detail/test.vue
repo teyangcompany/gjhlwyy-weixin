@@ -11,6 +11,11 @@
     <div id="test-detail" class="main flex1 overflow-y-auto overflow-touch">
       <template v-if="currentIndex==0">
         <div class="wrap" v-html="info.htmlXJ"></div>
+      </template>
+      <template v-if="currentIndex==1">
+        <div v-html="info.zONGJIANJY" class="wrap"></div>
+      </template>
+      <template v-if="currentIndex<2">
         <dl>
           <div>
             <dt>总检医生：</dt>
@@ -22,29 +27,22 @@
           </div>
           <div>
             <dt>总检日期：</dt>
-            {{info.zONGJIANRQ}}
+            {{info.zONGJIANRQ.substr(0,10)}}
           </div>
           <div>
             <dt>审核日期：</dt>
-            {{info.sHENHERQ}}
-          </div>
-          <div>
-            <dt>体检医院：</dt>
-            浙江大学医学院附属第二医院
+            {{info.sHENHERQ.substr(0,10)}}
           </div>
         </dl>
+        <div class="notice">
+          <h3>温馨提示：</h3>
+          <p>1.体检结论仅根据本次所检项目结果所做，可能难以全面反映您的健康状况。</p>
+          <p>2.您过去所患的疾病，因这次体检范围所限未能发现到的情况，仍按原诊断及治疗。</p>
+          <p>3.查出的疾病请及时到专科就诊治疗。</p>
+          <p>4.若需复查相关异常体检指标，或有不明之处可来国际保健中心一楼健康咨询门诊，我们将提供优质的健康保健指导。</p>
+          <p>5.为了尊重和保护您的个人隐私，本保健中心在每一份体检报告上都粘有封口带，请您在取到体检报告后确认封口带的完整性。</p>
+        </div>
       </template>
-      <template v-if="currentIndex==1">
-        <div v-html="info.zONGJIANJY" class="wrap"></div>
-      </template>
-      <div class="notice" v-if="currentIndex<2">
-        <h3>温馨提示：</h3>
-        <p>1.体检结论仅根据本次所检项目结果所做，可能难以全面
-          反映您的健康状况。</p>
-        <p>2.您过去所患的疾病，因这次体检范围所限未能发现到的
-          情况，仍按原诊断及治疗。</p>
-        <p>3.查出的疾病请及时到专科就诊治疗。</p>
-      </div>
       <template v-if="currentIndex==2">
         <div class="rep">
           <h3 class="flex">
@@ -83,10 +81,10 @@
   import JyItem from '../../../plugins/report/jyitem'
   import JcItem from '../../../plugins/report/jcitem'
   import {getENV} from "../../../lib/util";
-  import {TijianxjToHtml} from "../../../lib/filter";
+  import {TijianxjToHtml,TijianzdToHtml} from "../../../lib/filter";
 
   const NAVS = [
-    {name: '体检结果'},
+    {name: '体检异常'},
     {name: '医生建议'},
     {name: '体检报告'},
   ]
@@ -111,7 +109,7 @@
       this.team = getENV().team;
       this.info = testCache.get();
       this.pat = compatCache.get();
-      this.info.htmlXJ =TijianxjToHtml(this.info.htmlXJ);
+      this.info.htmlXJ = TijianzdToHtml(this.info.tIJIANZD);
       this.info.zONGJIANJY = this.info.zONGJIANJY.replace(/\r/g, res => `<br/>`);
       this.info.zONGJIANJY = this.info.zONGJIANJY.replace(/[\d]+\.[^<]+?<br\/>/g, res => `<h5>${res}</h5><p>`);
       this.getData(this.info.tIJIANBM, this.info.bAH);

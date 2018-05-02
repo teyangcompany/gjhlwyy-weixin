@@ -45,24 +45,15 @@
   }
 
   #test-detail2 {
+    padding-bottom: 10px;
     .wrap {
-      padding: 10px;
+      @include lines(6);
+      margin: 10px 10px 0;
       background-color: white;
-      h5 {
-        padding: 5px 0;
-        font-size: 14px;
-      }
-      p {
-        padding: 5px;
-        font-size: 12px;
-        border-radius: 5px;
-        line-height: 1.4;
-        color: #666666;
-      }
-      .red {
-        padding: 0 5px;
-        color: red;
-      }
+    }
+    .red {
+      padding: 0 5px;
+      color: red;
     }
   }
 

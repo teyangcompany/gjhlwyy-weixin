@@ -31,7 +31,7 @@
         </li>
         <div @click="handler(o,2)" class="type2" v-for="(o,i) in list" v-if="reportType.name=='体检报告'">
           <h3 class="color_333 flex">
-            <span class="flex1 fs16">报告日期:</span>
+            <span class="flex1 fs16">报告日期:{{o.zONGJIANRQ.substr(0,10)}}</span>
             <span class="flex0 color_main fs14">查看详情</span>
           </h3>
           <div>
@@ -138,7 +138,7 @@
           {endDate, startDate} = date[index],
           BAH = query.patCard, STARTDATE = startDate, ENDDATE = endDate;
         if (getENV().plat == "dev") {
-          BAH = "10856071"
+          BAH = "10683541"
         }
         let loading = this.$weuijs.loading("加载中...");
         let ret = await this.$http(service, Object.assign({}, query, {endDate, startDate, BAH, ENDDATE, STARTDATE}));

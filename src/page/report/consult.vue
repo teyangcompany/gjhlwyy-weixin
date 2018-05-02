@@ -22,7 +22,7 @@
 
       <div id="test-detail2" class="test wrap">
         <div class="h3">咨询内容</div>
-        <div class="wrap fs14">医生您好！这是我的体检结果（报告日期为<span class="red">{{test.zONGJIANRQ.substr(0,10)}}</span>，您可在第一栏的院内报告中查看我的具体检报告）
+        <div class="wrap fs14">{{prefixArr[0]}}<span class="red">{{test.zONGJIANRQ.substr(0,10)}}</span>{{prefixArr[1]}}
         </div>
         <div class="wrap" v-html="test.htmlXJ"></div>
 
@@ -58,7 +58,7 @@
   import {mainHeightMixin, scrollIntoViewMixin} from "../../lib/mixin";
   import PiclistUpload from "../../plugins/piclist-upload"
   import {compatCache, testCache} from "../../lib/cache";
-  import {getGender, TijianxjToHtml} from "../../lib/filter";
+  import {getGender, TijianzdToHtml} from "../../lib/filter";
 
   export default {
     data() {
@@ -68,7 +68,8 @@
         pics: [],
         compat: {},
         form: {},
-        test: {}
+        test: {},
+        prefixArr: ['医生您好！我的体检有以下异常（报告日期为', '，您可在第一栏的院内报告中查看我的具体检报告）']
       };
     },
     computed: {
@@ -83,7 +84,7 @@
     },
     created() {
       this.test = testCache.get();
-      this.test.htmlXJ = TijianxjToHtml(this.test.htmlXJ);
+      this.test.htmlXJ = TijianzdToHtml(this.test.tIJIANZD);
       this.compat = compatCache.get();
       let {id} = this.$route.params;
       id && (this.id = id) && (this.getDetail());
@@ -115,7 +116,11 @@
           form.attaList = form.attaIdList;
         }
 
-        !form.consultContent && (form.consultContent = this.test.zONGJIANXJ.substr(0, 500));
+        let zd = this.prefixArr[0] + (this.test.zONGJIANRQ.substr(0, 10)) + this.prefixArr[1] + "\r" + this.test.tIJIANZD;
+
+        !form.consultContent && (form.consultContent = zd);
+        form.consultContent && (form.consultContent = form.consultContent + "\r" + zd);
+        form.consultContent = form.consultContent.substr(0, 5000)
 
         let loading = this.$weuijs.loading("加载中...");
         let ret = await this.$http('nethos.consult.info.teampic.issue', form)

@@ -63,7 +63,7 @@
                 <label>审核医生：</label>{{o.sHENHEYS}}
               </li>
               <li>
-                <label>报告日期：</label>{{o.sHENHERQ}}
+                <label>报告日期：</label>{{o.sHENHERQ|filter_report_shenheeq}}
               </li>
             </ul>
           </td>
@@ -76,7 +76,7 @@
 
 <script>
   import YantiSvg from './svg'
-  import {splitTime} from "../../lib/filter";
+  import {filter_report_shenheeq, splitTime} from "../../lib/filter";
 
   export default {
     props: {
@@ -89,7 +89,7 @@
     },
     computed: {},
     filters: {
-      splitTime
+      splitTime, filter_report_shenheeq
       /*d(res) {
         console.log("1", res.match(/[\u4e00-\u9fa5]+/g))
         //console.log(res.split("|"));
