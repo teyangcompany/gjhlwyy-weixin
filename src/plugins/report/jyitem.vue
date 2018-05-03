@@ -99,9 +99,9 @@
 
     th {
         background-color: #f6f6f6;
-        height: px2rem(35px);
+        height: 35px;
         font-weight: normal;
-        flood-color: #666666;
+        color: #666666;
     }
 
     tr {
