@@ -118,8 +118,8 @@
 
         let zd = this.prefixArr[0] + (this.test.zONGJIANRQ.substr(0, 10)) + this.prefixArr[1] + "\r" + this.test.tIJIANZD;
 
-        !form.consultContent && (form.consultContent = zd);
-        form.consultContent && (form.consultContent = form.consultContent + "\r" + zd);
+        if(!form.consultContent) form.consultContent = zd;
+        else form.consultContent = form.consultContent + "\r" + zd
         form.consultContent = form.consultContent.substr(0, 5000)
 
         let loading = this.$weuijs.loading("加载中...");

@@ -8,7 +8,7 @@
           v-for="(item,index) in navs">{{item.name}}
       </li>
     </ul>
-    <div id="test-detail" class="main flex1 overflow-y-auto overflow-touch">
+    <div id="test-detail" class="main flex1 overflow-y-auto overflow-touch relative" @scroll="scroll($event)">
       <template v-if="currentIndex==0">
         <div class="wrap" v-html="info.htmlXJ"></div>
       </template>
@@ -52,7 +52,7 @@
             </div>
           </h3>
           <div class="jianyan-box" v-if="showPart[0]">
-            <jy-item v-for="(o,i) in examinationDetailsTest" :key="i" :o.sync="o" :i="i"
+            <jy-item ref="jy" v-for="(o,i) in examinationDetailsTest" :key="i" :o.sync="o" :i="i"
                      @open="openT"></jy-item>
           </div>
         </div>
@@ -64,7 +64,7 @@
             </div>
           </h3>
           <div class="jiancha-box" v-if="showPart[1]">
-            <jc-item v-for="(o,i) in examinationDetailsExamination" :key="i" :o="o" :i="i"
+            <jc-item ref="jc" v-for="(o,i) in examinationDetailsExamination" :key="i" :o="o" :i="i"
                      @open="openE"></jc-item>
           </div>
         </div>
@@ -81,7 +81,7 @@
   import JyItem from '../../../plugins/report/jyitem'
   import JcItem from '../../../plugins/report/jcitem'
   import {getENV} from "../../../lib/util";
-  import {TijianxjToHtml,TijianzdToHtml} from "../../../lib/filter";
+  import {TijianzdToHtml} from "../../../lib/filter";
 
   const NAVS = [
     {name: '体检异常'},
@@ -122,12 +122,22 @@
     },
 
     methods: {
+      scroll(e) {
+        let dom = e.target;
+        console.log("e", dom.scrollTop);
+      },
+
+
       show(index) {
         let val = this.showPart[index];
         this.showPart.splice(index, 1, !val);
       },
 
       openT(index) {
+        let scrollDom = document.getElementById('test-detail'), dom = this.$refs.jy[index].$el;
+        setTimeout(() => {
+          scrollDom.scrollTop = dom.offsetTop;
+        }, 200);
         this.examinationDetailsTest.map((res, i) => {
           if (i == index) res.open = !res.open;
           else res.open = false;
@@ -136,6 +146,10 @@
       },
 
       openE(index) {
+        let scrollDom = document.getElementById('test-detail'), dom = this.$refs.jc[index].$el;
+        setTimeout(() => {
+          scrollDom.scrollTop = dom.offsetTop;
+        }, 200);
         this.examinationDetailsExamination.map((res, i) => {
           if (i == index) res.open = !res.open;
           else res.open = false;
