@@ -69,7 +69,7 @@
         compat: {},
         form: {},
         test: {},
-        prefixArr: ['医生您好！我的体检有以下异常（报告日期为', '，您可在第一栏的院内报告中查看我的具体检报告）']
+        prefixArr: ['以下是我的体检异常描述（报告日期为', '，您可在第一栏的院内报告中查看我的具体检报告）']
       };
     },
     computed: {
@@ -118,8 +118,9 @@
 
         let zd = this.prefixArr[0] + (this.test.zONGJIANRQ.substr(0, 10)) + this.prefixArr[1] + "\r" + this.test.tIJIANZD;
 
-        if(!form.consultContent) form.consultContent = zd;
+        if (!form.consultContent) form.consultContent = zd;
         else form.consultContent = form.consultContent + "\r" + zd
+        form.consultContent = form.consultContent.replace(/\r/g, "\n");
         form.consultContent = form.consultContent.substr(0, 5000)
 
         let loading = this.$weuijs.loading("加载中...");

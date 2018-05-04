@@ -247,7 +247,7 @@ const TijianxjToHtml = (res) => {
 
 const TijianzdToHtml = (res) => {
   if (!res) return "";
-  res = res.replace(/\r/g, s => `<br/>`);
+  res = res.replace(/[\r\n]/g, s => `<br/>`);
   return res;
 }
 

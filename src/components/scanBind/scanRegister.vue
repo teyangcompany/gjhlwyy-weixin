@@ -29,10 +29,10 @@
             <label for="" class="phoneLabel"> <img class="idImg" src="../../../static/img/身份证.png" alt=""> </label>
             <input type="text" placeholder="请输入您的身份证号，可为空" class="numberInput" v-model="idCard">
           </div>
-          <div class="form verifyCode border-1px">
+          <!--<div class="form verifyCode border-1px">
             <label for="" class="codeLabel"> <img src="../../../static/img/密码.png" alt=""> </label>
             <input type="password" placeholder="8-20位大小写字母+数字" class="codeInput" v-model="passWord">
-          </div>
+          </div>-->
           <div class="form verifyCode border-1px" v-if="activityStatus">
             <label for="" class="codeLabel"> <img src="../../../static/img/密码.png" alt=""> </label>
             <input type="text" placeholder="邀请码" class="codeInput" v-model="inviteCode">
@@ -111,18 +111,17 @@
         if (this.realName == '') {
           this.verifyTips = "姓名不能为空"
           this.$refs.msg.show(this.verifyTips);
-        }else if (this.passWord == '') {
-          this.verifyTips = "密码不能为空"
-          this.$refs.msg.show(this.verifyTips);
-        } else if (this.passWord.length < 8) {
-          this.verifyTips = "密码长度太短"
-          this.$refs.msg.show(this.verifyTips);
+          // }else if (this.passWord == '') {
+          //   this.verifyTips = "密码不能为空"
+          //   this.$refs.msg.show(this.verifyTips);
+          // } else if (this.passWord.length < 8) {
+          //   this.verifyTips = "密码长度太短"
+          //   this.$refs.msg.show(this.verifyTips);
         } else {
-          this.passWord = sha512(hex_md5(this.passWord) + this.passWord);
+          // this.passWord = sha512(hex_md5(this.passWord) + this.passWord);
           let options = {
             captcha: this.codeValue,
             cid: this.cid,
-            patPassword: this.passWord,
             patName: this.realName,
             patIdcard: this.idCard,
             docId: this.docId,

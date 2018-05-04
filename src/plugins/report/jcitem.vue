@@ -1,7 +1,7 @@
 <template>
   <div class="jcitem">
-    <h6 @click="open" class="fs14"><font class="iconfont" v-if="!o.open">&#xe6b7;</font><font v-else
-                                                                                              class="iconfont">&#xe72c;</font>{{o.zUHEXMMC}}
+    <h6 @click="open" class="fs14"><font class="iconfont" v-if="!o.open">&#xe6b7;</font>
+      <font v-else class="iconfont">&#xe72c;</font>{{o.zUHEXMMC}} <span v-if="o.ycts" class="color_red">(异)</span>
     </h6>
     <ol v-if="o.list.length==1&&o.open" v-for="(oo,ii) in o.list">
       <li class="fs12 color_999 line2">项目名称:{{oo.xIANGMUMC}}</li>
@@ -28,20 +28,21 @@
         <thead>
         <th width="40">NO.</th>
         <th>项目/单位</th>
-        <th align="right" class="pr10">结果</th>
+        <th align="right" class="pr10">结果/参考值</th>
         </thead>
         <tbody>
         <tr v-for="(oo,ii) in o.list">
-          <td>{{ii+1}}</td>
+          <td class="no">{{ii+1}}</td>
           <td>
             <p class="p1">{{oo.xIANGMUMC}}</p>
             <p class="p2 fs10 color_999" v-if="oo.jILIANGDW">({{oo.jILIANGDW}})</p>
           </td>
           <td align="right">
             <template v-if="oo.xIANGMUMC!='牙体'">
-              <p class="p3 right">{{oo.tIJIANJG}}
-                <span v-if="oo.yICHANGTS==0">↓</span><span
-                  v-if="oo.yICHANGTS==1">↑</span></p>
+              <p class="p3 right" :class="['YICHANGTS'+oo.yICHANGTS]">{{oo.tIJIANJG}} <span
+                v-if="oo.yICHANGTS==0">↓</span><span
+                v-if="oo.yICHANGTS==1">↑</span></p>
+              <p class="p2 fs10 color_999 right">参考值:{{oo.cANKAOXX}}</p>
             </template>
             <template v-else>
               <yanti-svg :data="oo.tIJIANJG"></yanti-svg>
@@ -118,6 +119,18 @@
 <style scoped lang="scss">
   @import "../../common/public";
 
+  .YICHANGTS0, .YICHANGTS1 {
+    color: red;
+  }
+
+  .YICHANGTS2 {
+    color: #2AB6B3;
+  }
+
+  .no {
+    color: #999;
+  }
+
   .pr10 {
     padding-right: 10px;
   }
@@ -187,8 +200,17 @@
   }
 
   .info {
-    background-color: #f6f6f6;
     color: #333;
+    ul {
+      background-color: #f6f6f6;
+      &:first-child {
+        margin-top: -10px;
+        padding-top: 10px;
+      }
+      &:nth-child(2){
+        padding-bottom: 10px;
+      }
+    }
     li {
       label {
         color: #666666;

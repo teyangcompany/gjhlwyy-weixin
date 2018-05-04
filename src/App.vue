@@ -32,7 +32,7 @@
       }
       p {
         padding: 10px;
-        font-size: 12px;
+        font-size: 13px;
         background-color: $bgColor;
         border-radius: 5px;
         color: #666666;
