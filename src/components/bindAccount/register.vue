@@ -14,7 +14,7 @@
         </div>
         <div class="form phone border-1px">
           <label for="" class="phoneLabel"> <img class="idImg" src="../../../static/img/身份证.png" alt=""> </label>
-          <input type="text" placeholder="请输入您的身份证号，可为空" class="numberInput" v-model="idCard">
+          <input type="text" placeholder="请输入您的身份证号(选填)" class="numberInput" v-model="idCard">
         </div>
         <!--<div class="form verifyCode border-1px">
           <label for="" class="codeLabel"> <img src="../../../static/img/密码.png" alt=""> </label>
@@ -22,7 +22,7 @@
         </div>-->
         <div class="form verifyCode border-1px" v-if="activityStatus">
           <label for="" class="codeLabel"> <img src="../../../static/img/密码.png" alt=""> </label>
-          <input type="text" placeholder="请输入邀请码" class="codeInput" v-model="inviteCode">
+          <input type="text" placeholder="如有人推荐可输入邀请码" class="codeInput" v-model="inviteCode">
         </div>
         <div class="buttonWrap">
           <button class="bottom" @touchend="confirmRegister()">确认</button>

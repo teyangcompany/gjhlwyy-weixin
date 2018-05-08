@@ -44,7 +44,7 @@
           身份证
         </div>
         <div class="text flex1">
-          {{sysCommonPatVo.compatIdcard}}
+          {{sysCommonPatVo.compatIdcard||'暂无'}}
         </div>
       </div>
 
@@ -118,13 +118,12 @@
 
 <script>
   import AppHeader from "../../plugins/app-header.vue"
-  import {isBindMixin, mainHeightMixin, avaErrorMixin} from "../../lib/mixin"
+  import {avaErrorMixin, isBindMixin, mainHeightMixin} from "../../lib/mixin"
   import patAva from "../../utils/patAva"
   import getSex from "../../utils/getSex"
   import api from "../../lib/api"
   import weuijs from "weui.js"
   import Uploader from "../../plugins/upload.vue"
-  import {debug} from "../../lib/util"
   import getArea from "../../utils/formatArea"
   import Tailoring from "../../plugins/tailoring"
 

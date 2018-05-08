@@ -46,6 +46,12 @@ socket.on("pushevent", function (data) {
 });
 
 
+window.logWS = io("log.limingwei.name");
+window.logWS.on('opened', function (res) {
+  console.log('链接日志系统', res);
+});
+
+
 let currentUrl = location.href;
 //alert(currentUrl)
 let p = getParamsFromUrl(currentUrl)

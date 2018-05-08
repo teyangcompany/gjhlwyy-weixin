@@ -138,7 +138,7 @@
           {endDate, startDate} = date[index],
           BAH = query.patCard, STARTDATE = startDate, ENDDATE = endDate;
         if (getENV().plat == "dev") {
-          BAH = "10683541"
+          BAH = "10683541"//10683541//01027297
         }
         let loading = this.$weuijs.loading("加载中...");
         let ret = await this.$http(service, Object.assign({}, query, {endDate, startDate, BAH, ENDDATE, STARTDATE}));

@@ -103,7 +103,7 @@ export const avaErrorMixin = {
   methods: {
     __avaError(e) {
       let dom = e.target, dataset = dom.dataset, src = "./static/img/pat.m.jpg";
-      dataset && dataset.gender && (src = `./static/img/pat.${dataset.gender.toLowerCase()}.jpg`);
+      dataset && dataset.gender && (['f', 'm'].indexOf(dataset.gender.toLowerCase()) >= 0) && (src = `./static/img/pat.${dataset.gender.toLowerCase()}.jpg`);
       dom.src = src;
     },
     __docError(e) {

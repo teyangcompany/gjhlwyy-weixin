@@ -14,7 +14,7 @@
                             <span>{{ patientInfo.patName
                               }} <i
                                 :class="[patientInfo.sysCommonPatVo.isRealnameAuth?'ok':'no']">{{patientInfo.sysCommonPatVo.isRealnameAuth ? "已认证" : "未认证"}}</i></span>
-              <span>{{ patientInfo.patGender == 'M' ? '男' : '女'}} {{ patientInfo.age }}岁</span>
+              <span>{{ patientInfo.patGender|getGender}} {{ patientInfo.age }}岁</span>
 
             </div>
             <img class="look" src="../../static/img/查看更多.png" alt="">
@@ -101,10 +101,11 @@
   import {tokenCache} from '../lib/cache'
   import patAva from "../utils/consultPatAva"
   import weuijs from "weui.js"
+  import {getGender} from "../lib/filter";
 
   export default {
     filters: {
-      patAva
+      patAva, getGender
     },
     mixins: [isLoginMixin, isBindMixin, avaErrorMixin],
     data() {

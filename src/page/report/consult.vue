@@ -1,11 +1,11 @@
 <template>
   <div class="page team-consult">
-    <app-header ref="header" title="团队咨询">
+    <app-header ref="header" title="体检咨询">
       <i slot="back"></i>
     </app-header>
     <div class="main overflow-touch" ref="main">
       <div class="notice">
-        请务必保证填写资料的真实、详细;<br>若该团队医生48小时未回答将为您自动退款
+        来自浙二专业的健康管理团队为您解读报告<br>（医生会在48小时内回复您，否则为您退款）
       </div>
       <div class="info wrap">
         <div class="h3">咨询信息</div>
@@ -33,6 +33,7 @@
           <textarea v-model="form.consultContent" class="flex1"
                     placeholder="您还可继续输入您要咨询的内容"
                     rows="20"></textarea>
+          <div class="right color_666 fs12">{{form.consultContent?form.consultContent.length:0}}/500</div>
         </div>
         <piclist-upload class="piclist" @uploaded="getPics"></piclist-upload>
       </div>
@@ -43,7 +44,7 @@
           <div class="thumb flex0">
             <img :src="info.teamAvatar" alt="">
           </div>
-          <div class="resume flex1 fs12 color_666" v-html="info.teamResume"></div>
+          <div class="resume flex1 fs12 color_666" v-html="info.teamMembers"></div>
         </div>
         <h3 class="fs14 pl15 pr15">团队擅长</h3>
         <div class="fs12 color_666 p15" v-html="info.teamSkill"></div>
@@ -118,8 +119,15 @@
 
         let zd = this.prefixArr[0] + (this.test.zONGJIANRQ.substr(0, 10)) + this.prefixArr[1] + "\r" + this.test.tIJIANZD;
 
-        if (!form.consultContent) form.consultContent = zd;
-        else form.consultContent = form.consultContent + "\r" + zd
+        if (!form.consultContent) {
+          this.$refs.msg.show('请填写咨询内容');
+          return false
+        }
+        else if (form.consultContent.length > 500) {
+          this.$refs.msg.show('咨询内容不能大于500个字');
+          return false
+        }
+        else form.consultContent = form.consultContent + "\r" + zd;
         form.consultContent = form.consultContent.replace(/\r/g, "\n");
         form.consultContent = form.consultContent.substr(0, 5000)
 
@@ -202,11 +210,16 @@
       padding-left: px2rem(15px);
     }
     .textarea {
+      flex-direction: column;
       @include border(top);
       height: px2rem(100px);
       textarea {
         padding: 10px 15px;
         height: px2rem(100px);
+      }
+      div {
+        padding-right: 15px;
+        padding-bottom: 5px;
       }
     }
     .info {

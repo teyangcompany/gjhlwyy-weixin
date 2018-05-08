@@ -3,7 +3,7 @@
     <app-header title="我的礼券" ref="header">
       <i class="back" slot="back"></i>
     </app-header>
-    <div class="main overflow-y-auto" ref="main">
+    <div class="main overflow-y-auto overflow-touch" ref="main">
       <router-link v-if="activityStatus" tag="div" to="/coupons/recommended"
                    class="recommended weui-cell weui-cell_access">
         <div class="weui-cell__hd"><img src="../../../static/img/my/recommended.png" alt=""

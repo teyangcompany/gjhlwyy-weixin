@@ -132,12 +132,13 @@ const getGender = function (str) {
   if (!str) {
     return "";
   }
-  if (str.toLowerCase() == 'm') {
-    return '男';
+  str = str.toLowerCase();
+  let sex = {
+    m: '男',
+    f: '女',
+    n: '未知'
   }
-  else {
-    return "女";
-  }
+  return sex[str] ? sex[str] : sex.n
 }
 const week = function (item) {
   var date = ""
@@ -240,6 +241,7 @@ const splitTime = (res) => {
 
 const TijianxjToHtml = (res) => {
   if (!res) return "";
+  res = res.replace(/\r/g, res => `<br/>`)
   res = res.replace(/[\d]+\.[^\d]+?[：:]{1}/g, s => `<h5>${s}</h5><p>`);
   res = res.replace(/[↑↓]{1}/g, s => `<font class="red">${s}</font>`);
   return res;

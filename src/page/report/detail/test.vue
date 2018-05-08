@@ -74,7 +74,7 @@
         <p style="height: 10px">&nbsp;</p>
       </template>
     </div>
-    <router-link :to="{path:'/report/consult/'+team}" tag="div" class="sub center flex0">咨询医生</router-link>
+    <router-link :to="{path:'/report/consult/'+team}" tag="div" class="sub center flex0">体检咨询</router-link>
     <msg ref="msg"></msg>
     <div v-if="showCurrT" class="fixed fixedtable">
       <table>
@@ -93,7 +93,7 @@
   import JyItem from '../../../plugins/report/jyitem'
   import JcItem from '../../../plugins/report/jcitem'
   import {getENV} from "../../../lib/util";
-  import {TijianzdToHtml} from "../../../lib/filter";
+  import {TijianxjToHtml} from "../../../lib/filter";
 
   const NAVS = [
     {name: '体检异常'},
@@ -123,10 +123,11 @@
       this.team = getENV().team;
       this.info = testCache.get();
       this.pat = compatCache.get();
-      this.info.htmlXJ = TijianzdToHtml(this.info.tIJIANZD);
+      this.info.htmlXJ = TijianxjToHtml(this.info.zONGJIANXJ);
       this.info.zONGJIANJY = this.info.zONGJIANJY.replace(/\r/g, res => `<br/>`);
       this.info.zONGJIANJY = this.info.zONGJIANJY.replace(/[\d]+\.[^<]+?<br\/>/g, res => `<h5>${res}</h5><p>`);
       this.getData(this.info.tIJIANBM, this.info.bAH);
+      this.getTeam()
     },
     mounted() {
 
@@ -143,18 +144,25 @@
       }
     },
     methods: {
-      reset() {
+      reset(type) {
         this.showCurrT = false;
-        this.examinationDetailsTest.map((res, i) => {
-          res.open = false;
-          return res;
-        })
-        this.examinationDetailsExamination.map((res, i) => {
-          res.open = false;
-          return res;
-        })
-      },
+        switch (type) {
+          case "t":
+            this.examinationDetailsTest.map((res, i) => {
+              res.open = false;
+              return res;
+            });
+            break;
+          case "e":
+            this.examinationDetailsExamination.map((res, i) => {
+              res.open = false;
+              return res;
+            })
+            break;
+        }
 
+
+      },
 
       scrollToElement(scrollDom, dom) {
         this.currTable = dom.querySelector('.table');
@@ -175,7 +183,6 @@
         }
       },
 
-
       show(index) {
         let val = this.showPart[index];
         this.showPart.splice(index, 1, !val);
@@ -186,7 +193,7 @@
         setTimeout(() => {
           this.scrollToElement(scrollDom, dom);
         }, 200);
-        this.reset();
+        this.reset('e');
         this.examinationDetailsTest.map((res, i) => {
           if (i == index) res.open = !res.open;
           else res.open = false;
@@ -199,12 +206,21 @@
         setTimeout(() => {
           this.scrollToElement(scrollDom, dom);
         }, 200);
-        this.reset();
+        this.reset('t');
         this.examinationDetailsExamination.map((res, i) => {
           if (i == index) res.open = !res.open;
           else res.open = false;
           return res;
         })
+      },
+
+      async getTeam() {
+        let ret = await this.$http('nethos.system.param.string', {key: 'EXAM_TEAM', defaultString: 'EXAM_TEAM'})
+        if (ret.code == 0) {
+          this.team = ret.obj;
+        } else {
+          this.$refs.msg.show(ret.msg || "接口错误" + ret.code);
+        }
       },
 
       async getData(TIJIANBM, BAH) {

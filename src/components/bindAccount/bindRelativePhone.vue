@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="bindPhone">
+  <div class="page">
+    <div class="bindPhone flex1 overflow-y-auto overflow-touch">
       <div class="bindPhoneCenter">
         <div class="bigMiddle">
           <p>
@@ -43,13 +43,13 @@
   import mask from '../../base/mask'
   import verify from '../../base/verify'
   import weuijs from 'weui.js'
+  import {openidCache} from "../../lib/cache";
   import {getENV} from "../../lib/util";
-  import {openidCache} from '../../lib/cache'
-  import {isLoginMixin} from "../../lib/mixin"
+  import {isBindMixin, isLoginMixin, scrollIntoViewMixin} from "../../lib/mixin"
   import {between, minLength, required} from 'vuelidate/lib/validators'
 
   export default {
-    mixins: [isLoginMixin],
+    mixins: [isLoginMixin, scrollIntoViewMixin, isBindMixin],
     data() {
       return {
         phone: "",
@@ -75,34 +75,38 @@
         between: between(20, 30)
       }
     },
-    created() {
+    async created() {
       this.backPath = this.$route.query.backPath
       this.docId = this.$route.query.docId
-      this.getPatInfo();
+      if (this.docId) {
+        this.$router.replace({
+          path: "/onlineDoctorCard",
+          query: {docId: this.docId}
+        });
+      } else {
+        let ret = await this._isBind();
+        if (ret) {
+          this.$router.replace({
+            path: "/Profile",
+          });
+        }
+      }
     },
     methods: {
-      getPatInfo() {
-        api("nethos.pat.info.get", {}).then((data) => {
-          if (data.code == 0) {
-            if (this.docId) {
-              this.$router.push({
-                path: "/onlineDoctorCard",
-                query: {docId: this.docId}
-              });
-            } else {
-              this.$router.replace({
-                path: "/profile",
-              });
-            }
-          } else {
-            if (this.docId) {
-              this.$router.push({
-                path: "/scanBind",
-                query: {docId: this.docId}
-              });
-            }
-          }
-        })
+      async bind() {
+        let data = await api("nethos.pat.wechat.bind", {
+          captcha: this.code,
+          cid: this.cid,
+          openId: openidCache.get()
+        });
+        if (data.code == 0) {
+          this.$router.replace({
+            path: '/login',
+            query: {backPath: this.backPath}
+          })
+        } else {
+          this.$refs.msg.show(data.msg || "接口错误" + data.code);
+        }
       },
       async getCode() {
         if (this.phone == "") {
@@ -129,63 +133,39 @@
         }
         loading.hide();
       },
-      verifyCode() {
+      async verifyCode() {
         if (this.phone == '') {
           this.$refs.msg.show("手机号不能为空");
         }
         else if (this.code == '') {
           this.$refs.msg.show("验证码不能为空");
         }
+        else if (!this.cid) {
+          this.$refs.msg.show("验证码不正确");
+        }
         else {
+          let ret = await api('nethos.system.captcha.checkcaptcha.v2', {
+            captcha: this.code,
+            cid: this.cid
+          })
+          if (ret.code != 0) {
+            this.$refs.msg.show("验证码不正确");
+            return false;
+          }
+
           if (this.regStatus == 'REGISTER') {
             this.$router.replace({
               path: '/register',
-              query: {cid: this.cid, codeValue: this.codeValue, backPath: this.backPath}
+              query: {cid: this.cid, codeValue: this.code, backPath: this.backPath}
             })
           } else if (this.regStatus == 'BIND') {
-            api("nethos.pat.wechat.bind", {
-              captcha: this.code,
-              cid: this.cid,
-              openid: openidCache.get()
-            }).then((data) => {
-              if (data.code == 0) {
-                this.$router.replace({
-                  path: '/login',
-                  query: {backPath: this.backPath}
-                })
-              } else {
-                this.$refs.msg.show(data.msg || "接口错误" + data.code);
-              }
-            })
+            this.bind()
           }
         }
-        console.log(this.cid)
       },
       focus() {
-        document.getElementsByClassName("formContent")[0].style.height = window.innerHeight
-        document.getElementsByClassName("formContent")[0].style.backgroundColor = 'white'
-        console.log(document.getElementsByTagName("body")[0].offsetHeight)
-//             setInterval(function(){
-//                 console.log("123")
-//                 document.getElementsByClassName("formContent")[0].scrollIntoView()
-//             },200)
-        let UA = window.navigator.userAgent.toLocaleLowerCase();
-        if (/iphone/.test(UA)) {
-          window.device = "iphone";
-        }
-        if (/android/.test(UA)) {
-          window.device = "android";
-        }
-        if (window.device == "iphone") {
-//          this.ios = true
-        } else {
-          this.showMask = true
-        }
-
-
       },
       blur() {
-        this.showMask = false
       }
     },
     components: {
@@ -214,27 +194,18 @@
 <style scoped lang="scss">
   @import '../../common/public.scss';
 
+  .page {
+    flex-direction: column;
+  }
+
   .bindPhone {
-    position: fixed;
-    top: 0px;
-    left: 0;
-    right: 0;
-    bottom: 0;
     .verifyCenter {
-      position: fixed;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     .bindPhoneCenter {
       width: 690rem/$rem;
       margin: 0 auto;
       .bigMiddle {
-        margin-top: 200rem/$rem;
+        margin-top: 100rem/$rem;
         font-size: 32rem/$rem;
         color: #333333;
         display: flex;
@@ -261,10 +232,7 @@
         text-align: center;
       }
       .aboutNumber {
-        position: fixed;
-        bottom: 100rem/$rem;
         background-color: white;
-        z-index: 100;
         border-radius: 7px;
         /*<!--margin-top: 18rem/$rem;-->*/
         /*<!--height:500rem/$rem;-->*/

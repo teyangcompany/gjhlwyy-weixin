@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page overflow-y-auto overflow-touch">
     <!--<v-header :title="title" :rightTitle="rightTitle"></v-header>-->
     <div class="bindPhone">
       <div class="bindPhoneCenter">
@@ -78,20 +78,11 @@
   @import '../../common/public.scss';
 
   .bindPhone {
-    position: fixed;
-    top: 50px;
-    left: 0;
-    right: 0;
-    bottom: 0;
     .bindPhoneCenter {
       width: 690rem/$rem;
       margin: 0 auto;
+      margin-top: 100rem/$rem;
       .bigMiddle {
-        position: fixed;
-        top: 280rem/$rem;
-        left: 0;
-        right: 0;
-        bottom: 500rem/$rem;
         font-size: 32rem/$rem;
         color: #333333;
         display: flex;
@@ -115,13 +106,10 @@
         }
       }
       .aboutNumber {
-        position: fixed;
-        bottom: 0;
-        height: 500rem/$rem;
         .buttonWrap {
           width: 690rem/$rem;
           height: 90rem/$rem;
-          margin-top: 308rem/$rem;
+          margin-top: 100rem/$rem;
           text-align: center;
           button.bottom {
             width: 650rem/$rem;

@@ -1,5 +1,5 @@
 <template>
-  <div class="page overflow-y-auto">
+  <div class="page overflow-y-auto overflow-touch">
     <div class="bindPhone">
       <div class="bindPhoneCenter">
         <div class="bigMiddle">
@@ -54,8 +54,9 @@
   import verify from '../../base/verify'
   import api from '../../lib/api.js'
   import weuijs from 'weui.js'
-  import {scrollIntoViewMixin} from "../../lib/mixin";
-  import {openidCache} from '../../lib/cache'
+  import {openidCache} from "../../lib/cache";
+  import {isBindMixin, scrollIntoViewMixin} from "../../lib/mixin";
+  import {getENV} from "../../lib/util";
 
   export default {
     data() {
@@ -85,6 +86,24 @@
       blur() {
 
       },
+
+      async bind() {
+        let data = await api("nethos.pat.wechat.bind", {
+          captcha: this.code,
+          cid: this.cid,
+          openId: openidCache.get()
+        })
+        if (data.code == 0) {
+          this.$router.replace({
+            path: '/scanLogin',
+            query: {backPath: this.backPath, docId: this.docId}
+          })
+        } else {
+          this.$refs.msg.show(data.msg);
+        }
+      },
+
+
       async getDocInfo() {
         let loading = weuijs.loading("加载中...");
         let data = await api("nethos.doc.card", {
@@ -93,35 +112,31 @@
         loading.hide();
         this.docInfo = data.obj.sysDoc
       },
-      verifyCode() {
+      async verifyCode() {
         if (this.phone == '') {
           this.verifyTips = "手机号不能为空"
           this.$refs.msg.show(this.verifyTips);
         }
+        else if (!this.cid) {
+          this.$refs.msg.show("验证码不正确");
+        }
         else {
+          let ret = await api('nethos.system.captcha.checkcaptcha.v2', {
+            captcha: this.code,
+            cid: this.cid
+          })
+          if (ret.code != 0) {
+            this.$refs.msg.show("验证码不正确");
+            return false;
+          }
+
           if (this.regStatus == 'REGISTER') {
             this.$router.replace({
               path: '/scanRegister',
-              query: {cid: this.cid, codeValue: this.codeValue, backPath: this.backPath, docId: this.docId}
+              query: {cid: this.cid, codeValue: this.code, backPath: this.backPath, docId: this.docId}
             })
           } else if (this.regStatus == 'BIND') {
-            api("nethos.pat.wechat.bind", {
-              captcha: this.codeValue,
-              cid: this.cid,
-              openid: openidCache.get()
-            }).then((data) => {
-              if (data.code == 0) {
-                this.$router.replace({
-                  path: '/scanLogin',
-                  query: {backPath: this.backPath, docId: this.docId}
-                })
-              } else if (data.msg == '') {
-                this.verifyTips = '网络错误，稍候重试'
-                this.$refs.msg.show(this.verifyTips);
-              } else {
-                this.$refs.msg.show(data.msg);
-              }
-            })
+            this.bind();
           }
         }
       },
@@ -138,6 +153,10 @@
             this.regStatus = data.regStatus
             this.cid = data.obj.cid
             this.codeValue = data.obj.value
+
+            let env = getENV();
+            (env.plat !== 'pro') && (this.codeValue) && (this.code = this.codeValue);
+
             this.a = setInterval(() => {
               this.countdown--
             }, 1000)
@@ -150,7 +169,7 @@
       }
     },
     filters: {docAva},
-    mixins: [scrollIntoViewMixin],
+    mixins: [scrollIntoViewMixin, isBindMixin],
     components: {
       "VHeader": header,
       verify, Msg

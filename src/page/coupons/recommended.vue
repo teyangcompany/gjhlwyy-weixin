@@ -3,7 +3,7 @@
     <app-header title="推荐有礼" ref="header">
       <i slot="back"></i>
     </app-header>
-    <div v-if="!loading" class="main overflow-y-auto" ref="main">
+    <div v-if="!loading" class="main overflow-y-auto overflow-touch" ref="main">
       <div class="banner overflow-hidden">
         <img src="../../../static/img/my/coupon-banner.png" alt="">
       </div>

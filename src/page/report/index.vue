@@ -79,7 +79,7 @@
     },
     methods: {
       async bindCard(compatId) {
-        let loading = thsi.$weuijs.loading("加载中...");
+        let loading = this.$weuijs.loading("加载中...");
         let data = await this.$http('nethos.book.compat.bind', {compatId})
         loading.hide();
         if (data.code == 0) {
@@ -91,7 +91,9 @@
             }
           )
         } else {
-          this.$weuijs.alert(data.msg);
+          setTimeout(() => {
+            this.$weuijs.alert(data.msg)
+          }, 500)
         }
       },
 

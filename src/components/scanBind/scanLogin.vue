@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page overflow-touch overflow-y-auto">
     <!--<v-header :title="title" :rightTitle="rightTitle"></v-header>-->
     <div class="bindPhone">
       <div class="bindPhoneCenter">
@@ -17,10 +17,10 @@
             </div>
           </div>
         </div>
-        <div class="tips">
+        <div class="tips relative">
           <p>您已经成功关注我</p>
           <p>欢迎在需要的时候向我咨询</p>
-          <div class="nav"></div>
+          <div class="nav absolute"></div>
         </div>
         <div class="aboutNumber">
           <div class="buttonWrap">
@@ -96,20 +96,10 @@
   @import '../../common/public.scss';
 
   .bindPhone {
-    position: fixed;
-    top: 50px;
-    left: 0;
-    right: 0;
-    bottom: 0;
     .bindPhoneCenter {
       width: 690rem/$rem;
       margin: 0 auto;
       .bigMiddle {
-        position: fixed;
-        top: 50px;
-        left: 0;
-        right: 0;
-        bottom: 500rem/$rem;
         font-size: 32rem/$rem;
         color: #333333;
         display: flex;
@@ -117,7 +107,6 @@
         justify-content: center;
         .doctorFunc {
           width: 100%;
-          height: 210px;
           background-color: white;
           .doctorImg {
             width: 100%;
@@ -172,8 +161,6 @@
         }
       }
       .tips {
-        position: absolute;
-        top: 500rem/$rem;
         width: 690rem/$rem;
         text-align: center;
         border: 1px solid #00ced1;
@@ -192,9 +179,9 @@
           padding-bottom: 25rem/$rem;
         }
         .nav {
-          position: absolute;
-          top: -8px;
-          right: 332rem/$rem;
+          top: -7px;
+          left: 50%;
+          margin-left: (-13px/2);
           overflow: hidden;
           width: 13px;
           height: 13px;
@@ -208,13 +195,10 @@
         }
       }
       .aboutNumber {
-        position: fixed;
-        bottom: 0;
-        height: 500rem/$rem;
         .buttonWrap {
           width: 690rem/$rem;
           height: 90rem/$rem;
-          margin-top: 308rem/$rem;
+          margin-top: 100rem/$rem;
           text-align: center;
           button.bottom {
             width: 650rem/$rem;

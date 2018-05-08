@@ -294,6 +294,8 @@
             path: '/allConsultSuccess',
             query: {consultId: that.consultId}
           })
+        } else {
+          this.$weuijs.alert(data.msg);
         }
       }
     },
