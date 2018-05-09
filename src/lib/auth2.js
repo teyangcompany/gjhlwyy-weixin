@@ -31,7 +31,7 @@ export default (cb) => {
   }
   /*非微信打开*/
   else {
-    openidCache.set(hex_md5('8'));
+    openidCache.set('omrmBv98kC28OfJf1dbEo33qTKBU');
     // omrmBv61sj9FDFuma9qdi2pOrJPw
     // omrmBvwVz1JncKnh0ee2kGVdNSR8
     // omrmBv1p9porIc2z0IZkPm4q7dS4

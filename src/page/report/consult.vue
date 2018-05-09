@@ -117,7 +117,7 @@
           form.attaList = form.attaIdList;
         }
 
-        let zd = this.prefixArr[0] + (this.test.zONGJIANRQ.substr(0, 10)) + this.prefixArr[1] + "\r" + this.test.tIJIANZD;
+        let zd = this.prefixArr[0] + (this.test.zONGJIANRQ.substr(0, 10)) + this.prefixArr[1] + "\r" + this.test.zONGJIANXJ;
 
         if (!form.consultContent) {
           this.$refs.msg.show('请填写咨询内容');
