@@ -145,7 +145,6 @@
             this.$router.replace({path: `/videoPay`, query: {consultId: ret.obj.consultId}});
             return
           }
-
           this.$router.replace({path: `/team/consult/${ret.obj.consultId}`})
         }
         loading.hide();

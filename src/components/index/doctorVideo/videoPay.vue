@@ -155,7 +155,10 @@
           buttons: [
             {
               label: "暂不支付", type: 'default', onClick: () => {
-                this.$router.go(-1);
+                let {query} = this.$route;
+                if (query && query.consultId) {
+                  this.$router.replace('/team/consult/' + query.consultId);
+                } else this.$router.go(-1);
                 /*let {query} = this.$route;
                 if (query && query.back && query.back == 'list') {
                   this.$router.go(-1);
