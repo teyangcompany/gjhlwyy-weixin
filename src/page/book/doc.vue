@@ -148,6 +148,11 @@
         let ret = await this._isBind()
         if (ret) {
           this.$refs.num.show(data);
+        } else {
+          this.$router.push({
+            path: "/bindRelativePhone",
+            query: {backPath: this.$route.fullPath}
+          });
         }
       },
 

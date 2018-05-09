@@ -85,7 +85,7 @@
     },
     created() {
       this.test = testCache.get();
-      this.test.htmlXJ = TijianzdToHtml(this.test.tIJIANZD);
+      this.test.htmlXJ = TijianzdToHtml(this.test.zONGJIANXJ);
       this.compat = compatCache.get();
       let {id} = this.$route.params;
       id && (this.id = id) && (this.getDetail());

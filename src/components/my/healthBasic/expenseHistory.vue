@@ -64,7 +64,10 @@
       }
     },
     mounted() {
-      if (OPEN_MYPAY_VERSION) {
+      let {query} = this.$route;
+      if (query && query.consultId) {
+        this.$route.replace('/team/consult/' + query.consultId);
+      }else if (OPEN_MYPAY_VERSION) {
         this.$router.replace('/my/pay')
       } else {
         this.getDate()
