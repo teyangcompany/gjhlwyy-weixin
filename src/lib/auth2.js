@@ -1,5 +1,5 @@
 import {openidCache} from "./cache"
-import {getAppid, getENV} from "./util"
+import {getENV} from "./util"
 
 // const APPID = "wxa49f90b4ff678ef2";
 
@@ -22,8 +22,6 @@ export default (cb) => {
     /*本地无openid*/
     else {
       let callback = location.href;
-      let APPID = getAppid();
-      let env = getENV();
       callback = encodeURIComponent(callback);
       // location.replace(`http://test-zheer-wx.hztywl.cn/oauth2/?appid=${APPID}&callback=${callback}&plat=${env.plat}`);
       location.replace('login.html?callback=' + callback);
@@ -31,7 +29,8 @@ export default (cb) => {
   }
   /*非微信打开*/
   else {
-    openidCache.set('omrmBv98kC28OfJf1dbEo33qTKBU');
+    let env = getENV();
+    openidCache.set(env.plat !== 'pro' ? 'omrmBv98kC28OfJf1dbEo33qTKBU' : '');
     // omrmBv61sj9FDFuma9qdi2pOrJPw
     // omrmBvwVz1JncKnh0ee2kGVdNSR8
     // omrmBv1p9porIc2z0IZkPm4q7dS4
