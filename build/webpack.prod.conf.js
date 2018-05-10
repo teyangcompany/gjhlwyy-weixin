@@ -85,7 +85,8 @@ var webpackConfig = merge(baseWebpackConfig, {
       filename: 'login.html',
       template: 'login.ejs',
       inject: true,
-      chunks: ['login'],
+      chunks: ['vendor', 'login'],
+      chunksSortMode: 'dependency',
       version: utils.getVersion()
     }),
     // split vendor js into its own file
