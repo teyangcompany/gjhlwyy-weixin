@@ -30,7 +30,8 @@ export default (cb) => {
   /*非微信打开*/
   else {
     let env = getENV();
-    openidCache.set(env.plat !== 'pro' ? 'omrmBv98kC28OfJf1dbEo33qTKBU' : '');
+    console.log('process.env', process.env);
+    // openidCache.set(env.plat !== 'pro' ? 'omrmBv98kC28OfJf1dbEo33qTKBU' : '');
     // omrmBv61sj9FDFuma9qdi2pOrJPw
     // omrmBvwVz1JncKnh0ee2kGVdNSR8
     // omrmBv1p9porIc2z0IZkPm4q7dS4
