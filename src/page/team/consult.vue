@@ -32,7 +32,7 @@
       <div class="wrap">
         <div class="h3 overflow-hidden">填写病情资料<span class="float-right color_777">{{total}}/500</span></div>
         <div class="flex textarea">
-          <textarea v-model="form.consultContent" class="flex1"
+          <textarea v-model="form.consultContent" class="flex1 fs14"
                     placeholder="请详细描述患者的主要症状、持续时间、已经确诊的疾病和接诊医生的意见。(如有症状照片、病历、检查单，可在下方上传)"
                     rows="20"></textarea>
         </div>

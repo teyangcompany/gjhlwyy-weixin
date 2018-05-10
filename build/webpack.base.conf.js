@@ -9,6 +9,7 @@ function resolve(dir) {
 
 module.exports = {
   entry: {
+    login: './src/login.js',
     app: './src/main.js'
   },
   output: {

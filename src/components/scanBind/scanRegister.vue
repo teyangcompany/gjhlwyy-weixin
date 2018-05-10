@@ -118,6 +118,13 @@
           //   this.verifyTips = "密码长度太短"
           //   this.$refs.msg.show(this.verifyTips);
         } else {
+          if (this.idCard) {
+            let ret1 = await api('nethos.pat.checkcaptchaidcard', {patIdcard: this.idCard});
+            if (ret1.code != 0) {
+              this.$refs.msg.show(ret1.msg);
+              return false;
+            }
+          }
           // this.passWord = sha512(hex_md5(this.passWord) + this.passWord);
           let options = {
             captcha: this.codeValue,

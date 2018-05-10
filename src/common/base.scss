@@ -108,6 +108,13 @@ $i: 6;
   }
 }
 
+/*字体大小*/
+@for $i from 10 to 19 {
+  .fs#{$i} {
+    font-size: #{$i}px;
+  }
+}
+
 /*icon大小*/
 @for $i from 18 to 101 {
   .weui-icon-size#{$i} {

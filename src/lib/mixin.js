@@ -1,4 +1,4 @@
-import {openidCache} from "./cache"
+import {historyCache, openidCache} from "./cache"
 import api from "./api"
 import {getENV} from "./util";
 
@@ -174,10 +174,14 @@ export const doBackMixin = {
   },
   methods: {
     doBackMixin_doBack() {
-      if (history.length <= 1) {
+      if (history.length == 1) {
         wx && wx.closeWindow();
-      } else {
-        this.$router.go(-1);
+      }
+      else if (historyCache.get() == this.$route.path) {
+        wx && wx.closeWindow();
+      }
+      else {
+        this.$router.go(-1)
       }
     },
     async doBackMixin_getJssdkConfig() {

@@ -30,7 +30,7 @@
 
       <div class="wrap">
         <div class="flex textarea">
-          <textarea v-model="form.consultContent" class="flex1"
+          <textarea v-model="form.consultContent" class="flex1 fs14"
                     placeholder="您还可继续输入您要咨询的内容"
                     rows="20"></textarea>
           <div class="right color_666 fs12">{{form.consultContent?form.consultContent.length:0}}/500</div>

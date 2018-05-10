@@ -71,7 +71,6 @@
       },
       async sub() {
         let {query} = this.$route;
-
         let service = 'nethos.pat.info.perfect.anonym';
         if (this.user) {
           this.form.patId = this.user.patId;

@@ -5,7 +5,7 @@ import weuijs from 'weui.js'
 
 import AppHeader from '../plugins/app-header'
 import Msg from '../plugins/msg'
-
+import {historyCache} from "./cache";
 
 export default {
   install() {
@@ -17,6 +17,9 @@ export default {
     /*添加全局mixin*/
     Vue.mixin({
       components: {AppHeader, Msg},
+      created() {
+        if (history.length == 1) historyCache.set(this.$route.path);
+      },
       methods: {}
     });
   }

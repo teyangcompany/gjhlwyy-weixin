@@ -69,6 +69,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       filename: config.build.index,
       template: 'index.ejs',
       inject: true,
+      chunks: ['app', 'vendor', 'manifest'],
       version: utils.getVersion(),
       minify: {
         removeComments: true,
@@ -79,6 +80,13 @@ var webpackConfig = merge(baseWebpackConfig, {
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'login.html',
+      template: 'login.ejs',
+      inject: true,
+      chunks: ['login'],
+      version: utils.getVersion()
     }),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({

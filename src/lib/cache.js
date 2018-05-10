@@ -174,3 +174,42 @@ export const testCache = {
     storage.session.remove(test_KEY);
   }
 }
+
+const history_KEY = CACHE_PREFIX + "history_";
+export const historyCache = {
+  get() {
+    return storage.session.get(history_KEY, null);
+  },
+  set(value) {
+    storage.session.set(history_KEY, value);
+  },
+  remove() {
+    storage.session.remove(history_KEY);
+  }
+}
+
+const deep_KEY = CACHE_PREFIX + "deep_";
+export const deepCache = {
+  get() {
+    return storage.session.get(deep_KEY, null);
+  },
+  set(value) {
+    storage.session.set(deep_KEY, value);
+  },
+  remove() {
+    storage.session.remove(deep_KEY);
+  }
+}
+
+const callback_KEY = CACHE_PREFIX + "callback_";
+export const callbackCache = {
+  get() {
+    return storage.session.get(callback_KEY, null);
+  },
+  set(value) {
+    storage.session.set(callback_KEY, value);
+  },
+  remove() {
+    storage.session.remove(callback_KEY);
+  }
+}
