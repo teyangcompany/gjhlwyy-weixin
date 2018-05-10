@@ -42,7 +42,7 @@
       return {
         readonly: false,
         form: {},
-        user: {}
+        user: false
       }
     },
     computed: {},

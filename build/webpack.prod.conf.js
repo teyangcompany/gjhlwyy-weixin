@@ -85,7 +85,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       filename: 'login.html',
       template: 'login.ejs',
       inject: true,
-      chunks: ['vendor', 'login'],
+      chunks: ['manifest', 'vendor', 'login'],
       chunksSortMode: 'dependency',
       version: utils.getVersion()
     }),
