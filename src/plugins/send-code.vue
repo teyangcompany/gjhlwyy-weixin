@@ -47,6 +47,10 @@
         }
       },
       async send() {
+        if (!this.mobile) {
+          this.$emit('error', '手机号不能为空');
+          return;
+        }
         if (this.cutdown != CUTDOWN) return;
         let loading = this.$weuijs.loading("加载中...");
         let ret = await this.$http(this.service, {

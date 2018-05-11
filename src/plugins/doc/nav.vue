@@ -1,7 +1,7 @@
 <template>
   <div class="swiper" ref="swiper">
     <ul class="flex">
-      <li @click="handle(nav.name)" :class="[nav.name,'flex0',nav.open?'yes':'no']" v-for="nav in navs">
+      <li @click="handle(nav.name,nav.open)" :class="[nav.name,'flex0',nav.open?'yes':'no']" v-for="nav in navs">
         {{nav.price|formatPrice(nav)}}
       </li>
     </ul>
@@ -42,8 +42,8 @@
       },
     },
     methods: {
-      handle(name) {
-        this.$emit("click", name);
+      handle(name, open) {
+        this.$emit("click", name, open);
       },
       init() {
         setTimeout((res) => {

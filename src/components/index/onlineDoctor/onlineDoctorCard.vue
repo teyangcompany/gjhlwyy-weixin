@@ -262,8 +262,10 @@
       goTeam(id) {
         this.$router.push(`/team/${id}/detail`);
       },
-      handleClick(name) {
-        if (name == "pic") {
+      handleClick(name, open) {
+        if (!open) {
+          return false
+        }else if (name == "pic") {
           this.goConsult();
         } else if (name == 'book') {
           this.goBookNum();
