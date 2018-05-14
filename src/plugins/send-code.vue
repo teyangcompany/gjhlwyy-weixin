@@ -5,6 +5,8 @@
 </template>
 
 <script>
+  import Validater from '../lib/validate'
+
   const CUTDOWN = 60;
   /**
    *
@@ -47,10 +49,19 @@
         }
       },
       async send() {
-        if (!this.mobile) {
-          this.$emit('error', '手机号不能为空');
-          return;
+
+        let validater = new Validater();
+        validater.add(this.mobile, [
+          ['need', '手机号不能为空'],
+          ['isPhone', '手机号格式不正确']
+        ]);
+        let error = validater.start();
+        if (error) {
+          this.$emit('error', error);
+          return false
         }
+
+
         if (this.cutdown != CUTDOWN) return;
         let loading = this.$weuijs.loading("加载中...");
         let ret = await this.$http(this.service, {

@@ -1,10 +1,9 @@
 <template>
   <div class="page flex">
-    <app-header v-show="user" title="完善信息" class="flex0">
-      <i class="back" slot="back"></i>
-    </app-header>
     <div class="main flex1 overflow-touch">
-      <validate-phone service="nethos.system.captcha.pat.info.perfect"></validate-phone>
+      <validate-phone v-if="show=='validate'" @ok="ok" :form.sync="form"
+                      service="nethos.system.captcha.pat.info.perfect"></validate-phone>
+      <card v-if="show=='card'" :form.sync="form" :user="user"></card>
     </div>
     <msg ref="msg"></msg>
   </div>
@@ -15,23 +14,26 @@
   import {getENV} from "../../lib/util";
   import SendCode from '../../plugins/send-code'
   import ValidatePhone from '../../plugins/account/phone'
+  import Card from '../../plugins/account/card'
 
   export default {
     data() {
       return {
         readonly: false,
         form: {},
+        show: 'validate',//validate//card
         user: false
       }
     },
     computed: {},
-    components: {SendCode, ValidatePhone},
+    components: {SendCode, ValidatePhone, Card},
     mixins: [isBindMixin],
     async created() {
       let user = await this._isBind();
       if (user) {
         this.user = user;
-        this.readonly = true;
+        this.show = 'card'
+
       }
     },
     mounted() {
@@ -41,6 +43,9 @@
 
     },
     methods: {
+      ok(form) {
+        this.show = 'card';
+      },
       sendOk(data) {
         if (data.value && getENV().plat == 'dev') this.$set(this.form, "captcha", data.value);
         this.$set(this.form, "cid", data.cid);

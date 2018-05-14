@@ -17,6 +17,7 @@
         </div>
       </div>
     </div>
+    <div class="sub center mt" @click="sub">这是我的手机号</div>
     <msg ref="msg"></msg>
   </div>
 </template>
@@ -26,14 +27,11 @@
 
   export default {
     props: {
-      service: String
+      service: String,
+      form: {}
     },
     data() {
-      return {
-        form: {
-          mobile: ''
-        }
-      };
+      return {};
     },
     computed: {},
     components: {SendCode},
@@ -53,6 +51,17 @@
       },
       error(msg) {
         this.$refs.msg.show(msg);
+      },
+      async sub() {
+        let loading = this.$weuijs.loading("加载中...");
+        let ret = await this.$http('nethos.system.captcha.checkcaptcha.v2', this.form);
+        loading.hide();
+        if (ret.code == 0) {
+          this.$emit("ok", this.form);
+        } else {
+          this.$refs.msg.show(ret.msg || "接口错误" + ret.code);
+          process.env.NODE_ENV === "development" && this.$emit("ok", this.form);
+        }
       }
     }
   };
@@ -60,6 +69,10 @@
 
 <style scoped lang="scss">
   @import "../../common/public";
+
+  .mt {
+    margin-top: 10px;
+  }
 
   .pr {
     padding-right: $commonSpace;
@@ -87,5 +100,10 @@
 
   .icon-phone {
     height: px2rem(25px);
+  }
+
+  .sub {
+    border-radius: 10px;
+    @extend %a;
   }
 </style>
