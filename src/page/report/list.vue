@@ -11,6 +11,11 @@
     </ul>
     <scroll :height="scrollHeight" :data="list" class="list">
       <ul>
+        <p class="nodata center">
+          <img src="../../assets/empty-tijian.png" alt="">
+          <br>
+          <span class="color_999">暂无体检记录</span>
+        </p>
         <li @click="handler(o,0)" class="type0" v-for="(o,i) in list" v-if="reportType.name=='检查报告'">
           <h3 class="color_333">{{o.checkName}}</h3>
           <div class="flex color_666">
@@ -160,6 +165,13 @@
 
 <style scoped lang="scss">
   @import "../../common/public";
+
+  .nodata {
+    padding-top: 50px;
+    img {
+      width: 60%;
+    }
+  }
 
   .list {
     padding-top: 10px;

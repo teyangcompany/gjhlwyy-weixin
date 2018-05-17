@@ -3,7 +3,7 @@
     <app-header title="历史礼券" ref="header">
       <i slot="back"></i>
     </app-header>
-    <div class="main relative" ref="main">
+    <div class="main relative overflow-y-auto overflow-touch" ref="main">
       <coupons-item v-for="index in list" :data="index" :key="index.id"></coupons-item>
       <div class="nodata center absolute" v-if="nodata">
         您暂时没有历史礼券

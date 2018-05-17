@@ -71,7 +71,7 @@
           性别
         </div>
         <div class="text flex1">
-          {{getSex(sysCommonPatVo.compatGender)}}
+          {{sysCommonPatVo.compatGender|getGender}}
         </div>
       </div>
 
@@ -121,6 +121,7 @@
   import {avaErrorMixin, isBindMixin, mainHeightMixin} from "../../lib/mixin"
   import patAva from "../../utils/patAva"
   import getSex from "../../utils/getSex"
+  import {getGender} from "../../lib/filter";
   import api from "../../lib/api"
   import weuijs from "weui.js"
   import Uploader from "../../plugins/upload.vue"
@@ -134,6 +135,7 @@
         userInfo: {}
       };
     },
+    filters: {getGender},
     computed: {
       sysCommonPatVo() {
         return this.userInfo.sysCommonPatVo ? this.userInfo.sysCommonPatVo : {}

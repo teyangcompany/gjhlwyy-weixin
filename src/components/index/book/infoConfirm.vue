@@ -154,7 +154,6 @@
       })
     },
     created() {
-
       this.bookDeptId = this.$route.query.bookDeptId
       this.bookNumId = this.$route.query.bookNumId
       this.numTime = this.$route.query.numTime
